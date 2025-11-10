@@ -1,8 +1,6 @@
-# 精卫（JingWei）
-
-<center>
-    <img src="./logo-slogn.svg" height="128px"/>
-</center>
+<div align="center">
+  <img src="./logo-slogn.svg" style="height: 128px"/>
+</div>
 
 精卫（JingWei）—— **个人数字资产库**，是存储和管理个人的数字化资产的数据存储和管理库，
 并且所有数据均以**结构化**形式存储。
