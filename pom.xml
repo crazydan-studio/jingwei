@@ -10,6 +10,21 @@
     <version>0.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>JingWei - Personal Data Management and Storage</description>
+    <url>https://jingwei.crazydan.io</url>
+
+    <parent>
+        <groupId>io.github.entropy-cloud</groupId>
+        <artifactId>nop-entropy</artifactId>
+        <version>2.0.0-SNAPSHOT</version>
+    </parent>
+
+    <modules>
+        <module>100.app</module>
+
+        <module>150.codegen</module>
+        <module>200.ui</module>
+        <module>600.store</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -17,22 +32,72 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <jingwei.version>0.1.0-SNAPSHOT</jingwei.version>
-        <imgui.java.version>1.90.0</imgui.java.version>
+        <imgui.version>1.90.0</imgui.version>
+        <duckdb.version>1.4.1.0</duckdb.version>
     </properties>
 
-    <modules>
-        <module>100.app</module>
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License v3.0</name>
+            <url>https://www.gnu.org/licenses/lgpl-3.0.en.html</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>flytreeleft</name>
+            <email>flytreeleft@crazydan.org</email>
+            <organization>Crazydan Studio</organization>
+            <organizationUrl>https://studio.crazydan.org</organizationUrl>
+        </developer>
+    </developers>
 
-        <module>200.store</module>
-        <module>500.gui</module>
-    </modules>
+    <issueManagement>
+        <system>Github</system>
+        <url>https://github.com/crazydan-studio/jingwei/issues</url>
+    </issueManagement>
+    <scm>
+        <connection>scm:git:git://github.com/crazydan-studio/jingwei.git</connection>
+        <developerConnection>scm:git:ssh://github.com:crazydan-studio/jingwei.git</developerConnection>
+        <url>http://github.com/crazydan-studio/jingwei/tree/master</url>
+    </scm>
+
+    <repositories>
+        <repository>
+            <id>nop-repo</id>
+            <url>https://repo.nop.crazydan.io/</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>nop-repo</id>
+            <url>https://repo.nop.crazydan.io/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
     <dependencyManagement>
         <dependencies>
+            <!-- 本项目子模块，便于其他项目引入 -->
+            <dependency>
+                <groupId>io.crazydan.jingwei</groupId>
+                <artifactId>jingwei-codegen</artifactId>
+                <version>${jingwei.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.crazydan.jingwei</groupId>
+                <artifactId>jingwei-ui-vendor-imgui</artifactId>
+                <version>${jingwei.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>io.github.spair</groupId>
                 <artifactId>imgui-java-app</artifactId>
-                <version>${imgui.java.version}</version>
+                <version>${imgui.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.duckdb</groupId>
+                <artifactId>duckdb_jdbc</artifactId>
+                <version>${duckdb.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  - 精卫（JingWei） - 衔木石填沧海，筑屏障护安全
+  - Copyright (C) 2025 Crazydan Studio <https://studio.crazydan.org>
+  -
+  - This program is free software: you can redistribute it and/or modify
+  - it under the terms of the GNU Lesser General Public License as published by
+  - the Free Software Foundation, either version 3 of the License, or
+  - (at your option) any later version.
+  -
+  - This program is distributed in the hope that it will be useful,
+  - but WITHOUT ANY WARRANTY; without even the implied warranty of
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  - GNU Lesser General Public License for more details.
+  -
+  - You should have received a copy of the GNU Lesser General Public License
+  - along with this program.
+  - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
+  -->
+
+<c:script xmlns:c="c"><![CDATA[
+  codeGenerator
+    // 设置生成代码的存放位置，其相对于当前工程的根目录
+    .withTargetDir('./')
+    .renderModel(
+      // 设置 ORM 模型定义文件，其位置相对于该 xgen 脚本所在的目录
+      '../demo.orm-ext.xlsx',
+      // 代码模板资源的 classpath 位置
+      '/nop/templates/orm-ext',
+      // 以下参数保持不变
+      '/', $scope
+    );
+]]></c:script>

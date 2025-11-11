@@ -4,9 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <name>JingWei App</name>
-    <artifactId>jingwei-app</artifactId>
-    <packaging>pom</packaging>
+    <name>JingWei Code Generator</name>
+    <artifactId>jingwei-codegen</artifactId>
 
     <parent>
         <groupId>io.crazydan.jingwei</groupId>
@@ -19,5 +18,9 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>io.github.entropy-cloud</groupId>
+            <artifactId>nop-codegen</artifactId>
+        </dependency>
     </dependencies>
 </project>
