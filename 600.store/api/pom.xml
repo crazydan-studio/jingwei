@@ -17,5 +17,9 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>io.crazydan.jingwei</groupId>
+            <artifactId>jingwei-store-model</artifactId>
+        </dependency>
     </dependencies>
 </project>
