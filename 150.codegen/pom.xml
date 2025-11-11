@@ -4,6 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- Note: 在执行对本模块的 maven 构建时，将执行 postcompile/precompile/precompile2 中的 xgen 脚本 -->
     <name>JingWei Code Generator</name>
     <artifactId>jingwei-codegen</artifactId>
 
@@ -37,4 +38,14 @@
             <artifactId>nop-graphql-core</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Note：该插件的配置见 io.github.entropy-cloud:nop-entropy -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>

@@ -18,16 +18,17 @@
   - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
   -->
 
-<c:script xmlns:c="c"><![CDATA[
-  codeGenerator
-    // 设置生成代码的存放位置，其相对于当前 Maven 工程的根目录
-    .withTargetDir('../600.store')
-    .renderModel(
-      // 设置 ORM 模型定义文件，其位置相对于该 xgen 脚本所在的目录
-      '../model/store.orm.xlsx',
-      // 代码模板资源的 classpath 位置
-      '/jingwei/templates/store',
-      // 以下参数保持不变
-      '/', $scope
-    );
-]]></c:script>
+<c:unit xmlns:c="c" xmlns:gen="gen" xmlns:xpl="xpl">
+
+    <gen:Render template="/nop/templates/orm/{appName}-dao"
+                targetDir="${targetResource.path.$filePath()}"
+                inheritCodeGenLoop="true"
+                xpl:lib="/nop/codegen/xlib/gen.xlib"
+    />
+
+    <gen:Render template="/nop/templates/orm/{appName}-service"
+                targetDir="${targetResource.path.$filePath()}"
+                inheritCodeGenLoop="true"
+                xpl:lib="/nop/codegen/xlib/gen.xlib"
+    />
+</c:unit>
