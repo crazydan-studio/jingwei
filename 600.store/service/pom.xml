@@ -11,7 +11,6 @@
         <groupId>io.crazydan.jingwei</groupId>
         <artifactId>jingwei-store</artifactId>
         <version>0.1.0-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <properties>
@@ -39,22 +38,5 @@
             <groupId>io.github.entropy-cloud</groupId>
             <artifactId>nop-biz</artifactId>
         </dependency>
-
-        <!-- 引入 XCodeGenerator 工具类，用于代码生成。仅开发期在 IDE 中使用 -->
-        <dependency>
-            <groupId>io.github.entropy-cloud</groupId>
-            <artifactId>nop-codegen</artifactId>
-            <scope>provided</scope>
-        </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <!-- Note：该插件的配置见 io.github.entropy-cloud:nop-entropy -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 </project>
