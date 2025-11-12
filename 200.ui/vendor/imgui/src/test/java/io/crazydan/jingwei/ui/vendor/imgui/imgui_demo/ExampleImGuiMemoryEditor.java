@@ -17,7 +17,7 @@
  * If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
  */
 
-package io.crazydan.jingwei.ui.vendor.imgui.test.imgui_demo;
+package io.crazydan.jingwei.ui.vendor.imgui.imgui_demo;
 
 import imgui.extension.memedit.MemoryEditor;
 import imgui.flag.ImGuiCond;
