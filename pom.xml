@@ -13,9 +13,9 @@
     <url>https://jingwei.crazydan.io</url>
 
     <parent>
-        <groupId>io.github.entropy-cloud</groupId>
-        <artifactId>nop-entropy</artifactId>
-        <version>2.0.0-SNAPSHOT</version>
+        <groupId>io.crazydan.duzhou.framework</groupId>
+        <artifactId>parent</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
     </parent>
 
     <modules>
@@ -24,6 +24,8 @@
         <module>150.codegen</module>
         <module>200.ui</module>
         <module>600.store</module>
+
+        <module>800.common</module>
     </modules>
 
     <properties>
@@ -97,6 +99,7 @@
                 <artifactId>jingwei-store-api</artifactId>
                 <version>${jingwei.version}</version>
             </dependency>
+            <!-- End -->
 
             <dependency>
                 <groupId>io.github.spair</groupId>
@@ -111,4 +114,43 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>*.yaml</include>
+                    <include>*.yml</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>*.yaml</exclude>
+                    <exclude>*.yml</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>*.yaml</include>
+                    <include>*.yml</include>
+                </includes>
+            </testResource>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>*.yaml</exclude>
+                    <exclude>*.yml</exclude>
+                </excludes>
+            </testResource>
+        </testResources>
+    </build>
 </project>

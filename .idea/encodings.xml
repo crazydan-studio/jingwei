@@ -3,18 +3,24 @@
   <component name="Encoding" native2AsciiForPropertiesFiles="true">
     <file url="file://$PROJECT_DIR$/100.app/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/100.app/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/100.app/src/test/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/150.codegen/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/150.codegen/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/150.codegen/src/test/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/200.store/service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/200.store/service/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/200.ui/dsl/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/200.ui/dsl/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/200.ui/dsl/src/test/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/200.ui/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/200.ui/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/200.ui/src/test/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/200.ui/vendor/imgui/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/200.ui/vendor/imgui/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/200.ui/vendor/imgui/src/test/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/200.ui/vendor/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/200.ui/vendor/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/200.ui/vendor/src/test/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/500.gui/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/500.gui/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/500.ui/src/main/java" charset="UTF-8" />
@@ -25,14 +31,24 @@
     <file url="file://$PROJECT_DIR$/500.ui/vendor/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/600.store/api/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/600.store/api/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/600.store/api/src/test/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/600.store/model/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/600.store/model/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/600.store/model/src/test/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/600.store/service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/600.store/service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/600.store/service/src/test/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/600.store/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/600.store/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/600.store/src/test/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/800.common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/800.common/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/800.common/src/test/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/800.common/test/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/800.common/test/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/test/resources" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>
