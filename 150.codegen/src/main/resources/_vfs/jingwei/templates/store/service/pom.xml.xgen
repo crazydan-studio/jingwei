@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- __XGEN_TPL_FORCE_OVERRIDE__ 如果文件已存在，则强制合并更新 -->
 <!--
   - 精卫（JingWei） - 衔木石填沧海，筑屏障护安全
   - Copyright (C) 2025 Crazydan Studio <https://studio.crazydan.org>
@@ -60,23 +59,8 @@
         </dependency>
 
         <dependency>
-            <groupId>io.github.entropy-cloud</groupId>
-            <artifactId>nop-autotest-junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-params</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
+            <groupId>io.crazydan.jingwei</groupId>
+            <artifactId>jingwei-common-test</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
