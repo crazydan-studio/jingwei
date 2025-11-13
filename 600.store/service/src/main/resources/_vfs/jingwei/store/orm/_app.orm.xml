@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<orm ext:mavenArtifactId="jingwei-store" ext:entityPackageName="io.crazydan.jingwei.store.dao.entity"
+     ext:registerShortName="true" ext:mavenGroupId="io.crazydan.jingwei" ext:basePackageName="io.crazydan.jingwei.store"
+     ext:appName="jingwei-store" ext:platformVersion="2.0.0-SNAPSHOT" ext:dialect="duckdb"
+     ext:mavenVersion="0.1.0-SNAPSHOT" x:schema="/nop/schema/orm/orm.xdef" xmlns:x="/nop/schema/xdsl.xdef"
+     xmlns:i18n-en="i18n-en" xmlns:ref-i18n-en="ref-i18n-en" xmlns:ext="ext" xmlns:orm-gen="orm-gen" xmlns:xpl="xpl"
+     xmlns:ui="ui">
+
+    <x:post-extends x:override="replace">
+        <orm-gen:DefaultPostExtends xpl:lib="/nop/orm/xlib/orm-gen.xlib"/>
+    </x:post-extends>
+
+    <x:gen-extends x:override="replace">
+        <orm-gen:DefaultGenExtends xpl:lib="/nop/orm/xlib/orm-gen.xlib"/>
+    </x:gen-extends>
+
+    <dicts>
+        <dict label="性别" name="person/gender" valueType="string">
+            <description>个体的性别</description>
+            <option label="未设置" value="unset"/>
+            <option label="男" value="male"/>
+            <option label="女" value="female"/>
+        </dict>
+        <dict label="关系" name="person/relationship" valueType="string">
+            <description>两个个体之间的直接关系（排除性别），关系的根节点为资产库所有者</description>
+            <option label="未设置" value="unset"/>
+            <option label="父母" value="parent"/>
+            <option label="配偶" value="spouse"/>
+            <option label="子女" value="child"/>
+            <option label="兄弟姐妹" value="sibling"/>
+            <option label="朋友" value="friend"/>
+        </dict>
+    </dicts>
+
+    <domains>
+        <domain name="createdBy" precision="50" stdSqlType="VARCHAR"/>
+        <domain name="updatedBy" precision="50" stdSqlType="VARCHAR"/>
+        <domain name="createTime" stdSqlType="TIMESTAMP"/>
+        <domain name="updateTime" stdSqlType="TIMESTAMP"/>
+        <domain name="version" stdSqlType="INTEGER"/>
+        <domain name="delFlag" stdDomain="boolFlag" stdSqlType="TINYINT"/>
+        <domain name="image" precision="200" stdDomain="file" stdSqlType="VARCHAR"/>
+        <domain name="file" precision="200" stdDomain="file" stdSqlType="VARCHAR"/>
+        <domain name="email" precision="100" stdSqlType="VARCHAR"/>
+        <domain name="phone" precision="100" stdSqlType="VARCHAR"/>
+    </domains>
+
+    <entities>
+        <entity className="io.crazydan.jingwei.store.dao.entity.Person" displayName="个体"
+                name="io.crazydan.jingwei.store.dao.entity.Person" registerShortName="true" tableName="o_person">
+            <columns>
+                <column code="oid" displayName="对象 ID" mandatory="true" name="oid" precision="50" primary="true"
+                        propId="1" stdDataType="string" stdSqlType="VARCHAR" tagSet="seq"/>
+                <column code="first_name" displayName="名" mandatory="true" name="firstName" precision="100" propId="2"
+                        stdDataType="string" stdSqlType="VARCHAR"/>
+                <column code="family_name" displayName="姓" mandatory="true" name="familyName" precision="100" propId="3"
+                        stdDataType="string" stdSqlType="VARCHAR"/>
+                <column code="gender" defaultValue="unset" displayName="性别" name="gender" precision="100" propId="4"
+                        stdDataType="string" stdSqlType="VARCHAR" ext:dict="person/gender"/>
+                <column code="birthdate" comment="毫秒值，避免处理时区" displayName="出生日期" name="birthdate" propId="5"
+                        stdDataType="long" stdSqlType="BIGINT"/>
+                <column code="id_card_number" displayName="身份证号" name="idCardNumber" precision="50" propId="6"
+                        stdDataType="string" stdSqlType="VARCHAR"/>
+                <column code="myself" comment="是否为资产库所有者。有且仅有一个" displayName="「我」？" mandatory="true" name="myself"
+                        propId="7" stdDataType="boolean" stdSqlType="BOOLEAN"/>
+            </columns>
+        </entity>
+        <entity className="io.crazydan.jingwei.store.dao.entity.PersonRelationShip" displayName="个体间的（直接）关系"
+                name="io.crazydan.jingwei.store.dao.entity.PersonRelationShip" registerShortName="true"
+                tableName="o_person_relationship">
+            <columns>
+                <column code="oid" displayName="对象 ID" mandatory="true" name="oid" precision="50" primary="true"
+                        propId="1" stdDataType="string" stdSqlType="VARCHAR"/>
+                <column code="source_id" displayName="关系源对象 ID" mandatory="true" name="sourceId" precision="50"
+                        propId="2" stdDataType="string" stdSqlType="VARCHAR"/>
+                <column code="target_id" displayName="关系目标对象 ID" mandatory="true" name="targetId" precision="50"
+                        propId="3" stdDataType="string" stdSqlType="VARCHAR"/>
+                <column code="type" defaultValue="unset" displayName="关系类型" mandatory="true" name="type" precision="100"
+                        propId="4" stdDataType="string" stdSqlType="VARCHAR" ext:dict="person/relationship"/>
+            </columns>
+            <comment>在 DuckDB 中，varchar 长度设置会被忽略</comment>
+            <relations>
+                <to-one cascadeDelete="true" name="source" refEntityName="io.crazydan.jingwei.store.dao.entity.Person"
+                        tagSet="cascade-delete">
+                    <join>
+                        <on leftProp="sourceId" rightProp="oid"/>
+                    </join>
+                    <ref-set/>
+                </to-one>
+                <to-one cascadeDelete="true" name="target" refEntityName="io.crazydan.jingwei.store.dao.entity.Person"
+                        tagSet="cascade-delete">
+                    <join>
+                        <on leftProp="targetId" rightProp="oid"/>
+                    </join>
+                    <ref-set/>
+                </to-one>
+            </relations>
+        </entity>
+    </entities>
+</orm>

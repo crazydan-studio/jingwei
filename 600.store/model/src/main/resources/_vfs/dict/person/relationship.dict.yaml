@@ -1,0 +1,31 @@
+# __XGEN_FORCE_OVERRIDE__
+label: 关系
+locale: zh-CN
+valueType: string
+description: 两个个体之间的直接关系（排除性别），关系的根节点为资产库所有者
+options:
+
+  - label: 未设置
+    value: unset
+    description: 
+  
+  - label: 父母
+    value: parent
+    description: 
+  
+  - label: 配偶
+    value: spouse
+    description: 
+  
+  - label: 子女
+    value: child
+    description: 
+  
+  - label: 兄弟姐妹
+    value: sibling
+    description: 
+  
+  - label: 朋友
+    value: friend
+    description: 
+  

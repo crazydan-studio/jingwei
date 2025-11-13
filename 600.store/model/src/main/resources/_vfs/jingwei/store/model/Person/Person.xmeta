@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<meta x:schema="/nop/schema/xmeta.xdef" xmlns:x="/nop/schema/xdsl.xdef" x:extends="_Person.xmeta">
+
+    <props>
+        <prop name="fullName" displayName="姓名"
+              insertable="false" updatable="false" queryable="false"
+        >
+            <getter><![CDATA[
+                return entity.familyName + entity.firstName;
+            ]]></getter>
+        </prop>
+    </props>
+</meta>

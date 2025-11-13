@@ -1,0 +1,6 @@
+nop:
+  debug: true
+  datasource:
+    driver-class-name: org.duckdb.DuckDBDriver
+    jdbc-url: jdbc:duckdb:${project.build.directory}/test.db
+    username: sa

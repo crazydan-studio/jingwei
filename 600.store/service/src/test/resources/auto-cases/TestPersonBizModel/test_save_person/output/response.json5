@@ -1,0 +1,13 @@
+{
+  "data": {
+    "firstName": "三",
+    "familyName": "张",
+    "gender": "male",
+    "gender_label": "male-男",
+    "birthdate": null,
+    "idCardNumber": null,
+    "myself": true,
+    "fullName": "张三"
+  },
+  "status": 0
+}
