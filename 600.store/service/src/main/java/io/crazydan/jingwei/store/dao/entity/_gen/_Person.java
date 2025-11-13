@@ -57,10 +57,10 @@ public class _Person extends DynamicOrmEntity{
 
     
     /* relation:  */
-    public static final String PROP_NAME_relationToList = "relationToList";
+    public static final String PROP_NAME_relationships = "relationships";
     
     /* relation:  */
-    public static final String PROP_NAME_relationFromList = "relationFromList";
+    public static final String PROP_NAME_inverseRelationships = "inverseRelationships";
     
 
     protected static final List<String> PK_PROP_NAMES = Arrays.asList(PROP_NAME_oid);
@@ -533,24 +533,24 @@ public class _Person extends DynamicOrmEntity{
         }
     }
     
-    private final OrmEntitySet<io.crazydan.jingwei.store.dao.entity.PersonRelationship> _relationToList = new OrmEntitySet<>(this, PROP_NAME_relationToList,
+    private final OrmEntitySet<io.crazydan.jingwei.store.dao.entity.PersonRelationship> _relationships = new OrmEntitySet<>(this, PROP_NAME_relationships,
         io.crazydan.jingwei.store.dao.entity.PersonRelationship.PROP_NAME_source, null,io.crazydan.jingwei.store.dao.entity.PersonRelationship.class);
 
     /**
      * 。 refPropName: source, keyProp: {rel.keyProp}
      */
-    public final IOrmEntitySet<io.crazydan.jingwei.store.dao.entity.PersonRelationship> getRelationToList(){
-       return _relationToList;
+    public final IOrmEntitySet<io.crazydan.jingwei.store.dao.entity.PersonRelationship> getRelationships(){
+       return _relationships;
     }
        
-    private final OrmEntitySet<io.crazydan.jingwei.store.dao.entity.PersonRelationship> _relationFromList = new OrmEntitySet<>(this, PROP_NAME_relationFromList,
+    private final OrmEntitySet<io.crazydan.jingwei.store.dao.entity.PersonRelationship> _inverseRelationships = new OrmEntitySet<>(this, PROP_NAME_inverseRelationships,
         io.crazydan.jingwei.store.dao.entity.PersonRelationship.PROP_NAME_target, null,io.crazydan.jingwei.store.dao.entity.PersonRelationship.class);
 
     /**
      * 。 refPropName: target, keyProp: {rel.keyProp}
      */
-    public final IOrmEntitySet<io.crazydan.jingwei.store.dao.entity.PersonRelationship> getRelationFromList(){
-       return _relationFromList;
+    public final IOrmEntitySet<io.crazydan.jingwei.store.dao.entity.PersonRelationship> getInverseRelationships(){
+       return _inverseRelationships;
     }
        
 }

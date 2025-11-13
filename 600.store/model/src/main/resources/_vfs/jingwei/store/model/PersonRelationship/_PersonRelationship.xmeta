@@ -36,14 +36,14 @@
               insertable="true" updatable="true" defaultValue="unset">
             <schema type="java.lang.String" precision="100" dict="person/relationship"/>
         </prop>
-        <prop name="source" tagSet="pub,ref-pub,ref-cascade-delete" ext:kind="to-one" internal="true" queryable="true"
-              ext:joinLeftProp="sourceId" ext:joinRightProp="oid" insertable="false" updatable="false" mandatory="true"
-              lazy="true">
+        <prop name="source" displayName="人际关系" tagSet="pub,ref-pub,ref-cascade-delete" ext:kind="to-one" internal="true"
+              queryable="true" ext:joinLeftProp="sourceId" ext:joinRightProp="oid" insertable="false" updatable="false"
+              mandatory="true" lazy="true">
             <schema bizObjName="Person"/>
         </prop>
-        <prop name="target" tagSet="pub,ref-pub,ref-cascade-delete" ext:kind="to-one" internal="true" queryable="true"
-              ext:joinLeftProp="targetId" ext:joinRightProp="oid" insertable="false" updatable="false" mandatory="true"
-              lazy="true">
+        <prop name="target" displayName="反向人际关系" tagSet="pub,ref-pub,ref-cascade-delete" ext:kind="to-one"
+              internal="true" queryable="true" ext:joinLeftProp="targetId" ext:joinRightProp="oid" insertable="false"
+              updatable="false" mandatory="true" lazy="true">
             <schema bizObjName="Person"/>
         </prop>
     </props>

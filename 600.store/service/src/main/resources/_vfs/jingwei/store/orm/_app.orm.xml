@@ -68,14 +68,14 @@
                         name="deleted" propId="8" stdDataType="boolean" stdDomain="boolFlag" stdSqlType="BOOLEAN"/>
             </columns>
             <relations>
-                <to-many cascadeDelete="true" name="relationToList"
+                <to-many cascadeDelete="true" name="relationships"
                          refEntityName="io.crazydan.jingwei.store.dao.entity.PersonRelationship" refPropName="source"
                          tagSet="pub,cascade-delete">
                     <join>
                         <on leftProp="oid" rightProp="sourceId"/>
                     </join>
                 </to-many>
-                <to-many cascadeDelete="true" name="relationFromList"
+                <to-many cascadeDelete="true" name="inverseRelationships"
                          refEntityName="io.crazydan.jingwei.store.dao.entity.PersonRelationship" refPropName="target"
                          tagSet="pub,cascade-delete">
                     <join>
@@ -99,15 +99,15 @@
             </columns>
             <comment>在 DuckDB 中，varchar 长度设置会被忽略</comment>
             <relations>
-                <to-one name="source" refEntityName="io.crazydan.jingwei.store.dao.entity.Person"
-                        refPropName="relationToList" tagSet="pub,ref-pub,ref-cascade-delete">
+                <to-one displayName="人际关系" name="source" refEntityName="io.crazydan.jingwei.store.dao.entity.Person"
+                        refPropName="relationships" tagSet="pub,ref-pub,ref-cascade-delete">
                     <join>
                         <on leftProp="sourceId" rightProp="oid"/>
                     </join>
                     <ref-set/>
                 </to-one>
-                <to-one name="target" refEntityName="io.crazydan.jingwei.store.dao.entity.Person"
-                        refPropName="relationFromList" tagSet="pub,ref-pub,ref-cascade-delete">
+                <to-one displayName="反向人际关系" name="target" refEntityName="io.crazydan.jingwei.store.dao.entity.Person"
+                        refPropName="inverseRelationships" tagSet="pub,ref-pub,ref-cascade-delete">
                     <join>
                         <on leftProp="targetId" rightProp="oid"/>
                     </join>

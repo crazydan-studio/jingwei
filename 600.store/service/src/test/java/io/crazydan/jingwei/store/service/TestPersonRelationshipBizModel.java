@@ -54,7 +54,7 @@ public class TestPersonRelationshipBizModel extends TestBizModel {
 
         GraphQLRequestBean request = new GraphQLRequestBean();
         request.setQuery(
-                "query($id:String){ PersonRelationship__get(id:$id){ oid,type,sid:sourceId,tid:targetId,source{relationToList{oid,tid:targetId}},target{relationFromList{oid,sid:sourceId}} } }");
+                "query($id:String){ PersonRelationship__get(id:$id){ oid,type,sid:sourceId,tid:targetId,source{relationships{oid,tid:targetId}},target{inverseRelationships{oid,sid:sourceId}} } }");
         request.setVariables(Map.of("id", id));
 
         data = graphql(request);
@@ -65,12 +65,12 @@ public class TestPersonRelationshipBizModel extends TestBizModel {
         assertEquals(type, data.get("type"));
 
         Map<String, Object> source = (Map<String, Object>) data.get("source");
-        Map<String, Object> relateWith = (Map<String, Object>) ((List<?>) source.get("relationToList")).get(0);
+        Map<String, Object> relateWith = (Map<String, Object>) ((List<?>) source.get("relationships")).get(0);
         assertEquals(id, relateWith.get("oid"));
         assertEquals(tid, relateWith.get("tid"));
 
         Map<String, Object> target = (Map<String, Object>) data.get("target");
-        Map<String, Object> relatedBy = (Map<String, Object>) ((List<?>) target.get("relationFromList")).get(0);
+        Map<String, Object> relatedBy = (Map<String, Object>) ((List<?>) target.get("inverseRelationships")).get(0);
         assertEquals(id, relatedBy.get("oid"));
         assertEquals(sid, relatedBy.get("sid"));
     }

@@ -50,13 +50,13 @@
               insertable="false" updatable="true">
             <schema stdDomain="boolFlag" domain="delFlag" type="java.lang.Boolean"/>
         </prop>
-        <prop name="relationToList" tagSet="pub,cascade-delete" ext:kind="to-many" internal="true"
-              ext:joinLeftProp="oid" ext:joinRightProp="sourceId" insertable="false" updatable="false" lazy="true">
+        <prop name="relationships" tagSet="pub,cascade-delete" ext:kind="to-many" internal="true" ext:joinLeftProp="oid"
+              ext:joinRightProp="sourceId" insertable="false" updatable="false" lazy="true">
             <schema>
                 <item bizObjName="PersonRelationship"/>
             </schema>
         </prop>
-        <prop name="relationFromList" tagSet="pub,cascade-delete" ext:kind="to-many" internal="true"
+        <prop name="inverseRelationships" tagSet="pub,cascade-delete" ext:kind="to-many" internal="true"
               ext:joinLeftProp="oid" ext:joinRightProp="targetId" insertable="false" updatable="false" lazy="true">
             <schema>
                 <item bizObjName="PersonRelationship"/>

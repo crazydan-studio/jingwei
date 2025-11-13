@@ -40,10 +40,10 @@ public class _PersonRelationship extends DynamicOrmEntity{
     private static int _PROP_ID_BOUND = 5;
 
     
-    /* relation:  */
+    /* relation: 人际关系 */
     public static final String PROP_NAME_source = "source";
     
-    /* relation:  */
+    /* relation: 反向人际关系 */
     public static final String PROP_NAME_target = "target";
     
 
@@ -338,7 +338,7 @@ public class _PersonRelationship extends DynamicOrmEntity{
     }
     
     /**
-     * 
+     * 人际关系
      */
     public final io.crazydan.jingwei.store.dao.entity.Person getSource(){
        return (io.crazydan.jingwei.store.dao.entity.Person)internalGetRefEntity(PROP_NAME_source);
@@ -361,7 +361,7 @@ public class _PersonRelationship extends DynamicOrmEntity{
     }
        
     /**
-     * 
+     * 反向人际关系
      */
     public final io.crazydan.jingwei.store.dao.entity.Person getTarget(){
        return (io.crazydan.jingwei.store.dao.entity.Person)internalGetRefEntity(PROP_NAME_target);
