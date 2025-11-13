@@ -48,15 +48,25 @@ public class _Person extends DynamicOrmEntity{
     public static final String PROP_NAME_myself = "myself";
     public static final int PROP_ID_myself = 7;
     
+    /* 是否已删除: deleted BOOLEAN */
+    public static final String PROP_NAME_deleted = "deleted";
+    public static final int PROP_ID_deleted = 8;
+    
 
-    private static int _PROP_ID_BOUND = 8;
+    private static int _PROP_ID_BOUND = 9;
 
+    
+    /* relation:  */
+    public static final String PROP_NAME_relationToList = "relationToList";
+    
+    /* relation:  */
+    public static final String PROP_NAME_relationFromList = "relationFromList";
     
 
     protected static final List<String> PK_PROP_NAMES = Arrays.asList(PROP_NAME_oid);
     protected static final int[] PK_PROP_IDS = new int[]{PROP_ID_oid};
 
-    private static final String[] PROP_ID_TO_NAME = new String[8];
+    private static final String[] PROP_ID_TO_NAME = new String[9];
     private static final Map<String,Integer> PROP_NAME_TO_ID = new HashMap<>();
     static{
       
@@ -81,6 +91,9 @@ public class _Person extends DynamicOrmEntity{
           PROP_ID_TO_NAME[PROP_ID_myself] = PROP_NAME_myself;
           PROP_NAME_TO_ID.put(PROP_NAME_myself, PROP_ID_myself);
       
+          PROP_ID_TO_NAME[PROP_ID_deleted] = PROP_NAME_deleted;
+          PROP_NAME_TO_ID.put(PROP_NAME_deleted, PROP_ID_deleted);
+      
     }
 
     
@@ -104,6 +117,9 @@ public class _Person extends DynamicOrmEntity{
     
     /* 「我」？: myself */
     private java.lang.Boolean _myself;
+    
+    /* 是否已删除: deleted */
+    private java.lang.Boolean _deleted;
     
 
     public _Person(){
@@ -200,6 +216,9 @@ public class _Person extends DynamicOrmEntity{
             case PROP_ID_myself:
                return getMyself();
         
+            case PROP_ID_deleted:
+               return getDeleted();
+        
            default:
               return super.orm_propValue(propId);
         }
@@ -281,6 +300,16 @@ public class _Person extends DynamicOrmEntity{
                break;
             }
         
+            case PROP_ID_deleted:{
+               java.lang.Boolean typedValue = null;
+               if(value != null){
+                   typedValue = ConvertHelper.toBoolean(value,
+                       err-> newTypeConversionError(PROP_NAME_deleted));
+               }
+               setDeleted(typedValue);
+               break;
+            }
+        
            default:
               super.orm_propValue(propId,value);
         }
@@ -335,6 +364,13 @@ public class _Person extends DynamicOrmEntity{
             case PROP_ID_myself:{
                onInitProp(propId);
                this._myself = (java.lang.Boolean)value;
+               
+               break;
+            }
+        
+            case PROP_ID_deleted:{
+               onInitProp(propId);
+               this._deleted = (java.lang.Boolean)value;
                
                break;
             }
@@ -478,5 +514,44 @@ public class _Person extends DynamicOrmEntity{
         }
     }
     
+    /**
+     * 是否已删除: deleted
+     */
+    public final java.lang.Boolean getDeleted(){
+         onPropGet(PROP_ID_deleted);
+         return _deleted;
+    }
+
+    /**
+     * 是否已删除: deleted
+     */
+    public final void setDeleted(java.lang.Boolean value){
+        if(onPropSet(PROP_ID_deleted,value)){
+            this._deleted = value;
+            internalClearRefs(PROP_ID_deleted);
+            
+        }
+    }
+    
+    private final OrmEntitySet<io.crazydan.jingwei.store.dao.entity.PersonRelationship> _relationToList = new OrmEntitySet<>(this, PROP_NAME_relationToList,
+        io.crazydan.jingwei.store.dao.entity.PersonRelationship.PROP_NAME_source, null,io.crazydan.jingwei.store.dao.entity.PersonRelationship.class);
+
+    /**
+     * 。 refPropName: source, keyProp: {rel.keyProp}
+     */
+    public final IOrmEntitySet<io.crazydan.jingwei.store.dao.entity.PersonRelationship> getRelationToList(){
+       return _relationToList;
+    }
+       
+    private final OrmEntitySet<io.crazydan.jingwei.store.dao.entity.PersonRelationship> _relationFromList = new OrmEntitySet<>(this, PROP_NAME_relationFromList,
+        io.crazydan.jingwei.store.dao.entity.PersonRelationship.PROP_NAME_target, null,io.crazydan.jingwei.store.dao.entity.PersonRelationship.class);
+
+    /**
+     * 。 refPropName: target, keyProp: {rel.keyProp}
+     */
+    public final IOrmEntitySet<io.crazydan.jingwei.store.dao.entity.PersonRelationship> getRelationFromList(){
+       return _relationFromList;
+    }
+       
 }
 // resume CPD analysis - CPD-ON

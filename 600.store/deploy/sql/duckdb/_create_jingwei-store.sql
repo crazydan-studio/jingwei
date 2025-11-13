@@ -7,6 +7,7 @@ CREATE TABLE o_person(
   birthdate INT8  ,
   id_card_number VARCHAR(50)  ,
   myself BOOLEAN NOT NULL ,
+  deleted BOOLEAN NOT NULL ,
   constraint PK_o_person primary key (oid)
 );
 
@@ -15,6 +16,7 @@ CREATE TABLE o_person_relationship(
   source_id VARCHAR(50) NOT NULL ,
   target_id VARCHAR(50) NOT NULL ,
   "type" VARCHAR(100) default 'unset'  NOT NULL ,
+  constraint UK_o_person_relationship_sourceId_targetId unique (source_id,target_id),
   constraint PK_o_person_relationship primary key (oid)
 );
 
@@ -34,6 +36,8 @@ CREATE TABLE o_person_relationship(
       COMMENT ON COLUMN o_person.id_card_number IS '身份证号';
                     
       COMMENT ON COLUMN o_person.myself IS '「我」？';
+                    
+      COMMENT ON COLUMN o_person.deleted IS '是否已删除';
                     
       COMMENT ON TABLE o_person_relationship IS '个体间的（直接）关系';
                 

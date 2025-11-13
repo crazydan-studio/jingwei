@@ -1,0 +1,13 @@
+{
+  "type": "sibling",
+  "source": {
+    "firstName": "三",
+    "familyName": "张",
+    "gender": "male"
+  },
+  "target": {
+    "firstName": "四",
+    "familyName": "李",
+    "gender": "male"
+  }
+}

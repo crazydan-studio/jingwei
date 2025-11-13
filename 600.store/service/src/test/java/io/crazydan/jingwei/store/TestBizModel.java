@@ -22,18 +22,15 @@ package io.crazydan.jingwei.store;
 import java.util.Map;
 
 import io.crazydan.duzhou.framework.junit.NopJunitAutoTestCase;
-import io.nop.api.core.annotations.autotest.EnableSnapshot;
 import io.nop.api.core.annotations.autotest.NopTestConfig;
-import io.nop.api.core.beans.ApiRequest;
-import io.nop.api.core.beans.ApiResponse;
+import io.nop.api.core.beans.graphql.GraphQLRequestBean;
+import io.nop.api.core.beans.graphql.GraphQLResponseBean;
 import io.nop.graphql.core.IGraphQLExecutionContext;
 import io.nop.graphql.core.engine.IGraphQLEngine;
 import jakarta.inject.Inject;
-import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
@@ -41,22 +38,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @date 2025-11-12
  */
 @NopTestConfig(testConfigFile = "classpath:/application.yaml", initDatabaseSchema = true)
-public class TestPersonBizModel extends NopJunitAutoTestCase {
+public abstract class TestBizModel extends NopJunitAutoTestCase {
     @Inject
     IGraphQLEngine graphQLEngine;
 
-    @EnableSnapshot(localDb = false)
-    @Test
-    public void test_save_person() {
-        ApiRequest<?> request = request("request.json5", Map.class);
+    protected <T> T graphql(GraphQLRequestBean request) {
+        IGraphQLExecutionContext ctx = graphQLEngine.newGraphQLContext(request);
 
-        IGraphQLExecutionContext ctx = graphQLEngine.newRpcContext(null, "Person__save", request);
-
-        ApiResponse<?> response = graphQLEngine.executeRpc(ctx);
-        assertTrue(response.isOk());
+        GraphQLResponseBean response = graphQLEngine.executeGraphQL(ctx);
+        assertFalse(response.hasError());
         assertInstanceOf(Map.class, response.getData());
-        assertNotNull(((Map<?, ?>) response.getData()).remove("oid"));
 
-        output("response.json5", response);
+        return (T) ((Map<?, ?>) response.getData()).values().iterator().next();
     }
 }

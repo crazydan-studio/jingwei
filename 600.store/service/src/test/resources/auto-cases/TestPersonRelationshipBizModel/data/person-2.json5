@@ -1,0 +1,11 @@
+{
+  "query": "mutation($data:Map){ Person__save(data:$data){ ...F_defaults } }",
+  "variables": {
+    data: {
+      firstName: "四",
+      familyName: "李",
+      gender: "male",
+      myself: false,
+    }
+  }
+}

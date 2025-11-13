@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Arrays;
 import java.util.List;
 
-import io.crazydan.jingwei.store.dao.entity.PersonRelationShip;
+import io.crazydan.jingwei.store.dao.entity.PersonRelationship;
 
 // tell cpd to start ignoring code - CPD-OFF
 /**
@@ -18,7 +18,7 @@ import io.crazydan.jingwei.store.dao.entity.PersonRelationShip;
  */
 @SuppressWarnings({"PMD.UselessOverridingMethod","PMD.UnusedLocalVariable","java:S3008","java:S1602","java:S1128","java:S1161",
         "PMD.UnnecessaryFullyQualifiedName","PMD.EmptyControlStatement","java:S116","java:S115","java:S101","java:S3776"})
-public class _PersonRelationShip extends DynamicOrmEntity{
+public class _PersonRelationship extends DynamicOrmEntity{
     
     /* 对象 ID: oid VARCHAR */
     public static final String PROP_NAME_oid = "oid";
@@ -82,20 +82,20 @@ public class _PersonRelationShip extends DynamicOrmEntity{
     private java.lang.String _type;
     
 
-    public _PersonRelationShip(){
+    public _PersonRelationship(){
         // for debug
     }
 
-    protected PersonRelationShip newInstance(){
-        PersonRelationShip entity = new PersonRelationShip();
+    protected PersonRelationship newInstance(){
+        PersonRelationship entity = new PersonRelationship();
         entity.orm_attach(orm_enhancer());
         entity.orm_entityModel(orm_entityModel());
         return entity;
     }
 
     @Override
-    public PersonRelationShip cloneInstance() {
-        PersonRelationShip entity = newInstance();
+    public PersonRelationship cloneInstance() {
+        PersonRelationship entity = newInstance();
         orm_forEachInitedProp((value, propId) -> {
             entity.orm_propValue(propId,value);
         });
@@ -108,7 +108,7 @@ public class _PersonRelationShip extends DynamicOrmEntity{
       IEntityModel entityModel = orm_entityModel();
       if(entityModel != null)
           return entityModel.getName();
-      return "io.crazydan.jingwei.store.dao.entity.PersonRelationShip";
+      return "io.crazydan.jingwei.store.dao.entity.PersonRelationship";
     }
 
     @Override

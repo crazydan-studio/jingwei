@@ -1,0 +1,5 @@
+{
+  "query": "mutation($sid:String,$tid:String,$type:String){ PersonRelationship__save(data:{sourceId:$sid,targetId:$tid,type:$type}){ oid,type,sid:sourceId,tid:targetId,source{firstName,familyName,gender},target{firstName,familyName,gender} } }",
+  "variables": {
+  }
+}

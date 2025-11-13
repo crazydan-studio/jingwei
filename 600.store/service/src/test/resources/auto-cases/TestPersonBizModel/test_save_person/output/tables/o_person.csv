@@ -1,0 +1,2 @@
+_chgType,oid,first_name,family_name,gender,birthdate,id_card_number,myself
+A,@var:Person@oid,三,张,male,,,true

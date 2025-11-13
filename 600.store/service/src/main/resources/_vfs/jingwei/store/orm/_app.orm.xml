@@ -35,10 +35,10 @@
     <domains>
         <domain name="createdBy" precision="50" stdSqlType="VARCHAR"/>
         <domain name="updatedBy" precision="50" stdSqlType="VARCHAR"/>
-        <domain name="createTime" stdSqlType="TIMESTAMP"/>
-        <domain name="updateTime" stdSqlType="TIMESTAMP"/>
+        <domain name="createTime" stdSqlType="BIGINT"/>
+        <domain name="updateTime" stdSqlType="BIGINT"/>
         <domain name="version" stdSqlType="INTEGER"/>
-        <domain name="delFlag" stdDomain="boolFlag" stdSqlType="TINYINT"/>
+        <domain name="delFlag" stdDomain="boolFlag" stdSqlType="BOOLEAN"/>
         <domain name="image" precision="200" stdDomain="file" stdSqlType="VARCHAR"/>
         <domain name="file" precision="200" stdDomain="file" stdSqlType="VARCHAR"/>
         <domain name="email" precision="100" stdSqlType="VARCHAR"/>
@@ -46,8 +46,9 @@
     </domains>
 
     <entities>
-        <entity className="io.crazydan.jingwei.store.dao.entity.Person" displayName="个体"
-                name="io.crazydan.jingwei.store.dao.entity.Person" registerShortName="true" tableName="o_person">
+        <entity className="io.crazydan.jingwei.store.dao.entity.Person" deleteFlagProp="deleted" displayName="个体"
+                name="io.crazydan.jingwei.store.dao.entity.Person" registerShortName="true" tableName="o_person"
+                useLogicalDelete="true">
             <columns>
                 <column code="oid" displayName="对象 ID" mandatory="true" name="oid" precision="50" primary="true"
                         propId="1" stdDataType="string" stdSqlType="VARCHAR" tagSet="seq"/>
@@ -63,14 +64,32 @@
                         stdDataType="string" stdSqlType="VARCHAR"/>
                 <column code="myself" comment="是否为资产库所有者。有且仅有一个" displayName="「我」？" mandatory="true" name="myself"
                         propId="7" stdDataType="boolean" stdSqlType="BOOLEAN"/>
+                <column code="deleted" comment="软删除标记" displayName="是否已删除" domain="delFlag" mandatory="true"
+                        name="deleted" propId="8" stdDataType="boolean" stdDomain="boolFlag" stdSqlType="BOOLEAN"/>
             </columns>
+            <relations>
+                <to-many cascadeDelete="true" name="relationToList"
+                         refEntityName="io.crazydan.jingwei.store.dao.entity.PersonRelationship" refPropName="source"
+                         tagSet="pub,cascade-delete">
+                    <join>
+                        <on leftProp="oid" rightProp="sourceId"/>
+                    </join>
+                </to-many>
+                <to-many cascadeDelete="true" name="relationFromList"
+                         refEntityName="io.crazydan.jingwei.store.dao.entity.PersonRelationship" refPropName="target"
+                         tagSet="pub,cascade-delete">
+                    <join>
+                        <on leftProp="oid" rightProp="targetId"/>
+                    </join>
+                </to-many>
+            </relations>
         </entity>
-        <entity className="io.crazydan.jingwei.store.dao.entity.PersonRelationShip" displayName="个体间的（直接）关系"
-                name="io.crazydan.jingwei.store.dao.entity.PersonRelationShip" registerShortName="true"
+        <entity className="io.crazydan.jingwei.store.dao.entity.PersonRelationship" displayName="个体间的（直接）关系"
+                name="io.crazydan.jingwei.store.dao.entity.PersonRelationship" registerShortName="true"
                 tableName="o_person_relationship">
             <columns>
                 <column code="oid" displayName="对象 ID" mandatory="true" name="oid" precision="50" primary="true"
-                        propId="1" stdDataType="string" stdSqlType="VARCHAR"/>
+                        propId="1" stdDataType="string" stdSqlType="VARCHAR" tagSet="seq"/>
                 <column code="source_id" displayName="关系源对象 ID" mandatory="true" name="sourceId" precision="50"
                         propId="2" stdDataType="string" stdSqlType="VARCHAR"/>
                 <column code="target_id" displayName="关系目标对象 ID" mandatory="true" name="targetId" precision="50"
@@ -80,21 +99,25 @@
             </columns>
             <comment>在 DuckDB 中，varchar 长度设置会被忽略</comment>
             <relations>
-                <to-one cascadeDelete="true" name="source" refEntityName="io.crazydan.jingwei.store.dao.entity.Person"
-                        tagSet="cascade-delete">
+                <to-one name="source" refEntityName="io.crazydan.jingwei.store.dao.entity.Person"
+                        refPropName="relationToList" tagSet="pub,ref-pub,ref-cascade-delete">
                     <join>
                         <on leftProp="sourceId" rightProp="oid"/>
                     </join>
                     <ref-set/>
                 </to-one>
-                <to-one cascadeDelete="true" name="target" refEntityName="io.crazydan.jingwei.store.dao.entity.Person"
-                        tagSet="cascade-delete">
+                <to-one name="target" refEntityName="io.crazydan.jingwei.store.dao.entity.Person"
+                        refPropName="relationFromList" tagSet="pub,ref-pub,ref-cascade-delete">
                     <join>
                         <on leftProp="targetId" rightProp="oid"/>
                     </join>
                     <ref-set/>
                 </to-one>
             </relations>
+            <unique-keys>
+                <unique-key columns="sourceId,targetId" constraint="UK_o_person_relationship_sourceId_targetId"
+                            name="UK_o_person_relationship_sourceId_targetId"/>
+            </unique-keys>
         </entity>
     </entities>
 </orm>

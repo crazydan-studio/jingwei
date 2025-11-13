@@ -7,6 +7,6 @@
 
     <bean id="io.crazydan.jingwei.store.service.entity.PersonBizModel" ioc:type="@bean:id" ioc:default="true"/>
 
-    <bean id="io.crazydan.jingwei.store.service.entity.PersonRelationShipBizModel" ioc:type="@bean:id"
+    <bean id="io.crazydan.jingwei.store.service.entity.PersonRelationshipBizModel" ioc:type="@bean:id"
           ioc:default="true"/>
 </beans>
