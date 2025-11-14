@@ -35,6 +35,7 @@
 
         <jingwei.version>0.1.0-SNAPSHOT</jingwei.version>
         <imgui.version>1.90.0</imgui.version>
+        <jexer.version>1.7.0</jexer.version>
         <duckdb.version>1.4.1.0</duckdb.version>
     </properties>
 
@@ -105,6 +106,11 @@
                 <groupId>io.github.spair</groupId>
                 <artifactId>imgui-java-app</artifactId>
                 <version>${imgui.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.gitlab.autumnmeowmeow</groupId>
+                <artifactId>jexer</artifactId>
+                <version>${jexer.version}</version>
             </dependency>
 
             <dependency>
