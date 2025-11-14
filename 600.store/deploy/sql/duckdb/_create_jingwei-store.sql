@@ -1,21 +1,20 @@
 
 CREATE TABLE o_person(
-  oid VARCHAR(50) NOT NULL ,
-  first_name VARCHAR(100) NOT NULL ,
-  family_name VARCHAR(100) NOT NULL ,
-  gender VARCHAR(100) default 'unset'   ,
-  birthdate INT8  ,
-  id_card_number VARCHAR(50)  ,
-  myself BOOLEAN NOT NULL ,
+  oid VARCHAR NOT NULL ,
+  first_name VARCHAR NOT NULL ,
+  family_name VARCHAR NOT NULL ,
+  gender VARCHAR default 'unset'   ,
+  birthdate BIGINT  ,
+  id_card_number VARCHAR  ,
   deleted BOOLEAN NOT NULL ,
   constraint PK_o_person primary key (oid)
 );
 
 CREATE TABLE o_person_relationship(
-  oid VARCHAR(50) NOT NULL ,
-  source_id VARCHAR(50) NOT NULL ,
-  target_id VARCHAR(50) NOT NULL ,
-  "type" VARCHAR(100) default 'unset'  NOT NULL ,
+  oid VARCHAR NOT NULL ,
+  source_id VARCHAR NOT NULL ,
+  target_id VARCHAR NOT NULL ,
+  "type" VARCHAR default 'unset'  NOT NULL ,
   constraint UK_o_person_relationship_sourceId_targetId unique (source_id,target_id),
   constraint PK_o_person_relationship primary key (oid)
 );
@@ -34,8 +33,6 @@ CREATE TABLE o_person_relationship(
       COMMENT ON COLUMN o_person.birthdate IS '出生日期';
                     
       COMMENT ON COLUMN o_person.id_card_number IS '身份证号';
-                    
-      COMMENT ON COLUMN o_person.myself IS '「我」？';
                     
       COMMENT ON COLUMN o_person.deleted IS '是否已删除';
                     

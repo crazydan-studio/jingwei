@@ -62,8 +62,6 @@
                         stdDataType="long" stdSqlType="BIGINT"/>
                 <column code="id_card_number" displayName="身份证号" name="idCardNumber" precision="50" propId="6"
                         stdDataType="string" stdSqlType="VARCHAR"/>
-                <column code="myself" comment="是否为资产库所有者。有且仅有一个" displayName="「我」？" mandatory="true" name="myself"
-                        propId="7" stdDataType="boolean" stdSqlType="BOOLEAN"/>
                 <column code="deleted" comment="软删除标记" displayName="是否已删除" domain="delFlag" mandatory="true"
                         name="deleted" propId="8" stdDataType="boolean" stdDomain="boolFlag" stdSqlType="BOOLEAN"/>
             </columns>

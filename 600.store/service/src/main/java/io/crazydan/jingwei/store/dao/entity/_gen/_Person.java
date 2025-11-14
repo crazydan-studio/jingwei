@@ -44,10 +44,6 @@ public class _Person extends DynamicOrmEntity{
     public static final String PROP_NAME_idCardNumber = "idCardNumber";
     public static final int PROP_ID_idCardNumber = 6;
     
-    /* 「我」？: myself BOOLEAN */
-    public static final String PROP_NAME_myself = "myself";
-    public static final int PROP_ID_myself = 7;
-    
     /* 是否已删除: deleted BOOLEAN */
     public static final String PROP_NAME_deleted = "deleted";
     public static final int PROP_ID_deleted = 8;
@@ -88,9 +84,6 @@ public class _Person extends DynamicOrmEntity{
           PROP_ID_TO_NAME[PROP_ID_idCardNumber] = PROP_NAME_idCardNumber;
           PROP_NAME_TO_ID.put(PROP_NAME_idCardNumber, PROP_ID_idCardNumber);
       
-          PROP_ID_TO_NAME[PROP_ID_myself] = PROP_NAME_myself;
-          PROP_NAME_TO_ID.put(PROP_NAME_myself, PROP_ID_myself);
-      
           PROP_ID_TO_NAME[PROP_ID_deleted] = PROP_NAME_deleted;
           PROP_NAME_TO_ID.put(PROP_NAME_deleted, PROP_ID_deleted);
       
@@ -114,9 +107,6 @@ public class _Person extends DynamicOrmEntity{
     
     /* 身份证号: id_card_number */
     private java.lang.String _idCardNumber;
-    
-    /* 「我」？: myself */
-    private java.lang.Boolean _myself;
     
     /* 是否已删除: deleted */
     private java.lang.Boolean _deleted;
@@ -213,9 +203,6 @@ public class _Person extends DynamicOrmEntity{
             case PROP_ID_idCardNumber:
                return getIdCardNumber();
         
-            case PROP_ID_myself:
-               return getMyself();
-        
             case PROP_ID_deleted:
                return getDeleted();
         
@@ -290,16 +277,6 @@ public class _Person extends DynamicOrmEntity{
                break;
             }
         
-            case PROP_ID_myself:{
-               java.lang.Boolean typedValue = null;
-               if(value != null){
-                   typedValue = ConvertHelper.toBoolean(value,
-                       err-> newTypeConversionError(PROP_NAME_myself));
-               }
-               setMyself(typedValue);
-               break;
-            }
-        
             case PROP_ID_deleted:{
                java.lang.Boolean typedValue = null;
                if(value != null){
@@ -357,13 +334,6 @@ public class _Person extends DynamicOrmEntity{
             case PROP_ID_idCardNumber:{
                onInitProp(propId);
                this._idCardNumber = (java.lang.String)value;
-               
-               break;
-            }
-        
-            case PROP_ID_myself:{
-               onInitProp(propId);
-               this._myself = (java.lang.Boolean)value;
                
                break;
             }
@@ -491,25 +461,6 @@ public class _Person extends DynamicOrmEntity{
         if(onPropSet(PROP_ID_idCardNumber,value)){
             this._idCardNumber = value;
             internalClearRefs(PROP_ID_idCardNumber);
-            
-        }
-    }
-    
-    /**
-     * 「我」？: myself
-     */
-    public final java.lang.Boolean getMyself(){
-         onPropGet(PROP_ID_myself);
-         return _myself;
-    }
-
-    /**
-     * 「我」？: myself
-     */
-    public final void setMyself(java.lang.Boolean value){
-        if(onPropSet(PROP_ID_myself,value)){
-            this._myself = value;
-            internalClearRefs(PROP_ID_myself);
             
         }
     }

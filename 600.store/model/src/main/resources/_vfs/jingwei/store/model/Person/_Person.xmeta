@@ -42,10 +42,6 @@
               updatable="true">
             <schema type="java.lang.String" precision="50"/>
         </prop>
-        <prop name="myself" displayName="「我」？" propId="7" mandatory="true" queryable="true" sortable="true"
-              insertable="true" updatable="true">
-            <schema type="java.lang.Boolean"/>
-        </prop>
         <prop name="deleted" displayName="是否已删除" propId="8" mandatory="true" queryable="true" sortable="true"
               insertable="false" updatable="true">
             <schema stdDomain="boolFlag" domain="delFlag" type="java.lang.Boolean"/>

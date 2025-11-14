@@ -5,7 +5,6 @@
       firstName: "四",
       familyName: "李",
       gender: "male",
-      myself: false,
     }
   }
 }
