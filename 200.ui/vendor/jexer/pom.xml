@@ -18,6 +18,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>io.crazydan.jingwei</groupId>
+            <artifactId>jingwei-ui-dsl</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>io.gitlab.autumnmeowmeow</groupId>
             <artifactId>jexer</artifactId>
         </dependency>
