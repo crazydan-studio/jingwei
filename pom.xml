@@ -36,7 +36,7 @@
         <jingwei.version>0.1.0-SNAPSHOT</jingwei.version>
         <imgui.version>1.90.0</imgui.version>
         <jexer.version>1.7.0</jexer.version>
-        <duckdb.version>1.4.1.0</duckdb.version>
+        <duckdb.version>1.4.2.0</duckdb.version>
     </properties>
 
     <licenses>
