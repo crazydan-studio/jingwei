@@ -28,6 +28,14 @@
         <module>800.common</module>
     </modules>
 
+    <dependencies>
+        <dependency>
+            <groupId>io.crazydan.duzhou.framework</groupId>
+            <artifactId>duzhou-autotest</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
