@@ -38,7 +38,7 @@
     <import xdef:name="XuiComponentImport" xdef:unique-attr="as"
             as="!component-name" from="!v-path"/>
 
-    <!-- [组件模板] -->
+    <!-- [组件树] -->
     <template xdef:ref="component/template.xdef"/>
 
     <!-- [组件消息列表] -->
