@@ -24,7 +24,7 @@
     <import as="Button" from="/jingwei/ui/component/button.xui"/>
 
     <template>
-        <xui:cond>
+        <xui:choose xui:name="choose-person-init-or-not">
             <xui:when test="${$data.me.notExist}">
                 <xui:layout>
                     <linear><![CDATA[
@@ -43,7 +43,7 @@
                     />
                 </Button>
             </xui:when>
-            <xui:else>
+            <xui:otherwise>
                 <xui:layout>
                     <linear><![CDATA[
                         v>{
@@ -73,8 +73,8 @@
                                   data="${$data.settings}"
                     />
                 </Button>
-            </xui:else>
-        </xui:cond>
+            </xui:otherwise>
+        </xui:choose>
     </template>
 
     <messages>

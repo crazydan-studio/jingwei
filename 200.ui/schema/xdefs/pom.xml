@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <name>JingWei UI Vendor - Jexer</name>
-    <artifactId>jingwei-ui-vendor-jexer</artifactId>
+    <name>JingWei UI Schema - XDefs</name>
+    <artifactId>jingwei-ui-schema-xdefs</artifactId>
 
     <parent>
         <groupId>io.crazydan.jingwei</groupId>
-        <artifactId>jingwei-ui-vendor</artifactId>
+        <artifactId>jingwei-ui-schema</artifactId>
         <version>0.1.0-SNAPSHOT</version>
     </parent>
 
@@ -18,13 +18,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.crazydan.jingwei</groupId>
-            <artifactId>jingwei-ui-schema-model</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.gitlab.autumnmeowmeow</groupId>
-            <artifactId>jexer</artifactId>
+            <groupId>io.github.entropy-cloud</groupId>
+            <artifactId>nop-xdefs</artifactId>
         </dependency>
     </dependencies>
 </project>
