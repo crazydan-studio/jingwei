@@ -19,20 +19,23 @@
   - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
   -->
 
-<!-- [UI 应用]
-> 一个独立的 UI 应用是系统中相关功能的集合体，比如，控制台、门户等
+<lib xmlns:x="/nop/schema/xdsl.xdef" xmlns:c="c" xmlns:xpl="xpl"
+     xmlns:thisLib="thisLib"
+     x:schema="/nop/schema/xlib.xdef"
 >
--->
-<app xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="/nop/schema/xdef.xdef"
-     x:schema="/nop/schema/xdef.xdef"
-     xdef:name="XuiApp" xdef:bean-package="io.crazydan.jingwei.ui.schema.app"
->
+    <tags>
+        <DefaultGenExtends outputMode="node">
+            <attr name="_dsl_root" implicit="true" />
 
-    <pages xdef:bean-prop="pages" xdef:bean-child-name="page"
-           xdef:body-type="list" xdef:key-attr="route"
-    >
-        <page xdef:name="XuiAppPage"
-              route="!string" path="!v-path"
-        />
-    </pages>
-</app>
+            <source>
+            </source>
+        </DefaultGenExtends>
+
+        <DefaultPostExtends outputMode="node">
+            <attr name="_dsl_root" implicit="true" />
+
+            <source>
+            </source>
+        </DefaultPostExtends>
+    </tags>
+</lib>

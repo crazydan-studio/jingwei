@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!--
-  - 精卫（JingWei） - 衔木石填沧海，筑屏障护安全
+  - 渡舟平台 - 致力于构建自运维、自监控、可演化的应用生产平台
   - Copyright (C) 2025 Crazydan Studio <https://studio.crazydan.org>
   -
   - This program is free software: you can redistribute it and/or modify
@@ -19,20 +19,18 @@
   - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
   -->
 
-<!-- [UI 应用]
-> 一个独立的 UI 应用是系统中相关功能的集合体，比如，控制台、门户等
->
--->
-<app xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="/nop/schema/xdef.xdef"
-     x:schema="/nop/schema/xdef.xdef"
-     xdef:name="XuiApp" xdef:bean-package="io.crazydan.jingwei.ui.schema.app"
->
+<c:script xmlns:c="c"><![CDATA[
+    const xdefs = [
+        '/jingwei/ui/schema/app.xdef',
+        '/jingwei/ui/schema/page.xdef',
+        //
+        '/jingwei/ui/schema/component/define_model.xdef',
+        '/jingwei/ui/schema/component/message.xdef',
+        '/jingwei/ui/schema/component/template.xdef',
+    ];
 
-    <pages xdef:bean-prop="pages" xdef:bean-child-name="page"
-           xdef:body-type="list" xdef:key-attr="route"
-    >
-        <page xdef:name="XuiAppPage"
-              route="!string" path="!v-path"
-        />
-    </pages>
-</app>
+    for (let i = 0; i < xdefs.length; i++) {
+        const xdef = xdefs[i];
+        codeGenerator.renderModel(xdef, '/nop/templates/xdsl', '/', $scope);
+    }
+]]></c:script>

@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--
+  - 精卫（JingWei） - 衔木石填沧海，筑屏障护安全
+  - Copyright (C) 2025 Crazydan Studio <https://studio.crazydan.org>
+  -
+  - This program is free software: you can redistribute it and/or modify
+  - it under the terms of the GNU Lesser General Public License as published by
+  - the Free Software Foundation, either version 3 of the License, or
+  - (at your option) any later version.
+  -
+  - This program is distributed in the hope that it will be useful,
+  - but WITHOUT ANY WARRANTY; without even the implied warranty of
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  - GNU Lesser General Public License for more details.
+  -
+  - You should have received a copy of the GNU Lesser General Public License
+  - along with this program.
+  - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
+  -->
+
+<!-- [组件模板]
+> 定义组件内部的树形结构（组件树），且其内部结构可根据状态、属性等动态确定。
+-->
+<template xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="xdef"
+          xmlns:xui="xui"
+          x:schema="/nop/schema/xdef.xdef" xdef:check-ns="xui"
+          xdef:bean-package="io.crazydan.jingwei.ui.schema.component"
+          xdef:ref="XuiComponentTreeNode"
+          xdef:name="XuiComponentTemplate"
+>
+
+    <!-- [组件树节点] -->
+    <xdef:define xdef:name="XuiComponentTreeNode">
+        <!-- [布局控制]
+        > 通过 `xui:name` 对内嵌组件进行布局控制。
+        >
+        > 最终只能有唯一节点，不能重复。
+        -->
+        <xui:layout xdef:ref="XuiComponentTreeNode_Layout"/>
+        <!-- [消息派发]
+        > 监听指定的组件事件，并携带相关数据进行消息派发
+
+        @on [事件名称]
+            > 触发消息的事件，如 `click`、`input` 等
+        @msg [消息类型]
+            > 待触发的消息，如 `User_Login_Start`、`User_Login_Finish` 等
+        @data [消息所携带的数据]
+            > 以 `${xxx}` 形式构造数据，并可通过 `$event` 引用事件对象上的数据
+        -->
+        <xui:dispatch xdef:name="XuiComponentTreeNode_Dispatch"
+                      on="!conf-name" msg="!component-name"
+                      data="any"
+        />
+
+        <!-- [原生组件]
+        > 原生组件由 UI Vendor 根据通用组件的配置提供具体的实现。
+        >
+        > - 可以在原生组件内嵌入其他组件（含通用组件、原生组件）；
+        > - 其内嵌结构支持条件、循环控制，以及消息派发和布局控制；
+        > - 除 `name` 外，由 UI Vendor 自行根据原生组件的支持情况添加额外的配置属性，
+        >   且可通过 `${xxx}` 表达式引用变量；
+        -->
+        <xui:native xdef:ref="XuiComponentTreeNode"
+                    xdef:name="XuiComponentTreeNode_Native"
+                    xdef:unknown-attr="any"
+                    xui:name="!ns-name"
+                    name="!ns-name"
+        />
+        <!-- [子组件插槽]
+        >
+        >
+        > - ；
+        -->
+        <xui:slot xdef:ref="XuiComponentTreeNode"
+                  xdef:name="XuiComponentTreeNode_Slot"
+                  xui:name="!ns-name"
+                  name="!ns-name" attrs="any"
+        >
+            <!-- 当前组件在该插槽位置的缺省的嵌入结构：支持条件、循环 -->
+        </xui:slot>
+
+        <!-- [文本内嵌组件]
+        > 只包含文本内容的组件。
+
+        @as-html [是否为 HTML 片段]
+            > 若为 `true`，则将其文本作为 HTML 渲染，但需自行处理 XSS 攻击
+        -->
+        <Text xdef:ref="XuiComponentTreeNode"
+              xdef:name="XuiComponentTreeNode_Text"
+              xdef:value="string" xdef:bean-body-prop="value"
+              xdef:unknown-attr="any"
+              xui:name="!ns-name" xui:slot="ns-name"
+              as-html="boolean"
+        />
+        <!-- [任意内嵌组件] -->
+        <xdef:unknown-tag xdef:ref="XuiComponentTreeNode"
+                          xdef:ref="XuiComponentTreeNode_Any"
+                          xui:name="!ns-name" xui:slot="ns-name"
+        />
+
+        <!-- Start: 条件控制 -->
+        <xui:if xdef:ref="XuiComponentTreeNode"
+                xdef:name="XuiComponentTreeNode_Statement_If"
+                xui:name="!ns-name"
+                test="boolean"
+        />
+        <!-- [条件选择]
+        -->
+        <xui:choose xdef:name="XuiComponentTreeNode_Statement_Choose"
+                    xui:name="!ns-name"
+        >
+            <!-- [指定条件]
+
+            @test [条件表达式]
+                > 如 `${name != null}`
+            -->
+            <when xdef:ref="XuiComponentTreeNode"
+                  xdef:name="XuiComponentTreeNode_Statement_Choose_When"
+                  xdef:bean-prop="whens" xdef:bean-child-name="when"
+                  xdef:unique-attr="xui:name"
+                  xui:name="!ns-name"
+                  test="boolean"
+            />
+            <!-- [缺省条件]
+            -->
+            <otherwise xdef:ref="XuiComponentTreeNode"
+                       xdef:name="XuiComponentTreeNode_Statement_Choose_Otherwise"
+            />
+        </xui:choose>
+        <!-- End: 条件控制 -->
+
+        <!-- Start: 循环控制 -->
+        <!-- [For 循环]
+
+        @items [待循环变量]
+            > 如 `props.users`
+        @var [循环元素的变量名]
+            > 如 `user`
+        @index [循环元素序号的变量名]
+            > 如 `i`
+        -->
+        <xui:for xdef:ref="XuiComponentTreeNode"
+                 xdef:name="XuiComponentTreeNode_Statement_For"
+                 xui:name="!ns-name"
+                 var="!var-name" index="var-name"
+                 items="var-name"
+                 begin="int" end="int"
+        />
+        <xui:while xdef:ref="XuiComponentTreeNode"
+                   xdef:name="XuiComponentTreeNode_Statement_While"
+                   xui:name="!ns-name"
+                   test="boolean"
+        />
+        <!-- End: 循环控制 -->
+    </xdef:define>
+
+    <!-- [组件布局]
+    > - 布局将影响运行时的节点嵌套关系，从而保证布局的准确性；
+    > - 仅用于控制所在组件中的直接视图组件；
+    -->
+    <xdef:define xdef:name="XuiComponentTreeNode_Layout"
+                 xdef:body-type="union"
+                 xdef:bean-body-type="io.crazydan.jingwei.ui.schema.XuiLayout"
+                 xdef:bean-body-prop="type"
+                 xdef:bean-sub-type-prop="$type"
+    >
+        <!-- [线性布局]
+        > 在水平和垂直方向上布局组件，且溢出内容不做换行处理。
+        >
+        > 线性布局使用文本标记语言：
+        > - `[comp]`: 指代 `xui:name` `=` `comp` 的组件；
+        > - `<`: 表示左对齐；
+        > - `>`: 表示右对齐；
+        > - `^`: 表示顶部对齐；
+        > - `v`: 表示底部对齐；
+        > - `<[comp]>`: 表示使组件 `comp` 水平占满剩余空间，若未指定组件，则以空白占满剩余空间；
+        > - `>[comp]<`: 表示使组件 `comp` 水平居中对齐；
+        > - `^[comp]v`: 表示使组件 `comp` 垂直占满剩余空间，若未指定组件，则以空白占满剩余空间；
+        > - `v[comp]^`: 表示使组件 `comp` 垂直居中对齐；
+        > - `[comp1] [comp2]`: 表示左右放置组件 `comp1` 和 `comp2`；
+        > - `| [comp1] | [comp2] |`: 表示以表格形式放置组件 `comp1` 和 `comp2`，
+        >   也即，`comp1` 与 `comp2` 分别在同一行的两个单元格内。
+        >   上下相邻的以 `|` 为分隔符的多行属于同一个表格；
+        > - `[comp1]\n[comp2]`: 表示上下放置组件 `comp1` 和 `comp2`，其中，`\n` 为换行符，实际不可见，效果为上下两行；
+        > - `{xxx}`: 表示布局嵌套，可在内部反复应用前面的规则，其自身也是一个整体，可像组件一样对其应用水平和垂直布局；
+        > - `()`: 表示设置组件布局配置参数列表，在括号内以 `prop:value` 形式指定参数名和参数值，且参数间以逗号分隔，
+        >   如：`(width:10u,height:20u)` 表示设置宽为 `10u`，长为 `20u`。
+        >   参数列表只能紧跟在 `[comp]` 和 `{xxx}` 之后放置；
+        > - `//`: 表示行注释，其后均为注释内容；
+        > - 组件尺寸（宽高）默认均为自适应内容；
+        > - 根布局的尺寸始终与上层容器的尺寸相同；
+
+        @mode [布局模式]
+            > (必填) 缺省为 `column`
+        -->
+        <linear xdef:name="XuiLayout_Linear"
+                xdef:bean-implements-types="io.crazydan.jingwei.ui.schema.XuiLayout"
+                xdef:value="!string" xdef:bean-body-prop="value"
+                xdef:bean-tag-prop="$type"
+                mode="!dict:jingwei/ui/layout-linear-mode=column"
+        />
+
+        <!-- [堆叠布局]
+        > - 包含至少两个布局子节点，且子节点可通过 `xui:when` 控制是否显示；
+        > - 该布局及其各个子节点的布局空间均占满当前组件；
+        > - 子节点之间为一层一层的堆叠效果，并通过属性 `layer` 来控制相对间的层级关系；
+        > - 弹出层、遮罩等，均通过该布局进行控制；
+        -->
+        <stacked
+        >
+            <!-- TODO 嵌套其他类型布局 -->
+        </stacked>
+    </xdef:define>
+
+</template>

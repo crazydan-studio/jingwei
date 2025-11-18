@@ -24,9 +24,10 @@
 > 其本质就是一个占满整个视窗的 UI 组件。
 >
 -->
-<page xmlns:x="/nop/schema/xdsl.xdef"
+<page xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="/nop/schema/xdef.xdef"
       x:schema="/nop/schema/xdef.xdef"
       x:extends="component.xdef"
+      xdef:name="XuiPage" xdef:bean-package="io.crazydan.jingwei.ui.schema.page"
 >
 
 </page>

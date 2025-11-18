@@ -19,20 +19,17 @@
   - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
   -->
 
-<!-- [UI 应用]
-> 一个独立的 UI 应用是系统中相关功能的集合体，比如，控制台、门户等
->
+<!-- 组件的缺省扩展模型
+- 其在 `component.xdef` 中通过 `xdef:default-extends` 属性引用，其余组件不需要在 `x:extends` 中显式指定；
 -->
-<app xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="/nop/schema/xdef.xdef"
-     x:schema="/nop/schema/xdef.xdef"
-     xdef:name="XuiApp" xdef:bean-package="io.crazydan.jingwei.ui.schema.app"
+<component xmlns:x="/nop/schema/xdsl.xdef" xmlns:xpl="xpl"
+           x:schema="/jingwei/ui/schema/component.xdef"
 >
 
-    <pages xdef:bean-prop="pages" xdef:bean-child-name="page"
-           xdef:body-type="list" xdef:key-attr="route"
-    >
-        <page xdef:name="XuiAppPage"
-              route="!string" path="!v-path"
-        />
-    </pages>
-</app>
+    <x:gen-extends xmlns:component="component">
+        <component:DefaultGenExtends xpl:lib="/jingwei/ui/xlib/component.xlib"/>
+    </x:gen-extends>
+    <x:post-extends xmlns:component="component">
+        <component:DefaultPostExtends xpl:lib="/jingwei/ui/xlib/component.xlib"/>
+    </x:post-extends>
+</component>

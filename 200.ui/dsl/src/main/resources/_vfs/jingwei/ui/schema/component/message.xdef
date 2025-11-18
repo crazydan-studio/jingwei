@@ -19,20 +19,16 @@
   - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
   -->
 
-<!-- [UI 应用]
-> 一个独立的 UI 应用是系统中相关功能的集合体，比如，控制台、门户等
->
+<!-- [组件消息定义]
+
+@name [消息名]
+    > 其值需为首字母大写的驼峰形式（可包含下划线）；
 -->
-<app xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="/nop/schema/xdef.xdef"
-     x:schema="/nop/schema/xdef.xdef"
-     xdef:name="XuiApp" xdef:bean-package="io.crazydan.jingwei.ui.schema.app"
+<message xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="xdef"
+         x:schema="/nop/schema/xdef.xdef"
+         xdef:name="XuiComponentMessage"
+         xdef:bean-package="io.crazydan.jingwei.ui.schema.component"
+         name="!component-name"
 >
 
-    <pages xdef:bean-prop="pages" xdef:bean-child-name="page"
-           xdef:body-type="list" xdef:key-attr="route"
-    >
-        <page xdef:name="XuiAppPage"
-              route="!string" path="!v-path"
-        />
-    </pages>
-</app>
+</message>
