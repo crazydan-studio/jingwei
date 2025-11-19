@@ -25,7 +25,7 @@
 
     <template>
         <choose xid="choose-person-init-or-not">
-            <when test="${$data.me.notExist}">
+            <when xid="choose-person-init" test="${$data.me.notExist}">
                 <layout>
                     <linear><![CDATA[
                         v>[btn-add-personal-information]<^

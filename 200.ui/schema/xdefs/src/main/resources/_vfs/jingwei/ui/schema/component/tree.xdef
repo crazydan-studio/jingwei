@@ -110,6 +110,10 @@
 
         <!-- Start: 条件/循环控制 -->
 
+        <if xdef:name="XuiComponentTreeNodeStatementIf"
+            xdef:ref="XuiComponentTreeNodeStatementCond"
+            xdef:bean-prop="ifStatements" xdef:bean-child-name="ifStatement"
+        />
         <!-- [条件选择]
         >
         -->
@@ -118,15 +122,10 @@
                 xdef:bean-prop="chooseStatements" xdef:bean-child-name="chooseStatement"
         >
             <!-- [特定条件]
-            >
-
-            @test [条件表达式]
-                > 如 `${name != null}`
             -->
             <when xdef:name="XuiComponentTreeNodeStatementChooseWhen"
-                  xdef:ref="XuiComponentTreeNodeKeyed"
+                  xdef:ref="XuiComponentTreeNodeStatementCond"
                   xdef:bean-prop="whens" xdef:bean-child-name="when"
-                  test="boolean"
             />
             <!-- [缺省条件]
             >
@@ -178,6 +177,17 @@
     <xdef:define xdef:name="XuiComponentTreeNodeSlottable"
                  xdef:ref="XuiComponentTreeNodeKeyed"
                  xslot="ns-name"
+    />
+
+    <!-- [条件判断]
+    > 在 `test` 表达式的结果为 `true` 时，获得其子节点。
+
+    @test [条件表达式]
+        > 如 `${name != null}`
+    -->
+    <xdef:define xdef:name="XuiComponentTreeNodeStatementCond"
+                 xdef:ref="XuiComponentTreeNodeKeyed"
+                 test="boolean"
     />
 
     <!-- [组件布局]
