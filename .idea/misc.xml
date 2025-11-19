@@ -13,6 +13,7 @@
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/200.ui/schema/model/pom.xml" />
         <option value="$PROJECT_DIR$/800.common/test/pom.xml" />
       </set>
     </option>

@@ -6,7 +6,6 @@
 
     <name>JingWei UI Schema</name>
     <artifactId>jingwei-ui-schema</artifactId>
-    <packaging>pom</packaging>
 
     <parent>
         <groupId>io.crazydan.jingwei</groupId>
@@ -14,14 +13,23 @@
         <version>0.1.0-SNAPSHOT</version>
     </parent>
 
-    <modules>
-        <module>xdefs</module>
-        <module>model</module>
-    </modules>
-
     <properties>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>io.github.entropy-cloud</groupId>
+            <artifactId>nop-xdefs</artifactId>
+        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Note：该插件的配置见 io.github.entropy-cloud:nop-entropy -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>
