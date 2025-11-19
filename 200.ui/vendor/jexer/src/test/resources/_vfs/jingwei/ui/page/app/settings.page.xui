@@ -18,18 +18,18 @@
   - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
   -->
 
-<page xmlns:x="/nop/schema/xdsl.xdef" xmlns:xui="xui"
+<page xmlns:x="/nop/schema/xdsl.xdef"
       x:schema="/jingwei/ui/schema/page.xdef"
 >
 
     <template>
-        <xui:layout>
+        <layout>
             <linear><![CDATA[
                 v>[text-developing-tips]<^
             ]]></linear>
-        </xui:layout>
+        </layout>
 
-        <Text xui:name="text-developing-tips"><![CDATA[
+        <Text xid="text-developing-tips"><![CDATA[
             Developing ...
         ]]></Text>
     </template>

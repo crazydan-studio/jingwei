@@ -22,12 +22,12 @@
      x:schema="/jingwei/ui/schema/app.xdef"
 >
 
-    <pages>
-        <page route="/" path="page/main.page.xui"/>
+    <pages entry="/">
+        <page url="/" path="page/main.page.xui"/>
 
-        <page route="/person/edit" path="page/person/edit.page.xui"/>
-        <page route="/person/management" path="page/person/management.page.xui"/>
+        <page url="/person/edit" path="page/person/edit.page.xui"/>
+        <page url="/person/management" path="page/person/management.page.xui"/>
 
-        <page route="/app/settings" path="page/app/settings.page.xui"/>
+        <page url="/app/settings" path="page/app/settings.page.xui"/>
     </pages>
 </app>

@@ -18,21 +18,21 @@
   - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
   -->
 
-<component xmlns:x="/nop/schema/xdsl.xdef" xmlns:xui="xui"
+<component xmlns:x="/nop/schema/xdsl.xdef"
            x:schema="/jingwei/ui/schema/component.xdef"
 >
 
     <template>
-        <xui:native name="input">
+        <native xid="body" name="input">
             <!-- 插入 `<Input/>` 中 `xui:slot` 为 `label` 的组件，
             若不存在该 slot 组件，则缺省在该位置显示 `Label:`。
             若 `name="default"`，则表示将 `<Input/>` 的子组件均插入到该位置
             -->
-            <xui:slot name="label">
-                <Text xui:name="label-fallback"><![CDATA[
+            <slot xid="label" name="label">
+                <Text xid="label-fallback"><![CDATA[
                     Label
                 ]]></Text>
-            </xui:slot>
-        </xui:native>
+            </slot>
+        </native>
     </template>
 </component>

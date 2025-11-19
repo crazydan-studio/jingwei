@@ -28,11 +28,13 @@
      xdef:name="XuiApp" xdef:bean-package="io.crazydan.jingwei.ui.schema.app"
 >
 
-    <pages xdef:bean-prop="pages" xdef:bean-child-name="page"
-           xdef:body-type="list" xdef:key-attr="route"
+    <pages xdef:name="XuiAppPages"
+           xdef:body-type="list" xdef:key-attr="url"
+           xdef:bean-body-prop="children" xdef:bean-child-name="child"
+           entry="!string"
     >
         <page xdef:name="XuiAppPage"
-              route="!string" path="!v-path"
+              url="!string" path="!v-path"
         />
     </pages>
 </app>

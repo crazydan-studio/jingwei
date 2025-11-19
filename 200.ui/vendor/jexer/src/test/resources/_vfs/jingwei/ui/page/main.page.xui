@@ -18,63 +18,60 @@
   - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
   -->
 
-<page xmlns:x="/nop/schema/xdsl.xdef" xmlns:xui="xui"
+<page xmlns:x="/nop/schema/xdsl.xdef"
       x:schema="/jingwei/ui/schema/page.xdef"
 >
     <import as="Button" from="/jingwei/ui/component/button.xui"/>
 
     <template>
-        <xui:choose xui:name="choose-person-init-or-not">
-            <xui:when test="${$data.me.notExist}">
-                <xui:layout>
+        <choose xid="choose-person-init-or-not">
+            <when test="${$data.me.notExist}">
+                <layout>
                     <linear><![CDATA[
                         v>[btn-add-personal-information]<^
                     ]]></linear>
-                </xui:layout>
+                </layout>
 
-                <Button xui:name="btn-add-personal-information">
-                    <Text xui:name="label"><![CDATA[
+                <Button xid="btn-add-personal-information">
+                    <dispatch msg="Route_to_Person_Edit_Page"
+                              events="click" data="${$data.me}"
+                    />
+
+                    <Text xid="label"><![CDATA[
                         Add Personal Information
                     ]]></Text>
-
-                    <xui:dispatch on="click"
-                                  msg="Route_to_Person_Edit_Page"
-                                  data="${$data.me}"
-                    />
                 </Button>
-            </xui:when>
-            <xui:otherwise>
-                <xui:layout>
+            </when>
+            <otherwise>
+                <layout>
                     <linear><![CDATA[
                         v>{
                             <[btn-personal-management]>
                             <[btn-app-settings]>
                         }<^
                     ]]></linear>
-                </xui:layout>
+                </layout>
 
-                <Button xui:name="btn-personal-management">
-                    <Text xui:name="label"><![CDATA[
+                <Button xid="btn-personal-management">
+                    <dispatch msg="Route_to_Person_Management_Page"
+                              events="click" data="${$data.me}"
+                    />
+
+                    <Text xid="label"><![CDATA[
                         Personal Management
                     ]]></Text>
-
-                    <xui:dispatch on="click"
-                                  msg="Route_to_Person_Management_Page"
-                                  data="${$data.me}"
-                    />
                 </Button>
-                <Button xui:name="btn-app-settings">
-                    <Text xui:name="label"><![CDATA[
+                <Button xid="btn-app-settings">
+                    <dispatch msg="Route_to_App_Settings_Page"
+                              events="click" data="${$data.settings}"
+                    />
+
+                    <Text xid="label"><![CDATA[
                         App Settings
                     ]]></Text>
-
-                    <xui:dispatch on="click"
-                                  msg="Route_to_App_Settings_Page"
-                                  data="${$data.settings}"
-                    />
                 </Button>
-            </xui:otherwise>
-        </xui:choose>
+            </otherwise>
+        </choose>
     </template>
 
     <messages>

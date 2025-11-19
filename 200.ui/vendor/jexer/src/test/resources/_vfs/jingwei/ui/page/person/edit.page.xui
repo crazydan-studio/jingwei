@@ -18,7 +18,7 @@
   - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
   -->
 
-<page xmlns:x="/nop/schema/xdsl.xdef" xmlns:xui="xui"
+<page xmlns:x="/nop/schema/xdsl.xdef"
       x:schema="/jingwei/ui/schema/page.xdef"
 >
     <import as="Input" from="/jingwei/ui/component/form/input.xui"/>
@@ -26,7 +26,7 @@
     <import as="DatePicker" from="/jingwei/ui/component/form/date-picker.xui"/>
 
     <template>
-        <xui:layout>
+        <layout>
             <linear><![CDATA[
                 v>{
                     <[input-first-name]>
@@ -36,45 +36,45 @@
                     <[input-id-card-number]>
                 }<^
             ]]></linear>
-        </xui:layout>
+        </layout>
 
-        <Input xui:name="input-first-name"
+        <Input xid="input-first-name"
                value="${$data.firstName}"
         >
-            <Text xui:name="label" xui:slot="label"><![CDATA[
+            <Text xid="label" xslot="label"><![CDATA[
                 First Name
             ]]></Text>
         </Input>
 
-        <Input xui:name="input-family-name"
+        <Input xid="input-family-name"
                value="${$data.familyName}"
                label="Family Name"
         >
-            <Text xui:name="label" xui:slot="label"><![CDATA[
+            <Text xid="label" xslot="label"><![CDATA[
                 First Name
             ]]></Text>
         </Input>
 
-        <ComboBox xui:name="combobox-gender"
+        <ComboBox xid="combobox-gender"
                   value="${$data.gender}"
         >
-            <Text xui:name="label" xui:slot="label"><![CDATA[
+            <Text xid="label" xslot="label"><![CDATA[
                 Gender
             ]]></Text>
         </ComboBox>
 
-        <DatePicker xui:name="datepicker-birthdate"
+        <DatePicker xid="datepicker-birthdate"
                     value="${$data.birthdate}"
         >
-            <Text xui:name="label" xui:slot="label"><![CDATA[
+            <Text xid="label" xslot="label"><![CDATA[
                 Birth Date
             ]]></Text>
         </DatePicker>
 
-        <Input xui:name="input-id-card-number"
+        <Input xid="input-id-card-number"
                value="${$data.idCardNumber}"
         >
-            <Text xui:name="label" xui:slot="label"><![CDATA[
+            <Text xid="label" xslot="label"><![CDATA[
                 ID Card Number
             ]]></Text>
         </Input>

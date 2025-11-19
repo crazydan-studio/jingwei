@@ -26,7 +26,7 @@
         //
         '/jingwei/ui/schema/component.xdef',
         '/jingwei/ui/schema/component/message.xdef',
-        '/jingwei/ui/schema/component/template.xdef',
+        '/jingwei/ui/schema/component/tree.xdef',
     ];
 
     for (let i = 0; i < xdefs.length; i++) {

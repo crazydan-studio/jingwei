@@ -25,7 +25,7 @@
     <template>
         <Input>
             <!-- 通过 `xui:slot` 指定名字为 `label` 的 slot 组件 -->
-            <Text xui:name="label" xui:slot="label"/>
+            <Text xid="label" xui:slot="label"/>
         </Input>
     </template>
 </page>

@@ -39,7 +39,7 @@
             as="!component-name" from="!v-path"/>
 
     <!-- [组件树] -->
-    <template xdef:ref="component/template.xdef"/>
+    <template xdef:ref="component/tree.xdef"/>
 
     <!-- [组件消息列表] -->
     <messages xdef:bean-prop="messages"

@@ -32,5 +32,8 @@
            x:extends="super"
 >
 
+    <!-- [支持 Xpl 控制标签的组件树模板]
+    > - 控制标签将直接映射到相应的 Xpl 内置标签上，并在运行期执行，以便于动态获取组件树；
+    -->
     <template xdef:value="xpl-node" x:override="replace"/>
 </component>
