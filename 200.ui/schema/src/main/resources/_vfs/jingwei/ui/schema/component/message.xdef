@@ -27,7 +27,7 @@
 <message xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="xdef"
          x:schema="/nop/schema/xdef.xdef"
          xdef:name="XuiComponentMessage"
-         xdef:bean-package="io.crazydan.jingwei.ui.schema.component"
+         xdef:bean-package="io.crazydan.jingwei.ui.schema.component.message"
          name="!component-name"
 >
 
