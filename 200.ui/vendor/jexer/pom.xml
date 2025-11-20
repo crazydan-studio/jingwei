@@ -19,7 +19,7 @@
     <dependencies>
         <dependency>
             <groupId>io.crazydan.jingwei</groupId>
-            <artifactId>jingwei-ui-schema</artifactId>
+            <artifactId>jingwei-ui-vendor-core</artifactId>
         </dependency>
 
         <dependency>

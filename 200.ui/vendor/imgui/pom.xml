@@ -18,6 +18,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>io.crazydan.jingwei</groupId>
+            <artifactId>jingwei-ui-vendor-core</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>io.github.spair</groupId>
             <artifactId>imgui-java-app</artifactId>
         </dependency>

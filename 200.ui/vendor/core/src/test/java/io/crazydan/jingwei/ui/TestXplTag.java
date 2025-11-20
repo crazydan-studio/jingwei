@@ -72,6 +72,6 @@ public class TestXplTag extends NopJunitTestCase {
     }
 
     private <T> T nodeToModel(XNode node) {
-        return (T) new DslModelParser("/nop/schema/xmeta.xdef").resolveInDir("/nop/schema/").parseFromNode(node);
+        return (T) new DslModelParser("/nop/schema/xmeta.xdef").parseFromNode(node);
     }
 }

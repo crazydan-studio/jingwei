@@ -100,6 +100,11 @@
             </dependency>
             <dependency>
                 <groupId>io.crazydan.jingwei</groupId>
+                <artifactId>jingwei-ui-vendor-core</artifactId>
+                <version>${jingwei.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.crazydan.jingwei</groupId>
                 <artifactId>jingwei-ui-vendor-imgui</artifactId>
                 <version>${jingwei.version}</version>
             </dependency>
