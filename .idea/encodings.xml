@@ -9,6 +9,8 @@
     <file url="file://$PROJECT_DIR$/150.codegen/src/test/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/200.store/service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/200.store/service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/200.ui/codegen/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/200.ui/codegen/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/200.ui/dsl/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/200.ui/dsl/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/200.ui/dsl/src/test/resources" charset="UTF-8" />

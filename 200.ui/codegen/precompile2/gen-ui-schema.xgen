@@ -31,6 +31,9 @@
 
     for (let i = 0; i < xdefs.length; i++) {
         const xdef = xdefs[i];
-        codeGenerator.renderModel(xdef, '/nop/templates/xdsl', '/', $scope);
+        codeGenerator
+            // 设置生成代码的存放位置，其相对于当前 Maven 工程的根目录
+            .withTargetDir('../schema')
+            .renderModel(xdef, '/nop/templates/xdsl', '/', $scope);
     }
 ]]></c:script>

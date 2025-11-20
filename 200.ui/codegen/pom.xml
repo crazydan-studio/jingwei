@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <name>JingWei UI Schema</name>
-    <artifactId>jingwei-ui-schema</artifactId>
+    <name>JingWei UI CodeGen</name>
+    <artifactId>jingwei-ui-codegen</artifactId>
 
     <parent>
         <groupId>io.crazydan.jingwei</groupId>
@@ -18,8 +18,18 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.github.entropy-cloud</groupId>
-            <artifactId>nop-xdefs</artifactId>
+            <groupId>io.crazydan.jingwei</groupId>
+            <artifactId>jingwei-ui-schema</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Note：该插件的配置见 io.github.entropy-cloud:nop-entropy -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>
