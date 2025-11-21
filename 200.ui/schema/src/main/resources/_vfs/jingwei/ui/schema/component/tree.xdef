@@ -48,7 +48,6 @@
         -->
         <layout xdef:ref="XuiComponentTreeNodeLayout"
                 xdef:allow-multiple="false"
-                xdef:bean-implements-types="io.crazydan.jingwei.ui.schema.component.tree.XuiComponentTreeNodeKeyed"
                 xui-id="!~ns-name=xui-layout"
         />
         <!-- [消息派发]
@@ -62,6 +61,7 @@
             > 以 `${xxx}` 形式构造数据，并可通过 `$event` 引用事件对象上的数据
         -->
         <dispatch xdef:name="XuiComponentTreeNodeDispatch"
+                  xdef:bean-tag-prop="tagName"
                   xdef:bean-implements-types="io.crazydan.jingwei.ui.schema.component.tree.XuiComponentTreeNodeKeyed"
                   xui-id="!~ns-name=@attr:msg"
                   msg="!component-name" events="!prop-name-set"
@@ -72,10 +72,11 @@
     <!-- [组件树节点嵌套结构]
     -->
     <xdef:define xdef:name="XuiComponentTreeNodeNested"
+                 xdef:bean-tag-prop="tagName"
                  xdef:body-type="list" xdef:key-attr="xui-id"
                  xdef:bean-body-prop="children" xdef:bean-child-name="child"
                  xdef:bean-body-type="List&lt;io.crazydan.jingwei.ui.schema.component.tree.XuiComponentTreeNodeKeyed>"
-                 xdef:bean-sub-type-prop="$type"
+                 xdef:bean-sub-type-prop="tagName"
     >
         <!-- Start: 组件树节点 -->
 
@@ -118,6 +119,7 @@
             > 若为 `true`，则将其文本作为 HTML 渲染，但需自行处理 XSS 攻击
         -->
         <Text xdef:name="XuiComponentTreeNodeText"
+              xdef:bean-tag-prop="tagName"
               xdef:bean-implements-types="io.crazydan.jingwei.ui.schema.component.tree.XuiComponentTreeNodeKeyed"
               xui-id="!ns-name" xui-slot="ns-name"
               as-html="boolean"
@@ -150,6 +152,7 @@
             > 在父节点内，该标识必须唯一
         -->
         <choose xdef:name="XuiComponentTreeNodeStatementChoose"
+                xdef:bean-tag-prop="tagName"
                 xdef:bean-implements-types="io.crazydan.jingwei.ui.schema.component.tree.XuiComponentTreeNodeKeyed"
                 xui-id="!ns-name"
         >
@@ -223,10 +226,13 @@
     > - 仅用于控制所在组件中的直接视图组件；
     -->
     <xdef:define xdef:name="XuiComponentTreeNodeLayout"
+                 xdef:bean-tag-prop="tagName"
+                 xdef:bean-implements-types="io.crazydan.jingwei.ui.schema.component.tree.XuiComponentTreeNodeKeyed"
                  xdef:body-type="union"
                  xdef:bean-body-type="io.crazydan.jingwei.ui.XuiLayout"
                  xdef:bean-body-prop="type"
-                 xdef:bean-sub-type-prop="$type"
+                 xdef:bean-sub-type-prop="tagName"
+                 xui-id="!ns-name"
     >
         <!-- [线性布局]
         > 在水平和垂直方向上布局组件，且溢出内容不做换行处理。
@@ -258,9 +264,9 @@
             > (必填) 缺省为 `column`
         -->
         <linear xdef:name="XuiComponentTreeNodeLayoutLinear"
+                xdef:bean-tag-prop="tagName"
                 xdef:bean-implements-types="io.crazydan.jingwei.ui.XuiLayout"
                 xdef:value="!string" xdef:bean-body-prop="value"
-                xdef:bean-tag-prop="$type"
                 mode="!dict:jingwei/ui/layout-linear-mode=column"
         />
 
