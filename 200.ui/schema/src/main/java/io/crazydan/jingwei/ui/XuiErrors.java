@@ -22,8 +22,7 @@ package io.crazydan.jingwei.ui;
 import io.nop.api.core.exceptions.ErrorCode;
 
 import static io.nop.api.core.exceptions.ErrorCode.define;
-import static io.nop.core.CoreErrors.ARG_NAME;
-import static io.nop.core.CoreErrors.ARG_VALUE;
+import static io.nop.xlang.XLangErrors.ARG_TAG_NAME;
 
 /**
  *
@@ -32,6 +31,17 @@ import static io.nop.core.CoreErrors.ARG_VALUE;
  */
 public interface XuiErrors {
 
-    ErrorCode ERR_UI_XXX = //
-            define("jingwei.err.ui.xxx", "大语言模型返回的结果不是数字:name={name},value={name}", ARG_NAME, ARG_VALUE);
+    ErrorCode ERR_COMPONENT_INVALID_TAG_NAME = //
+            define("jingwei.err.ui.component.invalid-tag-name",
+                   "组件标签名 [{tagName}] 不符合规范。"
+                   + "其需为字母、数字、下划线组成的驼峰形式，且首字母必须大写，"
+                   + "如 Button、Button_Ext",
+                   ARG_TAG_NAME);
+    ErrorCode ERR_COMPONENT_MULTIPLE_LAYOUT_NOT_ALLOWED = //
+            define("jingwei.err.ui.component.multiple-layout-not-allowed",
+                   "不允许在 <{tagName}/> 标签中定义多个 <layout/>",
+                   ARG_TAG_NAME);
+    ErrorCode ERR_COMPONENT_SLOT_IN_DEPTH_NOT_ALLOWED = //
+            define("jingwei.err.ui.component.slot-in-depth-not-allowed", //
+                   "不允许在 <slot/> 标签内嵌套使用 slot");
 }

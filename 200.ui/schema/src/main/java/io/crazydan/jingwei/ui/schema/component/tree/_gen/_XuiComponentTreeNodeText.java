@@ -1,0 +1,225 @@
+package io.crazydan.jingwei.ui.schema.component.tree._gen;
+
+import io.nop.commons.collections.KeyedList; //NOPMD NOSONAR - suppressed UnusedImports - Used for List Prop
+import io.nop.core.lang.json.IJsonHandler;
+import io.crazydan.jingwei.ui.schema.component.tree.XuiComponentTreeNodeText;
+import io.nop.commons.util.ClassHelper;
+
+
+
+// tell cpd to start ignoring code - CPD-OFF
+/**
+ * generate from /jingwei/ui/schema/component/tree.xdef <p>
+ * > 只包含文本内容的组件。
+ */
+@SuppressWarnings({"PMD.UselessOverridingMethod","PMD.UnusedLocalVariable",
+    "PMD.UnnecessaryFullyQualifiedName","PMD.EmptyControlStatement","java:S116","java:S101","java:S1128","java:S1161"})
+public abstract class _XuiComponentTreeNodeText extends io.nop.core.resource.component.AbstractComponentModel implements io.crazydan.jingwei.ui.schema.component.tree.XuiComponentTreeNodeKeyed{
+    
+    /**
+     *  
+     * xml name: 
+     * 
+     */
+    private java.lang.String _$tag ;
+    
+    /**
+     *  是否为 HTML 片段
+     * xml name: as-html
+     * > 若为 `true`，则将其文本作为 HTML 渲染，但需自行处理 XSS 攻击
+     */
+    private java.lang.Boolean _asHtml ;
+    
+    /**
+     *  
+     * xml name: 
+     * 
+     */
+    private java.util.Map<java.lang.String,java.lang.Object> _attrs ;
+    
+    /**
+     *  
+     * xml name: 
+     * 
+     */
+    private java.lang.String _value ;
+    
+    /**
+     *  唯一标识
+     * xml name: xui-id
+     * > 在父节点内，该标识必须唯一
+     */
+    private java.lang.String _xuiId ;
+    
+    /**
+     *  对应的插槽名字
+     * xml name: xui-slot
+     * > 其将替换所在组件的 `<template/>` 中定义的同名 `<slot/>` 节点
+     */
+    private java.lang.String _xuiSlot ;
+    
+    /**
+     * 
+     * xml name: 
+     *  
+     */
+    
+    public java.lang.String get$tag(){
+      return _$tag;
+    }
+
+    
+    public void set$tag(java.lang.String value){
+        checkAllowChange();
+        
+        this._$tag = value;
+           
+    }
+
+    
+    /**
+     * 是否为 HTML 片段
+     * xml name: as-html
+     *  > 若为 `true`，则将其文本作为 HTML 渲染，但需自行处理 XSS 攻击
+     */
+    
+    public java.lang.Boolean getAsHtml(){
+      return _asHtml;
+    }
+
+    
+    public void setAsHtml(java.lang.Boolean value){
+        checkAllowChange();
+        
+        this._asHtml = value;
+           
+    }
+
+    
+    /**
+     * 
+     * xml name: 
+     *  
+     */
+    
+    public java.util.Map<java.lang.String,java.lang.Object> getAttrs(){
+      return _attrs;
+    }
+
+    
+    public void setAttrs(java.util.Map<java.lang.String,java.lang.Object> value){
+        checkAllowChange();
+        
+        this._attrs = value;
+           
+    }
+
+    
+    public boolean hasAttrs(){
+        return this._attrs != null && !this._attrs.isEmpty();
+    }
+    
+    /**
+     * 
+     * xml name: 
+     *  
+     */
+    
+    public java.lang.String getValue(){
+      return _value;
+    }
+
+    
+    public void setValue(java.lang.String value){
+        checkAllowChange();
+        
+        this._value = value;
+           
+    }
+
+    
+    /**
+     * 唯一标识
+     * xml name: xui-id
+     *  > 在父节点内，该标识必须唯一
+     */
+    
+    public java.lang.String getXuiId(){
+      return _xuiId;
+    }
+
+    
+    public void setXuiId(java.lang.String value){
+        checkAllowChange();
+        
+        this._xuiId = value;
+           
+    }
+
+    
+    /**
+     * 对应的插槽名字
+     * xml name: xui-slot
+     *  > 其将替换所在组件的 `<template/>` 中定义的同名 `<slot/>` 节点
+     */
+    
+    public java.lang.String getXuiSlot(){
+      return _xuiSlot;
+    }
+
+    
+    public void setXuiSlot(java.lang.String value){
+        checkAllowChange();
+        
+        this._xuiSlot = value;
+           
+    }
+
+    
+
+    @Override
+    public void freeze(boolean cascade){
+        if(frozen()) return;
+        super.freeze(cascade);
+
+        if(cascade){ //NOPMD - suppressed EmptyControlStatement - Auto Gen Code
+        
+           this._attrs = io.nop.api.core.util.FreezeHelper.deepFreeze(this._attrs);
+            
+        }
+    }
+
+    @Override
+    protected void outputJson(IJsonHandler out){
+        super.outputJson(out);
+        
+        out.putNotNull("$tag",this.get$tag());
+        out.putNotNull("asHtml",this.getAsHtml());
+        out.putNotNull("attrs",this.getAttrs());
+        out.putNotNull("value",this.getValue());
+        out.putNotNull("xuiId",this.getXuiId());
+        out.putNotNull("xuiSlot",this.getXuiSlot());
+    }
+
+    public XuiComponentTreeNodeText cloneInstance(){
+        XuiComponentTreeNodeText instance = newInstance();
+        this.copyTo(instance);
+        return instance;
+    }
+
+    protected void copyTo(XuiComponentTreeNodeText instance){
+        super.copyTo(instance);
+        
+        instance.set$tag(this.get$tag());
+        instance.setAsHtml(this.getAsHtml());
+        instance.setAttrs(this.getAttrs());
+        instance.setValue(this.getValue());
+        instance.setXuiId(this.getXuiId());
+        instance.setXuiSlot(this.getXuiSlot());
+    }
+
+    protected XuiComponentTreeNodeText newInstance(){
+        return (XuiComponentTreeNodeText) ClassHelper.newInstance(getClass());
+    }
+}
+ // resume CPD analysis - CPD-ON
