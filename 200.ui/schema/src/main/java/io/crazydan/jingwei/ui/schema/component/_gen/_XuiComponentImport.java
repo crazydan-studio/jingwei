@@ -9,8 +9,8 @@ import io.nop.commons.util.ClassHelper;
 
 // tell cpd to start ignoring code - CPD-OFF
 /**
- * generate from /jingwei/ui/schema/component.xdef <p>
- * > 按指定名字导入对应 vpath 路径的组件
+ * generate from /jingwei/ui/schema/component/import.xdef <p>
+ * > 单独定义，以避免扩展自 `component.xdef` 的模型重复生成 `XuiComponentImport`。
  */
 @SuppressWarnings({"PMD.UselessOverridingMethod","PMD.UnusedLocalVariable",
     "PMD.UnnecessaryFullyQualifiedName","PMD.EmptyControlStatement","java:S116","java:S101","java:S1128","java:S1161"})
@@ -19,12 +19,12 @@ public abstract class _XuiComponentImport extends io.nop.core.resource.component
     /**
      *  导入组件的名字
      * xml name: as
-     * 
+     * > 其名字必须为首字母大写的驼峰形式（可包含下划线）
      */
     private java.lang.String _as ;
     
     /**
-     *  
+     *  导入组件的 vpath 路径
      * xml name: from
      * 
      */
@@ -33,7 +33,7 @@ public abstract class _XuiComponentImport extends io.nop.core.resource.component
     /**
      * 导入组件的名字
      * xml name: as
-     *  
+     *  > 其名字必须为首字母大写的驼峰形式（可包含下划线）
      */
     
     public java.lang.String getAs(){
@@ -50,7 +50,7 @@ public abstract class _XuiComponentImport extends io.nop.core.resource.component
 
     
     /**
-     * 
+     * 导入组件的 vpath 路径
      * xml name: from
      *  
      */

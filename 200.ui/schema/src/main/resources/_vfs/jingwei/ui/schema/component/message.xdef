@@ -22,7 +22,7 @@
 <!-- [组件消息定义]
 
 @name [消息名]
-    > 其值需为首字母大写的驼峰形式（可包含下划线）；
+    > 其名字必须为首字母大写的驼峰形式（可包含下划线）
 -->
 <message xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="xdef"
          x:schema="/nop/schema/xdef.xdef"

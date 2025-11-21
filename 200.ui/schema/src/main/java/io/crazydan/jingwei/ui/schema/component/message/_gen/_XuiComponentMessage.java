@@ -19,14 +19,14 @@ public abstract class _XuiComponentMessage extends io.nop.core.resource.componen
     /**
      *  消息名
      * xml name: name
-     * > 其值需为首字母大写的驼峰形式（可包含下划线）；
+     * > 其名字必须为首字母大写的驼峰形式（可包含下划线）
      */
     private java.lang.String _name ;
     
     /**
      * 消息名
      * xml name: name
-     *  > 其值需为首字母大写的驼峰形式（可包含下划线）；
+     *  > 其名字必须为首字母大写的驼峰形式（可包含下划线）
      */
     
     public java.lang.String getName(){

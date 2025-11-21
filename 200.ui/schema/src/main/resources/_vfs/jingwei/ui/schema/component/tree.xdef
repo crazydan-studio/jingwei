@@ -141,6 +141,7 @@
 
         <!-- Start: 条件/循环控制 -->
 
+        <!--  -->
         <if xdef:name="XuiComponentTreeNodeStatementIf"
             xdef:ref="XuiComponentTreeNodeStatementCond"
             xui-id="!ns-name"
@@ -261,7 +262,7 @@
         > - 根布局的尺寸始终与上层容器的尺寸相同；
 
         @mode [布局模式]
-            > (必填) 缺省为 `column`
+            > 缺省为 `column`
         -->
         <linear xdef:name="XuiComponentTreeNodeLayoutLinear"
                 xdef:bean-tag-prop="$tag"

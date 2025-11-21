@@ -49,7 +49,7 @@ public abstract class _XuiComponentTreeNodeLayoutLinear extends io.nop.core.reso
     /**
      *  布局模式
      * xml name: mode
-     * > (必填) 缺省为 `column`
+     * > 缺省为 `column`
      */
     private java.lang.String _mode  = "column";
     
@@ -82,7 +82,7 @@ public abstract class _XuiComponentTreeNodeLayoutLinear extends io.nop.core.reso
     /**
      * 布局模式
      * xml name: mode
-     *  > (必填) 缺省为 `column`
+     *  > 缺省为 `column`
      */
     
     public java.lang.String getMode(){

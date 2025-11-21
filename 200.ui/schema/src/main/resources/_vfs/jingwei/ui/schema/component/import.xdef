@@ -19,14 +19,16 @@
   - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
   -->
 
-<!-- [UI 页面]
-> 一个包含完整业务处理组件的应用窗口。
-> 其本质就是一个占满整个视窗的 UI 组件。
--->
-<page xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="/nop/schema/xdef.xdef"
-      x:schema="/nop/schema/xdef.xdef"
-      xdef:ref="component.xdef"
-      xdef:name="XuiPage" xdef:bean-package="io.crazydan.jingwei.ui.schema.page"
->
+<!-- [组件导入指令]
+> 单独定义，以避免扩展自 `component.xdef` 的模型重复生成 `XuiComponentImport`。
 
-</page>
+@as [导入组件的名字]
+    > 其名字必须为首字母大写的驼峰形式（可包含下划线）
+@from [导入组件的 vpath 路径]
+-->
+<import xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="xdef"
+        x:schema="/nop/schema/xdef.xdef"
+        xdef:name="XuiComponentImport"
+        xdef:bean-package="io.crazydan.jingwei.ui.schema.component"
+        as="!component-name" from="!v-path"
+/>

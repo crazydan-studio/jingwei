@@ -26,17 +26,15 @@
 <component xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="/nop/schema/xdef.xdef"
            x:schema="/nop/schema/xdef.xdef"
            xdef:default-extends="/jingwei/ui/component/default.xui"
-           xdef:name="XuiComponent" xdef:bean-package="io.crazydan.jingwei.ui.schema.component"
+           xdef:bean-package="io.crazydan.jingwei.ui.schema.component"
+           xdef:name="XuiComponent"
 >
 
-    <!-- [组件导入]
-    > 按指定名字导入对应 vpath 路径的组件
-
-    @as [导入组件的名字]
-    @path [导入组件的 vpath 路径]
-    -->
-    <import xdef:name="XuiComponentImport" xdef:unique-attr="as"
-            as="!component-name" from="!v-path"/>
+    <!-- [组件导入] -->
+    <import xdef:ref="component/import.xdef"
+            xdef:unique-attr="as"
+            as="!component-name"
+    />
 
     <!-- [组件树] -->
     <template xdef:ref="component/tree.xdef"/>
@@ -48,6 +46,7 @@
     >
         <!-- [组件消息] -->
         <message xdef:ref="component/message.xdef"
-                 name="!component-name"/>
+                 name="!component-name"
+        />
     </messages>
 </component>
