@@ -20,10 +20,11 @@
 
 <model xmlns:x="/nop/schema/xdsl.xdef"
        x:schema="/nop/schema/register-model.xdef"
+       x:extends="super"
        name="xui"
 >
 
-    <loaders>
+    <loaders x:override="replace">
         <!-- 在 Nop 中，是以文件名的最后两个点作为 fileType 的，
         也就是每个资源文件默认均按两级后缀进行优先匹配，仅在二级后缀无匹配结果时，
         才匹配一级后缀，因此，一二级后缀的匹配是与顺序无关的
