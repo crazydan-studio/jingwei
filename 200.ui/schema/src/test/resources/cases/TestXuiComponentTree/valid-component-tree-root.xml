@@ -1,0 +1,63 @@
+<tree>
+    <layout>
+        <linear>
+            v&gt;{}&lt;^
+        </linear>
+    </layout>
+    <Text xui-id="text-1">
+        Text 1
+    </Text>
+    <native name="box" xui-id="native-1">
+        <Text xui-id="text-1">Native Text</Text>
+    </native>
+    <slot xui-id="slot-1">
+        <layout>
+            <linear>
+                v&gt;{}&lt;^
+            </linear>
+        </layout>
+        <if test="${a == 1}" xui-id="if-1">
+            <Text xui-id="text-1">If 1 Text 1</Text>
+        </if>
+        <Text xui-id="text-1">Text 1</Text>
+    </slot>
+    <for begin="0" end="2" var="i" xui-id="for-1">
+        <Text xui-id="text-1">For 1 Text 1</Text>
+        <native name="box" xui-id="native-1">
+            <Text xui-id="text-1">Text 1</Text>
+            <native name="text" xui-id="native-1"/>
+            <Text xui-id="text-2">Text 2</Text>
+        </native>
+        <Text xui-id="text-2">For 1 Text 2</Text>
+    </for>
+    <Button xui-id="button-1">
+        <layout>
+            <linear>
+                v&gt;{}&lt;^
+            </linear>
+        </layout>
+        <dispatch events="click" msg="User_Update" xui-id="User_Update"/>
+        <Text xui-id="text-1">Text 1</Text>
+        <native name="text" xui-id="native-1"/>
+        <Text xui-id="text-2">Text 2</Text>
+    </Button>
+    <if test="${b == 1}" xui-id="if-1">
+        <Text xui-id="text-1">
+            Hello!
+        </Text>
+    </if>
+    <choose xui-id="choose-1">
+        <otherwise>
+            <Button xui-id="button-1">
+                <Text xui-id="text-1">Otherwise</Text>
+            </Button>
+        </otherwise>
+        <when test="${when == 1}" xui-id="when-1">
+            <Text xui-id="text-1">When #1</Text>
+        </when>
+        <when test="${when == 2}" xui-id="when-2">
+            <Text xui-id="text-1">When #2</Text>
+            <Button xui-id="button-1"/>
+        </when>
+    </choose>
+</tree>

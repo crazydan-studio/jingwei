@@ -19,11 +19,13 @@
   - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
   -->
 
-<!-- [动态页面]
-> 用于适配 `DynamicXuiComponent`。
--->
-<page xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="/nop/schema/xdef.xdef"
-      x:schema="/nop/schema/xdef.xdef"
-      x:extends="super"
-      xdef:name="DynamicXuiPage" xdef:bean-package="io.crazydan.jingwei.ui.schema.page"
-/>
+<page xmlns:x="/nop/schema/xdsl.xdef"
+      x:schema="/jingwei/ui/schema/page.xdef"
+>
+
+    <template>
+        <Text xui-id="text-1"><![CDATA[
+            Text 1
+        ]]></Text>
+    </template>
+</page>

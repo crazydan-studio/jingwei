@@ -23,10 +23,17 @@
 > 一个包含完整业务处理组件的应用窗口。
 > 其本质就是一个占满整个视窗的 UI 组件。
 -->
-<page xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="/nop/schema/xdef.xdef"
+<page xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="/nop/schema/xdef.xdef" xmlns:c="c"
       x:schema="/nop/schema/xdef.xdef"
       xdef:ref="component.xdef"
       xdef:name="XuiPage" xdef:bean-package="io.crazydan.jingwei.ui.schema.page"
 >
+    <!-- Note: xdef:ref 引入的元模型中的 xdef:post-parse 脚本不会在加载 XuiPage 模型时执行 -->
+    <xdef:post-parse>
+        <c:script><![CDATA[
+            _dsl_model.setDslNode(_dsl_root);
+        ]]></c:script>
+    </xdef:post-parse>
 
+    <!--  -->
 </page>

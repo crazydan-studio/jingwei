@@ -19,12 +19,10 @@
 
 package io.crazydan.jingwei.ui.schema.component;
 
-import io.crazydan.duzhou.framework.junit.NopJunitTestCase;
+import io.crazydan.jingwei.ui.XuiJunitTestCase;
 import io.nop.api.core.exceptions.NopException;
 import io.nop.core.lang.json.JsonTool;
 import io.nop.core.lang.xml.XNode;
-import io.nop.core.resource.component.ResourceComponentManager;
-import io.nop.xlang.xdsl.DslModelHelper;
 import org.junit.jupiter.api.Test;
 
 import static io.crazydan.jingwei.ui.XuiErrors.ERR_COMPONENT_INVALID_TAG_NAME;
@@ -38,18 +36,27 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
  * @date 2025-11-20
  */
-public class TestXuiComponentTree extends NopJunitTestCase {
+public class TestXuiComponentTree extends XuiJunitTestCase {
 
     @Test
     public void test_valid_tree() {
-        XuiComponent component = loadModel("/jingwei/ui/test-valid-component-tree.xui");
+        String dslPath = "/jingwei/ui/test-valid-component-tree.xui";
+        XuiComponent component = loadModel(dslPath);
 
         String json = JsonTool.serialize(component, true);
         assertEquals(attachmentJsonText("valid-component-tree.json"), json);
 
-        XNode node = toXNode(component);
-        String xml = node.xml();
-        assertEquals(attachmentXmlText("valid-component-tree.xml"), xml);
+        XNode node = component.getDslNode();
+        String xml = cleanXml(toXml(node));
+        assertEquals(cleanXml(attachmentXmlText("valid-component-tree-from-dsl.xml")), xml);
+
+        node = toXNode(component);
+        xml = cleanXml(toXml(node));
+        assertEquals(cleanXml(attachmentXmlText("valid-component-tree.xml")), xml);
+
+        node = toXNode(component.getTemplate());
+        xml = cleanXml(toXml(node));
+        assertEquals(cleanXml(attachmentXmlText("valid-component-tree-root.xml")), xml);
     }
 
     @Test
@@ -92,17 +99,5 @@ public class TestXuiComponentTree extends NopJunitTestCase {
         } catch (NopException e) {
             assertEquals(ERR_COMPONENT_SLOT_IN_DEPTH_NOT_ALLOWED.getErrorCode(), e.getErrorCode());
         }
-    }
-
-    protected <T> T loadModel(String path) {
-        return (T) ResourceComponentManager.instance().loadComponentModel(path);
-    }
-
-    protected XNode toXNode(XuiComponent component) {
-        XNode node = DslModelHelper.dslModelToXNode("/jingwei/ui/schema/component.xdef", component);
-        node.clearComment();
-        node.removeAttrsWithPrefix("xmlns:");
-
-        return node;
     }
 }

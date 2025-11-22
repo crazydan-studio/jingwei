@@ -19,15 +19,13 @@
 
 package io.crazydan.jingwei.ui;
 
-import io.crazydan.duzhou.framework.junit.NopJunitTestCase;
 import io.nop.core.lang.eval.IEvalAction;
 import io.nop.core.lang.eval.IEvalScope;
 import io.nop.core.lang.xml.XNode;
-import io.nop.core.lang.xml.parse.XNodeParser;
 import io.nop.xlang.api.XLang;
 import io.nop.xlang.api.XLangCompileTool;
 import io.nop.xlang.ast.XLangOutputMode;
-import io.nop.xlang.xdsl.DslModelParser;
+import io.nop.xlang.xdsl.DslModelHelper;
 import io.nop.xlang.xmeta.IObjMeta;
 import io.nop.xlang.xpl.tags.ChooseTagCompiler;
 import org.junit.jupiter.api.Test;
@@ -40,13 +38,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
  * @date 2025-11-17
  */
-public class TestXplTag extends NopJunitTestCase {
+public class TestXplTag extends XuiJunitTestCase {
 
     @Test
     public void test_render_model_in_choose() {
         String version_1 = "1.2.1";
         String version_2 = "0.1.2";
-        XNode node = XNodeParser.instance().parseFromVirtualPath("/jingwei/ui/test-xpl-choose-render-model.xml");
+        XNode node = loadNode("/jingwei/ui/test-xpl-choose-render-model.xml");
 
         XLangCompileTool compileTool = XLang.newCompileTool();
         compileTool.getScope().addTagCompiler("cc:choose", ChooseTagCompiler.INSTANCE);
@@ -58,7 +56,7 @@ public class TestXplTag extends NopJunitTestCase {
         node = (XNode) action.invoke(scope);
         assertNotNull(node);
 
-        IObjMeta objMeta = nodeToModel(node);
+        IObjMeta objMeta = toModel(node);
         assertEquals(version_1, objMeta.getVersion());
 
         //
@@ -67,11 +65,11 @@ public class TestXplTag extends NopJunitTestCase {
         node = (XNode) action.invoke(scope);
         assertNotNull(node);
 
-        objMeta = nodeToModel(node);
+        objMeta = toModel(node);
         assertEquals(version_2, objMeta.getVersion());
     }
 
-    private <T> T nodeToModel(XNode node) {
-        return (T) new DslModelParser("/nop/schema/xmeta.xdef").parseFromNode(node);
+    private <T> T toModel(XNode node) {
+        return (T) DslModelHelper.parseDslNode("/nop/schema/xmeta.xdef", node);
     }
 }

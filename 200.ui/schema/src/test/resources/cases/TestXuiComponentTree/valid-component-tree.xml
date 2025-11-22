@@ -1,4 +1,4 @@
-<component x:schema="/jingwei/ui/schema/component.xdef">
+<component>
     <template>
         <layout>
             <linear>

@@ -22,14 +22,4 @@
             <artifactId>jingwei-ui-schema</artifactId>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <!-- Note：该插件的配置见 io.github.entropy-cloud:nop-entropy -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 </project>
