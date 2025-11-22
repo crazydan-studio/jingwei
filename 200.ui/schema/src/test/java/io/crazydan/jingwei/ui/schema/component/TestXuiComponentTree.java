@@ -22,7 +22,9 @@ package io.crazydan.jingwei.ui.schema.component;
 import io.crazydan.duzhou.framework.junit.NopJunitTestCase;
 import io.nop.api.core.exceptions.NopException;
 import io.nop.core.lang.json.JsonTool;
+import io.nop.core.lang.xml.XNode;
 import io.nop.core.resource.component.ResourceComponentManager;
+import io.nop.xlang.xdsl.DslModelHelper;
 import org.junit.jupiter.api.Test;
 
 import static io.crazydan.jingwei.ui.XuiErrors.ERR_COMPONENT_INVALID_TAG_NAME;
@@ -40,55 +42,67 @@ public class TestXuiComponentTree extends NopJunitTestCase {
 
     @Test
     public void test_valid_tree() {
-        XuiComponent component = parseComponent("/jingwei/ui/test-valid-component-tree.xui");
+        XuiComponent component = loadModel("/jingwei/ui/test-valid-component-tree.xui");
 
         String json = JsonTool.serialize(component, true);
         assertEquals(attachmentJsonText("valid-component-tree.json"), json);
+
+        XNode node = toXNode(component);
+        String xml = node.xml();
+        assertEquals(attachmentXmlText("valid-component-tree.xml"), xml);
     }
 
     @Test
     public void test_invalid_tree() {
         try {
-            parseComponent("/jingwei/ui/test-invalid-component-tag-name.xui");
+            loadModel("/jingwei/ui/test-invalid-component-tag-name.xui");
             fail("invalid-tag-name");
         } catch (NopException e) {
             assertEquals(ERR_COMPONENT_INVALID_TAG_NAME.getErrorCode(), e.getErrorCode());
         }
         try {
-            parseComponent("/jingwei/ui/test-invalid-component-tag-name-in-depth.xui");
+            loadModel("/jingwei/ui/test-invalid-component-tag-name-in-depth.xui");
             fail("invalid-tag-name");
         } catch (NopException e) {
             assertEquals(ERR_COMPONENT_INVALID_TAG_NAME.getErrorCode(), e.getErrorCode());
         }
 
         try {
-            parseComponent("/jingwei/ui/test-invalid-component-multi-layout.xui");
+            loadModel("/jingwei/ui/test-invalid-component-multi-layout.xui");
             fail("multiple-layout");
         } catch (NopException e) {
             assertEquals(ERR_COMPONENT_MULTIPLE_LAYOUT_NOT_ALLOWED.getErrorCode(), e.getErrorCode());
         }
         try {
-            parseComponent("/jingwei/ui/test-invalid-component-multi-layout-depth.xui");
+            loadModel("/jingwei/ui/test-invalid-component-multi-layout-depth.xui");
             fail("multiple-layout");
         } catch (NopException e) {
             assertEquals(ERR_COMPONENT_MULTIPLE_LAYOUT_NOT_ALLOWED.getErrorCode(), e.getErrorCode());
         }
 
         try {
-            parseComponent("/jingwei/ui/test-invalid-component-slot-in-slot.xui");
+            loadModel("/jingwei/ui/test-invalid-component-slot-in-slot.xui");
             fail("slot-in-depth");
         } catch (NopException e) {
             assertEquals(ERR_COMPONENT_SLOT_IN_DEPTH_NOT_ALLOWED.getErrorCode(), e.getErrorCode());
         }
         try {
-            parseComponent("/jingwei/ui/test-invalid-component-slot-in-slot-depth.xui");
+            loadModel("/jingwei/ui/test-invalid-component-slot-in-slot-depth.xui");
             fail("slot-in-depth");
         } catch (NopException e) {
             assertEquals(ERR_COMPONENT_SLOT_IN_DEPTH_NOT_ALLOWED.getErrorCode(), e.getErrorCode());
         }
     }
 
-    protected XuiComponent parseComponent(String path) {
-        return (XuiComponent) ResourceComponentManager.instance().loadComponentModel(path);
+    protected <T> T loadModel(String path) {
+        return (T) ResourceComponentManager.instance().loadComponentModel(path);
+    }
+
+    protected XNode toXNode(XuiComponent component) {
+        XNode node = DslModelHelper.dslModelToXNode("/jingwei/ui/schema/component.xdef", component);
+        node.clearComment();
+        node.removeAttrsWithPrefix("xmlns:");
+
+        return node;
     }
 }
