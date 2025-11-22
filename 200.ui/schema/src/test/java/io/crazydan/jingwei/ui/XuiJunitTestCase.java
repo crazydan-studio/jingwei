@@ -43,11 +43,11 @@ public abstract class XuiJunitTestCase extends NopJunitTestCase {
     }
 
     protected XNode toXNode(XuiComponent component) {
-        return toXNode("/jingwei/ui/schema/component.xdef", component);
+        return toXNode(XuiConstants.XDSL_SCHEMA_COMPONENT, component);
     }
 
     protected XNode toXNode(XuiComponentTreeNodeRoot root) {
-        return toXNode("/jingwei/ui/schema/component/tree.xdef", root);
+        return toXNode(XuiConstants.XDSL_SCHEMA_COMPONENT_TREE, root);
     }
 
     protected XNode toXNode(String xdefPath, Object model) {

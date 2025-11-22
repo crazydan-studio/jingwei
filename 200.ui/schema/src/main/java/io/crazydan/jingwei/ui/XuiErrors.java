@@ -44,4 +44,7 @@ public interface XuiErrors {
     ErrorCode ERR_COMPONENT_SLOT_IN_DEPTH_NOT_ALLOWED = //
             define("jingwei.err.ui.component.slot-in-depth-not-allowed", //
                    "不允许在 <slot/> 标签内嵌套使用 slot");
+    ErrorCode ERR_COMPONENT_DSL_NODE_NOT_BOUND = //
+            define("jingwei.err.ui.component.dsl-node-not-bound", //
+                   "组件未与其 XNode 节点绑定，建议在 xdef 元模型中的 <xdef:post-parse/> 脚本中做全局自动绑定，如：_dsl_model.setDslNode(_dsl_root)");
 }

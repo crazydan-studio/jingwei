@@ -20,7 +20,7 @@ public abstract class _XuiComponent extends io.nop.core.resource.component.Abstr
     /**
      *  组件导入
      * xml name: import
-     * > 单独定义，以避免扩展自 `component.xdef` 的模型重复生成 `XuiComponentImport`。
+     * >
      */
     private KeyedList<io.crazydan.jingwei.ui.schema.component.XuiComponentImport> _imports = KeyedList.emptyList();
     
@@ -41,7 +41,7 @@ public abstract class _XuiComponent extends io.nop.core.resource.component.Abstr
     /**
      * 组件导入
      * xml name: import
-     *  > 单独定义，以避免扩展自 `component.xdef` 的模型重复生成 `XuiComponentImport`。
+     *  >
      */
     
     public java.util.List<io.crazydan.jingwei.ui.schema.component.XuiComponentImport> getImports(){

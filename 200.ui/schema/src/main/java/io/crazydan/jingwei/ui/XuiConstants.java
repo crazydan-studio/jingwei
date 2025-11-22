@@ -26,6 +26,15 @@ package io.crazydan.jingwei.ui;
  */
 public interface XuiConstants {
 
-    /** 组件名，如 `Button`、`Button_Ext` */
-    String STD_DOMAIN_COMPONENT_NAME = "component-name";
+    String XDSL_SCHEMA_APP = "/jingwei/ui/schema/app.xdef";
+    String XDSL_SCHEMA_PAGE = "/jingwei/ui/schema/page.xdef";
+    String XDSL_SCHEMA_COMPONENT = "/jingwei/ui/schema/component.xdef";
+    String XDSL_SCHEMA_COMPONENT_TREE = "/jingwei/ui/schema/component/tree.xdef";
+    String XDSL_SCHEMA_COMPONENT_IMPORT = "/jingwei/ui/schema/component/import.xdef";
+    String XDSL_SCHEMA_COMPONENT_MESSAGE = "/jingwei/ui/schema/component/message.xdef";
+
+    String TAG_NAME_TEMPLATE = "template";
+    String TAG_NAME_IF = "if";
+    String TAG_NAME_CHOOSE = "choose";
+    String TAG_NAME_FOR = "for";
 }

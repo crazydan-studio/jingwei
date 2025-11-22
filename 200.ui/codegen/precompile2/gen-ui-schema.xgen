@@ -20,14 +20,16 @@
   -->
 
 <c:script xmlns:c="c"><![CDATA[
+    import io.crazydan.jingwei.ui.XuiConstants;
+
     const xdefs = [
-        '/jingwei/ui/schema/app.xdef',
-        '/jingwei/ui/schema/page.xdef',
+        XuiConstants.XDSL_SCHEMA_APP,
+        XuiConstants.XDSL_SCHEMA_PAGE,
         //
-        '/jingwei/ui/schema/component.xdef',
-        '/jingwei/ui/schema/component/tree.xdef',
-        '/jingwei/ui/schema/component/import.xdef',
-        '/jingwei/ui/schema/component/message.xdef',
+        XuiConstants.XDSL_SCHEMA_COMPONENT,
+        XuiConstants.XDSL_SCHEMA_COMPONENT_TREE,
+        XuiConstants.XDSL_SCHEMA_COMPONENT_IMPORT,
+        XuiConstants.XDSL_SCHEMA_COMPONENT_MESSAGE,
     ];
 
     for (let i = 0; i < xdefs.length; i++) {
