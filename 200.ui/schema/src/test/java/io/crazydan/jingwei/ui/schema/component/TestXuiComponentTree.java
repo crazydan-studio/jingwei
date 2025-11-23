@@ -21,7 +21,6 @@ package io.crazydan.jingwei.ui.schema.component;
 
 import io.crazydan.jingwei.ui.XuiJunitTestCase;
 import io.nop.api.core.exceptions.NopException;
-import io.nop.core.lang.json.JsonTool;
 import io.nop.core.lang.xml.XNode;
 import org.junit.jupiter.api.Test;
 
@@ -43,7 +42,7 @@ public class TestXuiComponentTree extends XuiJunitTestCase {
         String dslPath = "/jingwei/ui/test-valid-component-tree.xui";
         XuiComponent component = loadModel(dslPath);
 
-        String json = JsonTool.serialize(component, true);
+        String json = toJson(component);
         assertEquals(attachmentJsonText("valid-component-tree.json"), json);
 
         XNode node = component.getDslNode();

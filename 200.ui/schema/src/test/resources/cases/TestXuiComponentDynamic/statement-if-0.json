@@ -1,0 +1,21 @@
+{
+    "location" : "[26:6:0:0]/jingwei/ui/test-dynamic-component-tree-statement-if.xui",
+    "$tag" : "template",
+    "children" : [ {
+        "location" : "[28:14:0:0]/jingwei/ui/test-dynamic-component-tree-statement-if.xui",
+        "$tag" : "Text",
+        "value" : "\n                Text: Hello IF#1\n            ",
+        "xuiId" : "text-1"
+    }, {
+        "location" : "[38:10:0:0]/jingwei/ui/test-dynamic-component-tree-statement-if.xui",
+        "$tag" : "Button",
+        "children" : [ {
+            "location" : "[40:18:0:0]/jingwei/ui/test-dynamic-component-tree-statement-if.xui",
+            "$tag" : "Text",
+            "value" : "\n                    Text: Hello IF#1\n                ",
+            "xuiId" : "text-1"
+        } ],
+        "xuiId" : "button-1"
+    } ],
+    "xuiId" : "xui-template-root-node"
+}

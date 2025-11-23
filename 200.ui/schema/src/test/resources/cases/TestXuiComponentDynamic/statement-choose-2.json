@@ -1,0 +1,26 @@
+{
+  "location": "[26:6:0:0]/jingwei/ui/test-dynamic-component-tree-statement-choose.xui",
+  "$tag": "template",
+  "children": [
+    {
+      "location": "[35:18:0:0]/jingwei/ui/test-dynamic-component-tree-statement-choose.xui",
+      "$tag": "Text",
+      "value": "Text: Hello WHEN#3",
+      "xuiId": "text-1"
+    },
+    {
+      "location": "[42:10:0:0]/jingwei/ui/test-dynamic-component-tree-statement-choose.xui",
+      "$tag": "Button",
+      "children": [
+        {
+          "location": "[51:22:0:0]/jingwei/ui/test-dynamic-component-tree-statement-choose.xui",
+          "$tag": "Text",
+          "value": "Text: Hello WHEN#3",
+          "xuiId": "text-1"
+        }
+      ],
+      "xuiId": "button-1"
+    }
+  ],
+  "xuiId": "xui-template-root-node"
+}

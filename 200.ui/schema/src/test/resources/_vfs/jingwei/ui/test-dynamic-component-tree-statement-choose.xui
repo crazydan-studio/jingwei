@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--
+  - 精卫（JingWei） - 衔木石填沧海，筑屏障护安全
+  - Copyright (C) 2025 Crazydan Studio <https://studio.crazydan.org>
+  -
+  - This program is free software: you can redistribute it and/or modify
+  - it under the terms of the GNU Lesser General Public License as published by
+  - the Free Software Foundation, either version 3 of the License, or
+  - (at your option) any later version.
+  -
+  - This program is distributed in the hope that it will be useful,
+  - but WITHOUT ANY WARRANTY; without even the implied warranty of
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  - GNU Lesser General Public License for more details.
+  -
+  - You should have received a copy of the GNU Lesser General Public License
+  - along with this program.
+  - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
+  -->
+
+<component xmlns:x="/nop/schema/xdsl.xdef"
+           x:schema="/jingwei/ui/schema/component.xdef"
+>
+
+    <template>
+        <choose xui-id="choose-1">
+            <when xui-id="when-1" test="${props.var == 1}">
+                <Text xui-id="text-1">Text: ${props.msg1}</Text>
+            </when>
+            <when xui-id="when-2" test="${props.var == 2}">
+                <Text xui-id="text-1">Text: ${props.msg2}</Text>
+            </when>
+            <when xui-id="when-3" test="${props.var == 3}">
+                <Text xui-id="text-1">Text: ${props.msg3}</Text>
+            </when>
+            <otherwise>
+                <Text xui-id="text-1">Text: ${props.msg}</Text>
+            </otherwise>
+        </choose>
+
+        <Button xui-id="button-1">
+            <choose xui-id="choose-1">
+                <when xui-id="when-1" test="${props.var == 1}">
+                    <Text xui-id="text-1">Text: ${props.msg1}</Text>
+                </when>
+                <when xui-id="when-2" test="${props.var == 2}">
+                    <Text xui-id="text-1">Text: ${props.msg2}</Text>
+                </when>
+                <when xui-id="when-3" test="${props.var == 3}">
+                    <Text xui-id="text-1">Text: ${props.msg3}</Text>
+                </when>
+                <otherwise>
+                    <Text xui-id="text-1">Text: ${props.msg}</Text>
+                </otherwise>
+            </choose>
+        </Button>
+    </template>
+</component>

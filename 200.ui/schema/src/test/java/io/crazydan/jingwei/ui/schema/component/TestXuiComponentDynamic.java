@@ -19,10 +19,11 @@
 
 package io.crazydan.jingwei.ui.schema.component;
 
+import java.util.List;
 import java.util.Map;
 
 import io.crazydan.jingwei.ui.XuiJunitTestCase;
-import io.crazydan.jingwei.ui.schema.component.tree.XuiComponentTreeNodeRoot;
+import io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplate;
 import io.nop.core.lang.eval.IEvalAction;
 import io.nop.core.lang.eval.IEvalScope;
 import io.nop.core.lang.xml.XNode;
@@ -33,7 +34,8 @@ import io.nop.xlang.xdsl.DslModelHelper;
 import org.junit.jupiter.api.Test;
 
 import static io.crazydan.jingwei.ui.XuiConstants.TAG_NAME_TEMPLATE;
-import static io.crazydan.jingwei.ui.XuiConstants.XDSL_SCHEMA_COMPONENT_TREE;
+import static io.crazydan.jingwei.ui.XuiConstants.XDSL_SCHEMA_COMPONENT_TEMPLATE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
@@ -43,18 +45,110 @@ import static io.crazydan.jingwei.ui.XuiConstants.XDSL_SCHEMA_COMPONENT_TREE;
 public class TestXuiComponentDynamic extends XuiJunitTestCase {
 
     @Test
-    public void test_dynamic_tree() {
+    public void test_vars() {
+        XuiComponent component = loadModel("/jingwei/ui/test-dynamic-component-tree-vars.xui");
+
         IEvalScope scope = XLang.newEvalScope();
-        scope.setLocalValue("$props", Map.of());
+        scope.setLocalValue("props", Map.of("padding", "1u", "msg", "Welcome!"));
+
+        XuiComponentTemplate template = evalTemplate(component, scope);
+        String json = toJson(template);
+        assertEquals(attachmentJsonText("vars.json"), json);
+
+        XNode node = toXNode(template);
+        String xml = cleanXml(toXml(node));
+        assertEquals(cleanXml(attachmentXmlText("vars.xml")), xml);
     }
 
-    private XuiComponentTreeNodeRoot evalTreeRootNode(XuiComponent component, IEvalScope scope) {
-        XNode template = component.getDslNode().childByTag(TAG_NAME_TEMPLATE);
+    @Test
+    public void test_statement_if() {
+        XuiComponent component = loadModel("/jingwei/ui/test-dynamic-component-tree-statement-if.xui");
+
+        Map<?, ?>[] samples = new Map[] {
+                Map.of("var", 1, "msg1", "Hello IF#1"), //
+                Map.of("var", 2, "msg2", "Hello IF#2"), //
+        };
+
+        for (int i = 0; i < samples.length; i++) {
+            Map<?, ?> props = samples[i];
+
+            IEvalScope scope = XLang.newEvalScope();
+            scope.setLocalValue("props", props);
+
+            XuiComponentTemplate template = evalTemplate(component, scope);
+            String json = toJson(template);
+            assertEquals(attachmentJsonText("statement-if-" + i + ".json"), json);
+
+            XNode node = toXNode(template);
+            String xml = cleanXml(toXml(node));
+            assertEquals(cleanXml(attachmentXmlText("statement-if-" + i + ".xml")), xml);
+        }
+    }
+
+    @Test
+    public void test_statement_choose() {
+        XuiComponent component = loadModel("/jingwei/ui/test-dynamic-component-tree-statement-choose.xui");
+
+        Map<?, ?>[] samples = new Map[] {
+                Map.of("var", 1, "msg1", "Hello WHEN#1"), //
+                Map.of("var", 2, "msg2", "Hello WHEN#2"), //
+                Map.of("var", 3, "msg3", "Hello WHEN#3"), //
+                Map.of("var", 4, "msg", "Hello OTHERWISE"), //
+        };
+
+        for (int i = 0; i < samples.length; i++) {
+            Map<?, ?> props = samples[i];
+
+            IEvalScope scope = XLang.newEvalScope();
+            scope.setLocalValue("props", props);
+
+            XuiComponentTemplate template = evalTemplate(component, scope);
+            String json = toJson(template);
+            assertEquals(attachmentJsonText("statement-choose-" + i + ".json"), json);
+
+            XNode node = toXNode(template);
+            String xml = cleanXml(toXml(node));
+            assertEquals(cleanXml(attachmentXmlText("statement-choose-" + i + ".xml")), xml);
+        }
+    }
+
+    @Test
+    public void test_statement_for() {
+        XuiComponent component = loadModel("/jingwei/ui/test-dynamic-component-tree-statement-for.xui");
+
+        Map<?, ?>[] samples = new Map[] {
+                Map.of("var", 1, "items", List.of("a", "b", "c")), //
+                Map.of("var", 2, "items", List.of(12, 15, 21, 34)), //
+        };
+
+        for (int i = 0; i < samples.length; i++) {
+            Map<?, ?> props = samples[i];
+
+            IEvalScope scope = XLang.newEvalScope();
+            scope.setLocalValue("props", props);
+
+            XuiComponentTemplate template = evalTemplate(component, scope);
+            String json = toJson(template);
+            assertEquals(attachmentJsonText("statement-for-" + i + ".json"), json);
+
+            XNode node = toXNode(template);
+            String xml = cleanXml(toXml(node));
+            assertEquals(cleanXml(attachmentXmlText("statement-for-" + i + ".xml")), xml);
+        }
+    }
+
+    private XuiComponentTemplate evalTemplate(XuiComponent component, IEvalScope scope) {
+        XNode dummy = new XNode("_");
+        component.getDslNode().childByTag(TAG_NAME_TEMPLATE).cloneInstance().insertParent(dummy);
 
         XLangCompileTool compileTool = XuiComponent.newCompileTool();
-        IEvalAction action = compileTool.compileTagBody(template, XLangOutputMode.node);
+        IEvalAction action = compileTool.compileTagBody(dummy, XLangOutputMode.node);
         XNode node = (XNode) action.invoke(scope);
 
-        return (XuiComponentTreeNodeRoot) DslModelHelper.parseDslNode(XDSL_SCHEMA_COMPONENT_TREE, node);
+        XuiComponentTemplate template = //
+                (XuiComponentTemplate) DslModelHelper.parseDslNode(XDSL_SCHEMA_COMPONENT_TEMPLATE, node);
+        template.init();
+
+        return template;
     }
 }

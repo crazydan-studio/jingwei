@@ -1,0 +1,20 @@
+<template>
+    <Text xui-id="for-1-text_0" raw:xui-id="for-1-text">Number 1 #0</Text>
+    <Text xui-id="for-1-text_1" raw:xui-id="for-1-text">Number 2 #1</Text>
+    <Text xui-id="for-1-text_2" raw:xui-id="for-1-text">Number 3 #2</Text>
+    <Text xui-id="for-1-text_3" raw:xui-id="for-1-text">Number 4 #3</Text>
+    <Text xui-id="for-2-text_0" raw:xui-id="for-2-text">Item 12 #0</Text>
+    <Text xui-id="for-2-if-text_0" raw:xui-id="for-2-if-text">IF2: Item 12 #0</Text>
+    <Text xui-id="for-2-text_1" raw:xui-id="for-2-text">Item 15 #1</Text>
+    <Text xui-id="for-2-if-text_1" raw:xui-id="for-2-if-text">IF2: Item 15 #1</Text>
+    <Text xui-id="for-2-text_2" raw:xui-id="for-2-text">Item 21 #2</Text>
+    <Text xui-id="for-2-if-text_2" raw:xui-id="for-2-if-text">IF2: Item 21 #2</Text>
+    <Text xui-id="for-2-text_3" raw:xui-id="for-2-text">Item 34 #3</Text>
+    <Text xui-id="for-2-if-text_3" raw:xui-id="for-2-if-text">IF2: Item 34 #3</Text>
+    <Button xui-id="button-1">
+        <Text xui-id="for-2-text_0" raw:xui-id="for-2-text">Item 12 #0</Text>
+        <Text xui-id="for-2-text_1" raw:xui-id="for-2-text">Item 15 #1</Text>
+        <Text xui-id="for-2-text_2" raw:xui-id="for-2-text">Item 21 #2</Text>
+        <Text xui-id="for-2-text_3" raw:xui-id="for-2-text">Item 34 #3</Text>
+    </Button>
+</template>

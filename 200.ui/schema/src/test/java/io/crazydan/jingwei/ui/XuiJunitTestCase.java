@@ -21,7 +21,8 @@ package io.crazydan.jingwei.ui;
 
 import io.crazydan.duzhou.framework.junit.NopJunitTestCase;
 import io.crazydan.jingwei.ui.schema.component.XuiComponent;
-import io.crazydan.jingwei.ui.schema.component.tree.XuiComponentTreeNodeRoot;
+import io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplate;
+import io.nop.core.lang.json.JsonTool;
 import io.nop.core.lang.xml.XNode;
 import io.nop.core.lang.xml.parse.XNodeParser;
 import io.nop.core.resource.component.ResourceComponentManager;
@@ -42,12 +43,16 @@ public abstract class XuiJunitTestCase extends NopJunitTestCase {
         return (T) ResourceComponentManager.instance().loadComponentModel(dslPath);
     }
 
+    protected String toJson(Object obj) {
+        return JsonTool.serialize(obj, true);
+    }
+
     protected XNode toXNode(XuiComponent component) {
         return toXNode(XuiConstants.XDSL_SCHEMA_COMPONENT, component);
     }
 
-    protected XNode toXNode(XuiComponentTreeNodeRoot root) {
-        return toXNode(XuiConstants.XDSL_SCHEMA_COMPONENT_TREE, root);
+    protected XNode toXNode(XuiComponentTemplate root) {
+        return toXNode(XuiConstants.XDSL_SCHEMA_COMPONENT_TEMPLATE, root);
     }
 
     protected XNode toXNode(String xdefPath, Object model) {

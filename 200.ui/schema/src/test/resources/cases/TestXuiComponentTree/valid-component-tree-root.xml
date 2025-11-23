@@ -1,4 +1,4 @@
-<tree>
+<template>
     <layout>
         <linear>
             v&gt;{}&lt;^
@@ -60,4 +60,4 @@
             <Button xui-id="button-1"/>
         </when>
     </choose>
-</tree>
+</template>

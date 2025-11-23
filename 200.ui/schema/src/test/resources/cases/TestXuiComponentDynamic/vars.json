@@ -1,0 +1,54 @@
+{
+  "location": "[26:6:0:0]/jingwei/ui/test-dynamic-component-tree-vars.xui",
+  "$tag": "template",
+  "children": [
+    {
+      "location": "[27:10:0:0]/jingwei/ui/test-dynamic-component-tree-vars.xui",
+      "$tag": "layout",
+      "type": {
+        "location": "[28:14:0:0]/jingwei/ui/test-dynamic-component-tree-vars.xui",
+        "$tag": "linear",
+        "mode": "column",
+        "value": "\n                v>[text-1](padding: 1u)<^\n            ",
+        "root": {
+          "loc": "[28:14:0:0]/jingwei/ui/test-dynamic-component-tree-vars.xui",
+          "type": "column",
+          "props": {
+            "width": "match_parent",
+            "height": "match_parent"
+          },
+          "children": [
+            {
+              "loc": "[29:19:0:0]/jingwei/ui/test-dynamic-component-tree-vars.xui",
+              "type": "item",
+              "pattern": "^text-1$",
+              "props": {
+                "width": "wrap_content",
+                "height": "wrap_content",
+                "align": {
+                  "row": "center",
+                  "col": "center"
+                },
+                "padding": {
+                  "loc": "[29:37:0:0]/jingwei/ui/test-dynamic-component-tree-vars.xui",
+                  "left": "1.0u",
+                  "right": "1.0u",
+                  "top": "1.0u",
+                  "bottom": "1.0u"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "xuiId": "xui-layout"
+    },
+    {
+      "location": "[33:10:0:0]/jingwei/ui/test-dynamic-component-tree-vars.xui",
+      "$tag": "Text",
+      "value": "\n            Text: Welcome!\n        ",
+      "xuiId": "text-1"
+    }
+  ],
+  "xuiId": "xui-template-root-node"
+}
