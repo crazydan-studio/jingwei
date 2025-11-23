@@ -29,12 +29,18 @@ public interface XuiConstants {
     String XDSL_SCHEMA_APP = "/jingwei/ui/schema/app.xdef";
     String XDSL_SCHEMA_PAGE = "/jingwei/ui/schema/page.xdef";
     String XDSL_SCHEMA_COMPONENT = "/jingwei/ui/schema/component.xdef";
-    String XDSL_SCHEMA_COMPONENT_TREE = "/jingwei/ui/schema/component/tree.xdef";
+    String XDSL_SCHEMA_COMPONENT_TEMPLATE = "/jingwei/ui/schema/component/template.xdef";
     String XDSL_SCHEMA_COMPONENT_IMPORT = "/jingwei/ui/schema/component/import.xdef";
     String XDSL_SCHEMA_COMPONENT_MESSAGE = "/jingwei/ui/schema/component/message.xdef";
 
     String TAG_NAME_TEMPLATE = "template";
     String TAG_NAME_IF = "if";
-    String TAG_NAME_CHOOSE = "choose";
     String TAG_NAME_FOR = "for";
+    String TAG_NAME_CHOOSE = "choose";
+    String TAG_NAME_WHEN = "when";
+    String TAG_NAME_OTHERWISE = "otherwise";
+
+    String ATTR_NAME_XUI_ID = "xui-id";
+    /** 用于记录在 Xpl &lt;for/> 标签中组件的原始 {@link #ATTR_NAME_XUI_ID 唯一标识} */
+    String ATTR_NAME_XUI_ID_RAW = "raw:" + ATTR_NAME_XUI_ID;
 }

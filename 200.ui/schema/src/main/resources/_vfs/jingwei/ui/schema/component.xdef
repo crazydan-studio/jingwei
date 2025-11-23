@@ -22,6 +22,8 @@
 <!-- [UI 组件]
 > 一个视觉交互控件
 >
+> - 引用的变量名不能以 `$` 或 `_` 开头，否则，在动态生成组件树时，其会被视为全局变量，
+>   而全局变量需要通过 `EvalGlobalRegistry#registerVariable` 注册；
 -->
 <component xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="/nop/schema/xdef.xdef" xmlns:c="c"
            x:schema="/nop/schema/xdef.xdef"
@@ -42,7 +44,7 @@
     />
 
     <!-- [组件树] -->
-    <template xdef:ref="component/tree.xdef"/>
+    <template xdef:ref="component/template.xdef"/>
 
     <!-- [组件消息列表] -->
     <messages xdef:bean-prop="messages"

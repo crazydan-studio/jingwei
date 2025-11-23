@@ -12,6 +12,8 @@ import io.nop.commons.util.ClassHelper;
  * generate from /jingwei/ui/schema/component.xdef <p>
  * > 一个视觉交互控件
  * >
+ * > - 引用的变量名不能以 `$` 或 `_` 开头，否则，在动态生成组件树时，其会被视为全局变量，
+ * >   而全局变量需要通过 `EvalGlobalRegistry#registerVariable` 注册；
  */
 @SuppressWarnings({"PMD.UselessOverridingMethod","PMD.UnusedLocalVariable",
     "PMD.UnnecessaryFullyQualifiedName","PMD.EmptyControlStatement","java:S116","java:S101","java:S1128","java:S1161"})
@@ -34,9 +36,9 @@ public abstract class _XuiComponent extends io.nop.core.resource.component.Abstr
     /**
      *  组件树
      * xml name: template
-     * >
+     * > - 所有节点（包括 `<if/>`、`<for/>` 等控制节点）均以 `xui-id` 作为唯一性属性，从而支持对任意节点的差量定制；
      */
-    private io.crazydan.jingwei.ui.schema.component.tree.XuiComponentTreeNodeRoot _template ;
+    private io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplate _template ;
     
     /**
      * 组件导入
@@ -131,15 +133,15 @@ public abstract class _XuiComponent extends io.nop.core.resource.component.Abstr
     /**
      * 组件树
      * xml name: template
-     *  >
+     *  > - 所有节点（包括 `<if/>`、`<for/>` 等控制节点）均以 `xui-id` 作为唯一性属性，从而支持对任意节点的差量定制；
      */
     
-    public io.crazydan.jingwei.ui.schema.component.tree.XuiComponentTreeNodeRoot getTemplate(){
+    public io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplate getTemplate(){
       return _template;
     }
 
     
-    public void setTemplate(io.crazydan.jingwei.ui.schema.component.tree.XuiComponentTreeNodeRoot value){
+    public void setTemplate(io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplate value){
         checkAllowChange();
         
         this._template = value;

@@ -27,7 +27,7 @@
         XuiConstants.XDSL_SCHEMA_PAGE,
         //
         XuiConstants.XDSL_SCHEMA_COMPONENT,
-        XuiConstants.XDSL_SCHEMA_COMPONENT_TREE,
+        XuiConstants.XDSL_SCHEMA_COMPONENT_TEMPLATE,
         XuiConstants.XDSL_SCHEMA_COMPONENT_IMPORT,
         XuiConstants.XDSL_SCHEMA_COMPONENT_MESSAGE,
     ];
