@@ -24,6 +24,7 @@ import java.util.Map;
 
 import io.crazydan.jingwei.ui.XuiJunitTestCase;
 import io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplate;
+import io.nop.api.core.exceptions.NopException;
 import io.nop.core.lang.eval.IEvalAction;
 import io.nop.core.lang.eval.IEvalScope;
 import io.nop.core.lang.xml.XNode;
@@ -35,7 +36,10 @@ import org.junit.jupiter.api.Test;
 
 import static io.crazydan.jingwei.ui.XuiConstants.TAG_NAME_TEMPLATE;
 import static io.crazydan.jingwei.ui.XuiConstants.XDSL_SCHEMA_COMPONENT_TEMPLATE;
+import static io.crazydan.jingwei.ui.XuiErrors.ERR_COMPONENT_MULTIPLE_DISPATCHES_NOT_ALLOWED;
+import static io.crazydan.jingwei.ui.XuiErrors.ERR_COMPONENT_MULTIPLE_LAYOUTS_NOT_ALLOWED;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  *
@@ -48,10 +52,9 @@ public class TestXuiComponentDynamic extends XuiJunitTestCase {
     public void test_vars() {
         XuiComponent component = loadModel("/jingwei/ui/test-dynamic-component-tree-vars.xui");
 
-        IEvalScope scope = XLang.newEvalScope();
-        scope.setLocalValue("props", Map.of("padding", "1u", "msg", "Welcome!"));
+        Map<?, ?> props = Map.of("padding", "1u", "msg", "Welcome!");
+        XuiComponentTemplate template = evalTemplate(component, props);
 
-        XuiComponentTemplate template = evalTemplate(component, scope);
         String json = toJson(template);
         assertEquals(attachmentJsonText("vars.json"), json);
 
@@ -71,11 +74,8 @@ public class TestXuiComponentDynamic extends XuiJunitTestCase {
 
         for (int i = 0; i < samples.length; i++) {
             Map<?, ?> props = samples[i];
+            XuiComponentTemplate template = evalTemplate(component, props);
 
-            IEvalScope scope = XLang.newEvalScope();
-            scope.setLocalValue("props", props);
-
-            XuiComponentTemplate template = evalTemplate(component, scope);
             String json = toJson(template);
             assertEquals(attachmentJsonText("statement-if-" + i + ".json"), json);
 
@@ -98,11 +98,8 @@ public class TestXuiComponentDynamic extends XuiJunitTestCase {
 
         for (int i = 0; i < samples.length; i++) {
             Map<?, ?> props = samples[i];
+            XuiComponentTemplate template = evalTemplate(component, props);
 
-            IEvalScope scope = XLang.newEvalScope();
-            scope.setLocalValue("props", props);
-
-            XuiComponentTemplate template = evalTemplate(component, scope);
             String json = toJson(template);
             assertEquals(attachmentJsonText("statement-choose-" + i + ".json"), json);
 
@@ -123,11 +120,8 @@ public class TestXuiComponentDynamic extends XuiJunitTestCase {
 
         for (int i = 0; i < samples.length; i++) {
             Map<?, ?> props = samples[i];
+            XuiComponentTemplate template = evalTemplate(component, props);
 
-            IEvalScope scope = XLang.newEvalScope();
-            scope.setLocalValue("props", props);
-
-            XuiComponentTemplate template = evalTemplate(component, scope);
             String json = toJson(template);
             assertEquals(attachmentJsonText("statement-for-" + i + ".json"), json);
 
@@ -137,7 +131,51 @@ public class TestXuiComponentDynamic extends XuiJunitTestCase {
         }
     }
 
-    private XuiComponentTemplate evalTemplate(XuiComponent component, IEvalScope scope) {
+    @Test
+    public void test_invalid_tree() {
+        try {
+            XuiComponent component = //
+                    loadModel("/jingwei/ui/test-invalid-dynamic-component-multi-layout-in-statement-if.xui");
+            evalTemplate(component, Map.of("var", 2));
+
+            fail("multiple-layout");
+        } catch (NopException e) {
+            assertEquals(ERR_COMPONENT_MULTIPLE_LAYOUTS_NOT_ALLOWED.getErrorCode(), e.getErrorCode());
+        }
+        try {
+            XuiComponent component = //
+                    loadModel("/jingwei/ui/test-invalid-dynamic-component-multi-layout-in-statement-for.xui");
+            evalTemplate(component, Map.of());
+
+            fail("multiple-layout");
+        } catch (NopException e) {
+            assertEquals(ERR_COMPONENT_MULTIPLE_LAYOUTS_NOT_ALLOWED.getErrorCode(), e.getErrorCode());
+        }
+
+        try {
+            XuiComponent component = //
+                    loadModel("/jingwei/ui/test-invalid-dynamic-component-multi-dispatch-in-statement-if.xui");
+            evalTemplate(component, Map.of("var", 2));
+
+            fail("multiple-dispatch");
+        } catch (NopException e) {
+            assertEquals(ERR_COMPONENT_MULTIPLE_DISPATCHES_NOT_ALLOWED.getErrorCode(), e.getErrorCode());
+        }
+        try {
+            XuiComponent component = //
+                    loadModel("/jingwei/ui/test-invalid-dynamic-component-multi-dispatch-in-statement-for.xui");
+            evalTemplate(component, Map.of());
+
+            fail("multiple-dispatch");
+        } catch (NopException e) {
+            assertEquals(ERR_COMPONENT_MULTIPLE_DISPATCHES_NOT_ALLOWED.getErrorCode(), e.getErrorCode());
+        }
+    }
+
+    private XuiComponentTemplate evalTemplate(XuiComponent component, Map<?, ?> props) {
+        IEvalScope scope = XLang.newEvalScope();
+        scope.setLocalValue("props", props);
+
         XNode dummy = new XNode("_");
         component.getDslNode().childByTag(TAG_NAME_TEMPLATE).cloneInstance().insertParent(dummy);
 
@@ -145,10 +183,6 @@ public class TestXuiComponentDynamic extends XuiJunitTestCase {
         IEvalAction action = compileTool.compileTagBody(dummy, XLangOutputMode.node);
         XNode node = (XNode) action.invoke(scope);
 
-        XuiComponentTemplate template = //
-                (XuiComponentTemplate) DslModelHelper.parseDslNode(XDSL_SCHEMA_COMPONENT_TEMPLATE, node);
-        template.init();
-
-        return template;
+        return (XuiComponentTemplate) DslModelHelper.parseDslNode(XDSL_SCHEMA_COMPONENT_TEMPLATE, node);
     }
 }

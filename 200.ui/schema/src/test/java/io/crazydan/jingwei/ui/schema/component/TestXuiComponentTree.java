@@ -25,7 +25,8 @@ import io.nop.core.lang.xml.XNode;
 import org.junit.jupiter.api.Test;
 
 import static io.crazydan.jingwei.ui.XuiErrors.ERR_COMPONENT_INVALID_TAG_NAME;
-import static io.crazydan.jingwei.ui.XuiErrors.ERR_COMPONENT_MULTIPLE_LAYOUT_NOT_ALLOWED;
+import static io.crazydan.jingwei.ui.XuiErrors.ERR_COMPONENT_MULTIPLE_LAYOUTS_NOT_ALLOWED;
+import static io.crazydan.jingwei.ui.XuiErrors.ERR_COMPONENT_MULTIPLE_DISPATCHES_NOT_ALLOWED;
 import static io.crazydan.jingwei.ui.XuiErrors.ERR_COMPONENT_SLOT_IN_DEPTH_NOT_ALLOWED;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -77,13 +78,20 @@ public class TestXuiComponentTree extends XuiJunitTestCase {
             loadModel("/jingwei/ui/test-invalid-component-multi-layout.xui");
             fail("multiple-layout");
         } catch (NopException e) {
-            assertEquals(ERR_COMPONENT_MULTIPLE_LAYOUT_NOT_ALLOWED.getErrorCode(), e.getErrorCode());
+            assertEquals(ERR_COMPONENT_MULTIPLE_LAYOUTS_NOT_ALLOWED.getErrorCode(), e.getErrorCode());
         }
         try {
             loadModel("/jingwei/ui/test-invalid-component-multi-layout-depth.xui");
             fail("multiple-layout");
         } catch (NopException e) {
-            assertEquals(ERR_COMPONENT_MULTIPLE_LAYOUT_NOT_ALLOWED.getErrorCode(), e.getErrorCode());
+            assertEquals(ERR_COMPONENT_MULTIPLE_LAYOUTS_NOT_ALLOWED.getErrorCode(), e.getErrorCode());
+        }
+
+        try {
+            loadModel("/jingwei/ui/test-invalid-component-multi-dispatch.xui");
+            fail("multiple-dispatch");
+        } catch (NopException e) {
+            assertEquals(ERR_COMPONENT_MULTIPLE_DISPATCHES_NOT_ALLOWED.getErrorCode(), e.getErrorCode());
         }
 
         try {

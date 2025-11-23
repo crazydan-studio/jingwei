@@ -78,11 +78,8 @@ public class XuiComponent extends _XuiComponent implements INeedInit {
 
         XNode node = (XNode) action.invoke(scope);
 
-        XuiComponentTemplate template = //
-                (XuiComponentTemplate) DslModelHelper.parseDslNode(XDSL_SCHEMA_COMPONENT_TEMPLATE, node);
-        template.init();
-
-        return template;
+        // Note: 在解析得到模型后，将自动调用 INeedInit#init 进行初始化
+        return (XuiComponentTemplate) DslModelHelper.parseDslNode(XDSL_SCHEMA_COMPONENT_TEMPLATE, node);
     }
 
     protected IEvalAction getTemplateEvalAction() {

@@ -22,6 +22,7 @@ package io.crazydan.jingwei.ui;
 import io.nop.api.core.exceptions.ErrorCode;
 
 import static io.nop.api.core.exceptions.ErrorCode.define;
+import static io.nop.xlang.XLangErrors.ARG_NAME;
 import static io.nop.xlang.XLangErrors.ARG_TAG_NAME;
 
 /**
@@ -37,10 +38,15 @@ public interface XuiErrors {
                    + "其需为字母、数字、下划线组成的驼峰形式，且首字母必须大写，"
                    + "如 Button、Button_Ext",
                    ARG_TAG_NAME);
-    ErrorCode ERR_COMPONENT_MULTIPLE_LAYOUT_NOT_ALLOWED = //
-            define("jingwei.err.ui.component.multiple-layout-not-allowed",
+    ErrorCode ERR_COMPONENT_MULTIPLE_LAYOUTS_NOT_ALLOWED = //
+            define("jingwei.err.ui.component.multiple-layouts-not-allowed",
                    "不允许在 <{tagName}/> 标签中定义多个 <layout/>",
                    ARG_TAG_NAME);
+    ErrorCode ERR_COMPONENT_MULTIPLE_DISPATCHES_NOT_ALLOWED = //
+            define("jingwei.err.ui.component.multiple-dispatches-not-allowed",
+                   "不允许在 <{tagName}/> 标签中定义消息名（{name}）重复的 <dispatch/>",
+                   ARG_TAG_NAME,
+                   ARG_NAME);
     ErrorCode ERR_COMPONENT_SLOT_IN_DEPTH_NOT_ALLOWED = //
             define("jingwei.err.ui.component.slot-in-depth-not-allowed", //
                    "不允许在 <slot/> 标签内嵌套使用 slot");

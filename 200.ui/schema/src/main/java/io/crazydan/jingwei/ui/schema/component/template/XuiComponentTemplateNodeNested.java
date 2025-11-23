@@ -1,13 +1,18 @@
 package io.crazydan.jingwei.ui.schema.component.template;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.crazydan.duzhou.framework.ui.domain.GenericStdDomainHandlers;
 import io.crazydan.jingwei.ui.schema.component.template._gen._XuiComponentTemplateNodeNested;
 import io.nop.api.core.exceptions.NopException;
 import io.nop.api.core.util.INeedInit;
 
 import static io.crazydan.jingwei.ui.XuiErrors.ERR_COMPONENT_INVALID_TAG_NAME;
-import static io.crazydan.jingwei.ui.XuiErrors.ERR_COMPONENT_MULTIPLE_LAYOUT_NOT_ALLOWED;
+import static io.crazydan.jingwei.ui.XuiErrors.ERR_COMPONENT_MULTIPLE_DISPATCHES_NOT_ALLOWED;
+import static io.crazydan.jingwei.ui.XuiErrors.ERR_COMPONENT_MULTIPLE_LAYOUTS_NOT_ALLOWED;
 import static io.crazydan.jingwei.ui.XuiErrors.ERR_COMPONENT_SLOT_IN_DEPTH_NOT_ALLOWED;
+import static io.nop.xlang.XLangErrors.ARG_NAME;
 import static io.nop.xlang.XLangErrors.ARG_TAG_NAME;
 
 public class XuiComponentTemplateNodeNested extends _XuiComponentTemplateNodeNested implements INeedInit {
@@ -20,8 +25,8 @@ public class XuiComponentTemplateNodeNested extends _XuiComponentTemplateNodeNes
     public void init() {
         checkTagName();
         checkMultiLayouts();
+        checkMultiDispatches();
         checkSlotInSlot();
-        // TODO 同名消息不能重复派发
 
         getChildren().forEach((child) -> {
             if (child instanceof INeedInit) {
@@ -44,11 +49,31 @@ public class XuiComponentTemplateNodeNested extends _XuiComponentTemplateNodeNes
         boolean exists = false;
         for (XuiComponentTemplateNodeKeyed child : getChildren()) {
             if (child instanceof XuiComponentTemplateNodeLayout) {
+                XuiComponentTemplateNodeLayout layout = (XuiComponentTemplateNodeLayout) child;
                 if (exists) {
-                    throw new NopException(ERR_COMPONENT_MULTIPLE_LAYOUT_NOT_ALLOWED).source(this)
-                                                                                     .param(ARG_TAG_NAME, get$tag());
+                    throw new NopException(ERR_COMPONENT_MULTIPLE_LAYOUTS_NOT_ALLOWED).source(layout)
+                                                                                      .param(ARG_TAG_NAME, get$tag());
                 } else {
                     exists = true;
+                }
+            }
+        }
+    }
+
+    protected void checkMultiDispatches() {
+        List<String> messages = new ArrayList<>();
+
+        for (XuiComponentTemplateNodeKeyed child : getChildren()) {
+            if (child instanceof XuiComponentTemplateNodeDispatch) {
+                XuiComponentTemplateNodeDispatch dispatch = (XuiComponentTemplateNodeDispatch) child;
+                String msg = dispatch.getMsg();
+
+                if (messages.contains(msg)) {
+                    throw new NopException(ERR_COMPONENT_MULTIPLE_DISPATCHES_NOT_ALLOWED).source(dispatch)
+                                                                                         .param(ARG_TAG_NAME, get$tag())
+                                                                                         .param(ARG_NAME, msg);
+                } else {
+                    messages.add(msg);
                 }
             }
         }
