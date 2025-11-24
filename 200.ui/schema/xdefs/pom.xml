@@ -38,11 +38,11 @@
     <dependencies>
         <dependency>
             <groupId>io.github.entropy-cloud</groupId>
-            <artifactId>nop-xdefs</artifactId>
+            <artifactId>nop-xlang</artifactId>
         </dependency>
         <dependency>
             <groupId>io.crazydan.duzhou.framework</groupId>
-            <artifactId>duzhou-ui-schema</artifactId>
+            <artifactId>duzhou-ui-schema-xdefs</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -93,6 +93,7 @@
                 <artifactId>jingwei-codegen</artifactId>
                 <version>${jingwei.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>io.crazydan.jingwei</groupId>
                 <artifactId>jingwei-ui-schema-xdefs</artifactId>
@@ -113,6 +114,7 @@
                 <artifactId>jingwei-ui-vendor-imgui</artifactId>
                 <version>${jingwei.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>io.crazydan.jingwei</groupId>
                 <artifactId>jingwei-store-model</artifactId>
