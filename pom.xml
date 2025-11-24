@@ -95,7 +95,12 @@
             </dependency>
             <dependency>
                 <groupId>io.crazydan.jingwei</groupId>
-                <artifactId>jingwei-ui-schema</artifactId>
+                <artifactId>jingwei-ui-schema-xdefs</artifactId>
+                <version>${jingwei.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.crazydan.jingwei</groupId>
+                <artifactId>jingwei-ui-schema-model</artifactId>
                 <version>${jingwei.version}</version>
             </dependency>
             <dependency>

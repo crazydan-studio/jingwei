@@ -4,22 +4,24 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <name>JingWei UI CodeGen</name>
-    <artifactId>jingwei-ui-codegen</artifactId>
+    <name>JingWei UI Schema - CodeGen</name>
+    <artifactId>jingwei-ui-schema-codegen</artifactId>
 
     <parent>
         <groupId>io.crazydan.jingwei</groupId>
-        <artifactId>jingwei-ui</artifactId>
+        <artifactId>jingwei-ui-schema</artifactId>
         <version>0.1.0-SNAPSHOT</version>
     </parent>
 
     <properties>
+        <maven.install.skip>true</maven.install.skip>
+        <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>io.crazydan.jingwei</groupId>
-            <artifactId>jingwei-ui-schema</artifactId>
+            <artifactId>jingwei-ui-schema-xdefs</artifactId>
         </dependency>
     </dependencies>
 

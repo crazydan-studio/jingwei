@@ -15,8 +15,6 @@
     </parent>
 
     <modules>
-        <module>codegen</module>
-
         <module>schema</module>
         <module>vendor</module>
     </modules>
