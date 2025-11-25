@@ -52,13 +52,6 @@ public abstract class _XuiComponentTemplateNodeStatementFor extends io.crazydan.
     private java.lang.String _var ;
     
     /**
-     *  唯一标识
-     * xml name: xui-id
-     * > 在父节点内，该标识必须唯一
-     */
-    private java.lang.String _xuiId ;
-    
-    /**
      * 
      * xml name: begin
      *  
@@ -153,25 +146,6 @@ public abstract class _XuiComponentTemplateNodeStatementFor extends io.crazydan.
     }
 
     
-    /**
-     * 唯一标识
-     * xml name: xui-id
-     *  > 在父节点内，该标识必须唯一
-     */
-    
-    public java.lang.String getXuiId(){
-      return _xuiId;
-    }
-
-    
-    public void setXuiId(java.lang.String value){
-        checkAllowChange();
-        
-        this._xuiId = value;
-           
-    }
-
-    
 
     @Override
     public void freeze(boolean cascade){
@@ -192,7 +166,6 @@ public abstract class _XuiComponentTemplateNodeStatementFor extends io.crazydan.
         out.putNotNull("index",this.getIndex());
         out.putNotNull("items",this.getItems());
         out.putNotNull("var",this.getVar());
-        out.putNotNull("xuiId",this.getXuiId());
     }
 
     public XuiComponentTemplateNodeStatementFor cloneInstance(){
@@ -209,7 +182,6 @@ public abstract class _XuiComponentTemplateNodeStatementFor extends io.crazydan.
         instance.setIndex(this.getIndex());
         instance.setItems(this.getItems());
         instance.setVar(this.getVar());
-        instance.setXuiId(this.getXuiId());
     }
 
     protected XuiComponentTemplateNodeStatementFor newInstance(){

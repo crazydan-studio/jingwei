@@ -24,34 +24,34 @@
 >
 
     <template>
-        <choose xui-id="choose-1">
-            <when xui-id="when-1" test="${props.var == 1}">
-                <Text xui-id="text-1">Text: ${props.msg1}</Text>
+        <choose xui:name="choose-1">
+            <when xui:name="when-1" test="${props.var == 1}">
+                <Text xui:name="text-1">Text: ${props.msg1}</Text>
             </when>
-            <when xui-id="when-2" test="${props.var == 2}">
-                <Text xui-id="text-1">Text: ${props.msg2}</Text>
+            <when xui:name="when-2" test="${props.var == 2}">
+                <Text xui:name="text-1">Text: ${props.msg2}</Text>
             </when>
-            <when xui-id="when-3" test="${props.var == 3}">
-                <Text xui-id="text-1">Text: ${props.msg3}</Text>
+            <when xui:name="when-3" test="${props.var == 3}">
+                <Text xui:name="text-1">Text: ${props.msg3}</Text>
             </when>
             <otherwise>
-                <Text xui-id="text-1">Text: ${props.msg}</Text>
+                <Text xui:name="text-1">Text: ${props.msg}</Text>
             </otherwise>
         </choose>
 
-        <Button xui-id="button-1">
-            <choose xui-id="choose-1">
-                <when xui-id="when-1" test="${props.var == 1}">
-                    <Text xui-id="text-1">Text: ${props.msg1}</Text>
+        <Button xui:name="button-1">
+            <choose xui:name="choose-1">
+                <when xui:name="when-1" test="${props.var == 1}">
+                    <Text xui:name="text-1">Text: ${props.msg1}</Text>
                 </when>
-                <when xui-id="when-2" test="${props.var == 2}">
-                    <Text xui-id="text-1">Text: ${props.msg2}</Text>
+                <when xui:name="when-2" test="${props.var == 2}">
+                    <Text xui:name="text-1">Text: ${props.msg2}</Text>
                 </when>
-                <when xui-id="when-3" test="${props.var == 3}">
-                    <Text xui-id="text-1">Text: ${props.msg3}</Text>
+                <when xui:name="when-3" test="${props.var == 3}">
+                    <Text xui:name="text-1">Text: ${props.msg3}</Text>
                 </when>
                 <otherwise>
-                    <Text xui-id="text-1">Text: ${props.msg}</Text>
+                    <Text xui:name="text-1">Text: ${props.msg}</Text>
                 </otherwise>
             </choose>
         </Button>

@@ -24,9 +24,9 @@
 >
 
     <template>
-        <for xui-id="for-1" begin="0" end="3" var="n">
-            <if xui-id="if-1" test="${n &gt; 0}">
-                <layout xui-id="layout-1">
+        <for xui:name="for-1" begin="0" end="3" var="n">
+            <if xui:name="if-1" test="${n &gt; 0}">
+                <layout xui:name="layout-1">
                     <linear><![CDATA[
                         v>{}<^
                     ]]></linear>

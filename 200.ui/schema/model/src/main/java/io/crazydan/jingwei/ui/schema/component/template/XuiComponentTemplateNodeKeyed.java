@@ -19,12 +19,18 @@
 
 package io.crazydan.jingwei.ui.schema.component.template;
 
+import io.nop.core.reflect.hook.IExtensibleObject;
+
+import static io.crazydan.jingwei.ui.XuiConstants.ATTR_NAME_XUI_NAME;
+
 /**
  *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
  * @date 2025-11-20
  */
-public interface XuiComponentTemplateNodeKeyed {
+public interface XuiComponentTemplateNodeKeyed extends IExtensibleObject {
 
-    String getXuiId();
+    default String getXuiName() {
+        return (String) prop_get(ATTR_NAME_XUI_NAME);
+    }
 }

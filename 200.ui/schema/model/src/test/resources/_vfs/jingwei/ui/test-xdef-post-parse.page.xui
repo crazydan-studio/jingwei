@@ -24,7 +24,7 @@
 >
 
     <template>
-        <Text xui-id="text-1"><![CDATA[
+        <Text xui:name="text-1"><![CDATA[
             Text 1
         ]]></Text>
     </template>

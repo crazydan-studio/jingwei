@@ -32,13 +32,6 @@ public abstract class _XuiComponentTemplateNodeLayout extends io.nop.core.resour
     private io.crazydan.duzhou.framework.ui.XuiLayout _type ;
     
     /**
-     *  
-     * xml name: xui-id
-     * 
-     */
-    private java.lang.String _xuiId ;
-    
-    /**
      * 
      * xml name: 
      *  
@@ -76,25 +69,6 @@ public abstract class _XuiComponentTemplateNodeLayout extends io.nop.core.resour
     }
 
     
-    /**
-     * 
-     * xml name: xui-id
-     *  
-     */
-    
-    public java.lang.String getXuiId(){
-      return _xuiId;
-    }
-
-    
-    public void setXuiId(java.lang.String value){
-        checkAllowChange();
-        
-        this._xuiId = value;
-           
-    }
-
-    
 
     @Override
     public void freeze(boolean cascade){
@@ -114,7 +88,6 @@ public abstract class _XuiComponentTemplateNodeLayout extends io.nop.core.resour
         
         out.putNotNull("$tag",this.get$tag());
         out.putNotNull("type",this.getType());
-        out.putNotNull("xuiId",this.getXuiId());
     }
 
     public XuiComponentTemplateNodeLayout cloneInstance(){
@@ -128,7 +101,6 @@ public abstract class _XuiComponentTemplateNodeLayout extends io.nop.core.resour
         
         instance.set$tag(this.get$tag());
         instance.setType(this.getType());
-        instance.setXuiId(this.getXuiId());
     }
 
     protected XuiComponentTemplateNodeLayout newInstance(){

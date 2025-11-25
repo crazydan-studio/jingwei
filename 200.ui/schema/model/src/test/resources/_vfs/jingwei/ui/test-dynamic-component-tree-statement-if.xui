@@ -24,25 +24,25 @@
 >
 
     <template>
-        <if xui-id="if-1" test="${props.var == 1}">
-            <Text xui-id="text-1"><![CDATA[
+        <if xui:name="if-1" test="${props.var == 1}">
+            <Text xui:name="text-1"><![CDATA[
                 Text: ${props.msg1}
             ]]></Text>
         </if>
-        <if xui-id="if-2" test="${props.var == 2}">
-            <Text xui-id="text-1"><![CDATA[
+        <if xui:name="if-2" test="${props.var == 2}">
+            <Text xui:name="text-1"><![CDATA[
                 Text: ${props.msg2}
             ]]></Text>
         </if>
 
-        <Button xui-id="button-1">
-            <if xui-id="if-1" test="${props.var == 1}">
-                <Text xui-id="text-1"><![CDATA[
+        <Button xui:name="button-1">
+            <if xui:name="if-1" test="${props.var == 1}">
+                <Text xui:name="text-1"><![CDATA[
                     Text: ${props.msg1}
                 ]]></Text>
             </if>
-            <if xui-id="if-2" test="${props.var == 2}">
-                <Text xui-id="text-1"><![CDATA[
+            <if xui:name="if-2" test="${props.var == 2}">
+                <Text xui:name="text-1"><![CDATA[
                     Text: ${props.msg2}
                 ]]></Text>
             </if>

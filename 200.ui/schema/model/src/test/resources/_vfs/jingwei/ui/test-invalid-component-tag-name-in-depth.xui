@@ -24,8 +24,8 @@
 >
 
     <template>
-        <Box xui-id="box-1">
-            <button xui-id="button-1"/>
+        <Box xui:name="box-1">
+            <button xui:name="button-1"/>
         </Box>
     </template>
 </component>

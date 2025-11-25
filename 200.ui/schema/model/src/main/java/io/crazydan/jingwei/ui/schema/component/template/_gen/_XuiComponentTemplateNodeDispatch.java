@@ -45,13 +45,6 @@ public abstract class _XuiComponentTemplateNodeDispatch extends io.nop.core.reso
     private java.lang.String _msg ;
     
     /**
-     *  
-     * xml name: xui-id
-     * 
-     */
-    private java.lang.String _xuiId ;
-    
-    /**
      * 
      * xml name: 
      *  
@@ -127,25 +120,6 @@ public abstract class _XuiComponentTemplateNodeDispatch extends io.nop.core.reso
     }
 
     
-    /**
-     * 
-     * xml name: xui-id
-     *  
-     */
-    @Deprecated
-    public java.lang.String getXuiId(){
-      return _xuiId;
-    }
-
-    @Deprecated
-    public void setXuiId(java.lang.String value){
-        checkAllowChange();
-        
-        this._xuiId = value;
-           
-    }
-
-    
 
     @Override
     public void freeze(boolean cascade){
@@ -165,7 +139,6 @@ public abstract class _XuiComponentTemplateNodeDispatch extends io.nop.core.reso
         out.putNotNull("data",this.getData());
         out.putNotNull("events",this.getEvents());
         out.putNotNull("msg",this.getMsg());
-        out.putNotNull("xuiId",this.getXuiId());
     }
 
     public XuiComponentTemplateNodeDispatch cloneInstance(){
@@ -181,7 +154,6 @@ public abstract class _XuiComponentTemplateNodeDispatch extends io.nop.core.reso
         instance.setData(this.getData());
         instance.setEvents(this.getEvents());
         instance.setMsg(this.getMsg());
-        instance.setXuiId(this.getXuiId());
     }
 
     protected XuiComponentTemplateNodeDispatch newInstance(){

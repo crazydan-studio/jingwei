@@ -16,32 +16,6 @@ import io.nop.commons.util.ClassHelper;
     "PMD.UnnecessaryFullyQualifiedName","PMD.EmptyControlStatement","java:S116","java:S101","java:S1128","java:S1161"})
 public abstract class _XuiComponentTemplateNode extends io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeNested implements io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed{
     
-    /**
-     *  唯一标识
-     * xml name: xui-id
-     * > 在父节点内，该标识必须唯一
-     */
-    private java.lang.String _xuiId ;
-    
-    /**
-     * 唯一标识
-     * xml name: xui-id
-     *  > 在父节点内，该标识必须唯一
-     */
-    
-    public java.lang.String getXuiId(){
-      return _xuiId;
-    }
-
-    
-    public void setXuiId(java.lang.String value){
-        checkAllowChange();
-        
-        this._xuiId = value;
-           
-    }
-
-    
 
     @Override
     public void freeze(boolean cascade){
@@ -57,7 +31,6 @@ public abstract class _XuiComponentTemplateNode extends io.crazydan.jingwei.ui.s
     protected void outputJson(IJsonHandler out){
         super.outputJson(out);
         
-        out.putNotNull("xuiId",this.getXuiId());
     }
 
     public XuiComponentTemplateNode cloneInstance(){
@@ -69,7 +42,6 @@ public abstract class _XuiComponentTemplateNode extends io.crazydan.jingwei.ui.s
     protected void copyTo(XuiComponentTemplateNode instance){
         super.copyTo(instance);
         
-        instance.setXuiId(this.getXuiId());
     }
 
     protected XuiComponentTemplateNode newInstance(){

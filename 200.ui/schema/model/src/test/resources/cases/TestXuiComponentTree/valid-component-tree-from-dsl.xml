@@ -3,51 +3,51 @@
         <layout>
             <linear><![CDATA[v>{}<^]]></linear>
         </layout>
-        <Text xui-id="text-1"><![CDATA[Text 1]]></Text>
-        <native xui-id="native-1" name="box">
-            <Text xui-id="text-1">Native Text</Text>
+        <Text xui:name="text-1"><![CDATA[Text 1]]></Text>
+        <native xui:name="native-1" name="box">
+            <Text xui:name="text-1">Native Text</Text>
         </native>
-        <slot xui-id="slot-1">
+        <slot xui:name="slot-1">
             <layout>
                 <linear><![CDATA[v>{}<^]]></linear>
             </layout>
-            <if xui-id="if-1" test="${a == 1}">
-                <Text xui-id="text-1">If 1 Text 1</Text>
+            <if xui:name="if-1" test="${a == 1}">
+                <Text xui:name="text-1">If 1 Text 1</Text>
             </if>
-            <Text xui-id="text-1">Text 1</Text>
+            <Text xui:name="text-1">Text 1</Text>
         </slot>
-        <for xui-id="for-1" begin="0" end="2" var="i">
-            <Text xui-id="text-1">For 1 Text 1</Text>
-            <native xui-id="native-1" name="box">
-                <Text xui-id="text-1">Text 1</Text>
-                <native xui-id="native-1" name="text"/>
-                <Text xui-id="text-2">Text 2</Text>
+        <for xui:name="for-1" begin="0" end="2" var="i">
+            <Text xui:name="text-1">For 1 Text 1</Text>
+            <native xui:name="native-1" name="box">
+                <Text xui:name="text-1">Text 1</Text>
+                <native xui:name="native-1" name="text"/>
+                <Text xui:name="text-2">Text 2</Text>
             </native>
-            <Text xui-id="text-2">For 1 Text 2</Text>
+            <Text xui:name="text-2">For 1 Text 2</Text>
         </for>
-        <Button xui-id="button-1">
+        <Button xui:name="button-1">
             <layout>
                 <linear><![CDATA[v>{}<^]]></linear>
             </layout>
-            <dispatch msg="User_Update" events="click" xui-id="User_Update"/>
-            <Text xui-id="text-1">Text 1</Text>
-            <native xui-id="native-1" name="text"/>
-            <Text xui-id="text-2">Text 2</Text>
+            <dispatch msg="User_Update" events="click" xui:name="User_Update"/>
+            <Text xui:name="text-1">Text 1</Text>
+            <native xui:name="native-1" name="text"/>
+            <Text xui:name="text-2">Text 2</Text>
         </Button>
-        <if xui-id="if-1" test="${b == 1}">
-            <Text xui-id="text-1"><![CDATA[Hello!]]></Text>
+        <if xui:name="if-1" test="${b == 1}">
+            <Text xui:name="text-1"><![CDATA[Hello!]]></Text>
         </if>
-        <choose xui-id="choose-1">
-            <when xui-id="when-1" test="${when == 1}">
-                <Text xui-id="text-1">When #1</Text>
+        <choose xui:name="choose-1">
+            <when xui:name="when-1" test="${when == 1}">
+                <Text xui:name="text-1">When #1</Text>
             </when>
-            <when xui-id="when-2" test="${when == 2}">
-                <Text xui-id="text-1">When #2</Text>
-                <Button xui-id="button-1"/>
+            <when xui:name="when-2" test="${when == 2}">
+                <Text xui:name="text-1">When #2</Text>
+                <Button xui:name="button-1"/>
             </when>
             <otherwise>
-                <Button xui-id="button-1">
-                    <Text xui-id="text-1">Otherwise</Text>
+                <Button xui:name="button-1">
+                    <Text xui:name="text-1">Otherwise</Text>
                 </Button>
             </otherwise>
         </choose>

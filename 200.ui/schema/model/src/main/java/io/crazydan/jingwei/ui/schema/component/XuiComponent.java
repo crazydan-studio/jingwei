@@ -21,8 +21,8 @@ import io.nop.xlang.xpl.tags.ChooseTagCompiler;
 import io.nop.xlang.xpl.tags.ForTagCompiler;
 import io.nop.xlang.xpl.tags.IfTagCompiler;
 
-import static io.crazydan.jingwei.ui.XuiConstants.ATTR_NAME_XUI_ID;
-import static io.crazydan.jingwei.ui.XuiConstants.ATTR_NAME_XUI_ID_RAW;
+import static io.crazydan.jingwei.ui.XuiConstants.ATTR_NAME_XUI_NAME;
+import static io.crazydan.jingwei.ui.XuiConstants.ATTR_NAME_XUI_NAME_RAW;
 import static io.crazydan.jingwei.ui.XuiConstants.TAG_NAME_CHOOSE;
 import static io.crazydan.jingwei.ui.XuiConstants.TAG_NAME_FOR;
 import static io.crazydan.jingwei.ui.XuiConstants.TAG_NAME_IF;
@@ -151,18 +151,18 @@ public class XuiComponent extends _XuiComponent implements INeedInit {
                     node.setAttr(INDEX_NAME, indexName);
                 }
 
-                patchXuiIdInFor(node, indexName, false);
+                patchXuiNameInFor(node, indexName, false);
             }
 
             return this.compiler.parseTag(node, cp, scope);
         }
 
         private void cleanNode(XNode node) {
-            node.removeAttr(ATTR_NAME_XUI_ID);
+            node.removeAttr(ATTR_NAME_XUI_NAME);
         }
 
         /** 为确保 for 循环中的节点唯一标识的唯一性，需要在原始的标识中添加循环序号变量 */
-        private void patchXuiIdInFor(XNode node, String indexName, boolean ignoreFor) {
+        private void patchXuiNameInFor(XNode node, String indexName, boolean ignoreFor) {
             if (ignoreFor && TAG_NAME_FOR.equals(node.getTagName())) {
                 return;
             }
@@ -171,11 +171,11 @@ public class XuiComponent extends _XuiComponent implements INeedInit {
                 String childTagName = child.getTagName();
 
                 if (TAGS.contains(childTagName)) {
-                    patchXuiIdInFor(child, indexName, true);
+                    patchXuiNameInFor(child, indexName, true);
                 } else {
-                    String xuiId = child.attrText(ATTR_NAME_XUI_ID);
-                    child.setAttr(ATTR_NAME_XUI_ID_RAW, xuiId);
-                    child.setAttr(ATTR_NAME_XUI_ID, xuiId + "_${" + indexName + "}");
+                    String xuiName = child.attrText(ATTR_NAME_XUI_NAME);
+                    child.setAttr(ATTR_NAME_XUI_NAME_RAW, xuiName);
+                    child.setAttr(ATTR_NAME_XUI_NAME, xuiName + "_${" + indexName + "}");
                 }
             }
         }

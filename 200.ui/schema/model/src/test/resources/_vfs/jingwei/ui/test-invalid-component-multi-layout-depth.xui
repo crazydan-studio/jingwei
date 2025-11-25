@@ -24,13 +24,13 @@
 >
 
     <template>
-        <slot xui-id="slot-1">
-            <layout xui-id="layout-1">
+        <slot xui:name="slot-1">
+            <layout xui:name="layout-1">
                 <linear><![CDATA[
                     v>{}<^
                 ]]></linear>
             </layout>
-            <layout xui-id="layout-2">
+            <layout xui:name="layout-2">
                 <linear><![CDATA[
                     v>{}<^
                 ]]></linear>

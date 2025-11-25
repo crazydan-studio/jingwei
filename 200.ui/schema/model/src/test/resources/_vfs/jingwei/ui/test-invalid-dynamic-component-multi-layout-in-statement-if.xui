@@ -24,15 +24,15 @@
 >
 
     <template>
-        <if xui-id="if-1" test="${props.var &gt; 1}">
-            <layout xui-id="layout-1">
+        <if xui:name="if-1" test="${props.var &gt; 1}">
+            <layout xui:name="layout-1">
                 <linear><![CDATA[
                     v>{}<^
                 ]]></linear>
             </layout>
         </if>
-        <if xui-id="if-2" test="${props.var &lt; 3}">
-            <layout xui-id="layout-2">
+        <if xui:name="if-2" test="${props.var &lt; 3}">
+            <layout xui:name="layout-2">
                 <linear><![CDATA[
                     v>{}<^
                 ]]></linear>

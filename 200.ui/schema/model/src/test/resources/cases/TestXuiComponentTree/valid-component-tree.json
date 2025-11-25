@@ -6,10 +6,12 @@
   "messages": [],
   "template": {
     "location": "[26:6:0:0]/jingwei/ui/test-valid-component-tree.xui",
+    "xui:name": "xui-template-root-node",
     "$tag": "template",
     "children": [
       {
         "location": "[27:10:0:0]/jingwei/ui/test-valid-component-tree.xui",
+        "xui:name": "xui-layout",
         "$tag": "layout",
         "type": {
           "location": "[28:14:0:0]/jingwei/ui/test-valid-component-tree.xui",
@@ -24,35 +26,36 @@
               "height": "match_parent"
             }
           }
-        },
-        "xuiId": "xui-layout"
+        }
       },
       {
         "location": "[33:10:0:0]/jingwei/ui/test-valid-component-tree.xui",
+        "xui:name": "text-1",
         "$tag": "Text",
-        "value": "\n            Text 1\n        ",
-        "xuiId": "text-1"
+        "value": "\n            Text 1\n        "
       },
       {
         "location": "[37:10:0:0]/jingwei/ui/test-valid-component-tree.xui",
+        "xui:name": "native-1",
         "$tag": "native",
         "children": [
           {
             "location": "[38:14:0:0]/jingwei/ui/test-valid-component-tree.xui",
+            "xui:name": "text-1",
             "$tag": "Text",
-            "value": "Native Text",
-            "xuiId": "text-1"
+            "value": "Native Text"
           }
         ],
-        "xuiId": "native-1",
         "name": "box"
       },
       {
         "location": "[41:10:0:0]/jingwei/ui/test-valid-component-tree.xui",
+        "xui:name": "slot-1",
         "$tag": "slot",
         "children": [
           {
             "location": "[42:14:0:0]/jingwei/ui/test-valid-component-tree.xui",
+            "xui:name": "xui-layout",
             "$tag": "layout",
             "type": {
               "location": "[43:18:0:0]/jingwei/ui/test-valid-component-tree.xui",
@@ -67,88 +70,88 @@
                   "height": "match_parent"
                 }
               }
-            },
-            "xuiId": "xui-layout"
+            }
           },
           {
             "location": "[48:14:0:0]/jingwei/ui/test-valid-component-tree.xui",
+            "xui:name": "if-1",
             "$tag": "if",
             "children": [
               {
                 "location": "[49:18:0:0]/jingwei/ui/test-valid-component-tree.xui",
+                "xui:name": "text-1",
                 "$tag": "Text",
-                "value": "If 1 Text 1",
-                "xuiId": "text-1"
+                "value": "If 1 Text 1"
               }
             ],
-            "xuiId": "if-1",
             "test": "${a == 1}"
           },
           {
             "location": "[51:14:0:0]/jingwei/ui/test-valid-component-tree.xui",
+            "xui:name": "text-1",
             "$tag": "Text",
-            "value": "Text 1",
-            "xuiId": "text-1"
+            "value": "Text 1"
           }
         ],
-        "xuiId": "slot-1",
         "name": "default"
       },
       {
         "location": "[54:10:0:0]/jingwei/ui/test-valid-component-tree.xui",
+        "xui:name": "for-1",
         "$tag": "for",
         "children": [
           {
             "location": "[55:14:0:0]/jingwei/ui/test-valid-component-tree.xui",
+            "xui:name": "text-1",
             "$tag": "Text",
-            "value": "For 1 Text 1",
-            "xuiId": "text-1"
+            "value": "For 1 Text 1"
           },
           {
             "location": "[56:14:0:0]/jingwei/ui/test-valid-component-tree.xui",
+            "xui:name": "native-1",
             "$tag": "native",
             "children": [
               {
                 "location": "[57:18:0:0]/jingwei/ui/test-valid-component-tree.xui",
+                "xui:name": "text-1",
                 "$tag": "Text",
-                "value": "Text 1",
-                "xuiId": "text-1"
+                "value": "Text 1"
               },
               {
                 "location": "[58:18:0:0]/jingwei/ui/test-valid-component-tree.xui",
+                "xui:name": "native-1",
                 "$tag": "native",
                 "children": [],
-                "xuiId": "native-1",
                 "name": "text"
               },
               {
                 "location": "[59:18:0:0]/jingwei/ui/test-valid-component-tree.xui",
+                "xui:name": "text-2",
                 "$tag": "Text",
-                "value": "Text 2",
-                "xuiId": "text-2"
+                "value": "Text 2"
               }
             ],
-            "xuiId": "native-1",
             "name": "box"
           },
           {
             "location": "[61:14:0:0]/jingwei/ui/test-valid-component-tree.xui",
+            "xui:name": "text-2",
             "$tag": "Text",
-            "value": "For 1 Text 2",
-            "xuiId": "text-2"
+            "value": "For 1 Text 2"
           }
         ],
         "begin": 0,
         "end": 2,
-        "var": "i",
-        "xuiId": "for-1"
+        "var": "i"
       },
       {
         "location": "[64:10:0:0]/jingwei/ui/test-valid-component-tree.xui",
+        "xui:name": "button-1",
         "$tag": "Button",
         "children": [
           {
             "location": "[65:14:0:0]/jingwei/ui/test-valid-component-tree.xui",
+            "xui:name": "xui-layout",
             "$tag": "layout",
             "type": {
               "location": "[66:18:0:0]/jingwei/ui/test-valid-component-tree.xui",
@@ -163,116 +166,113 @@
                   "height": "match_parent"
                 }
               }
-            },
-            "xuiId": "xui-layout"
+            }
           },
           {
             "location": "[71:14:0:0]/jingwei/ui/test-valid-component-tree.xui",
+            "xui:name": "User_Update",
             "$tag": "dispatch",
             "events": [
               "click"
             ],
-            "msg": "User_Update",
-            "xuiId": "User_Update"
+            "msg": "User_Update"
           },
           {
             "location": "[73:14:0:0]/jingwei/ui/test-valid-component-tree.xui",
+            "xui:name": "text-1",
             "$tag": "Text",
-            "value": "Text 1",
-            "xuiId": "text-1"
+            "value": "Text 1"
           },
           {
             "location": "[74:14:0:0]/jingwei/ui/test-valid-component-tree.xui",
+            "xui:name": "native-1",
             "$tag": "native",
             "children": [],
-            "xuiId": "native-1",
             "name": "text"
           },
           {
             "location": "[75:14:0:0]/jingwei/ui/test-valid-component-tree.xui",
+            "xui:name": "text-2",
             "$tag": "Text",
-            "value": "Text 2",
-            "xuiId": "text-2"
+            "value": "Text 2"
           }
-        ],
-        "xuiId": "button-1"
+        ]
       },
       {
         "location": "[78:10:0:0]/jingwei/ui/test-valid-component-tree.xui",
+        "xui:name": "if-1",
         "$tag": "if",
         "children": [
           {
             "location": "[79:14:0:0]/jingwei/ui/test-valid-component-tree.xui",
+            "xui:name": "text-1",
             "$tag": "Text",
-            "value": "\n                Hello!\n            ",
-            "xuiId": "text-1"
+            "value": "\n                Hello!\n            "
           }
         ],
-        "xuiId": "if-1",
         "test": "${b == 1}"
       },
       {
         "location": "[83:10:0:0]/jingwei/ui/test-valid-component-tree.xui",
+        "xui:name": "choose-1",
         "$tag": "choose",
         "otherwise": {
           "location": "[91:14:0:0]/jingwei/ui/test-valid-component-tree.xui",
+          "xui:name": "otherwise",
           "$tag": "otherwise",
           "children": [
             {
               "location": "[92:18:0:0]/jingwei/ui/test-valid-component-tree.xui",
+              "xui:name": "button-1",
               "$tag": "Button",
               "children": [
                 {
                   "location": "[93:22:0:0]/jingwei/ui/test-valid-component-tree.xui",
+                  "xui:name": "text-1",
                   "$tag": "Text",
-                  "value": "Otherwise",
-                  "xuiId": "text-1"
+                  "value": "Otherwise"
                 }
-              ],
-              "xuiId": "button-1"
+              ]
             }
-          ],
-          "xuiId": "otherwise"
+          ]
         },
         "whens": [
           {
             "location": "[84:14:0:0]/jingwei/ui/test-valid-component-tree.xui",
+            "xui:name": "when-1",
             "$tag": "when",
             "children": [
               {
                 "location": "[85:18:0:0]/jingwei/ui/test-valid-component-tree.xui",
+                "xui:name": "text-1",
                 "$tag": "Text",
-                "value": "When #1",
-                "xuiId": "text-1"
+                "value": "When #1"
               }
             ],
-            "xuiId": "when-1",
             "test": "${when == 1}"
           },
           {
             "location": "[87:14:0:0]/jingwei/ui/test-valid-component-tree.xui",
+            "xui:name": "when-2",
             "$tag": "when",
             "children": [
               {
                 "location": "[88:18:0:0]/jingwei/ui/test-valid-component-tree.xui",
+                "xui:name": "text-1",
                 "$tag": "Text",
-                "value": "When #2",
-                "xuiId": "text-1"
+                "value": "When #2"
               },
               {
                 "location": "[89:18:0:0]/jingwei/ui/test-valid-component-tree.xui",
+                "xui:name": "button-1",
                 "$tag": "Button",
-                "children": [],
-                "xuiId": "button-1"
+                "children": []
               }
             ],
-            "xuiId": "when-2",
             "test": "${when == 2}"
           }
-        ],
-        "xuiId": "choose-1"
+        ]
       }
-    ],
-    "xuiId": "xui-template-root-node"
+    ]
   }
 }

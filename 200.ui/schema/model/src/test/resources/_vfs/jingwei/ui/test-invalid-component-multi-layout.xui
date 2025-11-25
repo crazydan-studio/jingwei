@@ -24,12 +24,12 @@
 >
 
     <template>
-        <layout xui-id="layout-1">
+        <layout xui:name="layout-1">
             <linear><![CDATA[
                 v>{}<^
             ]]></linear>
         </layout>
-        <layout xui-id="layout-2">
+        <layout xui:name="layout-2">
             <linear><![CDATA[
                 v>{}<^
             ]]></linear>

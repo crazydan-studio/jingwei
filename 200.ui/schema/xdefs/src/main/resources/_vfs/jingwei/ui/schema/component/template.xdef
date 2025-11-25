@@ -20,35 +20,35 @@
   -->
 
 <!-- [组件树]
-> - 所有节点（包括 `<if/>`、`<for/>` 等控制节点）均以 `xui-id` 作为唯一性属性，从而支持对任意节点的差量定制；
+> - 所有节点（包括 `<if/>`、`<for/>` 等控制节点）均以 `xui:name` 作为唯一性属性，从而支持对任意节点的差量定制；
 -->
-<template xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="xdef"
-          x:schema="/nop/schema/xdef.xdef"
+<template xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="xdef" xmlns:xui="xui"
+          x:schema="/nop/schema/xdef.xdef" xdef:check-ns="xui"
           xdef:bean-package="io.crazydan.jingwei.ui.schema.component.template"
           xdef:name="XuiComponentTemplate"
           xdef:ref="XuiComponentTemplateNode"
-          xui-id="!~ns-name=xui-template-root-node"
+          xui:name="!~ns-name=xui-template-root-node"
 >
 
     <!-- [组件树节点]
     >
 
-    @xui-id [唯一标识]
+    @xui:name [唯一标识]
         > 在父节点内，该标识必须唯一
     -->
     <xdef:define xdef:name="XuiComponentTemplateNode"
                  xdef:ref="XuiComponentTemplateNodeNested"
                  xdef:bean-implements-types="io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed"
-                 xui-id="!ns-name"
+                 xui:name="!ns-name"
     >
         <!-- [布局控制]
-        > 根据 `xui-id` 对其**直接子组件**（含 `<slot/>` 和 `<native/>`，但不含 `<if/>`、`<for/>` 等控制节点）进行布局控制。
+        > 根据 `xui:name` 对其**直接子组件**（含 `<slot/>` 和 `<native/>`，但不含 `<if/>`、`<for/>` 等控制节点）进行布局控制。
         >
         > 缺省将按照子组件声明顺序排列，并由 UI Vendor 做默认布局。
         -->
         <layout xdef:ref="XuiComponentTemplateNodeLayout"
                 xdef:allow-multiple="false"
-                xui-id="!~ns-name=xui-layout"
+                xui:name="!~ns-name=xui-layout"
         />
         <!-- [消息派发]
         > 监听指定的事件，在事件触发时派发指定的消息。
@@ -63,7 +63,7 @@
         <dispatch xdef:name="XuiComponentTemplateNodeDispatch"
                   xdef:bean-tag-prop="$tag"
                   xdef:bean-implements-types="io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed"
-                  xui-id="!~ns-name=@attr:msg"
+                  xui:name="!~ns-name=@attr:msg"
                   msg="!component-name" events="!prop-name-set"
                   data="any"
         />
@@ -73,7 +73,7 @@
     -->
     <xdef:define xdef:name="XuiComponentTemplateNodeNested"
                  xdef:bean-tag-prop="$tag"
-                 xdef:body-type="list" xdef:key-attr="xui-id"
+                 xdef:body-type="list" xdef:key-attr="xui:name"
                  xdef:bean-body-prop="children" xdef:bean-child-name="child"
                  xdef:bean-body-type="List&lt;io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed>"
                  xdef:bean-sub-type-prop="$tag"
@@ -91,7 +91,7 @@
         -->
         <native xdef:name="XuiComponentTemplateNodeNative"
                 xdef:ref="XuiComponentTemplateNodeSlottable"
-                xui-id="!ns-name"
+                xui:name="!ns-name"
                 name="!ns-name"
                 xdef:unknown-attr="any" xdef:bean-unknown-attrs-prop="attrs"
         />
@@ -104,16 +104,16 @@
         -->
         <slot xdef:name="XuiComponentTemplateNodeSlot"
               xdef:ref="XuiComponentTemplateNode"
-              xui-id="!ns-name"
+              xui:name="!ns-name"
               name="!ns-name=default" attrs="any"
         />
 
         <!-- [文本内嵌组件]
         > 只包含文本内容的组件。
 
-        @xui-id [唯一标识]
+        @xui:name [唯一标识]
             > 在父节点内，该标识必须唯一
-        @xui-slot [对应的插槽名字]
+        @xui:slot [对应的插槽名字]
             > 其将替换所在组件的 `<template/>` 中定义的同名 `<slot/>` 节点
         @as-html [是否为 HTML 片段]
             > 若为 `true`，则将其文本作为 HTML 渲染，但需自行处理 XSS 攻击
@@ -121,7 +121,7 @@
         <Text xdef:name="XuiComponentTemplateNodeText"
               xdef:bean-tag-prop="$tag"
               xdef:bean-implements-types="io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed"
-              xui-id="!ns-name" xui-slot="ns-name"
+              xui:name="!ns-name" xui:slot="ns-name"
               as-html="boolean"
               xdef:unknown-attr="any" xdef:bean-unknown-attrs-prop="attrs"
               xdef:value="string" xdef:bean-body-prop="value"
@@ -133,7 +133,7 @@
         -->
         <xdef:unknown-tag xdef:name="XuiComponentTemplateNodeAny"
                           xdef:ref="XuiComponentTemplateNodeSlottable"
-                          xui-id="!ns-name"
+                          xui:name="!ns-name"
                           xdef:unknown-attr="any" xdef:bean-unknown-attrs-prop="attrs"
         />
 
@@ -144,26 +144,26 @@
         <!--  -->
         <if xdef:name="XuiComponentTemplateNodeStatementIf"
             xdef:ref="XuiComponentTemplateNodeStatementCond"
-            xui-id="!ns-name"
+            xui:name="!ns-name"
         />
         <!-- [条件选择]
         >
 
-        @xui-id [唯一标识]
+        @xui:name [唯一标识]
             > 在父节点内，该标识必须唯一
         -->
         <choose xdef:name="XuiComponentTemplateNodeStatementChoose"
                 xdef:bean-tag-prop="$tag"
                 xdef:bean-implements-types="io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed"
-                xui-id="!ns-name"
+                xui:name="!ns-name"
         >
             <!-- [特定条件]
             -->
             <when xdef:name="XuiComponentTemplateNodeStatementChooseWhen"
                   xdef:ref="XuiComponentTemplateNodeStatementCond"
-                  xdef:unique-attr="xui-id"
+                  xdef:unique-attr="xui:name"
                   xdef:bean-prop="whens" xdef:bean-child-name="when"
-                  xui-id="!ns-name"
+                  xui:name="!ns-name"
             />
             <!-- [缺省条件]
             >
@@ -171,7 +171,7 @@
             <otherwise xdef:name="XuiComponentTemplateNodeStatementChooseOtherwise"
                        xdef:ref="XuiComponentTemplateNode"
                        xdef:allow-multiple="false"
-                       xui-id="!~ns-name=otherwise"
+                       xui:name="!~ns-name=otherwise"
             />
         </choose>
 
@@ -179,7 +179,7 @@
         <!-- [For 循环]
         >
 
-        @xui-id [唯一标识]
+        @xui:name [唯一标识]
             > 在父节点内，该标识必须唯一
         @items [待循环变量]
             > 如 `${props.users}`
@@ -191,7 +191,7 @@
         <for xdef:name="XuiComponentTemplateNodeStatementFor"
              xdef:ref="XuiComponentTemplateNodeNested"
              xdef:bean-implements-types="io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed"
-             xui-id="!ns-name"
+             xui:name="!ns-name"
              var="!var-name" index="var-name"
              items="string"
              begin="int" end="int"
@@ -203,12 +203,12 @@
     <!-- [组件树可指定插槽的节点]
     >
 
-    @xui-slot [对应的插槽名字]
+    @xui:slot [对应的插槽名字]
         > 其将替换所属组件在 `<template/>` 中定义的同名 `<slot/>` 节点
     -->
     <xdef:define xdef:name="XuiComponentTemplateNodeSlottable"
                  xdef:ref="XuiComponentTemplateNode"
-                 xui-slot="ns-name"
+                 xui:slot="ns-name"
     />
 
     <!-- [条件判断]
@@ -233,13 +233,13 @@
                  xdef:bean-body-type="io.crazydan.duzhou.framework.ui.XuiLayout"
                  xdef:bean-body-prop="type"
                  xdef:bean-sub-type-prop="$tag"
-                 xui-id="!ns-name"
+                 xui:name="!ns-name"
     >
         <!-- [线性布局]
         > 在水平和垂直方向上布局组件，且溢出内容不做换行处理。
         >
         > 线性布局使用文本标记语言：
-        > - `[comp]`: 指代 `xui-id` 属性值为 `comp` 的组件；
+        > - `[comp]`: 指代 `xui:name` 属性值为 `comp` 的组件；
         > - `<`: 表示左对齐；
         > - `>`: 表示右对齐；
         > - `^`: 表示顶部对齐；

@@ -24,6 +24,6 @@
 >
 
     <template>
-        <button xui-id="button-1"/>
+        <button xui:name="button-1"/>
     </template>
 </component>

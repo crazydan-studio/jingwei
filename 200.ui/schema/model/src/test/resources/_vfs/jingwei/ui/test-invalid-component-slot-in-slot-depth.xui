@@ -24,9 +24,9 @@
 >
 
     <template>
-        <slot xui-id="slot-1">
-            <Button xui-id="button-1">
-                <slot xui-id="slot-1" name="text"/>
+        <slot xui:name="slot-1">
+            <Button xui:name="button-1">
+                <slot xui:name="slot-1" name="text"/>
             </Button>
         </slot>
     </template>

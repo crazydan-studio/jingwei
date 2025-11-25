@@ -1,6 +1,6 @@
 <template>
-    <Text xui-id="text-1">Text: Hello WHEN#2</Text>
-    <Button xui-id="button-1">
-        <Text xui-id="text-1">Text: Hello WHEN#2</Text>
+    <Text xui:name="text-1">Text: Hello WHEN#2</Text>
+    <Button xui:name="button-1">
+        <Text xui:name="text-1">Text: Hello WHEN#2</Text>
     </Button>
 </template>

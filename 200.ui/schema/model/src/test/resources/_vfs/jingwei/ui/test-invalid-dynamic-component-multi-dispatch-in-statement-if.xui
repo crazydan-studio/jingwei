@@ -24,11 +24,11 @@
 >
 
     <template>
-        <if xui-id="if-1" test="${props.var &gt; 1}">
-            <dispatch xui-id="dispatch-1" msg="User_Add" events="click"/>
+        <if xui:name="if-1" test="${props.var &gt; 1}">
+            <dispatch xui:name="dispatch-1" msg="User_Add" events="click"/>
         </if>
-        <if xui-id="if-2" test="${props.var &lt; 3}">
-            <dispatch xui-id="dispatch-2" msg="User_Add" events="click"/>
+        <if xui:name="if-2" test="${props.var &lt; 3}">
+            <dispatch xui:name="dispatch-2" msg="User_Add" events="click"/>
         </if>
     </template>
 </component>

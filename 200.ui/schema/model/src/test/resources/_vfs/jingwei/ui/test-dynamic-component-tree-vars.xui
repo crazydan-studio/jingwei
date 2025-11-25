@@ -30,7 +30,7 @@
             ]]></linear>
         </layout>
 
-        <Text xui-id="text-1"><![CDATA[
+        <Text xui:name="text-1"><![CDATA[
             Text: ${props.msg}
         ]]></Text>
     </template>

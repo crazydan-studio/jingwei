@@ -24,9 +24,9 @@
 >
 
     <template>
-        <for xui-id="for-1" begin="0" end="3" var="n">
-            <if xui-id="if-1" test="${n &gt; 0}">
-                <dispatch xui-id="dispatch-1" msg="User_Add" events="click"/>
+        <for xui:name="for-1" begin="0" end="3" var="n">
+            <if xui:name="if-1" test="${n &gt; 0}">
+                <dispatch xui:name="dispatch-1" msg="User_Add" events="click"/>
             </if>
         </for>
     </template>

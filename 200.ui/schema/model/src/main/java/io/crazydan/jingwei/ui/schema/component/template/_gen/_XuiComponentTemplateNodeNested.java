@@ -63,7 +63,7 @@ public abstract class _XuiComponentTemplateNodeNested extends io.nop.core.resour
     public void setChildren(java.util.List<io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed> value){
         checkAllowChange();
         
-        this._children = KeyedList.fromList(value, io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed::getXuiId);
+        this._children = KeyedList.fromList(value, io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed::getXuiName);
            
     }
 
@@ -80,7 +80,7 @@ public abstract class _XuiComponentTemplateNodeNested extends io.nop.core.resour
         checkAllowChange();
         java.util.List<io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed> list = this.getChildren();
         if (list == null || list.isEmpty()) {
-            list = new KeyedList<>(io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed::getXuiId);
+            list = new KeyedList<>(io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed::getXuiName);
             setChildren(list);
         }
         list.add(item);

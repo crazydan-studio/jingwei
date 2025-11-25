@@ -1,26 +1,26 @@
 {
   "location": "[26:6:0:0]/jingwei/ui/test-dynamic-component-tree-statement-choose.xui",
+  "xui:name": "xui-template-root-node",
   "$tag": "template",
   "children": [
     {
       "location": "[32:18:0:0]/jingwei/ui/test-dynamic-component-tree-statement-choose.xui",
+      "xui:name": "text-1",
       "$tag": "Text",
-      "value": "Text: Hello WHEN#2",
-      "xuiId": "text-1"
+      "value": "Text: Hello WHEN#2"
     },
     {
       "location": "[42:10:0:0]/jingwei/ui/test-dynamic-component-tree-statement-choose.xui",
+      "xui:name": "button-1",
       "$tag": "Button",
       "children": [
         {
           "location": "[48:22:0:0]/jingwei/ui/test-dynamic-component-tree-statement-choose.xui",
+          "xui:name": "text-1",
           "$tag": "Text",
-          "value": "Text: Hello WHEN#2",
-          "xuiId": "text-1"
+          "value": "Text: Hello WHEN#2"
         }
-      ],
-      "xuiId": "button-1"
+      ]
     }
-  ],
-  "xuiId": "xui-template-root-node"
+  ]
 }

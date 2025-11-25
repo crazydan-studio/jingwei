@@ -38,13 +38,6 @@ public abstract class _XuiComponentTemplateNodeStatementChoose extends io.nop.co
     private KeyedList<io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeStatementChooseWhen> _whens = KeyedList.emptyList();
     
     /**
-     *  唯一标识
-     * xml name: xui-id
-     * > 在父节点内，该标识必须唯一
-     */
-    private java.lang.String _xuiId ;
-    
-    /**
      * 
      * xml name: 
      *  
@@ -96,7 +89,7 @@ public abstract class _XuiComponentTemplateNodeStatementChoose extends io.nop.co
     public void setWhens(java.util.List<io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeStatementChooseWhen> value){
         checkAllowChange();
         
-        this._whens = KeyedList.fromList(value, io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeStatementChooseWhen::getXuiId);
+        this._whens = KeyedList.fromList(value, io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeStatementChooseWhen::getXuiName);
            
     }
 
@@ -113,7 +106,7 @@ public abstract class _XuiComponentTemplateNodeStatementChoose extends io.nop.co
         checkAllowChange();
         java.util.List<io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeStatementChooseWhen> list = this.getWhens();
         if (list == null || list.isEmpty()) {
-            list = new KeyedList<>(io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeStatementChooseWhen::getXuiId);
+            list = new KeyedList<>(io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeStatementChooseWhen::getXuiName);
             setWhens(list);
         }
         list.add(item);
@@ -126,25 +119,6 @@ public abstract class _XuiComponentTemplateNodeStatementChoose extends io.nop.co
     public boolean hasWhens(){
         return !this._whens.isEmpty();
     }
-    
-    /**
-     * 唯一标识
-     * xml name: xui-id
-     *  > 在父节点内，该标识必须唯一
-     */
-    
-    public java.lang.String getXuiId(){
-      return _xuiId;
-    }
-
-    
-    public void setXuiId(java.lang.String value){
-        checkAllowChange();
-        
-        this._xuiId = value;
-           
-    }
-
     
 
     @Override
@@ -168,7 +142,6 @@ public abstract class _XuiComponentTemplateNodeStatementChoose extends io.nop.co
         out.putNotNull("$tag",this.get$tag());
         out.putNotNull("otherwise",this.getOtherwise());
         out.putNotNull("whens",this.getWhens());
-        out.putNotNull("xuiId",this.getXuiId());
     }
 
     public XuiComponentTemplateNodeStatementChoose cloneInstance(){
@@ -183,7 +156,6 @@ public abstract class _XuiComponentTemplateNodeStatementChoose extends io.nop.co
         instance.set$tag(this.get$tag());
         instance.setOtherwise(this.getOtherwise());
         instance.setWhens(this.getWhens());
-        instance.setXuiId(this.getXuiId());
     }
 
     protected XuiComponentTemplateNodeStatementChoose newInstance(){

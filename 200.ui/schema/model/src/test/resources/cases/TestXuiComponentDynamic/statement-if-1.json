@@ -1,26 +1,26 @@
 {
   "location": "[26:6:0:0]/jingwei/ui/test-dynamic-component-tree-statement-if.xui",
+  "xui:name": "xui-template-root-node",
   "$tag": "template",
   "children": [
     {
       "location": "[33:14:0:0]/jingwei/ui/test-dynamic-component-tree-statement-if.xui",
+      "xui:name": "text-1",
       "$tag": "Text",
-      "value": "\n                Text: Hello IF#2\n            ",
-      "xuiId": "text-1"
+      "value": "\n                Text: Hello IF#2\n            "
     },
     {
       "location": "[38:10:0:0]/jingwei/ui/test-dynamic-component-tree-statement-if.xui",
+      "xui:name": "button-1",
       "$tag": "Button",
       "children": [
         {
           "location": "[45:18:0:0]/jingwei/ui/test-dynamic-component-tree-statement-if.xui",
+          "xui:name": "text-1",
           "$tag": "Text",
-          "value": "\n                    Text: Hello IF#2\n                ",
-          "xuiId": "text-1"
+          "value": "\n                    Text: Hello IF#2\n                "
         }
-      ],
-      "xuiId": "button-1"
+      ]
     }
-  ],
-  "xuiId": "xui-template-root-node"
+  ]
 }
