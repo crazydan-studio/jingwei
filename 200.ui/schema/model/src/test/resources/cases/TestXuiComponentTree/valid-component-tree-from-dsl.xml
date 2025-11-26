@@ -1,10 +1,12 @@
 <component>
+    <import as="Text" from="/jingwei/ui/component/text.xui"/>
+    <import as="Button" from="/jingwei/ui/component/button.xui"/>
     <template>
         <layout>
             <linear><![CDATA[v>{}<^]]></linear>
         </layout>
-        <Text xui:name="text-1"><![CDATA[Text 1]]></Text>
-        <native xui:name="native-1" name="box">
+        <Text xui:name="text-1" style="color: green;"><![CDATA[Text 1]]></Text>
+        <native xui:name="native-1" name="box" style="border: 1u;">
             <Text xui:name="text-1">Native Text</Text>
         </native>
         <slot xui:name="slot-1">
@@ -17,7 +19,7 @@
             <Text xui:name="text-1">Text 1</Text>
         </slot>
         <for xui:name="for-1" begin="0" end="2" var="i">
-            <Text xui:name="text-1">For 1 Text 1</Text>
+            <Text xui:name="text-1" style="color: blue;">For 1 Text 1</Text>
             <native xui:name="native-1" name="box">
                 <Text xui:name="text-1">Text 1</Text>
                 <native xui:name="native-1" name="text"/>
@@ -25,12 +27,12 @@
             </native>
             <Text xui:name="text-2">For 1 Text 2</Text>
         </for>
-        <Button xui:name="button-1">
+        <Button xui:name="button-1" style="background-color: white;">
             <layout>
                 <linear><![CDATA[v>{}<^]]></linear>
             </layout>
             <dispatch msg="User_Update" events="click" xui:name="User_Update"/>
-            <Text xui:name="text-1">Text 1</Text>
+            <Text xui:name="text-1" style="color: red;">Text 1</Text>
             <native xui:name="native-1" name="text"/>
             <Text xui:name="text-2">Text 2</Text>
         </Button>

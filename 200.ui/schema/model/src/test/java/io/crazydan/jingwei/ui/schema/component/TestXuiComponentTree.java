@@ -28,6 +28,7 @@ import org.junit.jupiter.api.Test;
 import static io.crazydan.jingwei.ui.XuiErrors.ERR_COMPONENT_INVALID_TAG_NAME;
 import static io.crazydan.jingwei.ui.XuiErrors.ERR_COMPONENT_MULTIPLE_DISPATCHES_NOT_ALLOWED;
 import static io.crazydan.jingwei.ui.XuiErrors.ERR_COMPONENT_MULTIPLE_LAYOUTS_NOT_ALLOWED;
+import static io.crazydan.jingwei.ui.XuiErrors.ERR_COMPONENT_NOT_IMPORTED;
 import static io.crazydan.jingwei.ui.XuiErrors.ERR_COMPONENT_SLOT_IN_DEPTH_NOT_ALLOWED;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -106,6 +107,37 @@ public class TestXuiComponentTree extends XuiJunitTestCase {
             fail("slot-in-depth");
         } catch (NopException e) {
             assertEquals(ERR_COMPONENT_SLOT_IN_DEPTH_NOT_ALLOWED.getErrorCode(), e.getErrorCode());
+        }
+
+        try {
+            XuiHelper.loadComponent("/jingwei/ui/test-invalid-component-not-imported.xui");
+            fail("not-imported");
+        } catch (NopException e) {
+            assertEquals(ERR_COMPONENT_NOT_IMPORTED.getErrorCode(), e.getErrorCode());
+        }
+        try {
+            XuiHelper.loadComponent("/jingwei/ui/test-invalid-component-not-imported-in-depth.xui");
+            fail("not-imported");
+        } catch (NopException e) {
+            assertEquals(ERR_COMPONENT_NOT_IMPORTED.getErrorCode(), e.getErrorCode());
+        }
+        try {
+            XuiHelper.loadComponent("/jingwei/ui/test-invalid-component-not-imported-in-statement-for.xui");
+            fail("not-imported");
+        } catch (NopException e) {
+            assertEquals(ERR_COMPONENT_NOT_IMPORTED.getErrorCode(), e.getErrorCode());
+        }
+        try {
+            XuiHelper.loadComponent("/jingwei/ui/test-invalid-component-not-imported-in-statement-choose.xui");
+            fail("not-imported");
+        } catch (NopException e) {
+            assertEquals(ERR_COMPONENT_NOT_IMPORTED.getErrorCode(), e.getErrorCode());
+        }
+        try {
+            XuiHelper.loadComponent("/jingwei/ui/test-invalid-component-not-imported-in-statement-choose-1.xui");
+            fail("not-imported");
+        } catch (NopException e) {
+            assertEquals(ERR_COMPONENT_NOT_IMPORTED.getErrorCode(), e.getErrorCode());
         }
     }
 }

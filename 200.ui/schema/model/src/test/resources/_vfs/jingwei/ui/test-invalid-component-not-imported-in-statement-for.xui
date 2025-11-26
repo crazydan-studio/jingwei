@@ -22,13 +22,13 @@
 <component xmlns:x="/nop/schema/xdsl.xdef" xmlns:xui="xui"
            x:schema="/jingwei/ui/schema/component.xdef"
 >
+    <import as="Box" from="/jingwei/ui/component/box.xui"/>
 
     <template>
-        <if xui:name="if-1" test="${props.var &gt; 1}">
-            <dispatch xui:name="dispatch-1" msg="User_Add" events="click"/>
-        </if>
-        <if xui:name="if-2" test="${props.var &lt; 3}">
-            <dispatch xui:name="dispatch-2" msg="User_Add" events="click"/>
-        </if>
+        <for xui:name="for-1" begin="0" end="3" var="n">
+            <Box xui:name="box-1">
+                <Button xui:name="button-1"/>
+            </Box>
+        </for>
     </template>
 </component>

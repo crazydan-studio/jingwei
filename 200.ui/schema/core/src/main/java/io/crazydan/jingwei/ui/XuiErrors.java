@@ -53,4 +53,7 @@ public interface XuiErrors {
     ErrorCode ERR_COMPONENT_DSL_NODE_NOT_BOUND = //
             define("jingwei.err.ui.component.dsl-node-not-bound", //
                    "组件未与其 XNode 节点绑定，建议在 xdef 元模型中的 <xdef:post-parse/> 脚本中做全局自动绑定，如：_dsl_model.setDslNode(_dsl_root)");
+    ErrorCode ERR_COMPONENT_NOT_IMPORTED = //
+            define("jingwei.err.ui.component.component-not-imported", //
+                   "组件 <{tagName}/> 未通过 <import/> 显式导入", ARG_TAG_NAME);
 }

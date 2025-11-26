@@ -1,113 +1,113 @@
 {
-  "location": "[26:6:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
+  "location": "[28:6:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
   "xui:name": "xui-template-root-node",
   "$tag": "template",
   "children": [
     {
-      "location": "[28:14:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
+      "location": "[30:14:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
       "raw-xui:name": "for-1-text",
       "xui:name": "for-1-text_0",
       "$tag": "Text",
       "value": "Number 1 #0"
     },
     {
-      "location": "[31:18:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
+      "location": "[33:18:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
       "raw-xui:name": "for-1-if-text",
       "xui:name": "for-1-if-text_0",
       "$tag": "Text",
       "value": "IF1: Number 1 #0"
     },
     {
-      "location": "[28:14:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
+      "location": "[30:14:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
       "raw-xui:name": "for-1-text",
       "xui:name": "for-1-text_1",
       "$tag": "Text",
       "value": "Number 2 #1"
     },
     {
-      "location": "[31:18:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
+      "location": "[33:18:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
       "raw-xui:name": "for-1-if-text",
       "xui:name": "for-1-if-text_1",
       "$tag": "Text",
       "value": "IF1: Number 2 #1"
     },
     {
-      "location": "[28:14:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
+      "location": "[30:14:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
       "raw-xui:name": "for-1-text",
       "xui:name": "for-1-text_2",
       "$tag": "Text",
       "value": "Number 3 #2"
     },
     {
-      "location": "[31:18:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
+      "location": "[33:18:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
       "raw-xui:name": "for-1-if-text",
       "xui:name": "for-1-if-text_2",
       "$tag": "Text",
       "value": "IF1: Number 3 #2"
     },
     {
-      "location": "[28:14:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
+      "location": "[30:14:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
       "raw-xui:name": "for-1-text",
       "xui:name": "for-1-text_3",
       "$tag": "Text",
       "value": "Number 4 #3"
     },
     {
-      "location": "[31:18:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
+      "location": "[33:18:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
       "raw-xui:name": "for-1-if-text",
       "xui:name": "for-1-if-text_3",
       "$tag": "Text",
       "value": "IF1: Number 4 #3"
     },
     {
-      "location": "[35:14:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
+      "location": "[37:14:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
       "raw-xui:name": "for-2-text",
       "xui:name": "for-2-text_0",
       "$tag": "Text",
       "value": "Item a #0"
     },
     {
-      "location": "[35:14:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
+      "location": "[37:14:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
       "raw-xui:name": "for-2-text",
       "xui:name": "for-2-text_1",
       "$tag": "Text",
       "value": "Item b #1"
     },
     {
-      "location": "[35:14:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
+      "location": "[37:14:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
       "raw-xui:name": "for-2-text",
       "xui:name": "for-2-text_2",
       "$tag": "Text",
       "value": "Item c #2"
     },
     {
-      "location": "[42:10:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
+      "location": "[44:10:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
       "xui:name": "button-1",
       "$tag": "Button",
       "children": [
         {
-          "location": "[45:22:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
+          "location": "[47:22:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
           "raw-xui:name": "for-1-text",
           "xui:name": "for-1-text_0",
           "$tag": "Text",
           "value": "Number 1 #0"
         },
         {
-          "location": "[45:22:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
+          "location": "[47:22:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
           "raw-xui:name": "for-1-text",
           "xui:name": "for-1-text_1",
           "$tag": "Text",
           "value": "Number 2 #1"
         },
         {
-          "location": "[45:22:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
+          "location": "[47:22:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
           "raw-xui:name": "for-1-text",
           "xui:name": "for-1-text_2",
           "$tag": "Text",
           "value": "Number 3 #2"
         },
         {
-          "location": "[45:22:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
+          "location": "[47:22:0:0]/jingwei/ui/test-dynamic-component-tree-statement-for.xui",
           "raw-xui:name": "for-1-text",
           "xui:name": "for-1-text_3",
           "$tag": "Text",

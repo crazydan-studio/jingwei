@@ -4,8 +4,14 @@ import java.util.List;
 
 import io.crazydan.jingwei.ui.schema.component._gen._XuiComponent;
 import io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplate;
+import io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeAny;
+import io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed;
+import io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeNested;
+import io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeStatementChoose;
+import io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeText;
 import io.nop.api.core.exceptions.NopException;
 import io.nop.api.core.util.INeedInit;
+import io.nop.api.core.util.ISourceLocationGetter;
 import io.nop.core.lang.eval.IEvalAction;
 import io.nop.core.lang.eval.IEvalScope;
 import io.nop.core.lang.xml.XNode;
@@ -31,6 +37,8 @@ import static io.crazydan.jingwei.ui.XuiConstants.TAG_NAME_TEMPLATE;
 import static io.crazydan.jingwei.ui.XuiConstants.TAG_NAME_WHEN;
 import static io.crazydan.jingwei.ui.XuiConstants.XDSL_SCHEMA_COMPONENT_TEMPLATE;
 import static io.crazydan.jingwei.ui.XuiErrors.ERR_COMPONENT_DSL_NODE_NOT_BOUND;
+import static io.crazydan.jingwei.ui.XuiErrors.ERR_COMPONENT_NOT_IMPORTED;
+import static io.nop.xlang.XLangErrors.ARG_TAG_NAME;
 import static io.nop.xlang.xpl.XplConstants.INDEX_NAME;
 
 /**
@@ -54,17 +62,44 @@ public class XuiComponent extends _XuiComponent implements INeedInit {
 
     @Override
     public void init() {
-        initTemplate();
-        // TODO 检查未导入组件
+        if (getTemplate() != null) {
+            getTemplate().init();
+            checkImported(getTemplate());
+        }
     }
 
     public XuiComponentTemplate evalTemplate(IEvalScope scope) {
         return doEvalTemplate(scope);
     }
 
-    protected void initTemplate() {
-        if (getTemplate() != null) {
-            getTemplate().init();
+    /** 检查组件节点是否已显式通过 {@code <import/>} 导入 */
+    protected void checkImported(XuiComponentTemplateNodeKeyed node) {
+        if (node == null) {
+            return;
+        }
+        if (node instanceof XuiComponentTemplateNodeStatementChoose) {
+            XuiComponentTemplateNodeStatementChoose choose = (XuiComponentTemplateNodeStatementChoose) node;
+
+            choose.getWhens().forEach(this::checkImported);
+            checkImported(choose.getOtherwise());
+            return;
+        }
+
+        String tagName = null;
+        if (node instanceof XuiComponentTemplateNodeText) {
+            tagName = ((XuiComponentTemplateNodeText) node).get$tag();
+        } //
+        else if (node instanceof XuiComponentTemplateNodeAny) {
+            tagName = ((XuiComponentTemplateNodeAny) node).get$tag();
+        }
+
+        if (tagName != null && !hasImport(tagName)) {
+            throw new NopException(ERR_COMPONENT_NOT_IMPORTED).source((ISourceLocationGetter) node)
+                                                              .param(ARG_TAG_NAME, tagName);
+        }
+
+        if (node instanceof XuiComponentTemplateNodeNested) {
+            ((XuiComponentTemplateNodeNested) node).getChildren().forEach(this::checkImported);
         }
     }
 

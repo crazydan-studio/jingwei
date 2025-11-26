@@ -19,9 +19,11 @@
   - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
   -->
 
-<component xmlns:x="/nop/schema/xdsl.xdef"
+<component xmlns:x="/nop/schema/xdsl.xdef" xmlns:xui="xui"
            x:schema="/jingwei/ui/schema/component.xdef"
 >
+    <import as="Text" from="/jingwei/ui/component/text.xui"/>
+    <import as="Button" from="/jingwei/ui/component/button.xui"/>
 
     <template>
         <layout>
@@ -30,11 +32,11 @@
             ]]></linear>
         </layout>
 
-        <Text xui:name="text-1"><![CDATA[
+        <Text xui:name="text-1" style="color: green;"><![CDATA[
             Text 1
         ]]></Text>
 
-        <native xui:name="native-1" name="box">
+        <native xui:name="native-1" name="box" style="border: 1u;">
             <Text xui:name="text-1">Native Text</Text>
         </native>
 
@@ -52,7 +54,7 @@
         </slot>
 
         <for xui:name="for-1" begin="0" end="2" var="i">
-            <Text xui:name="text-1">For 1 Text 1</Text>
+            <Text xui:name="text-1" style="color: blue;">For 1 Text 1</Text>
             <native xui:name="native-1" name="box">
                 <Text xui:name="text-1">Text 1</Text>
                 <native xui:name="native-1" name="text"/>
@@ -61,7 +63,7 @@
             <Text xui:name="text-2">For 1 Text 2</Text>
         </for>
 
-        <Button xui:name="button-1">
+        <Button xui:name="button-1" style="background-color: white;">
             <layout>
                 <linear><![CDATA[
                     v>{}<^
@@ -70,7 +72,7 @@
 
             <dispatch msg="User_Update" events="click"/>
 
-            <Text xui:name="text-1">Text 1</Text>
+            <Text xui:name="text-1" style="color: red;">Text 1</Text>
             <native xui:name="native-1" name="text"/>
             <Text xui:name="text-2">Text 2</Text>
         </Button>

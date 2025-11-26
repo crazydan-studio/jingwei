@@ -1,7 +1,6 @@
 <page>
+    <import as="Text" from="/jingwei/ui/component/text.xui"/>
     <template>
-        <Text xui:name="text-1"><![CDATA[
-            Text 1
-        ]]></Text>
+        <Text xui:name="text-1"><![CDATA[Text 1]]></Text>
     </template>
 </page>

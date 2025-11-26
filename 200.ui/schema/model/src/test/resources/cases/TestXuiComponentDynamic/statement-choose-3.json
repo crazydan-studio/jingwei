@@ -1,21 +1,21 @@
 {
-  "location": "[26:6:0:0]/jingwei/ui/test-dynamic-component-tree-statement-choose.xui",
+  "location": "[28:6:0:0]/jingwei/ui/test-dynamic-component-tree-statement-choose.xui",
   "xui:name": "xui-template-root-node",
   "$tag": "template",
   "children": [
     {
-      "location": "[38:18:0:0]/jingwei/ui/test-dynamic-component-tree-statement-choose.xui",
+      "location": "[40:18:0:0]/jingwei/ui/test-dynamic-component-tree-statement-choose.xui",
       "xui:name": "text-1",
       "$tag": "Text",
       "value": "Text: Hello OTHERWISE"
     },
     {
-      "location": "[42:10:0:0]/jingwei/ui/test-dynamic-component-tree-statement-choose.xui",
+      "location": "[44:10:0:0]/jingwei/ui/test-dynamic-component-tree-statement-choose.xui",
       "xui:name": "button-1",
       "$tag": "Button",
       "children": [
         {
-          "location": "[54:22:0:0]/jingwei/ui/test-dynamic-component-tree-statement-choose.xui",
+          "location": "[56:22:0:0]/jingwei/ui/test-dynamic-component-tree-statement-choose.xui",
           "xui:name": "text-1",
           "$tag": "Text",
           "value": "Text: Hello OTHERWISE"

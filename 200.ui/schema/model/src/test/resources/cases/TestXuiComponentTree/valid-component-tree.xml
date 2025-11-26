@@ -1,21 +1,17 @@
 <component>
+    <import as="Text" from="/jingwei/ui/component/text.xui"/>
+    <import as="Button" from="/jingwei/ui/component/button.xui"/>
     <template>
         <layout>
-            <linear>
-                v&gt;{}&lt;^
-            </linear>
+            <linear>v&gt;{}&lt;^</linear>
         </layout>
-        <Text xui:name="text-1">
-            Text 1
-        </Text>
+        <Text xui:name="text-1">Text 1</Text>
         <native name="box" xui:name="native-1">
             <Text xui:name="text-1">Native Text</Text>
         </native>
         <slot xui:name="slot-1">
             <layout>
-                <linear>
-                    v&gt;{}&lt;^
-                </linear>
+                <linear>v&gt;{}&lt;^</linear>
             </layout>
             <if test="${a == 1}" xui:name="if-1">
                 <Text xui:name="text-1">If 1 Text 1</Text>
@@ -33,9 +29,7 @@
         </for>
         <Button xui:name="button-1">
             <layout>
-                <linear>
-                    v&gt;{}&lt;^
-                </linear>
+                <linear>v&gt;{}&lt;^</linear>
             </layout>
             <dispatch events="click" msg="User_Update" xui:name="User_Update"/>
             <Text xui:name="text-1">Text 1</Text>
@@ -43,9 +37,7 @@
             <Text xui:name="text-2">Text 2</Text>
         </Button>
         <if test="${b == 1}" xui:name="if-1">
-            <Text xui:name="text-1">
-                Hello!
-            </Text>
+            <Text xui:name="text-1">Hello!</Text>
         </if>
         <choose xui:name="choose-1">
             <otherwise>

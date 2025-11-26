@@ -19,9 +19,10 @@
   - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
   -->
 
-<component xmlns:x="/nop/schema/xdsl.xdef"
+<component xmlns:x="/nop/schema/xdsl.xdef" xmlns:xui="xui"
            x:schema="/jingwei/ui/schema/component.xdef"
 >
+    <import as="Text" from="/jingwei/ui/component/text.xui"/>
 
     <template>
         <layout>
