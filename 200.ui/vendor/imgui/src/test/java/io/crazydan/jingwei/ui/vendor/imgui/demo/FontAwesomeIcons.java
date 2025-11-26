@@ -17,7 +17,7 @@
  * If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
  */
 
-package io.crazydan.jingwei.ui.vendor.imgui.imgui_demo;
+package io.crazydan.jingwei.ui.vendor.imgui.demo;
 
 /**
  * Font Awesome icons codepoints, can be used to render icons with imgui in any place where text can be rendered.

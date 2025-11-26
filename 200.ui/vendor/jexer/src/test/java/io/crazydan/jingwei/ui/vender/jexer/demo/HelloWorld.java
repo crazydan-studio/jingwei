@@ -17,8 +17,9 @@
  * If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
  */
 
-package io.crazydan.jingwei.ui.vender.jexer;
+package io.crazydan.jingwei.ui.vender.jexer.demo;
 
+import io.crazydan.jingwei.ui.vendor.jexer.JexerApp;
 import jexer.TApplication;
 
 /**
@@ -26,13 +27,15 @@ import jexer.TApplication;
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
  * @date 2025-11-14
  */
-public class TestJexer {
+public class HelloWorld {
 
     public static void main(String[] args) throws Exception {
-        TApplication app = new TApplication(TApplication.BackendType.XTERM);
+        TApplication app = new JexerApp();
         app.addToolMenu();
         app.addFileMenu();
         app.addWindowMenu();
+//        app.setHideMenuBar(true);
+//        app.setHideStatusBar(true);
 
         app.run();
     }
