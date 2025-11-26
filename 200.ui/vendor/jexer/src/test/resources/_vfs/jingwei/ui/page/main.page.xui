@@ -18,26 +18,26 @@
   - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
   -->
 
-<page xmlns:x="/nop/schema/xdsl.xdef"
+<page xmlns:x="/nop/schema/xdsl.xdef" xmlns:xui="xui"
       x:schema="/jingwei/ui/schema/page.xdef"
 >
     <import as="Button" from="/jingwei/ui/component/button.xui"/>
 
     <template>
-        <choose xid="choose-person-init-or-not">
-            <when xid="choose-person-init" test="${$data.me.notExist}">
+        <choose xui:name="choose-person-init-or-not">
+            <when xui:name="choose-person-init" test="${data.me.notExist}">
                 <layout>
                     <linear><![CDATA[
                         v>[btn-add-personal-information]<^
                     ]]></linear>
                 </layout>
 
-                <Button xid="btn-add-personal-information">
+                <Button xui:name="btn-add-personal-information">
                     <dispatch msg="Route_to_Person_Edit_Page"
-                              events="click" data="${$data.me}"
+                              events="click" data="${data.me}"
                     />
 
-                    <Text xid="label"><![CDATA[
+                    <Text xui:name="label"><![CDATA[
                         Add Personal Information
                     ]]></Text>
                 </Button>
@@ -52,21 +52,21 @@
                     ]]></linear>
                 </layout>
 
-                <Button xid="btn-personal-management">
+                <Button xui:name="btn-personal-management">
                     <dispatch msg="Route_to_Person_Management_Page"
-                              events="click" data="${$data.me}"
+                              events="click" data="${data.me}"
                     />
 
-                    <Text xid="label"><![CDATA[
+                    <Text xui:name="label"><![CDATA[
                         Personal Management
                     ]]></Text>
                 </Button>
-                <Button xid="btn-app-settings">
+                <Button xui:name="btn-app-settings">
                     <dispatch msg="Route_to_App_Settings_Page"
-                              events="click" data="${$data.settings}"
+                              events="click" data="${data.settings}"
                     />
 
-                    <Text xid="label"><![CDATA[
+                    <Text xui:name="label"><![CDATA[
                         App Settings
                     ]]></Text>
                 </Button>
@@ -75,7 +75,7 @@
     </template>
 
     <messages>
-        <message name="Route_to_Person_Edit_Page">
+        <!--<message name="Route_to_Person_Edit_Page">
             <route to="/person/edit" data="${data}"/>
         </message>
         <message name="Route_to_Person_Management_Page">
@@ -84,6 +84,6 @@
 
         <message name="Route_to_App_Settings_Page">
             <route to="/app/settings" data="${data}"/>
-        </message>
+        </message>-->
     </messages>
 </page>

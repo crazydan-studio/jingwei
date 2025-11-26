@@ -18,7 +18,7 @@
   - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
   -->
 
-<page xmlns:x="/nop/schema/xdsl.xdef"
+<page xmlns:x="/nop/schema/xdsl.xdef" xmlns:xui="xui"
       x:schema="/jingwei/ui/schema/page.xdef"
 >
     <import as="Input" from="/jingwei/ui/component/form/input.xui"/>
@@ -38,43 +38,43 @@
             ]]></linear>
         </layout>
 
-        <Input xid="input-first-name"
+        <Input xui:name="input-first-name"
                value="${$data.firstName}"
         >
-            <Text xid="label" xslot="label"><![CDATA[
+            <Text xui:name="label" xui:slot="label"><![CDATA[
                 First Name
             ]]></Text>
         </Input>
 
-        <Input xid="input-family-name"
+        <Input xui:name="input-family-name"
                value="${$data.familyName}"
                label="Family Name"
         >
-            <Text xid="label" xslot="label"><![CDATA[
+            <Text xui:name="label" xui:slot="label"><![CDATA[
                 First Name
             ]]></Text>
         </Input>
 
-        <ComboBox xid="combobox-gender"
+        <ComboBox xui:name="combobox-gender"
                   value="${$data.gender}"
         >
-            <Text xid="label" xslot="label"><![CDATA[
+            <Text xui:name="label" xui:slot="label"><![CDATA[
                 Gender
             ]]></Text>
         </ComboBox>
 
-        <DatePicker xid="datepicker-birthdate"
+        <DatePicker xui:name="datepicker-birthdate"
                     value="${$data.birthdate}"
         >
-            <Text xid="label" xslot="label"><![CDATA[
+            <Text xui:name="label" xui:slot="label"><![CDATA[
                 Birth Date
             ]]></Text>
         </DatePicker>
 
-        <Input xid="input-id-card-number"
+        <Input xui:name="input-id-card-number"
                value="${$data.idCardNumber}"
         >
-            <Text xid="label" xslot="label"><![CDATA[
+            <Text xui:name="label" xui:slot="label"><![CDATA[
                 ID Card Number
             ]]></Text>
         </Input>

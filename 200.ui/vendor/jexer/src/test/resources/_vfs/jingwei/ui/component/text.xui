@@ -18,12 +18,12 @@
   - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
   -->
 
-<component xmlns:x="/nop/schema/xdsl.xdef"
+<component xmlns:x="/nop/schema/xdsl.xdef" xmlns:xui="xui"
            x:schema="/jingwei/ui/schema/component.xdef"
 >
 
     <template>
-        <native xid="body" name="text" value="${$body.innerText}">
+        <native xui:name="body" name="text" value="${props.$innerText}">
 
         </native>
     </template>
