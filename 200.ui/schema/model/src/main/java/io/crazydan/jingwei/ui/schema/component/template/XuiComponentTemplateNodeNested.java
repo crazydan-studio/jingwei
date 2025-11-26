@@ -27,6 +27,7 @@ public class XuiComponentTemplateNodeNested extends _XuiComponentTemplateNodeNes
         checkMultiLayouts();
         checkMultiDispatches();
         checkSlotInSlot();
+        // TODO xui:slot 不能存在重名
 
         getChildren().forEach((child) -> {
             if (child instanceof INeedInit) {

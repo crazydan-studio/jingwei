@@ -9,6 +9,7 @@ import io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNode
 import io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeNested;
 import io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeStatementChoose;
 import io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeText;
+import io.crazydan.jingwei.ui.util.XuiHelper;
 import io.nop.api.core.exceptions.NopException;
 import io.nop.api.core.util.INeedInit;
 import io.nop.api.core.util.ISourceLocationGetter;
@@ -37,7 +38,9 @@ import static io.crazydan.jingwei.ui.XuiConstants.TAG_NAME_TEMPLATE;
 import static io.crazydan.jingwei.ui.XuiConstants.TAG_NAME_WHEN;
 import static io.crazydan.jingwei.ui.XuiConstants.XDSL_SCHEMA_COMPONENT_TEMPLATE;
 import static io.crazydan.jingwei.ui.XuiErrors.ERR_COMPONENT_DSL_NODE_NOT_BOUND;
-import static io.crazydan.jingwei.ui.XuiErrors.ERR_COMPONENT_NOT_IMPORTED;
+import static io.crazydan.jingwei.ui.XuiErrors.ERR_COMPONENT_TAG_COMPONENT_LOADING_FAILED;
+import static io.crazydan.jingwei.ui.XuiErrors.ERR_COMPONENT_TAG_COMPONENT_NOT_IMPORTED;
+import static io.nop.xlang.XLangErrors.ARG_PATH;
 import static io.nop.xlang.XLangErrors.ARG_TAG_NAME;
 import static io.nop.xlang.xpl.XplConstants.INDEX_NAME;
 
@@ -68,8 +71,26 @@ public class XuiComponent extends _XuiComponent implements INeedInit {
         }
     }
 
+    /** 动态生成组件模版树 */
     public XuiComponentTemplate evalTemplate(IEvalScope scope) {
         return doEvalTemplate(scope);
+    }
+
+    /** 加载标签对应的{@link XuiComponent 组件} */
+    public XuiComponent loadTagComponent(XuiComponentTemplateNodeKeyed node) {
+        String tagName = getTagName(node);
+        if (tagName == null) {
+            return null;
+        }
+
+        String dslPath = getImport(tagName).getFrom();
+        try {
+            return XuiHelper.loadComponent(dslPath);
+        } catch (Exception e) {
+            throw new NopException(ERR_COMPONENT_TAG_COMPONENT_LOADING_FAILED, e).source((ISourceLocationGetter) node)
+                                                                                 .param(ARG_TAG_NAME, tagName)
+                                                                                 .param(ARG_PATH, dslPath);
+        }
     }
 
     /** 检查组件节点是否已显式通过 {@code <import/>} 导入 */
@@ -85,17 +106,10 @@ public class XuiComponent extends _XuiComponent implements INeedInit {
             return;
         }
 
-        String tagName = null;
-        if (node instanceof XuiComponentTemplateNodeText) {
-            tagName = ((XuiComponentTemplateNodeText) node).get$tag();
-        } //
-        else if (node instanceof XuiComponentTemplateNodeAny) {
-            tagName = ((XuiComponentTemplateNodeAny) node).get$tag();
-        }
-
+        String tagName = getTagName(node);
         if (tagName != null && !hasImport(tagName)) {
-            throw new NopException(ERR_COMPONENT_NOT_IMPORTED).source((ISourceLocationGetter) node)
-                                                              .param(ARG_TAG_NAME, tagName);
+            throw new NopException(ERR_COMPONENT_TAG_COMPONENT_NOT_IMPORTED).source((ISourceLocationGetter) node)
+                                                                            .param(ARG_TAG_NAME, tagName);
         }
 
         if (node instanceof XuiComponentTemplateNodeNested) {
@@ -146,7 +160,19 @@ public class XuiComponent extends _XuiComponent implements INeedInit {
         scope.addTagCompiler(TAG_NAME_CHOOSE, new XplTagCompiler(ChooseTagCompiler.INSTANCE));
         scope.addTagCompiler(TAG_NAME_FOR, new XplTagCompiler(ForTagCompiler.INSTANCE));
 
+        // TODO 定义 slot 标签函数
+
         return compileTool;
+    }
+
+    private String getTagName(XuiComponentTemplateNodeKeyed node) {
+        if (node instanceof XuiComponentTemplateNodeText) {
+            return ((XuiComponentTemplateNodeText) node).get$tag();
+        } //
+        else if (node instanceof XuiComponentTemplateNodeAny) {
+            return ((XuiComponentTemplateNodeAny) node).get$tag();
+        }
+        return null;
     }
 
     // <<<<<<<<<<<<<<< getter/setter

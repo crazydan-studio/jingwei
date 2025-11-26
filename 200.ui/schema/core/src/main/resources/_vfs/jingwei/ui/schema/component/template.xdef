@@ -19,7 +19,7 @@
   - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
   -->
 
-<!-- [组件树]
+<!-- [组件模版树]
 > - 所有节点（包括 `<if/>`、`<for/>` 等控制节点）均以 `xui:name` 作为唯一性属性，从而支持对任意节点的差量定制；
 -->
 <template xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="xdef" xmlns:xui="xui"
@@ -30,7 +30,7 @@
           xui:name="!~ns-name=xui-template-root-node"
 >
 
-    <!-- [组件树节点]
+    <!-- [组件模版树节点]
     >
 
     @xui:name [唯一标识]
@@ -69,7 +69,7 @@
         />
     </xdef:define>
 
-    <!-- [组件树节点嵌套结构]
+    <!-- [组件模版树节点嵌套结构]
     -->
     <xdef:define xdef:name="XuiComponentTemplateNodeNested"
                  xdef:bean-tag-prop="$tag"
@@ -78,7 +78,7 @@
                  xdef:bean-body-type="List&lt;io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed>"
                  xdef:bean-sub-type-prop="$tag"
     >
-        <!-- Start: 组件树节点 -->
+        <!-- Start: 组件模版树节点 -->
 
         <!-- [原生组件]
         > 原生组件一般**仅用在**基础组件内，并由 UI Vendor 根据组件配置提供具体的实现。
@@ -137,7 +137,7 @@
                           xdef:unknown-attr="any" xdef:bean-unknown-attrs-prop="attrs"
         />
 
-        <!-- End: 组件树节点 -->
+        <!-- End: 组件模版树节点 -->
 
         <!-- Start: 条件/循环控制 -->
 
@@ -200,7 +200,7 @@
         <!-- End: 条件/循环控制 -->
     </xdef:define>
 
-    <!-- [组件树可指定插槽的节点]
+    <!-- [组件模版树可指定插槽的节点]
     >
 
     @xui:slot [对应的插槽名字]

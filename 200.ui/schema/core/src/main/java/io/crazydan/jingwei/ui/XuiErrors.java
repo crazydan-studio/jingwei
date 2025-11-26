@@ -23,6 +23,7 @@ import io.nop.api.core.exceptions.ErrorCode;
 
 import static io.nop.api.core.exceptions.ErrorCode.define;
 import static io.nop.xlang.XLangErrors.ARG_NAME;
+import static io.nop.xlang.XLangErrors.ARG_PATH;
 import static io.nop.xlang.XLangErrors.ARG_TAG_NAME;
 
 /**
@@ -34,17 +35,17 @@ public interface XuiErrors {
 
     ErrorCode ERR_COMPONENT_INVALID_TAG_NAME = //
             define("jingwei.err.ui.component.invalid-tag-name",
-                   "组件标签名 [{tagName}] 不符合规范。"
+                   ("组件标签名 [{" + ARG_TAG_NAME + "}] 不符合规范。")
                    + "其需为字母、数字、下划线组成的驼峰形式，且首字母必须大写，"
                    + "如 Button、Button_Ext",
                    ARG_TAG_NAME);
     ErrorCode ERR_COMPONENT_MULTIPLE_LAYOUTS_NOT_ALLOWED = //
             define("jingwei.err.ui.component.multiple-layouts-not-allowed",
-                   "不允许在 <{tagName}/> 标签中定义多个 <layout/>",
+                   "不允许在 <{" + ARG_TAG_NAME + "}/> 标签中定义多个 <layout/>",
                    ARG_TAG_NAME);
     ErrorCode ERR_COMPONENT_MULTIPLE_DISPATCHES_NOT_ALLOWED = //
             define("jingwei.err.ui.component.multiple-dispatches-not-allowed",
-                   "不允许在 <{tagName}/> 标签中定义消息名（{name}）重复的 <dispatch/>",
+                   "不允许在 <{" + ARG_TAG_NAME + "}/> 标签中定义消息名（{" + ARG_NAME + "}）重复的 <dispatch/>",
                    ARG_TAG_NAME,
                    ARG_NAME);
     ErrorCode ERR_COMPONENT_SLOT_IN_DEPTH_NOT_ALLOWED = //
@@ -53,7 +54,10 @@ public interface XuiErrors {
     ErrorCode ERR_COMPONENT_DSL_NODE_NOT_BOUND = //
             define("jingwei.err.ui.component.dsl-node-not-bound", //
                    "组件未与其 XNode 节点绑定，建议在 xdef 元模型中的 <xdef:post-parse/> 脚本中做全局自动绑定，如：_dsl_model.setDslNode(_dsl_root)");
-    ErrorCode ERR_COMPONENT_NOT_IMPORTED = //
-            define("jingwei.err.ui.component.component-not-imported", //
-                   "组件 <{tagName}/> 未通过 <import/> 显式导入", ARG_TAG_NAME);
+    ErrorCode ERR_COMPONENT_TAG_COMPONENT_NOT_IMPORTED = //
+            define("jingwei.err.ui.component.tag-component-not-imported", //
+                   "标签 <{" + ARG_TAG_NAME + "}/> 对应的组件未通过 <import/> 显式导入", ARG_TAG_NAME);
+    ErrorCode ERR_COMPONENT_TAG_COMPONENT_LOADING_FAILED = //
+            define("jingwei.err.ui.component.tag-component-loading-failed", //
+                   "标签 <{" + ARG_TAG_NAME + "}/> 对应的组件 [{" + ARG_PATH + "}] 加载失败", ARG_TAG_NAME, ARG_PATH);
 }
