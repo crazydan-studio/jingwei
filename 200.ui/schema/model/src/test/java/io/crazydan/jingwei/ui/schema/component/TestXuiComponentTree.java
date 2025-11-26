@@ -20,13 +20,14 @@
 package io.crazydan.jingwei.ui.schema.component;
 
 import io.crazydan.jingwei.ui.XuiJunitTestCase;
+import io.crazydan.jingwei.ui.util.XuiHelper;
 import io.nop.api.core.exceptions.NopException;
 import io.nop.core.lang.xml.XNode;
 import org.junit.jupiter.api.Test;
 
 import static io.crazydan.jingwei.ui.XuiErrors.ERR_COMPONENT_INVALID_TAG_NAME;
-import static io.crazydan.jingwei.ui.XuiErrors.ERR_COMPONENT_MULTIPLE_LAYOUTS_NOT_ALLOWED;
 import static io.crazydan.jingwei.ui.XuiErrors.ERR_COMPONENT_MULTIPLE_DISPATCHES_NOT_ALLOWED;
+import static io.crazydan.jingwei.ui.XuiErrors.ERR_COMPONENT_MULTIPLE_LAYOUTS_NOT_ALLOWED;
 import static io.crazydan.jingwei.ui.XuiErrors.ERR_COMPONENT_SLOT_IN_DEPTH_NOT_ALLOWED;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -41,7 +42,7 @@ public class TestXuiComponentTree extends XuiJunitTestCase {
     @Test
     public void test_valid_tree() {
         String dslPath = "/jingwei/ui/test-valid-component-tree.xui";
-        XuiComponent component = loadModel(dslPath);
+        XuiComponent component = XuiHelper.loadComponent(dslPath);
 
         String json = toJson(component);
         assertEquals(attachmentJsonText("valid-component-tree.json"), json);
@@ -62,46 +63,46 @@ public class TestXuiComponentTree extends XuiJunitTestCase {
     @Test
     public void test_invalid_tree() {
         try {
-            loadModel("/jingwei/ui/test-invalid-component-tag-name.xui");
+            XuiHelper.loadComponent("/jingwei/ui/test-invalid-component-tag-name.xui");
             fail("invalid-tag-name");
         } catch (NopException e) {
             assertEquals(ERR_COMPONENT_INVALID_TAG_NAME.getErrorCode(), e.getErrorCode());
         }
         try {
-            loadModel("/jingwei/ui/test-invalid-component-tag-name-in-depth.xui");
+            XuiHelper.loadComponent("/jingwei/ui/test-invalid-component-tag-name-in-depth.xui");
             fail("invalid-tag-name");
         } catch (NopException e) {
             assertEquals(ERR_COMPONENT_INVALID_TAG_NAME.getErrorCode(), e.getErrorCode());
         }
 
         try {
-            loadModel("/jingwei/ui/test-invalid-component-multi-layout.xui");
+            XuiHelper.loadComponent("/jingwei/ui/test-invalid-component-multi-layout.xui");
             fail("multiple-layout");
         } catch (NopException e) {
             assertEquals(ERR_COMPONENT_MULTIPLE_LAYOUTS_NOT_ALLOWED.getErrorCode(), e.getErrorCode());
         }
         try {
-            loadModel("/jingwei/ui/test-invalid-component-multi-layout-depth.xui");
+            XuiHelper.loadComponent("/jingwei/ui/test-invalid-component-multi-layout-depth.xui");
             fail("multiple-layout");
         } catch (NopException e) {
             assertEquals(ERR_COMPONENT_MULTIPLE_LAYOUTS_NOT_ALLOWED.getErrorCode(), e.getErrorCode());
         }
 
         try {
-            loadModel("/jingwei/ui/test-invalid-component-multi-dispatch.xui");
+            XuiHelper.loadComponent("/jingwei/ui/test-invalid-component-multi-dispatch.xui");
             fail("multiple-dispatch");
         } catch (NopException e) {
             assertEquals(ERR_COMPONENT_MULTIPLE_DISPATCHES_NOT_ALLOWED.getErrorCode(), e.getErrorCode());
         }
 
         try {
-            loadModel("/jingwei/ui/test-invalid-component-slot-in-slot.xui");
+            XuiHelper.loadComponent("/jingwei/ui/test-invalid-component-slot-in-slot.xui");
             fail("slot-in-depth");
         } catch (NopException e) {
             assertEquals(ERR_COMPONENT_SLOT_IN_DEPTH_NOT_ALLOWED.getErrorCode(), e.getErrorCode());
         }
         try {
-            loadModel("/jingwei/ui/test-invalid-component-slot-in-slot-depth.xui");
+            XuiHelper.loadComponent("/jingwei/ui/test-invalid-component-slot-in-slot-depth.xui");
             fail("slot-in-depth");
         } catch (NopException e) {
             assertEquals(ERR_COMPONENT_SLOT_IN_DEPTH_NOT_ALLOWED.getErrorCode(), e.getErrorCode());

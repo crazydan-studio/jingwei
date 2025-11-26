@@ -21,7 +21,7 @@
     <dependencies>
         <dependency>
             <groupId>io.crazydan.jingwei</groupId>
-            <artifactId>jingwei-ui-schema-xdefs</artifactId>
+            <artifactId>jingwei-ui-schema-core</artifactId>
         </dependency>
 
         <!-- 支持开发期在 IDE 中运行 XCodeGenerator 以生成代码 -->

@@ -38,7 +38,7 @@
     <dependencies>
         <dependency>
             <groupId>io.crazydan.jingwei</groupId>
-            <artifactId>jingwei-ui-schema-xdefs</artifactId>
+            <artifactId>jingwei-ui-schema-core</artifactId>
         </dependency>
     </dependencies>
 </project>

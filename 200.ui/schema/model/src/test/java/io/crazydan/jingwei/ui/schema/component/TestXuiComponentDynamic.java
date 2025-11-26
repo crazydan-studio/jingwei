@@ -24,6 +24,7 @@ import java.util.Map;
 
 import io.crazydan.jingwei.ui.XuiJunitTestCase;
 import io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplate;
+import io.crazydan.jingwei.ui.util.XuiHelper;
 import io.nop.api.core.exceptions.NopException;
 import io.nop.core.lang.eval.IEvalAction;
 import io.nop.core.lang.eval.IEvalScope;
@@ -50,7 +51,7 @@ public class TestXuiComponentDynamic extends XuiJunitTestCase {
 
     @Test
     public void test_vars() {
-        XuiComponent component = loadModel("/jingwei/ui/test-dynamic-component-tree-vars.xui");
+        XuiComponent component = XuiHelper.loadComponent("/jingwei/ui/test-dynamic-component-tree-vars.xui");
 
         Map<?, ?> props = Map.of("padding", "1u", "msg", "Welcome!");
         XuiComponentTemplate template = evalTemplate(component, props);
@@ -65,7 +66,7 @@ public class TestXuiComponentDynamic extends XuiJunitTestCase {
 
     @Test
     public void test_statement_if() {
-        XuiComponent component = loadModel("/jingwei/ui/test-dynamic-component-tree-statement-if.xui");
+        XuiComponent component = XuiHelper.loadComponent("/jingwei/ui/test-dynamic-component-tree-statement-if.xui");
 
         Map<?, ?>[] samples = new Map[] {
                 Map.of("var", 1, "msg1", "Hello IF#1"), //
@@ -87,7 +88,8 @@ public class TestXuiComponentDynamic extends XuiJunitTestCase {
 
     @Test
     public void test_statement_choose() {
-        XuiComponent component = loadModel("/jingwei/ui/test-dynamic-component-tree-statement-choose.xui");
+        XuiComponent component
+                = XuiHelper.loadComponent("/jingwei/ui/test-dynamic-component-tree-statement-choose.xui");
 
         Map<?, ?>[] samples = new Map[] {
                 Map.of("var", 1, "msg1", "Hello WHEN#1"), //
@@ -111,7 +113,7 @@ public class TestXuiComponentDynamic extends XuiJunitTestCase {
 
     @Test
     public void test_statement_for() {
-        XuiComponent component = loadModel("/jingwei/ui/test-dynamic-component-tree-statement-for.xui");
+        XuiComponent component = XuiHelper.loadComponent("/jingwei/ui/test-dynamic-component-tree-statement-for.xui");
 
         Map<?, ?>[] samples = new Map[] {
                 Map.of("var", 1, "items", List.of("a", "b", "c")), //
@@ -135,7 +137,8 @@ public class TestXuiComponentDynamic extends XuiJunitTestCase {
     public void test_invalid_tree() {
         try {
             XuiComponent component = //
-                    loadModel("/jingwei/ui/test-invalid-dynamic-component-multi-layout-in-statement-if.xui");
+                    XuiHelper.loadComponent(
+                            "/jingwei/ui/test-invalid-dynamic-component-multi-layout-in-statement-if.xui");
             evalTemplate(component, Map.of("var", 2));
 
             fail("multiple-layout");
@@ -144,7 +147,8 @@ public class TestXuiComponentDynamic extends XuiJunitTestCase {
         }
         try {
             XuiComponent component = //
-                    loadModel("/jingwei/ui/test-invalid-dynamic-component-multi-layout-in-statement-for.xui");
+                    XuiHelper.loadComponent(
+                            "/jingwei/ui/test-invalid-dynamic-component-multi-layout-in-statement-for.xui");
             evalTemplate(component, Map.of());
 
             fail("multiple-layout");
@@ -154,7 +158,8 @@ public class TestXuiComponentDynamic extends XuiJunitTestCase {
 
         try {
             XuiComponent component = //
-                    loadModel("/jingwei/ui/test-invalid-dynamic-component-multi-dispatch-in-statement-if.xui");
+                    XuiHelper.loadComponent(
+                            "/jingwei/ui/test-invalid-dynamic-component-multi-dispatch-in-statement-if.xui");
             evalTemplate(component, Map.of("var", 2));
 
             fail("multiple-dispatch");
@@ -163,7 +168,8 @@ public class TestXuiComponentDynamic extends XuiJunitTestCase {
         }
         try {
             XuiComponent component = //
-                    loadModel("/jingwei/ui/test-invalid-dynamic-component-multi-dispatch-in-statement-for.xui");
+                    XuiHelper.loadComponent(
+                            "/jingwei/ui/test-invalid-dynamic-component-multi-dispatch-in-statement-for.xui");
             evalTemplate(component, Map.of());
 
             fail("multiple-dispatch");

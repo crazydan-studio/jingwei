@@ -17,31 +17,24 @@
  * If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
  */
 
-package io.crazydan.jingwei.ui.schema.page;
+package io.crazydan.jingwei.ui.util;
 
-import io.crazydan.jingwei.ui.XuiJunitTestCase;
-import io.crazydan.jingwei.ui.util.XuiHelper;
-import io.nop.core.lang.xml.XNode;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import io.crazydan.jingwei.ui.schema.component.XuiComponent;
+import io.crazydan.jingwei.ui.schema.page.XuiPage;
+import io.nop.core.resource.component.ResourceComponentManager;
 
 /**
  *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
- * @date 2025-11-22
+ * @date 2025-11-25
  */
-public class TestXuiPage extends XuiJunitTestCase {
+public class XuiHelper {
 
-    @Test
-    public void test_xdef_post_parse() {
-        XuiPage page = XuiHelper.loadPage("/jingwei/ui/test-xdef-post-parse.page.xui");
+    public static XuiPage loadPage(String dslPath) {
+        return (XuiPage) ResourceComponentManager.instance().loadComponentModel(dslPath);
+    }
 
-        XNode node = page.getDslNode();
-        assertNotNull(page.getDslNode());
-
-        String xml = cleanXml(toXml(node));
-        assertEquals(cleanXml(attachmentXmlText("page-for-test-xdef-post-parse.xml")), xml);
+    public static XuiComponent loadComponent(String dslPath) {
+        return (XuiComponent) ResourceComponentManager.instance().loadComponentModel(dslPath);
     }
 }

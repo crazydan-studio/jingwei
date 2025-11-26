@@ -25,7 +25,6 @@ import io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplate;
 import io.nop.core.lang.json.JsonTool;
 import io.nop.core.lang.xml.XNode;
 import io.nop.core.lang.xml.parse.XNodeParser;
-import io.nop.core.resource.component.ResourceComponentManager;
 import io.nop.xlang.xdsl.DslModelHelper;
 
 /**
@@ -39,10 +38,6 @@ public abstract class XuiJunitTestCase extends NopJunitTestCase {
         return XNodeParser.instance().parseFromVirtualPath(dslPath);
     }
 
-    protected <T> T loadModel(String dslPath) {
-        return (T) ResourceComponentManager.instance().loadComponentModel(dslPath);
-    }
-
     protected String toJson(Object obj) {
         return JsonTool.serialize(obj, true);
     }
@@ -51,8 +46,8 @@ public abstract class XuiJunitTestCase extends NopJunitTestCase {
         return toXNode(XuiConstants.XDSL_SCHEMA_COMPONENT, component);
     }
 
-    protected XNode toXNode(XuiComponentTemplate root) {
-        return toXNode(XuiConstants.XDSL_SCHEMA_COMPONENT_TEMPLATE, root);
+    protected XNode toXNode(XuiComponentTemplate template) {
+        return toXNode(XuiConstants.XDSL_SCHEMA_COMPONENT_TEMPLATE, template);
     }
 
     protected XNode toXNode(String xdefPath, Object model) {
