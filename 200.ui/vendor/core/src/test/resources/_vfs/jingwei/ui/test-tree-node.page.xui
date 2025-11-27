@@ -65,5 +65,9 @@
                 </Button>
             </otherwise>
         </choose>
+
+        <for xui:name="for-1" begin="0" end="2" var="i">
+            <Text xui:name="for-1-text">For Text #${i}</Text>
+        </for>
     </template>
 </page>

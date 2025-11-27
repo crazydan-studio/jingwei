@@ -41,6 +41,8 @@ import io.nop.core.lang.json.IJsonHandler;
 import io.nop.core.lang.json.IJsonSerializable;
 import io.nop.xlang.api.XLang;
 
+import static io.crazydan.jingwei.ui.XuiConstants.ATTR_NAME_XUI_NAME_RAW;
+
 /**
  *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
@@ -137,7 +139,7 @@ public class XuiComponentTreeNode implements IJsonSerializable {
             XuiComponentTemplateNodeKeyed templateNode, XuiComponent component) {
         XuiComponent tagComponent = component.loadTagComponent(templateNode);
 
-        String key = templateNode.getXuiName();
+        String key = getKey(templateNode);
         Props props = new Props(templateNode);
 
         IEvalScope scope = XLang.newEvalScope();
@@ -148,13 +150,36 @@ public class XuiComponentTreeNode implements IJsonSerializable {
 
     protected static XuiComponentTreeNode buildNativeNode(
             XuiComponentTemplateNodeNative templateNode, XuiComponent component) {
-        String key = templateNode.getXuiName();
-
+        String key = getKey(templateNode);
         String nativeName = templateNode.getName();
-        Map<String, Object> nativeProps = //
-                templateNode.getAttrs() != null ? new LinkedHashMap<>(templateNode.getAttrs()) : Map.of();
+
+        Map<String, Object> attrs = getUnknownAttrs(templateNode);
+        Map<String, Object> nativeProps = attrs != null ? new LinkedHashMap<>(attrs) : Map.of();
 
         return buildNode(key, templateNode, component, nativeName, nativeProps);
+    }
+
+    protected static String getKey(XuiComponentTemplateNodeKeyed node) {
+        Map<String, Object> attrs = getUnknownAttrs(node);
+
+        // Note: 对于 <for/> 节点中的组件，会将真实 xui:name 放在 attrs 中
+        if (attrs != null && attrs.containsKey(ATTR_NAME_XUI_NAME_RAW)) {
+            return (String) attrs.get(ATTR_NAME_XUI_NAME_RAW);
+        }
+        return node.getXuiName();
+    }
+
+    protected static Map<String, Object> getUnknownAttrs(XuiComponentTemplateNodeKeyed node) {
+        if (node instanceof XuiComponentTemplateNodeNative) {
+            return ((XuiComponentTemplateNodeNative) node).getAttrs();
+        } //
+        else if (node instanceof XuiComponentTemplateNodeText) {
+            return ((XuiComponentTemplateNodeText) node).getAttrs();
+        } //
+        else if (node instanceof XuiComponentTemplateNodeAny) {
+            return ((XuiComponentTemplateNodeAny) node).getAttrs();
+        }
+        return null;
     }
 
     static class Props implements Map<String, Object> {
@@ -200,8 +225,9 @@ public class XuiComponentTreeNode implements IJsonSerializable {
                 return ((XuiComponentTemplateNode) this.node).getSlottables();
             }
 
-            if (this.node.prop_has((String) key)) {
-                return this.node.prop_get((String) key);
+            Map<String, Object> attrs = getUnknownAttrs(this.node);
+            if (attrs != null && attrs.containsKey((String) key)) {
+                return attrs.get(key);
             }
             return null;
         }

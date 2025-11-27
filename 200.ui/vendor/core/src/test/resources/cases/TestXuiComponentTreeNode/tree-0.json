@@ -87,6 +87,45 @@
           }
         }
       ]
+    },
+    {
+      "key": "for-1-text",
+      "children": [
+        {
+          "key": "body",
+          "native": "text",
+          "props": {
+            "color": "blue",
+            "value": "For Text #0"
+          }
+        }
+      ]
+    },
+    {
+      "key": "for-1-text",
+      "children": [
+        {
+          "key": "body",
+          "native": "text",
+          "props": {
+            "color": "blue",
+            "value": "For Text #1"
+          }
+        }
+      ]
+    },
+    {
+      "key": "for-1-text",
+      "children": [
+        {
+          "key": "body",
+          "native": "text",
+          "props": {
+            "color": "blue",
+            "value": "For Text #2"
+          }
+        }
+      ]
     }
   ]
 }
