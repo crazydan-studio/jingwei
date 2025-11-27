@@ -22,10 +22,7 @@ package io.crazydan.jingwei.ui;
 import io.crazydan.duzhou.framework.junit.NopJunitTestCase;
 import io.crazydan.jingwei.ui.schema.component.XuiComponent;
 import io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplate;
-import io.nop.core.lang.json.JsonTool;
 import io.nop.core.lang.xml.XNode;
-import io.nop.core.lang.xml.parse.XNodeParser;
-import io.nop.xlang.xdsl.DslModelHelper;
 
 /**
  *
@@ -34,24 +31,12 @@ import io.nop.xlang.xdsl.DslModelHelper;
  */
 public abstract class XuiJunitTestCase extends NopJunitTestCase {
 
-    protected XNode loadNode(String dslPath) {
-        return XNodeParser.instance().parseFromVirtualPath(dslPath);
-    }
-
-    protected String toJson(Object obj) {
-        return JsonTool.serialize(obj, true);
-    }
-
     protected XNode toXNode(XuiComponent component) {
         return toXNode(XuiConstants.XDSL_SCHEMA_COMPONENT, component);
     }
 
     protected XNode toXNode(XuiComponentTemplate template) {
         return toXNode(XuiConstants.XDSL_SCHEMA_COMPONENT_TEMPLATE, template);
-    }
-
-    protected XNode toXNode(String xdefPath, Object model) {
-        return DslModelHelper.dslModelToXNode(xdefPath, model);
     }
 
     protected String toXml(XNode node) {

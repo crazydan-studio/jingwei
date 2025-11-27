@@ -27,7 +27,13 @@ public class XuiComponentTemplateNode extends _XuiComponentTemplateNode {
             } else {
                 text = ((XuiComponentTemplateNode) child).getInnerText();
             }
-            sb.append(text);
+
+            if (text != null) {
+                if (sb.length() > 0) {
+                    sb.append('\n');
+                }
+                sb.append(text);
+            }
         });
         return sb.toString();
     }
