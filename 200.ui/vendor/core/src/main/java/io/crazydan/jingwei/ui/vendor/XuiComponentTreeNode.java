@@ -53,52 +53,89 @@ public class XuiComponentTreeNode {
     public final XuiLayout layout;
     public final List<XuiComponentTreeNode> children;
 
+    public final String nativeName;
+    public final Map<String, Object> nativeProps;
+
     public static XuiComponentTreeNode build(XuiComponent component, IEvalScope scope) {
-        return buildNode(null, component, scope);
+        return build(null, component, scope);
     }
 
-    XuiComponentTreeNode(String key, XuiLayout layout, List<XuiComponentTreeNode> children) {
-        this.key = key;
-        this.layout = layout;
-        this.children = children;
-    }
-
-    protected static XuiComponentTreeNode buildNode(String key, XuiComponent component, IEvalScope scope) {
+    public static XuiComponentTreeNode build(String key, XuiComponent component, IEvalScope scope) {
         // Note: 生成的组建模版树中已不再包含 <if/>、<for/> 等控制节点
         XuiComponentTemplate template = component.evalTemplate(scope);
 
-        XuiLayout layout = null;
-        List<XuiComponentTreeNode> children = new ArrayList<>();
+        return buildNode(key, template, component, null, null);
+    }
 
-        for (XuiComponentTemplateNodeKeyed child : template.getChildren()) {
-            if (child instanceof XuiComponentTemplateNodeLayout) {
-                layout = ((XuiComponentTemplateNodeLayout) child).getType();
-            } else if (child instanceof XuiComponentTemplateNodeDispatch) {
-                XuiComponentTemplateNodeDispatch dispatch = (XuiComponentTemplateNodeDispatch) child;
+    XuiComponentTreeNode(
+            String key, //
+            XuiLayout layout, List<XuiComponentTreeNode> children, //
+            String nativeName, Map<String, Object> nativeProps
+    ) {
+        this.key = key;
+        this.layout = layout;
+        this.children = children;
+
+        this.nativeName = nativeName;
+        this.nativeProps = nativeProps;
+    }
+
+    protected static XuiComponentTreeNode buildNode(
+            String key, //
+            XuiComponentTemplateNode templateNode, XuiComponent component, //
+            String nativeName, Map<String, Object> nativeProps
+    ) {
+        XuiLayout layout = null;
+        List<XuiComponentTreeNode> treeNodes = new ArrayList<>();
+
+        for (XuiComponentTemplateNodeKeyed templateNodeChild : templateNode.getChildren()) {
+            if (templateNodeChild instanceof XuiComponentTemplateNodeLayout) {
+                layout = ((XuiComponentTemplateNodeLayout) templateNodeChild).getType();
+            } //
+            else if (templateNodeChild instanceof XuiComponentTemplateNodeDispatch) {
+                XuiComponentTemplateNodeDispatch dispatch = (XuiComponentTemplateNodeDispatch) templateNodeChild;
             }
 
-            if (child instanceof XuiComponentTemplateNodeText //
-                || child instanceof XuiComponentTemplateNodeAny //
+            XuiComponentTreeNode treeNode = null;
+            if (templateNodeChild instanceof XuiComponentTemplateNodeText //
+                || templateNodeChild instanceof XuiComponentTemplateNodeAny //
             ) {
-                children.add(buildChildNode(child, component));
+                treeNode = buildCustomNode(templateNodeChild, component);
             } //
-            else if (child instanceof XuiComponentTemplateNodeNative) {
+            else if (templateNodeChild instanceof XuiComponentTemplateNodeNative) {
+                treeNode = buildNativeNode((XuiComponentTemplateNodeNative) templateNodeChild, component);
+            }
+
+            if (treeNode != null) {
+                treeNodes.add(treeNode);
             }
         }
 
-        return new XuiComponentTreeNode(key, layout, children);
+        return new XuiComponentTreeNode(key, layout, treeNodes, nativeName, nativeProps);
     }
 
-    protected static XuiComponentTreeNode buildChildNode(XuiComponentTemplateNodeKeyed child, XuiComponent component) {
-        XuiComponent childComponent = component.loadTagComponent(child);
+    protected static XuiComponentTreeNode buildCustomNode(
+            XuiComponentTemplateNodeKeyed templateNode, XuiComponent component) {
+        XuiComponent tagComponent = component.loadTagComponent(templateNode);
 
-        String childKey = child.getXuiName();
-        Props props = new Props(child);
+        String key = templateNode.getXuiName();
+        Props props = new Props(templateNode);
 
         IEvalScope scope = XLang.newEvalScope();
         scope.setLocalValue(VAR_NAME_PROPS, props);
 
-        return buildNode(childKey, childComponent, scope);
+        return build(key, tagComponent, scope);
+    }
+
+    protected static XuiComponentTreeNode buildNativeNode(
+            XuiComponentTemplateNodeNative templateNode, XuiComponent component) {
+        String key = templateNode.getXuiName();
+
+        String nativeName = templateNode.getName();
+        Map<String, Object> nativeProps = //
+                templateNode.getAttrs() != null ? Map.copyOf(templateNode.getAttrs()) : Map.of();
+
+        return buildNode(key, templateNode, component, nativeName, nativeProps);
     }
 
     static class Props implements Map<String, Object> {
