@@ -21,6 +21,7 @@ package io.crazydan.jingwei.ui.vendor;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -36,6 +37,8 @@ import io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNode
 import io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeNative;
 import io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeText;
 import io.nop.core.lang.eval.IEvalScope;
+import io.nop.core.lang.json.IJsonHandler;
+import io.nop.core.lang.json.IJsonSerializable;
 import io.nop.xlang.api.XLang;
 
 /**
@@ -43,7 +46,7 @@ import io.nop.xlang.api.XLang;
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
  * @date 2025-11-26
  */
-public class XuiComponentTreeNode {
+public class XuiComponentTreeNode implements IJsonSerializable {
     public static final String VAR_NAME_PROPS = "props";
     public static final String VAR_PROP_NAME_CHILDREN = "$children";
     public static final String VAR_PROP_NAME_SLOT = "$slot";
@@ -78,6 +81,22 @@ public class XuiComponentTreeNode {
 
         this.nativeName = nativeName;
         this.nativeProps = nativeProps;
+    }
+
+    @Override
+    public void serializeToJson(IJsonHandler out) {
+        out.beginObject(null);
+
+        out.putNotNull("key", this.key);
+        out.putNotNull("layout", this.layout);
+        if (!this.children.isEmpty()) {
+            out.put("children", this.children);
+        }
+
+        out.putNotNull("native", this.nativeName);
+        out.putNotNull("props", this.nativeProps);
+
+        out.endObject();
     }
 
     protected static XuiComponentTreeNode buildNode(
@@ -133,7 +152,7 @@ public class XuiComponentTreeNode {
 
         String nativeName = templateNode.getName();
         Map<String, Object> nativeProps = //
-                templateNode.getAttrs() != null ? Map.copyOf(templateNode.getAttrs()) : Map.of();
+                templateNode.getAttrs() != null ? new LinkedHashMap<>(templateNode.getAttrs()) : Map.of();
 
         return buildNode(key, templateNode, component, nativeName, nativeProps);
     }
