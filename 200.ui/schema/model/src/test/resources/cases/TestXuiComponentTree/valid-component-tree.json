@@ -42,14 +42,15 @@
       },
       {
         "location": "[35:10:0:0]/jingwei/ui/test-valid-component-tree.xui",
-        "style": "color: green;",
         "xui:name": "text-1",
         "$tag": "Text",
+        "attrs": {
+          "style": "color: green;"
+        },
         "value": "\n            Text 1\n        "
       },
       {
         "location": "[39:10:0:0]/jingwei/ui/test-valid-component-tree.xui",
-        "style": "border: 1u;",
         "xui:name": "native-1",
         "$tag": "native",
         "children": [
@@ -60,6 +61,9 @@
             "value": "Native Text"
           }
         ],
+        "attrs": {
+          "style": "border: 1u;"
+        },
         "name": "box"
       },
       {
@@ -116,9 +120,11 @@
         "children": [
           {
             "location": "[57:14:0:0]/jingwei/ui/test-valid-component-tree.xui",
-            "style": "color: blue;",
             "xui:name": "text-1",
             "$tag": "Text",
+            "attrs": {
+              "style": "color: blue;"
+            },
             "value": "For 1 Text 1"
           },
           {
@@ -161,7 +167,6 @@
       },
       {
         "location": "[66:10:0:0]/jingwei/ui/test-valid-component-tree.xui",
-        "style": "background-color: white;",
         "xui:name": "button-1",
         "$tag": "Button",
         "children": [
@@ -195,9 +200,11 @@
           },
           {
             "location": "[75:14:0:0]/jingwei/ui/test-valid-component-tree.xui",
-            "style": "color: red;",
             "xui:name": "text-1",
             "$tag": "Text",
+            "attrs": {
+              "style": "color: red;"
+            },
             "value": "Text 1"
           },
           {
@@ -213,7 +220,10 @@
             "$tag": "Text",
             "value": "Text 2"
           }
-        ]
+        ],
+        "attrs": {
+          "style": "background-color: white;"
+        }
       },
       {
         "location": "[80:10:0:0]/jingwei/ui/test-valid-component-tree.xui",

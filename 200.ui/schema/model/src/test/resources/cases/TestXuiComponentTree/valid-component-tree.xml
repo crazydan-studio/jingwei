@@ -5,8 +5,8 @@
         <layout>
             <linear>v&gt;{}&lt;^</linear>
         </layout>
-        <Text xui:name="text-1">Text 1</Text>
-        <native name="box" xui:name="native-1">
+        <Text style="color: green;" xui:name="text-1">Text 1</Text>
+        <native style="border: 1u;" name="box" xui:name="native-1">
             <Text xui:name="text-1">Native Text</Text>
         </native>
         <slot xui:name="slot-1">
@@ -19,7 +19,7 @@
             <Text xui:name="text-1">Text 1</Text>
         </slot>
         <for begin="0" end="2" var="i" xui:name="for-1">
-            <Text xui:name="text-1">For 1 Text 1</Text>
+            <Text style="color: blue;" xui:name="text-1">For 1 Text 1</Text>
             <native name="box" xui:name="native-1">
                 <Text xui:name="text-1">Text 1</Text>
                 <native name="text" xui:name="native-1"/>
@@ -27,12 +27,12 @@
             </native>
             <Text xui:name="text-2">For 1 Text 2</Text>
         </for>
-        <Button xui:name="button-1">
+        <Button style="background-color: white;" xui:name="button-1">
             <layout>
                 <linear>v&gt;{}&lt;^</linear>
             </layout>
             <dispatch events="click" msg="User_Update" xui:name="User_Update"/>
-            <Text xui:name="text-1">Text 1</Text>
+            <Text style="color: red;" xui:name="text-1">Text 1</Text>
             <native name="text" xui:name="native-1"/>
             <Text xui:name="text-2">Text 2</Text>
         </Button>
