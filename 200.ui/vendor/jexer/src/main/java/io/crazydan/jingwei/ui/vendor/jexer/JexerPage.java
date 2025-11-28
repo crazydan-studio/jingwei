@@ -20,8 +20,7 @@
 package io.crazydan.jingwei.ui.vendor.jexer;
 
 import io.crazydan.jingwei.ui.vendor.XuiComponentTreeNode;
-import io.crazydan.jingwei.ui.vendor.jexer.component.JexerButton;
-import io.crazydan.jingwei.ui.vendor.jexer.component.JexerText;
+import io.crazydan.jingwei.ui.vendor.jexer.component.JexerBox;
 import jexer.TDesktop;
 
 /**
@@ -33,21 +32,8 @@ public class JexerPage extends TDesktop {
 
     JexerPage(JexerApp app, XuiComponentTreeNode node) {
         super(app);
-
-        // TODO 在尺寸变化后重新计算布局
-        render(node);
         setActive(true);
-    }
 
-    protected void render(XuiComponentTreeNode node) {
-        if ("button".equals(node.nativeName)) {
-            new JexerButton(node, this, 20, 20);
-        } else if ("text".equals(node.nativeName)) {
-            new JexerText(node, this, 20, 10);
-        }
-
-        for (XuiComponentTreeNode child : node.children) {
-            render(child);
-        }
+        new JexerBox(this, node);
     }
 }

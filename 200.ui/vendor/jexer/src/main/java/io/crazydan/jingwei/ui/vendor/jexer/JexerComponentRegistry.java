@@ -17,31 +17,27 @@
  * If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
  */
 
-package io.crazydan.jingwei.ui.vendor.jexer.component;
+package io.crazydan.jingwei.ui.vendor.jexer;
 
-import io.crazydan.jingwei.ui.vendor.XuiComponentTreeNode;
-import io.crazydan.jingwei.ui.vendor.jexer.JexerComponent;
-import jexer.TLabel;
-import jexer.TWidget;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 尺寸自适应内容的文本组件，其没有滚动条
+ * 组件注册器
  *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
- * @date 2025-11-28
+ * @date 2025-11-25
  */
-public class JexerText extends JexerComponent {
-    public static final String NAME = "text";
+public class JexerComponentRegistry {
+    private static final Map<String, JexerComponent.Creator> components = new ConcurrentHashMap<>();
 
-    public JexerText(TWidget parent, XuiComponentTreeNode node) {
-        super(parent, node);
+    public static Runnable register(String name, JexerComponent.Creator creator) {
+        components.put(name, creator);
+
+        return () -> components.remove(name, creator);
     }
 
-    @Override
-    protected TWidget createWidget(TWidget parent, XuiComponentTreeNode node) {
-        String text = (String) node.nativeProps.get("value");
-        TLabel widget = new TLabel(parent, text, 20, 0);
-
-        return widget;
+    public static JexerComponent.Creator get(String name) {
+        return components.get(name);
     }
 }

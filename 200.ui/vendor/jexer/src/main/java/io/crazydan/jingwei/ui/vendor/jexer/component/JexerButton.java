@@ -20,6 +20,7 @@
 package io.crazydan.jingwei.ui.vendor.jexer.component;
 
 import io.crazydan.jingwei.ui.vendor.XuiComponentTreeNode;
+import io.crazydan.jingwei.ui.vendor.jexer.JexerComponent;
 import jexer.TAction;
 import jexer.TButton;
 import jexer.TWidget;
@@ -29,14 +30,25 @@ import jexer.TWidget;
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
  * @date 2025-11-25
  */
-public class JexerButton extends TButton {
+public class JexerButton extends JexerComponent {
+    public static final String NAME = "button";
 
-    public JexerButton(XuiComponentTreeNode node, TWidget parent, int x, int y) {
-        super(parent, (String) node.nativeProps.get("label"), x, y, new TAction() {
+    public JexerButton(TWidget parent, XuiComponentTreeNode node) {
+        super(parent, node);
+    }
+
+    @Override
+    protected TWidget createWidget(TWidget parent, XuiComponentTreeNode node) {
+        String label = (String) node.nativeProps.get("label");
+        TButton widget = new TButton(parent, label, 20, 20, new TAction() {
             @Override
             public void DO() {
                 // TODO TButton click event
             }
         });
+
+        widget.setActive(false);
+
+        return widget;
     }
 }

@@ -21,26 +21,23 @@ package io.crazydan.jingwei.ui.vendor.jexer.component;
 
 import io.crazydan.jingwei.ui.vendor.XuiComponentTreeNode;
 import io.crazydan.jingwei.ui.vendor.jexer.JexerComponent;
-import jexer.TLabel;
 import jexer.TWidget;
 
 /**
- * 尺寸自适应内容的文本组件，其没有滚动条
+ * 容器组件，没有可视边界，仅用于布局内部组件
  *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
  * @date 2025-11-28
  */
-public class JexerText extends JexerComponent {
-    public static final String NAME = "text";
+public class JexerBox extends JexerComponent {
 
-    public JexerText(TWidget parent, XuiComponentTreeNode node) {
+    public JexerBox(TWidget parent, XuiComponentTreeNode node) {
         super(parent, node);
     }
 
     @Override
     protected TWidget createWidget(TWidget parent, XuiComponentTreeNode node) {
-        String text = (String) node.nativeProps.get("value");
-        TLabel widget = new TLabel(parent, text, 20, 0);
+        TWidget widget = new TWidget(parent) {};
 
         return widget;
     }

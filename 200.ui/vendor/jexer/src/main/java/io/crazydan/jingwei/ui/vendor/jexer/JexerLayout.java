@@ -17,31 +17,28 @@
  * If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
  */
 
-package io.crazydan.jingwei.ui.vendor.jexer.component;
+package io.crazydan.jingwei.ui.vendor.jexer;
 
+import io.crazydan.duzhou.framework.ui.XuiLayout;
 import io.crazydan.jingwei.ui.vendor.XuiComponentTreeNode;
-import io.crazydan.jingwei.ui.vendor.jexer.JexerComponent;
-import jexer.TLabel;
-import jexer.TWidget;
+import io.crazydan.jingwei.ui.vendor.jexer.layout.LinearLayoutManager;
+import jexer.layout.LayoutManager;
 
 /**
- * 尺寸自适应内容的文本组件，其没有滚动条
  *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
  * @date 2025-11-28
  */
-public class JexerText extends JexerComponent {
-    public static final String NAME = "text";
+public class JexerLayout {
 
-    public JexerText(TWidget parent, XuiComponentTreeNode node) {
-        super(parent, node);
-    }
+    public static LayoutManager create(XuiComponentTreeNode node) {
+        if (node.layout == null) {
+            return null;
+        }
 
-    @Override
-    protected TWidget createWidget(TWidget parent, XuiComponentTreeNode node) {
-        String text = (String) node.nativeProps.get("value");
-        TLabel widget = new TLabel(parent, text, 20, 0);
-
-        return widget;
+        if (XuiLayout.Type.linear.name().equals(node.layout.getType())) {
+            return new LinearLayoutManager(node.layout);
+        }
+        return null;
     }
 }
