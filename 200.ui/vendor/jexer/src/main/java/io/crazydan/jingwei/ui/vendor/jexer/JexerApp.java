@@ -1,0 +1,80 @@
+/*
+ * 精卫（JingWei） - 衔木石填沧海，筑屏障护安全
+ * Copyright (C) 2025 Crazydan Studio <https://studio.crazydan.org>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.
+ * If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
+ */
+
+package io.crazydan.jingwei.ui.vendor.jexer;
+
+import java.io.UnsupportedEncodingException;
+import java.util.function.Supplier;
+
+import io.crazydan.jingwei.ui.schema.page.XuiPage;
+import io.crazydan.jingwei.ui.util.XuiHelper;
+import io.crazydan.jingwei.ui.vendor.XuiComponentTreeNode;
+import io.crazydan.jingwei.ui.vendor.jexer.page.JexerErrorPage;
+import io.nop.commons.util.StringHelper;
+import io.nop.core.lang.eval.IEvalScope;
+import io.nop.xlang.api.XLang;
+import jexer.TApplication;
+import jexer.TDesktop;
+
+/**
+ *
+ * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
+ * @date 2025-11-26
+ */
+public class JexerApp extends TApplication {
+
+    public JexerApp() throws UnsupportedEncodingException {
+        super(detectBackendType());
+    }
+
+    public void render(String pageDslPath, Object data) {
+        doRender(() -> XuiHelper.loadPage(pageDslPath), data);
+    }
+
+    public void render(XuiPage page, Object data) {
+        doRender(() -> page, data);
+    }
+
+    protected void doRender(Supplier<XuiPage> pageGetter, Object data) {
+        IEvalScope scope = XLang.newEvalScope();
+        scope.setLocalValue("data", data);
+
+        TDesktop desktop;
+        try {
+            XuiPage page = pageGetter.get();
+            XuiComponentTreeNode node = XuiComponentTreeNode.build(page, scope);
+
+            desktop = new JexerPage(this, node);
+        } catch (Exception e) {
+            String msg = e.getMessage();
+            e.printStackTrace();
+
+            desktop = new JexerErrorPage(this, msg);
+        }
+
+        setDesktop(desktop, true);
+    }
+
+    protected static TApplication.BackendType detectBackendType() {
+        String term = System.getenv("TERM");
+
+        // Note: swing 类型将在独立的弹出窗口中显示字符界面
+        return StringHelper.isBlank(term) ? TApplication.BackendType.SWING : TApplication.BackendType.XTERM;
+    }
+}
