@@ -21,7 +21,7 @@ package io.crazydan.jingwei.ui.vendor;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -79,10 +79,12 @@ public class XuiComponentTreeNode implements IJsonSerializable {
     ) {
         this.key = key;
         this.layout = layout;
-        this.children = children;
+        this.children = Collections.unmodifiableList(children);
 
         this.nativeName = nativeName;
-        this.nativeProps = nativeProps;
+        this.nativeProps = nativeProps != null
+                           ? Collections.unmodifiableMap(nativeProps)
+                           : nativeName != null ? Map.of() : null;
     }
 
     @Override
@@ -153,8 +155,7 @@ public class XuiComponentTreeNode implements IJsonSerializable {
         String key = getKey(templateNode);
         String nativeName = templateNode.getName();
 
-        Map<String, Object> attrs = getUnknownAttrs(templateNode);
-        Map<String, Object> nativeProps = attrs != null ? new LinkedHashMap<>(attrs) : Map.of();
+        Map<String, Object> nativeProps = getUnknownAttrs(templateNode);
 
         return buildNode(key, templateNode, component, nativeName, nativeProps);
     }
