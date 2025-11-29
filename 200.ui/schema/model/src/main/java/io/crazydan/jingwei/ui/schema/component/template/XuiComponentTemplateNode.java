@@ -9,8 +9,8 @@ import io.crazydan.jingwei.ui.schema.component.template._gen._XuiComponentTempla
 import io.nop.commons.util.StringHelper;
 
 public class XuiComponentTemplateNode extends _XuiComponentTemplateNode {
-    private List<XuiComponentTemplateNodeKeyed> customOrTextChildren;
-    private Map<String, XuiComponentTemplateNodeKeyed> slottables;
+    private List<XuiComponentTemplateNodeNamed> customOrTextChildren;
+    private Map<String, XuiComponentTemplateNodeNamed> slottables;
 
     public XuiComponentTemplateNode() {
 
@@ -39,7 +39,7 @@ public class XuiComponentTemplateNode extends _XuiComponentTemplateNode {
     }
 
     /** 获取自定义或文本子节点 */
-    public List<XuiComponentTemplateNodeKeyed> getCustomOrTextChildren() {
+    public List<XuiComponentTemplateNodeNamed> getCustomOrTextChildren() {
         if (this.customOrTextChildren == null) {
             this.customOrTextChildren = //
                     getChildren().stream()
@@ -51,7 +51,7 @@ public class XuiComponentTemplateNode extends _XuiComponentTemplateNode {
     }
 
     /** 获取命名插槽组件 */
-    public Map<String, XuiComponentTemplateNodeKeyed> getSlottables() {
+    public Map<String, XuiComponentTemplateNodeNamed> getSlottables() {
         if (this.slottables == null) {
             this.slottables = getCustomOrTextChildren().stream()
                                                        .filter((child) -> child instanceof XuiComponentTemplateNodeSlottable)

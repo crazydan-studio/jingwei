@@ -14,7 +14,7 @@ import io.nop.commons.util.ClassHelper;
  */
 @SuppressWarnings({"PMD.UselessOverridingMethod","PMD.UnusedLocalVariable",
     "PMD.UnnecessaryFullyQualifiedName","PMD.EmptyControlStatement","java:S116","java:S101","java:S1128","java:S1161"})
-public abstract class _XuiComponentTemplateNodeText extends io.nop.core.resource.component.AbstractComponentModel implements io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed{
+public abstract class _XuiComponentTemplateNodeText extends io.nop.core.resource.component.AbstractComponentModel implements io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeNamed{
     
     /**
      *  

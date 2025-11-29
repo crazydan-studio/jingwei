@@ -28,7 +28,7 @@ import static io.crazydan.jingwei.ui.XuiConstants.ATTR_NAME_XUI_NAME;
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
  * @date 2025-11-20
  */
-public interface XuiComponentTemplateNodeKeyed extends IExtensibleObject {
+public interface XuiComponentTemplateNodeNamed extends IExtensibleObject {
 
     default String getXuiName() {
         return (String) prop_get(ATTR_NAME_XUI_NAME);

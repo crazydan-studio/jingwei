@@ -28,7 +28,7 @@ public abstract class _XuiComponentTemplateNodeNested extends io.nop.core.resour
      * xml name: 
      * 
      */
-    private KeyedList<io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed> _children = KeyedList.emptyList();
+    private KeyedList<io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeNamed> _children = KeyedList.emptyList();
     
     /**
      * 
@@ -55,20 +55,20 @@ public abstract class _XuiComponentTemplateNodeNested extends io.nop.core.resour
      *  
      */
     
-    public java.util.List<io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed> getChildren(){
+    public java.util.List<io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeNamed> getChildren(){
       return _children;
     }
 
     
-    public void setChildren(java.util.List<io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed> value){
+    public void setChildren(java.util.List<io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeNamed> value){
         checkAllowChange();
         
-        this._children = KeyedList.fromList(value, io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed::getXuiName);
+        this._children = KeyedList.fromList(value, io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeNamed::getXuiName);
            
     }
 
     
-    public io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed getChild(String name){
+    public io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeNamed getChild(String name){
         return this._children.getByKey(name);
     }
 
@@ -76,11 +76,11 @@ public abstract class _XuiComponentTemplateNodeNested extends io.nop.core.resour
         return this._children.containsKey(name);
     }
 
-    public void addChild(io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed item) {
+    public void addChild(io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeNamed item) {
         checkAllowChange();
-        java.util.List<io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed> list = this.getChildren();
+        java.util.List<io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeNamed> list = this.getChildren();
         if (list == null || list.isEmpty()) {
-            list = new KeyedList<>(io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed::getXuiName);
+            list = new KeyedList<>(io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeNamed::getXuiName);
             setChildren(list);
         }
         list.add(item);

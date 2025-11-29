@@ -38,7 +38,7 @@
     -->
     <xdef:define xdef:name="XuiComponentTemplateNode"
                  xdef:ref="XuiComponentTemplateNodeNested"
-                 xdef:bean-implements-types="io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed"
+                 xdef:bean-implements-types="io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeNamed"
                  xui:name="!ns-name"
     >
         <!-- [布局控制]
@@ -62,7 +62,7 @@
         -->
         <dispatch xdef:name="XuiComponentTemplateNodeDispatch"
                   xdef:bean-tag-prop="$tag"
-                  xdef:bean-implements-types="io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed"
+                  xdef:bean-implements-types="io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeNamed"
                   xui:name="!~ns-name=@attr:msg"
                   msg="!component-name" events="!prop-name-set"
                   data="any"
@@ -75,7 +75,7 @@
                  xdef:bean-tag-prop="$tag"
                  xdef:body-type="list" xdef:key-attr="xui:name"
                  xdef:bean-body-prop="children" xdef:bean-child-name="child"
-                 xdef:bean-body-type="List&lt;io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed>"
+                 xdef:bean-body-type="List&lt;io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeNamed>"
                  xdef:bean-sub-type-prop="$tag"
     >
         <!-- Start: 组件模版树节点 -->
@@ -122,7 +122,7 @@
         -->
         <Text xdef:name="XuiComponentTemplateNodeText"
               xdef:bean-tag-prop="$tag"
-              xdef:bean-implements-types="io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed"
+              xdef:bean-implements-types="io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeNamed"
               xui:name="!ns-name" xui:slot="ns-name"
               as-html="boolean"
               xdef:unknown-attr="any" xdef:bean-unknown-attrs-prop="attrs"
@@ -156,7 +156,7 @@
         -->
         <choose xdef:name="XuiComponentTemplateNodeStatementChoose"
                 xdef:bean-tag-prop="$tag"
-                xdef:bean-implements-types="io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed"
+                xdef:bean-implements-types="io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeNamed"
                 xui:name="!ns-name"
         >
             <!-- [特定条件]
@@ -192,7 +192,7 @@
         -->
         <for xdef:name="XuiComponentTemplateNodeStatementFor"
              xdef:ref="XuiComponentTemplateNodeNested"
-             xdef:bean-implements-types="io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed"
+             xdef:bean-implements-types="io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeNamed"
              xui:name="!ns-name"
              var="!var-name" index="var-name"
              items="string"
@@ -230,7 +230,7 @@
     -->
     <xdef:define xdef:name="XuiComponentTemplateNodeLayout"
                  xdef:bean-tag-prop="$tag"
-                 xdef:bean-implements-types="io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed"
+                 xdef:bean-implements-types="io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeNamed"
                  xdef:body-type="union"
                  xdef:bean-body-type="io.crazydan.duzhou.framework.ui.XuiLayout"
                  xdef:bean-body-prop="type"

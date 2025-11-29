@@ -32,7 +32,7 @@ import io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplate;
 import io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNode;
 import io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeAny;
 import io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeDispatch;
-import io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeKeyed;
+import io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeNamed;
 import io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeLayout;
 import io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeNative;
 import io.crazydan.jingwei.ui.schema.component.template.XuiComponentTemplateNodeText;
@@ -111,7 +111,7 @@ public class XuiComponentTreeNode implements IJsonSerializable {
         XuiLayout layout = null;
         List<XuiComponentTreeNode> treeNodes = new ArrayList<>();
 
-        for (XuiComponentTemplateNodeKeyed templateNodeChild : templateNode.getChildren()) {
+        for (XuiComponentTemplateNodeNamed templateNodeChild : templateNode.getChildren()) {
             if (templateNodeChild instanceof XuiComponentTemplateNodeLayout) {
                 layout = ((XuiComponentTemplateNodeLayout) templateNodeChild).getType();
             } //
@@ -138,7 +138,7 @@ public class XuiComponentTreeNode implements IJsonSerializable {
     }
 
     protected static XuiComponentTreeNode buildCustomNode(
-            XuiComponentTemplateNodeKeyed templateNode, XuiComponent component) {
+            XuiComponentTemplateNodeNamed templateNode, XuiComponent component) {
         XuiComponent tagComponent = component.loadTagComponent(templateNode);
 
         String key = getKey(templateNode);
@@ -160,7 +160,7 @@ public class XuiComponentTreeNode implements IJsonSerializable {
         return buildNode(key, templateNode, component, nativeName, nativeProps);
     }
 
-    protected static String getKey(XuiComponentTemplateNodeKeyed node) {
+    protected static String getKey(XuiComponentTemplateNodeNamed node) {
         Map<String, Object> attrs = getUnknownAttrs(node);
 
         // Note: 对于 <for/> 节点中的组件，会将真实 xui:name 放在 attrs 中
@@ -170,7 +170,7 @@ public class XuiComponentTreeNode implements IJsonSerializable {
         return node.getXuiName();
     }
 
-    protected static Map<String, Object> getUnknownAttrs(XuiComponentTemplateNodeKeyed node) {
+    protected static Map<String, Object> getUnknownAttrs(XuiComponentTemplateNodeNamed node) {
         if (node instanceof XuiComponentTemplateNodeNative) {
             return ((XuiComponentTemplateNodeNative) node).getAttrs();
         } //
@@ -184,9 +184,9 @@ public class XuiComponentTreeNode implements IJsonSerializable {
     }
 
     static class Props implements Map<String, Object> {
-        private final XuiComponentTemplateNodeKeyed node;
+        private final XuiComponentTemplateNodeNamed node;
 
-        Props(XuiComponentTemplateNodeKeyed node) {
+        Props(XuiComponentTemplateNodeNamed node) {
             this.node = node;
         }
 

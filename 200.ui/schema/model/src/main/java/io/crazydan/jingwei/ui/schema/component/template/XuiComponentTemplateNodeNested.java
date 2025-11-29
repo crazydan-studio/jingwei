@@ -48,7 +48,7 @@ public class XuiComponentTemplateNodeNested extends _XuiComponentTemplateNodeNes
 
     protected void checkMultiLayouts() {
         boolean exists = false;
-        for (XuiComponentTemplateNodeKeyed child : getChildren()) {
+        for (XuiComponentTemplateNodeNamed child : getChildren()) {
             if (child instanceof XuiComponentTemplateNodeLayout) {
                 XuiComponentTemplateNodeLayout layout = (XuiComponentTemplateNodeLayout) child;
                 if (exists) {
@@ -64,7 +64,7 @@ public class XuiComponentTemplateNodeNested extends _XuiComponentTemplateNodeNes
     protected void checkMultiDispatches() {
         List<String> messages = new ArrayList<>();
 
-        for (XuiComponentTemplateNodeKeyed child : getChildren()) {
+        for (XuiComponentTemplateNodeNamed child : getChildren()) {
             if (child instanceof XuiComponentTemplateNodeDispatch) {
                 XuiComponentTemplateNodeDispatch dispatch = (XuiComponentTemplateNodeDispatch) child;
                 String msg = dispatch.getMsg();
@@ -91,7 +91,7 @@ public class XuiComponentTemplateNodeNested extends _XuiComponentTemplateNodeNes
     }
 
     private boolean hasSlotInDepth() {
-        for (XuiComponentTemplateNodeKeyed child : getChildren()) {
+        for (XuiComponentTemplateNodeNamed child : getChildren()) {
             if (child instanceof XuiComponentTemplateNodeNested) {
                 if (((XuiComponentTemplateNodeNested) child).isSlot() //
                     || ((XuiComponentTemplateNodeNested) child).hasSlotInDepth() //
