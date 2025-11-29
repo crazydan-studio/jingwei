@@ -22,7 +22,7 @@
            x:schema="/jingwei/ui/schema/component.xdef"
 >
     <x:config>
-        <c:import id="Constants" class="io.crazydan.jingwei.ui.vendor.component.Constants"/>
+        <c:import as="Constants" class="io.crazydan.jingwei.ui.vendor.component.Constants"/>
     </x:config>
 
     <template>

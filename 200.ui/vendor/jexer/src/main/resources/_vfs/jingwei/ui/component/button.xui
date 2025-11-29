@@ -22,7 +22,7 @@
            x:schema="/jingwei/ui/schema/component.xdef"
 >
     <x:config>
-        <c:import id="JexerButton" class="io.crazydan.jingwei.ui.vendor.jexer.component.JexerButton"/>
+        <c:import as="JexerButton" class="io.crazydan.jingwei.ui.vendor.jexer.component.JexerButton"/>
     </x:config>
 
     <template>

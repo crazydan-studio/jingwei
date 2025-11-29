@@ -22,7 +22,7 @@
            x:schema="/jingwei/ui/schema/component.xdef"
 >
     <x:config>
-        <c:import id="JexerText" class="io.crazydan.jingwei.ui.vendor.jexer.component.JexerText"/>
+        <c:import as="JexerText" class="io.crazydan.jingwei.ui.vendor.jexer.component.JexerText"/>
     </x:config>
 
     <template>
