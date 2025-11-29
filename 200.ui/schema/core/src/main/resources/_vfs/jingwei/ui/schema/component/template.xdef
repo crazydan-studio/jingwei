@@ -88,11 +88,13 @@
         > - 其内嵌结构支持条件、循环控制，以及消息派发和布局控制；
         > - 除 `name` 外，由 UI Vendor 自行根据原生组件的支持情况添加额外的配置属性，
         >   且可通过 `${xxx}` 表达式引用变量；
+
+        @name [原生组件名]
         -->
         <native xdef:name="XuiComponentTemplateNodeNative"
                 xdef:ref="XuiComponentTemplateNodeSlottable"
                 xui:name="!ns-name"
-                name="!ns-name"
+                name="#!ns-name"
                 xdef:unknown-attr="any" xdef:bean-unknown-attrs-prop="attrs"
         />
         <!-- [组件插槽]

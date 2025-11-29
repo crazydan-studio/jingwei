@@ -17,33 +17,15 @@
  * If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
  */
 
-package io.crazydan.jingwei.ui.vender.jexer;
-
-import java.util.Map;
-
-import io.crazydan.duzhou.framework.junit.NopJunitTestCase;
-import io.crazydan.jingwei.ui.vendor.jexer.JexerApp;
-import org.junit.jupiter.api.Test;
+package io.crazydan.jingwei.ui.vendor.component;
 
 /**
  *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
- * @date 2025-11-25
+ * @date 2025-11-29
  */
-public class TestJexerApp extends NopJunitTestCase {
+public interface Constants {
 
-    @Test
-    public void test_render_page() throws Exception {
-        JexerApp app = new JexerApp();
-        app.addToolMenu();
-
-        // 异步加载并渲染页面
-        (new Thread(() -> {
-            Object data = Map.of("me", Map.of("notExist", true));
-            app.render("/jingwei/ui/page/main.page.xui", data);
-        })).start();
-
-        // 等待退出
-        app.run();
-    }
+    String BUTTON = "button";
+    String TEXT = "text";
 }

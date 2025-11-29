@@ -18,12 +18,15 @@
   - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
   -->
 
-<component xmlns:x="/nop/schema/xdsl.xdef" xmlns:xui="xui"
+<component xmlns:x="/nop/schema/xdsl.xdef" xmlns:xui="xui" xmlns:c="c"
            x:schema="/jingwei/ui/schema/component.xdef"
 >
+    <x:config>
+        <c:import id="Constants" class="io.crazydan.jingwei.ui.vendor.component.Constants"/>
+    </x:config>
 
     <template>
-        <native xui:name="body" name="button" border="1u" label="${props.$innerText}">
+        <native xui:name="body" name="#{Constants.BUTTON}" border="1u" label="${props.$innerText}">
 
         </native>
     </template>

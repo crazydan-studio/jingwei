@@ -30,7 +30,7 @@ public abstract class _XuiComponentTemplateNodeNative extends io.crazydan.jingwe
     private java.util.Map<java.lang.String,java.lang.Object> _attrs ;
     
     /**
-     *  
+     *  原生组件名
      * xml name: name
      * 
      */
@@ -60,7 +60,7 @@ public abstract class _XuiComponentTemplateNodeNative extends io.crazydan.jingwe
     }
     
     /**
-     * 
+     * 原生组件名
      * xml name: name
      *  
      */

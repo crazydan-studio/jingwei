@@ -13,9 +13,14 @@ import io.crazydan.jingwei.ui.util.XuiHelper;
 import io.nop.api.core.exceptions.NopException;
 import io.nop.api.core.util.INeedInit;
 import io.nop.api.core.util.ISourceLocationGetter;
+import io.nop.commons.util.StringHelper;
+import io.nop.commons.util.objects.ValueWithLocation;
+import io.nop.core.CoreConstants;
 import io.nop.core.lang.eval.IEvalAction;
 import io.nop.core.lang.eval.IEvalScope;
 import io.nop.core.lang.xml.XNode;
+import io.nop.core.reflect.ReflectionManager;
+import io.nop.core.reflect.bean.IBeanModel;
 import io.nop.xlang.api.IXLangCompileScope;
 import io.nop.xlang.api.XLang;
 import io.nop.xlang.api.XLangCompileTool;
@@ -27,6 +32,7 @@ import io.nop.xlang.xpl.IXplTagCompiler;
 import io.nop.xlang.xpl.tags.ChooseTagCompiler;
 import io.nop.xlang.xpl.tags.ForTagCompiler;
 import io.nop.xlang.xpl.tags.IfTagCompiler;
+import io.nop.xlang.xpl.utils.XplParseHelper;
 
 import static io.crazydan.jingwei.ui.XuiConstants.ATTR_NAME_XUI_NAME;
 import static io.crazydan.jingwei.ui.XuiConstants.ATTR_NAME_XUI_NAME_RAW;
@@ -123,8 +129,6 @@ public class XuiComponent extends _XuiComponent implements INeedInit {
             return null;
         }
 
-        // TODO 传入配置的组件属性
-
         XNode node = (XNode) action.invoke(scope);
 
         // Note: 在解析得到模型后，将自动调用 INeedInit#init 进行初始化
@@ -140,10 +144,13 @@ public class XuiComponent extends _XuiComponent implements INeedInit {
             XNode node = this._dslNode.childByTag(TAG_NAME_TEMPLATE);
 
             if (node != null) {
+                // 涉及对 Xpl 节点的修改，故而需复制一份以避免影响原始节点的结构
+                node = cloneXNode(node, getTemplate());
+
                 // Note: 必须将 <template/> 单独挂载到仅有唯一子节点的根节点上，
                 // 因为 Xpl 脚本的执行结果返回的是脚本构造节点的最后一个子节点
-                XNode dummy = new XNode("_");
-                node.cloneInstance().insertParent(dummy);
+                XNode dummy = new XNode(CoreConstants.DUMMY_TAG_NAME);
+                node.insertParent(dummy);
 
                 this.templateEvalAction = newCompileTool().compileTagBody(dummy, XLangOutputMode.node);
             }
@@ -173,6 +180,41 @@ public class XuiComponent extends _XuiComponent implements INeedInit {
             return ((XuiComponentTemplateNodeAny) node).get$tag();
         }
         return null;
+    }
+
+    protected static XNode cloneXNode(XNode node, XuiComponentTemplateNodeKeyed bean) {
+        XNode copiedNode = node.cloneWithoutChildren();
+
+        if (bean != null && copiedNode.getAttrCount() > 0) {
+            IBeanModel beanModel = ReflectionManager.instance().getBeanModelForClass(bean.getClass());
+
+            String[] attrNames = copiedNode.getAttrNames().toArray(new String[0]);
+            for (String attrName : attrNames) {
+                ValueWithLocation attr = copiedNode.attrValueLoc(attrName);
+
+                // 将宏表达式 #{xxx} 替换为实际解析后的值
+                // Note: 宏表达式仅在构造 XuiComponent 实例时解析并赋值在该实例中
+                if (XplParseHelper.isCpExpr(attr.asString())) {
+                    String propName = StringHelper.xmlNameToPropName(attrName);
+                    Object attrValue = beanModel.getProperty(bean, propName);
+
+                    copiedNode.setAttr(attr.getLocation(), attrName, attrValue);
+                }
+            }
+        }
+
+        for (XNode child : node.getChildren()) {
+            Object xuiName = child.getAttr(ATTR_NAME_XUI_NAME);
+            XuiComponentTemplateNodeKeyed beanChild = null;
+            if (bean instanceof XuiComponentTemplateNodeNested) {
+                beanChild = ((XuiComponentTemplateNodeNested) bean).getChild((String) xuiName);
+            }
+
+            XNode copiedChild = cloneXNode(child, beanChild);
+            copiedNode.appendChild(copiedChild);
+        }
+
+        return copiedNode;
     }
 
     // <<<<<<<<<<<<<<< getter/setter

@@ -18,12 +18,15 @@
   - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
   -->
 
-<component xmlns:x="/nop/schema/xdsl.xdef" xmlns:xui="xui"
+<component xmlns:x="/nop/schema/xdsl.xdef" xmlns:xui="xui" xmlns:c="c"
            x:schema="/jingwei/ui/schema/component.xdef"
 >
+    <x:config>
+        <c:import id="JexerButton" class="io.crazydan.jingwei.ui.vendor.jexer.component.JexerButton"/>
+    </x:config>
 
     <template>
-        <native xui:name="body" name="button" label="${props.$innerText}">
+        <native xui:name="body" name="#{JexerButton.NAME}" label="${props.$innerText}">
 
         </native>
     </template>
