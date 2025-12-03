@@ -1,8 +1,10 @@
 {
   "location": "[22:2:0:0]/jingwei/ui/test-valid-component-tree.xui",
   "xmlns:xui": "xui",
+  "x:schema": "/jingwei/ui/schema/component.xdef",
   "xmlns:x": "/nop/schema/xdsl.xdef",
   "xmlns:xpl": "xpl",
+  "x:validated": true,
   "imports": [
     {
       "location": "[25:6:0:0]/jingwei/ui/test-valid-component-tree.xui",

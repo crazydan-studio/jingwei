@@ -33,14 +33,14 @@ import jexer.TWidget;
 public class JexerText extends JexerComponent {
     public static final String NAME = "text";
 
-    public JexerText(TWidget parent, XuiComponentTreeNode node) {
+    public JexerText(JexerComponent parent, XuiComponentTreeNode node) {
         super(parent, node);
     }
 
     @Override
     protected TWidget createWidget(TWidget parent, XuiComponentTreeNode node) {
         String text = (String) node.nativeProps.get("value");
-        TLabel widget = new TLabel(parent, text, 20, 0);
+        TLabel widget = new TLabel(parent, text, 0, 0);
 
         return widget;
     }

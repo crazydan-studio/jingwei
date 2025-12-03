@@ -17,28 +17,22 @@
  * If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
  */
 
-package io.crazydan.jingwei.ui.vendor.jexer;
+package io.crazydan.jingwei.ui.vendor;
 
-import io.crazydan.duzhou.framework.ui.XuiLayout;
-import io.crazydan.jingwei.ui.vendor.XuiComponentTreeNode;
-import io.crazydan.jingwei.ui.vendor.jexer.layout.LinearLayoutManager;
-import jexer.layout.LayoutManager;
+import io.nop.api.core.exceptions.ErrorCode;
+
+import static io.nop.api.core.exceptions.ErrorCode.define;
+import static io.nop.xlang.XLangErrors.ARG_NAME;
 
 /**
  *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
- * @date 2025-11-28
+ * @date 2025-11-30
  */
-public class JexerLayout {
+public interface XuiVendorErrors {
 
-    public static LayoutManager create(XuiComponentTreeNode node) {
-        if (node.layout == null) {
-            return null;
-        }
-
-        if (XuiLayout.Type.linear.name().equals(node.layout.getType())) {
-            return new LinearLayoutManager(node.layout);
-        }
-        return null;
-    }
+    ErrorCode ERR_COMPONENT_NATIVE_NOT_REGISTERED = //
+            define("jingwei.err.ui.vendor.component.native-not-registered",
+                   "未注册名字为 [{" + ARG_NAME + "}] 的原生组件",
+                   ARG_NAME);
 }

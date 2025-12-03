@@ -37,11 +37,8 @@ public class TestJexerApp extends NopJunitTestCase {
         JexerApp app = new JexerApp();
         app.addToolMenu();
 
-        // 异步加载并渲染页面
-        (new Thread(() -> {
-            Object data = Map.of("me", Map.of("notExist", true));
-            app.render("/jingwei/ui/page/main.page.xui", data);
-        })).start();
+        Object data = Map.of("me", Map.of("notExist", true));
+        app.asyncRender("/jingwei/ui/page/main.page.xui", data);
 
         // 等待退出
         app.run();

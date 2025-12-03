@@ -22,6 +22,7 @@ package io.crazydan.jingwei.ui.vendor.jexer;
 import io.crazydan.jingwei.ui.vendor.XuiComponentTreeNode;
 import io.crazydan.jingwei.ui.vendor.jexer.component.JexerBox;
 import jexer.TDesktop;
+import jexer.event.TResizeEvent;
 
 /**
  *
@@ -29,11 +30,17 @@ import jexer.TDesktop;
  * @date 2025-11-25
  */
 public class JexerPage extends TDesktop {
+    private final JexerBox root;
 
     JexerPage(JexerApp app, XuiComponentTreeNode node) {
         super(app);
         setActive(true);
 
-        new JexerBox(this, node);
+        this.root = new JexerBox(this, node);
+    }
+
+    @Override
+    public void onResize(TResizeEvent resize) {
+        this.root.onResize(resize.getWidth(), resize.getHeight());
     }
 }

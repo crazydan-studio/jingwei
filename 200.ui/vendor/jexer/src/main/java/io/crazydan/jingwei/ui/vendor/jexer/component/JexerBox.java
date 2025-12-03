@@ -19,8 +19,10 @@
 
 package io.crazydan.jingwei.ui.vendor.jexer.component;
 
+import io.crazydan.duzhou.framework.ui.layout.XuiLayoutNode;
 import io.crazydan.jingwei.ui.vendor.XuiComponentTreeNode;
 import io.crazydan.jingwei.ui.vendor.jexer.JexerComponent;
+import io.crazydan.jingwei.ui.vendor.jexer.component.widget.TBox;
 import jexer.TWidget;
 
 /**
@@ -35,9 +37,17 @@ public class JexerBox extends JexerComponent {
         super(parent, node);
     }
 
+    public JexerBox(JexerComponent parent, XuiComponentTreeNode node) {
+        super(parent, node);
+    }
+
+    public JexerBox(JexerComponent parent, XuiComponentTreeNode node, XuiLayoutNode layout) {
+        super(parent, node, layout);
+    }
+
     @Override
     protected TWidget createWidget(TWidget parent, XuiComponentTreeNode node) {
-        TWidget widget = new TWidget(parent) {};
+        TBox widget = new TBox(parent);
 
         return widget;
     }

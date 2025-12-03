@@ -102,14 +102,12 @@
                     <join>
                         <on leftProp="sourceId" rightProp="oid"/>
                     </join>
-                    <ref-set/>
                 </to-one>
                 <to-one displayName="反向人际关系" name="target" refEntityName="io.crazydan.jingwei.store.dao.entity.Person"
                         refPropName="inverseRelationships" tagSet="pub,ref-pub,ref-cascade-delete">
                     <join>
                         <on leftProp="targetId" rightProp="oid"/>
                     </join>
-                    <ref-set/>
                 </to-one>
             </relations>
             <unique-keys>

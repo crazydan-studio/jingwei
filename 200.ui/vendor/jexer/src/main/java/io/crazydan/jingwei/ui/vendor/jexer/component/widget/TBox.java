@@ -17,43 +17,18 @@
  * If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
  */
 
-package io.crazydan.jingwei.ui.vendor.jexer.layout;
+package io.crazydan.jingwei.ui.vendor.jexer.component.widget;
 
-import io.crazydan.duzhou.framework.ui.XuiLayout;
 import jexer.TWidget;
-import jexer.event.TResizeEvent;
-import jexer.layout.LayoutManager;
 
 /**
- * 线性布局器
  *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
- * @date 2025-11-28
+ * @date 2025-12-02
  */
-public class LinearLayoutManager implements LayoutManager {
-    private final XuiLayout layout;
+public class TBox extends TWidget {
 
-    public LinearLayoutManager(XuiLayout layout) {
-        this.layout = layout;
-    }
-
-    @Override
-    public void onResize(TResizeEvent resize) {
-
-    }
-
-    @Override
-    public void add(TWidget child) {
-
-    }
-
-    @Override
-    public void remove(TWidget child) {
-
-    }
-
-    @Override
-    public void resetSize(TWidget child) {
-
+    public TBox(TWidget parent) {
+        super(parent);
     }
 }

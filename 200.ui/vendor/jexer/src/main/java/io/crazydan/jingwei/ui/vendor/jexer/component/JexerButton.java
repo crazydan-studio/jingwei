@@ -33,14 +33,14 @@ import jexer.TWidget;
 public class JexerButton extends JexerComponent {
     public static final String NAME = "button";
 
-    public JexerButton(TWidget parent, XuiComponentTreeNode node) {
+    public JexerButton(JexerComponent parent, XuiComponentTreeNode node) {
         super(parent, node);
     }
 
     @Override
     protected TWidget createWidget(TWidget parent, XuiComponentTreeNode node) {
         String label = (String) node.nativeProps.get("label");
-        TButton widget = new TButton(parent, label, 20, 20, new TAction() {
+        TButton widget = new TButton(parent, label, 0, 0, new TAction() {
             @Override
             public void DO() {
                 // TODO TButton click event

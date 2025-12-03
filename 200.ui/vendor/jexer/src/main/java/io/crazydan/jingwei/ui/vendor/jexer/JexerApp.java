@@ -31,6 +31,8 @@ import io.nop.core.lang.eval.IEvalScope;
 import io.nop.xlang.api.XLang;
 import jexer.TApplication;
 import jexer.TDesktop;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -38,9 +40,15 @@ import jexer.TDesktop;
  * @date 2025-11-26
  */
 public class JexerApp extends TApplication {
+    private static final Logger log = LoggerFactory.getLogger(JexerApp.class);
 
     public JexerApp() throws UnsupportedEncodingException {
         super(detectBackendType());
+    }
+
+    /** 异步加载并渲染页面 */
+    public void asyncRender(String pageDslPath, Object data) {
+        new Thread(() -> render(pageDslPath, data)).start();
     }
 
     public void render(String pageDslPath, Object data) {
@@ -63,7 +71,7 @@ public class JexerApp extends TApplication {
             desktop = new JexerPage(this, node);
         } catch (Exception e) {
             String msg = e.getMessage();
-            e.printStackTrace();
+            log.error("jingwei.xui.render-page-error", e);
 
             desktop = new JexerErrorPage(this, msg);
         }
