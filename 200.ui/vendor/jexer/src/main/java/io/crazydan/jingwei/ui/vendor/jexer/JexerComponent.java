@@ -68,7 +68,7 @@ public abstract class JexerComponent {
 
     private static final XuiLayoutNode LAYOUT_ANY_ITEM = XuiLayoutNode.item(null, ".+");
 
-    public final TWidget widget;
+    private final TWidget widget;
 
     public final XuiLayoutNode layout;
     public final List<JexerComponent> children;

@@ -30,7 +30,9 @@
                 <layout>
                     <linear><![CDATA[
                         ^>[text-welcome]<
-                        v>[btn-add-personal-information]<^
+                        v>{
+                            >[btn-add-personal-information]<
+                        }<^
                     ]]></linear>
                 </layout>
 
@@ -51,8 +53,8 @@
                     <linear><![CDATA[
                         ^>[text-welcome]<
                         v>{
-                            <[btn-personal-management]>
-                            <[btn-app-settings]>
+                            >[btn-personal-management]<
+                            >[btn-app-settings]<
                         }<^
                     ]]></linear>
                 </layout>
