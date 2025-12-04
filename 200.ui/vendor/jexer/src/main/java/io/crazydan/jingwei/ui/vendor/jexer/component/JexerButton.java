@@ -19,6 +19,7 @@
 
 package io.crazydan.jingwei.ui.vendor.jexer.component;
 
+import io.crazydan.duzhou.framework.ui.layout.XuiLayoutNode;
 import io.crazydan.jingwei.ui.vendor.XuiComponentTreeNode;
 import io.crazydan.jingwei.ui.vendor.jexer.JexerComponent;
 import jexer.TAction;
@@ -34,7 +35,7 @@ public class JexerButton extends JexerComponent {
     public static final String NAME = "button";
 
     public JexerButton(JexerComponent parent, XuiComponentTreeNode node) {
-        super(parent, node);
+        super(parent, node, XuiLayoutNode.item(null, null));
     }
 
     @Override
