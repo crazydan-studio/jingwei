@@ -22,7 +22,6 @@
         <module>100.app</module>
 
         <module>150.codegen</module>
-        <module>200.ui</module>
         <module>600.store</module>
 
         <module>800.common</module>
@@ -42,8 +41,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <jingwei.version>0.1.0-SNAPSHOT</jingwei.version>
-        <imgui.version>1.90.0</imgui.version>
-        <jexer.version>1.7.0</jexer.version>
         <duckdb.version>1.4.2.0</duckdb.version>
     </properties>
 
@@ -96,27 +93,6 @@
 
             <dependency>
                 <groupId>io.crazydan.jingwei</groupId>
-                <artifactId>jingwei-ui-schema-core</artifactId>
-                <version>${jingwei.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.crazydan.jingwei</groupId>
-                <artifactId>jingwei-ui-schema-model</artifactId>
-                <version>${jingwei.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.crazydan.jingwei</groupId>
-                <artifactId>jingwei-ui-vendor-core</artifactId>
-                <version>${jingwei.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.crazydan.jingwei</groupId>
-                <artifactId>jingwei-ui-vendor-imgui</artifactId>
-                <version>${jingwei.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.crazydan.jingwei</groupId>
                 <artifactId>jingwei-store-model</artifactId>
                 <version>${jingwei.version}</version>
             </dependency>
@@ -126,17 +102,6 @@
                 <version>${jingwei.version}</version>
             </dependency>
             <!-- End -->
-
-            <dependency>
-                <groupId>io.github.spair</groupId>
-                <artifactId>imgui-java-app</artifactId>
-                <version>${imgui.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.gitlab.autumnmeowmeow</groupId>
-                <artifactId>jexer</artifactId>
-                <version>${jexer.version}</version>
-            </dependency>
 
             <dependency>
                 <groupId>org.duckdb</groupId>
