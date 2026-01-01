@@ -42,6 +42,7 @@
 
         <jingwei.version>0.1.0-SNAPSHOT</jingwei.version>
         <duckdb.version>1.4.2.0</duckdb.version>
+        <nop-extensions.version>1.0.0-SNAPSHOT</nop-extensions.version>
     </properties>
 
     <licenses>
@@ -103,6 +104,11 @@
             </dependency>
             <!-- End -->
 
+            <dependency>
+                <groupId>io.github.entropy-cloud.extensions</groupId>
+                <artifactId>nop-undertow-starter</artifactId>
+                <version>${nop-extensions.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.duckdb</groupId>
                 <artifactId>duckdb_jdbc</artifactId>

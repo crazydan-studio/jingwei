@@ -1,0 +1,37 @@
+# Nop平台自身会加载application.yaml配置文件，与Spring和Quarkus框架可以共享配置文件
+
+nop:
+  debug: true
+
+  orm:
+    init-database-schema: true
+    enable-tenant-by-default: false
+    auto-add-tenant-col: false
+
+  datasource:
+    # driver-class-name: com.mysql.cj.jdbc.Driver
+    # jdbc-url: jdbc:mysql://127.0.0.1:3306/dev?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+    # username: nop
+    # password: nop-test
+    metrics-enabled: true
+    driver-class-name: org.h2.Driver
+    jdbc-url: jdbc:h2:./db/test
+    username: sa
+    password:
+
+  gateway:
+    http-filter:
+      enabled: true
+
+  file:
+    #store-impl: oss
+    store-dir: /tmp/nop-files
+
+  extension:
+    undertow:
+      server:
+        port: 8181
+        compression:
+          enabled: true
+          # min-response-size: 2048
+          mime-types: text/html,text/xml,text/plain,text/javascript,text/css,application/json,application/xml,application/javascript,application/x-shockwave-flash
