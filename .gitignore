@@ -1,4 +1,7 @@
+application-local.yaml
+_data/
 _dump/
+
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/

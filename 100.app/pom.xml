@@ -6,7 +6,6 @@
 
     <name>JingWei App</name>
     <artifactId>jingwei-app</artifactId>
-    <packaging>pom</packaging>
 
     <parent>
         <groupId>io.crazydan.jingwei</groupId>
@@ -25,7 +24,7 @@
 
         <dependency>
             <groupId>io.github.entropy-cloud</groupId>
-            <artifactId>nop-ai-core</artifactId>
+            <artifactId>nop-ai-coder</artifactId>
         </dependency>
         <dependency>
             <groupId>io.github.entropy-cloud</groupId>
@@ -34,6 +33,10 @@
         <dependency>
             <groupId>io.github.entropy-cloud</groupId>
             <artifactId>nop-integration-file-local</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.entropy-cloud</groupId>
+            <artifactId>nop-http-client-jdk</artifactId>
         </dependency>
 
         <dependency>

@@ -1,0 +1,14 @@
+nop:
+  debug: true
+  # Note: 在 application-local.yaml 中配置敏感数据
+  config:
+    additional-location: "classpath:/application-local.yaml"
+
+  ai:
+    service:
+      # LLM引擎执行时是否自动打印所有请求和响应消息
+      log-message: true
+      # 禁止日志输出到文件
+      log-dir: none
+      # 是否启用系统提示词
+      enable-work-mode-system-prompt: true
