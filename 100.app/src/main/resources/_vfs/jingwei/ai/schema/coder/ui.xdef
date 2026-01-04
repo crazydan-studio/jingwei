@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<ui xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="/nop/schema/xdef.xdef"
+    x:schema="/nop/schema/xdef.xdef"
+>
+
+    <pages xdef:body-type="list" xdef:key-attr="name">
+        <page name="!kebab-case" displayName="!string">
+            <body>component-code</body>
+
+            <demo-data xdef:body-type="list" xdef:key-attr="name">
+                <api name="!kebab-case">json</api>
+            </demo-data>
+        </page>
+    </pages>
+</ui>

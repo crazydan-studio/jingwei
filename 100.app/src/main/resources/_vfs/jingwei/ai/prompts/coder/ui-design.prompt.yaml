@@ -3,9 +3,9 @@
 # - 需要强调的内容使用加粗标记符，即一对双星号
 # - 通过命令式加粗词汇要求 AI 不做什么，如 **禁止**、**不要**
 template: |
-  【任务目标】
+  【任务描述】
   
-  你作为兼具软件技术与业务领域专业知识的资深软件架构师，需要依据给定需求描述完成业务模型的结构设计。
+  你作为兼具软件技术与业务领域专业知识的资深 UI 设计师，需要根据需求描述设计 Web 应用的相关页面。
   只用返回 XML，不需要额外解释。
   
   【返回格式】
@@ -16,33 +16,38 @@ template: |
   
   【设计规范】
   
-  {{include: /jingwei/ai/prompts/coder/erd-design.md}}
+  {{include: /jingwei/ai/prompts/coder/ui-design.md}}
   
   【完整性检查】
   
-  - 返回的 XML 包含所有业务模型定义，没有缺失
-  - 移除值为空的 XML 标签属性
-  - 移除 XML 标签属性值中的首尾空白
+  - 包含完整的功能模块，所涉及的模型结构完整展示，没有缺失
+  
+  【业务模型】
+  
+  {{modelDefinitions}}
   
   【需求描述 - 系统设计】
   
   {{appRequirements}}
   
-  【需求描述 - 模型设计】
+  【需求描述 - UI 设计】
   
-  {{modelRequirements}}
+  {{uiRequirements}}
 
 inputs:
+  - name: modelDefinitions
+    type: String
+    mandatory: true
   - name: appRequirements
     type: String
     mandatory: true
-  - name: modelRequirements
+  - name: uiRequirements
     type: String
     mandatory: true
 
 outputs:
   - name: RESULT
-    xdefPath: /jingwei/ai/schema/coder/erd.xdef
+    xdefPath: /jingwei/ai/schema/coder/ui.xdef
     format: xml
     outputBuilder: |
       import io.crazydan.jingwei.ai.AiErdModelNormalizer;

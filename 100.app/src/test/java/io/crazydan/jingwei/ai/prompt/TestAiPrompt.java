@@ -25,11 +25,13 @@ import java.util.Map;
 import io.crazydan.duzhou.framework.junit.NopJunitAutoTestCase;
 import io.nop.ai.coder.orm.AiOrmModel;
 import io.nop.ai.core.api.chat.AiChatOptions;
+import io.nop.ai.core.api.messages.AiChatExchange;
 import io.nop.ai.core.command.AiCommand;
 import io.nop.ai.core.prompt.IPromptTemplate;
 import io.nop.ai.core.prompt.IPromptTemplateManager;
 import io.nop.api.core.annotations.autotest.EnableSnapshot;
 import io.nop.api.core.annotations.autotest.NopTestConfig;
+import io.nop.core.lang.eval.IEvalScope;
 import io.nop.core.lang.xml.XNode;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
@@ -46,6 +48,46 @@ public class TestAiPrompt extends NopJunitAutoTestCase {
 
     @EnableSnapshot
     @Test
+    public void test_app_main_design() {
+        IPromptTemplate promptModel = loadPrompt("/jingwei/ai/prompts/coder/erd-design.prompt.yaml");
+        Map<String, Object> vars = new HashMap<>();
+        vars.put("appRequirements", inputText("app-requirements.md"));
+        vars.put("modelRequirements", inputText("model-requirements.md"));
+
+        IEvalScope scope = promptModel.prepareInputs(vars);
+        String prompt = promptModel.generatePrompt(scope);
+        outputText("prompt-erd-design.md", prompt);
+
+        AiChatExchange response = new AiChatExchange();
+        String content = inputText("response-erd-design.md");
+        response.setContent(content);
+        promptModel.processChatResponse(response, scope);
+
+        XNode node = (XNode) response.getOutput("RESULT");
+        node.dump();
+
+        // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        promptModel = loadPrompt("/jingwei/ai/prompts/coder/ui-design.prompt.yaml");
+        vars = new HashMap<>();
+        vars.put("modelDefinitions", inputText("response-erd-design.md"));
+        vars.put("appRequirements", inputText("app-requirements.md"));
+        vars.put("uiRequirements", inputText("ui-requirements.md"));
+
+        scope = promptModel.prepareInputs(vars);
+        prompt = promptModel.generatePrompt(scope);
+        outputText("prompt-ui-design.md", prompt);
+
+        response = new AiChatExchange();
+        content = inputText("response-ui-design.md");
+        response.setContent(content);
+        promptModel.processChatResponse(response, scope);
+
+        node = (XNode) response.getOutput("RESULT");
+        node.dump();
+    }
+
+    //@EnableSnapshot
+    //@Test
     public void test_erd_design() {
         IPromptTemplate promptTemplate = loadPrompt("/jingwei/ai/prompts/coder/erd-design.prompt.yaml");
 

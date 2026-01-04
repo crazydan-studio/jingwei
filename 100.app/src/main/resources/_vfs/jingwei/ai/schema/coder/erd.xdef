@@ -1,29 +1,62 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<!--
-  - 精卫（JingWei） - 衔木石填沧海，筑屏障护安全
-  - Copyright (C) 2026 Crazydan Studio <https://studio.crazydan.org>
-  -
-  - This program is free software: you can redistribute it and/or modify
-  - it under the terms of the GNU Lesser General Public License as published by
-  - the Free Software Foundation, either version 3 of the License, or
-  - (at your option) any later version.
-  -
-  - This program is distributed in the hope that it will be useful,
-  - but WITHOUT ANY WARRANTY; without even the implied warranty of
-  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  - GNU Lesser General Public License for more details.
-  -
-  - You should have received a copy of the GNU Lesser General Public License
-  - along with this program.
-  - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
-  -->
-
-<!-- [ER 图]
->
--->
 <erd xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="/nop/schema/xdef.xdef"
-    x:schema="/nop/schema/xdef.xdef"
+     xmlns:db="db" xmlns:orm="orm"
+     x:schema="/nop/schema/xdef.xdef"
 >
 
+    <dicts xdef:body-type="list" xdef:key-attr="name">
+        <dict name="!kebab-case" displayName="string">
+            <description>string</description>
+
+            <options xdef:body-type="list" xdef:key-attr="value">
+                <option value="!digits" code="!macro-case" displayName="string">
+                    <description>string</description>
+                </option>
+            </options>
+        </dict>
+    </dicts>
+
+    <entities xdef:body-type="list" xdef:key-attr="name">
+        <entity name="!pascal-case" displayName="string">
+            <description>string</description>
+
+            <orm:unique-keys xdef:body-type="list" xdef:key-attr="name">
+                <key name="!snake-case">entity-attr-csv-string</key>
+            </orm:unique-keys>
+
+            <attrs xdef:body-type="list" xdef:key-attr="name">
+                <attr name="!camel-case" displayName="string"
+                      mandatory="!boolean=false"
+                      virtual="!boolean=false" published="!boolean=true"
+                      insertable="!boolean=false" updatable="!boolean=false"
+                      queryable="!boolean=false" sortable="!boolean=false"
+                      maskPattern="string" datePattern="string"
+                      db:estimatedRowCount="int"
+
+                      dict="dict-name"
+                      stdDomain="!std-domain"
+                      precision="int" scale="int"
+                      defaultValue="any"
+                      minValue="double" maxValue="double"
+                      minLength="int" maxLength="int"
+                      minFileSize="file-size" maxFileSize="file-size"
+                      allowedFileTypes="mime-type-csv-string"
+                >
+                    <description>string</description>
+
+                    <computed>xpl-fn</computed>
+                </attr>
+            </attrs>
+        </entity>
+    </entities>
+
+    <relations xdef:body-type="list" xdef:key-attr="name">
+        <relation name="!snake-case"
+                  source="!child-entity-name" sourceProp="!child-entity-attr"
+                  target="!parent-entity-name"
+                  targetProp="parent-to-children-prop"
+                  targetPropDisplayName="string"
+        />
+    </relations>
 </erd>
