@@ -1,5 +1,5 @@
 ```xml
-<erd>
+<model-design>
     <dicts>
         <dict name="app-status" displayName="应用状态">
             <description>应用的状态，包括开发中、已启用和已禁用</description>
@@ -101,5 +101,5 @@
         <relation name="app_active_version" source="App" sourceProp="activeVersion" target="AppVersion"/>
         <relation name="version_derived_from" source="AppVersion" sourceProp="derivedFrom" target="AppVersion"/>
     </relations>
-</erd>
+</model-design>
 ```

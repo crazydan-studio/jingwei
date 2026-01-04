@@ -16,7 +16,7 @@ template: |
   
   【设计规范】
   
-  {{include: /jingwei/ai/prompts/coder/erd-design.md}}
+  {{include: /jingwei/ai/prompts/coder/model-design.md}}
   
   【完整性检查】
   
@@ -42,7 +42,7 @@ inputs:
 
 outputs:
   - name: RESULT
-    xdefPath: /jingwei/ai/schema/coder/erd.xdef
+    xdefPath: /jingwei/ai/schema/coder/model-design.xdef
     format: xml
     outputBuilder: |
       import io.crazydan.jingwei.ai.AiErdModelNormalizer;

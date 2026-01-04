@@ -6,7 +6,7 @@
 【返回格式】
 
 ```xml
-<erd>
+<model-design>
     <dicts>
         <dict name="kebab-case" displayName="string">
             <description>string</description>
@@ -40,7 +40,7 @@
         <relation name="snake-case" source="child-entity-name" sourceProp="child-entity-attr"
                   target="parent-entity-name" targetProp="parent-to-children-prop" targetPropDisplayName="string"/>
     </relations>
-</erd>
+</model-design>
 ```
 
 【设计规范】

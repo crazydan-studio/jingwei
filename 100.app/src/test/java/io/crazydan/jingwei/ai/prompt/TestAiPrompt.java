@@ -49,17 +49,17 @@ public class TestAiPrompt extends NopJunitAutoTestCase {
     @EnableSnapshot
     @Test
     public void test_app_main_design() {
-        IPromptTemplate promptModel = loadPrompt("/jingwei/ai/prompts/coder/erd-design.prompt.yaml");
+        IPromptTemplate promptModel = loadPrompt("/jingwei/ai/prompts/coder/model-design.prompt.yaml");
         Map<String, Object> vars = new HashMap<>();
         vars.put("appRequirements", inputText("app-requirements.md"));
         vars.put("modelRequirements", inputText("model-requirements.md"));
 
         IEvalScope scope = promptModel.prepareInputs(vars);
         String prompt = promptModel.generatePrompt(scope);
-        outputText("prompt-erd-design.md", prompt);
+        outputText("prompt-model-design.md", prompt);
 
         AiChatExchange response = new AiChatExchange();
-        String content = inputText("response-erd-design.md");
+        String content = inputText("response-model-design.md");
         response.setContent(content);
         promptModel.processChatResponse(response, scope);
 
@@ -69,7 +69,7 @@ public class TestAiPrompt extends NopJunitAutoTestCase {
         // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         promptModel = loadPrompt("/jingwei/ai/prompts/coder/ui-design.prompt.yaml");
         vars = new HashMap<>();
-        vars.put("modelDefinitions", inputText("response-erd-design.md"));
+        vars.put("modelDefinitions", inputText("response-model-design.md"));
         vars.put("appRequirements", inputText("app-requirements.md"));
         vars.put("uiRequirements", inputText("ui-requirements.md"));
 
@@ -89,7 +89,7 @@ public class TestAiPrompt extends NopJunitAutoTestCase {
     //@EnableSnapshot
     //@Test
     public void test_erd_design() {
-        IPromptTemplate promptTemplate = loadPrompt("/jingwei/ai/prompts/coder/erd-design.prompt.yaml");
+        IPromptTemplate promptTemplate = loadPrompt("/jingwei/ai/prompts/coder/model-design.prompt.yaml");
 
         AiCommand command = AiCommand.create();
         AiChatOptions options = command.makeChatOptions();

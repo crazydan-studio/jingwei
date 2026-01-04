@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<ui xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="/nop/schema/xdef.xdef"
-    x:schema="/nop/schema/xdef.xdef"
+<ui-design xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="/nop/schema/xdef.xdef"
+           x:schema="/nop/schema/xdef.xdef"
 >
 
     <pages xdef:body-type="list" xdef:key-attr="name">
@@ -13,4 +13,4 @@
             </demo-data>
         </page>
     </pages>
-</ui>
+</ui-design>
