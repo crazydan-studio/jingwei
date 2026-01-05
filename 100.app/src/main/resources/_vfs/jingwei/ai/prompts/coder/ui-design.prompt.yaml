@@ -21,6 +21,7 @@ template: |
   【完整性检查】
   
   - 包含完整的功能模块，所涉及的模型结构完整展示，没有缺失
+  - 清理未使用但被导入的 ES 模块
   
   【业务模型】
   
@@ -28,7 +29,7 @@ template: |
   
   【需求描述 - 系统设计】
   
-  {{appRequirements}}
+  {{sysRequirements}}
   
   【需求描述 - UI 设计】
   
@@ -38,7 +39,7 @@ inputs:
   - name: modelDefinitions
     type: String
     mandatory: true
-  - name: appRequirements
+  - name: sysRequirements
     type: String
     mandatory: true
   - name: uiRequirements

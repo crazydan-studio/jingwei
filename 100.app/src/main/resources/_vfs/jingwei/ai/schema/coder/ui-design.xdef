@@ -6,7 +6,7 @@
 
     <pages xdef:body-type="list" xdef:key-attr="name">
         <page name="!kebab-case" displayName="!string">
-            <body>component-code</body>
+            <body>page-component-code</body>
 
             <demo-data xdef:body-type="list" xdef:key-attr="name">
                 <api name="!kebab-case">json</api>

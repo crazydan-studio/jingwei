@@ -26,14 +26,14 @@ template: |
   
   【需求描述 - 系统设计】
   
-  {{appRequirements}}
+  {{sysRequirements}}
   
   【需求描述 - 模型设计】
   
   {{modelRequirements}}
 
 inputs:
-  - name: appRequirements
+  - name: sysRequirements
     type: String
     mandatory: true
   - name: modelRequirements

@@ -51,12 +51,12 @@ public class TestAiPrompt extends NopJunitAutoTestCase {
     public void test_app_main_design() {
         IPromptTemplate promptModel = loadPrompt("/jingwei/ai/prompts/coder/model-design.prompt.yaml");
         Map<String, Object> vars = new HashMap<>();
-        vars.put("appRequirements", inputText("app-requirements.md"));
+        vars.put("sysRequirements", inputText("app-requirements.md"));
         vars.put("modelRequirements", inputText("model-requirements.md"));
 
         IEvalScope scope = promptModel.prepareInputs(vars);
         String prompt = promptModel.generatePrompt(scope);
-        outputText("prompt-model-design.md", prompt);
+//        outputText("prompt-model-design.md", prompt);
 
         AiChatExchange response = new AiChatExchange();
         String content = inputText("response-model-design.md");
@@ -69,8 +69,8 @@ public class TestAiPrompt extends NopJunitAutoTestCase {
         // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         promptModel = loadPrompt("/jingwei/ai/prompts/coder/ui-design.prompt.yaml");
         vars = new HashMap<>();
+        vars.put("sysRequirements", inputText("app-requirements.md"));
         vars.put("modelDefinitions", inputText("response-model-design.md"));
-        vars.put("appRequirements", inputText("app-requirements.md"));
         vars.put("uiRequirements", inputText("ui-requirements.md"));
 
         scope = promptModel.prepareInputs(vars);

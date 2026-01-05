@@ -53,9 +53,11 @@
 
     <relations xdef:body-type="list" xdef:key-attr="name">
         <relation name="!snake-case"
-                  source="!child-entity-name" sourceProp="!child-entity-attr"
-                  target="!parent-entity-name"
-                  targetProp="parent-to-children-prop"
+                  source="!source-entity-name"
+                  sourceProp="!source-prop"
+                  sourcePropDisplayName="string"
+                  target="!target-entity-name"
+                  targetProp="target-to-sources-prop"
                   targetPropDisplayName="string"
         />
     </relations>

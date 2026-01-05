@@ -2,104 +2,111 @@
 <model-design>
     <dicts>
         <dict name="app-status" displayName="应用状态">
-            <description>应用的状态，包括开发中、已启用和已禁用</description>
+            <description>记录应用当前所处的业务状态。</description>
             <options>
                 <option value="010" code="DEVELOPING" displayName="开发中">
-                    <description>应用正在开发中，尚未激活任何版本</description>
+                    <description>应用正在开发中，尚未有已激活的版本。</description>
                 </option>
                 <option value="020" code="ENABLED" displayName="已启用">
-                    <description>应用已启用，用户可以正常使用</description>
+                    <description>应用已启用，用户可以正常使用该应用。</description>
                 </option>
                 <option value="030" code="DISABLED" displayName="已禁用">
-                    <description>应用已被禁用，用户只能编辑基本信息</description>
+                    <description>应用已被禁用，用户无法使用该应用，仅可编辑基本信息。</description>
                 </option>
             </options>
         </dict>
-        <dict name="app-version-status" displayName="版本状态">
-            <description>应用版本的状态，包括开发中和已发布</description>
+        <dict name="app-version-status" displayName="应用版本状态">
+            <description>记录应用版本的生命周期状态。</description>
             <options>
                 <option value="010" code="DEVELOPING" displayName="开发中">
-                    <description>版本正在开发中，可以修改和删除</description>
+                    <description>版本正在开发或修改中。</description>
                 </option>
                 <option value="020" code="PUBLISHED" displayName="已发布">
-                    <description>版本已发布，不可修改和删除，可以被激活</description>
+                    <description>版本已发布，可以作为应用的激活版本。</description>
                 </option>
             </options>
         </dict>
     </dicts>
     <entities>
-        <entity name="App" displayName="应用" db:estimatedRowCount="1000">
-            <description>个人数字资产应用，用户可以创建和管理自己的本地应用</description>
+        <entity name="App" displayName="应用">
+            <description>用于管理个人或家庭的本地轻量级数字资产应用。</description>
             <orm:unique-keys>
                 <key name="uk_code">code</key>
+                <key name="uk_dbTablePrefix">dbTablePrefix</key>
             </orm:unique-keys>
             <attrs>
-                <attr name="code" displayName="唯一标识" mandatory="true" stdDomain="uuidv7" insertable="true" updatable="false" queryable="true" sortable="true">
-                    <description>应用的唯一标识符，采用 UUIDv7 格式，系统自动生成，全局唯一。例如：018f1234-5678-9abc-def0-123456789abc</description>
+                <attr name="code" displayName="唯一标识" mandatory="true" insertable="true" updatable="false" published="true" queryable="true" sortable="true" stdDomain="uuidv7">
+                    <description>应用的唯一识别码，在新增时由系统自动生成，全局唯一。</description>
                 </attr>
-                <attr name="name" displayName="名字" mandatory="true" stdDomain="string" minLength="1" maxLength="200" insertable="true" updatable="true" queryable="true" sortable="true">
-                    <description>应用的名称，最长 200 个字符，不同应用可以重名</description>
+                <attr name="name" displayName="名字" mandatory="true" published="true" insertable="true" updatable="true" queryable="true" sortable="true" stdDomain="string" minLength="1" maxLength="200">
+                    <description>应用的名称，长度不超过 200 个字符，不同应用可以重名。</description>
                 </attr>
-                <attr name="icon" displayName="图标" mandatory="false" stdDomain="file" insertable="true" updatable="true" queryable="false" sortable="false" maxFileSize="2M" allowedFileTypes="image/jpeg,image/png,image/webp,image/svg+xml,image/x-icon">
-                    <description>应用的图标文件，支持 JPEG、PNG、WebP、SVG 和 ICO 格式，不支持 GIF 格式</description>
+                <attr name="icon" displayName="图标" mandatory="false" published="true" insertable="true" updatable="true" queryable="false" sortable="false" stdDomain="file" allowedFileTypes="image/jpeg,image/png,image/svg+xml,image/webp">
+                    <description>应用的图标文件，支持 JPG， PNG， SVG， WebP 格式，不支持 GIF 格式。文件标识长度为 64 个字符。</description>
                 </attr>
-                <attr name="status" displayName="状态" mandatory="true" stdDomain="string" dict="app-status" insertable="true" updatable="true" queryable="true" sortable="true" defaultValue="010">
-                    <description>应用的当前状态，初始为开发中。只有已启用状态的应用才能被用户使用</description>
+                <attr name="status" displayName="状态" mandatory="true" published="true" insertable="true" updatable="true" queryable="true" sortable="true" stdDomain="string" dict="app-status" defaultValue="010">
+                    <description>应用当前的状态，初始为“开发中”。应用在首次激活版本后会自动切换为“已启用”。</description>
                 </attr>
-                <attr name="description" displayName="说明" mandatory="false" stdDomain="markdown" insertable="true" updatable="true" queryable="true" sortable="false">
-                    <description>应用的详细说明，支持 Markdown 格式。可以描述应用的功能、用途等信息</description>
+                <attr name="description" displayName="说明" mandatory="false" published="true" insertable="true" updatable="true" queryable="true" sortable="false" stdDomain="markdown">
+                    <description>对应用的详细描述，支持 Markdown 格式。</description>
+                </attr>
+                <attr name="dbTablePrefix" displayName="数据库表前缀" mandatory="true" insertable="true" updatable="false" published="true" queryable="true" sortable="true" stdDomain="string">
+                    <description>该应用下所有业务模型在数据库中所使用的表前缀，在新增时由系统自动生成，全局唯一。</description>
                 </attr>
             </attrs>
         </entity>
-        <entity name="AppVersion" displayName="应用版本" db:estimatedRowCount="5000">
-            <description>应用的版本信息，包含版本的设计说明、模型定义和 UI 代码</description>
+        <entity name="AppVersion" displayName="应用版本">
+            <description>应用的具体版本信息，包含开发需求、生成的模型和 UI 代码等。</description>
             <orm:unique-keys>
-                <key name="uk_app_dev_code">appId,devCode</key>
+                <key name="uk_app_devCode">appId, devCode</key>
             </orm:unique-keys>
             <attrs>
-                <attr name="appId" displayName="所属应用" mandatory="true" stdDomain="string" insertable="true" updatable="false" queryable="true" sortable="true">
-                    <description>所属应用的主键 ID</description>
+                <attr name="appId" displayName="所属应用ID" mandatory="true" published="true" insertable="true" updatable="false" queryable="true" sortable="true" stdDomain="string">
+                    <description>当前版本所属的应用 ID。</description>
                 </attr>
-                <attr name="name" displayName="版本号" mandatory="false" stdDomain="string" insertable="true" updatable="true" queryable="true" sortable="true">
-                    <description>版本号，采用 x.y.z 三段格式，每段最多 3 位数字。例如：1.0.0 或 2.15.3</description>
+                <attr name="name" displayName="版本号" mandatory="false" published="true" insertable="true" updatable="true" queryable="true" sortable="true" stdDomain="string">
+                    <description>版本号，遵循 x.y.z 三段式命名规则，每段最多由 3 位数字组成，例如 1.0.0。</description>
                 </attr>
-                <attr name="devCode" displayName="开发代码" mandatory="true" stdDomain="string" insertable="true" updatable="false" queryable="true" sortable="true">
-                    <description>版本开发代码，系统自动生成，与所属应用组成复合唯一键</description>
+                <attr name="devCode" displayName="开发代码" mandatory="true" insertable="true" updatable="false" published="true" queryable="true" sortable="true" stdDomain="string">
+                    <description>版本在开发阶段的唯一代码，在新增时由系统自动生成，与所属应用 ID 共同保证唯一性。</description>
                 </attr>
-                <attr name="status" displayName="状态" mandatory="true" stdDomain="string" dict="app-version-status" insertable="true" updatable="true" queryable="true" sortable="true" defaultValue="010">
-                    <description>版本的状态，初始为开发中。只有已发布状态才能被激活</description>
+                <attr name="status" displayName="状态" mandatory="true" published="true" insertable="true" updatable="true" queryable="true" sortable="true" stdDomain="string" dict="app-version-status" defaultValue="010">
+                    <description>版本的状态，初始为“开发中”，发布后变为“已发布”。</description>
                 </attr>
-                <attr name="description" displayName="说明" mandatory="false" stdDomain="text" insertable="true" updatable="true" queryable="true" sortable="false">
-                    <description>版本说明，描述版本实现的功能、特色或变更情况</description>
+                <attr name="description" displayName="说明" mandatory="false" published="true" insertable="true" updatable="true" queryable="true" sortable="false" stdDomain="text">
+                    <description>版本发布说明，描述所实现的功能、特色或对衍生版本所做的变更。</description>
                 </attr>
-                <attr name="appRequirements" displayName="应用功能设计需求" mandatory="false" stdDomain="text" insertable="true" updatable="true" queryable="true" sortable="false">
-                    <description>应用整体的功能设计描述，提交给 AI 生成模型和代码</description>
+                <attr name="appRequirements" displayName="应用功能设计需求" mandatory="false" published="true" insertable="true" updatable="true" queryable="true" sortable="false" stdDomain="text">
+                    <description>提交给 AI 的，描述应用整体功能设计的文本需求。</description>
                 </attr>
-                <attr name="modelRequirements" displayName="业务模型设计需求" mandatory="false" stdDomain="text" insertable="true" updatable="true" queryable="true" sortable="false">
-                    <description>应用的业务模型结构和约束描述，提交给 AI 生成模型定义</description>
+                <attr name="modelRequirements" displayName="业务模型设计需求" mandatory="false" published="true" insertable="true" updatable="true" queryable="true" sortable="false" stdDomain="text">
+                    <description>提交给 AI 的，描述应用业务模型结构和约束的文本需求。</description>
                 </attr>
-                <attr name="uiRequirements" displayName="UI设计需求" mandatory="false" stdDomain="text" insertable="true" updatable="true" queryable="true" sortable="false">
-                    <description>应用的 UI 设计风格和要求描述，提交给 AI 生成 UI 代码</description>
+                <attr name="uiRequirements" displayName="UI 设计需求" mandatory="false" published="true" insertable="true" updatable="true" queryable="true" sortable="false" stdDomain="text">
+                    <description>提交给 AI 的，描述应用 UI 设计风格和要求的文本需求。</description>
                 </attr>
-                <attr name="modelDefs" displayName="业务模型定义" mandatory="false" stdDomain="xml" insertable="true" updatable="true" queryable="true" sortable="false">
-                    <description>AI 生成的业务模型结构定义，采用 XML 格式</description>
+                <attr name="modelDefs" displayName="业务模型定义" mandatory="false" published="true" insertable="true" updatable="true" queryable="false" sortable="false" stdDomain="xml">
+                    <description>由 AI 生成或用户编辑的应用业务模型结构定义，为 XML 格式。</description>
                 </attr>
-                <attr name="uiDefs" displayName="UI代码" mandatory="false" stdDomain="html" insertable="true" updatable="true" queryable="true" sortable="false">
-                    <description>AI 生成的 UI 代码，采用 HTML 格式</description>
+                <attr name="uiDefs" displayName="UI 代码" mandatory="false" published="true" insertable="true" updatable="true" queryable="false" sortable="false" stdDomain="xml">
+                    <description>由 AI 生成或用户编辑的应用 UI 代码，包含多个页面，为 XML 格式。</description>
                 </attr>
-                <attr name="aiModelVendor" displayName="AI模型供应商" mandatory="false" stdDomain="string" insertable="true" updatable="true" queryable="true" sortable="true">
-                    <description>使用的 AI 模型供应商标识，如 OpenAI、DeepSeek 等</description>
+                <attr name="aiProvider" displayName="使用的 AI 模型提供商" mandatory="false" published="true" insertable="true" updatable="true" queryable="true" sortable="true" stdDomain="string" maxLength="100">
+                    <description>生成当前版本内容所使用的 AI 服务提供商标识，例如“DeepSeek”。</description>
                 </attr>
-                <attr name="aiModelName" displayName="AI模型名" mandatory="false" stdDomain="string" insertable="true" updatable="true" queryable="true" sortable="true">
-                    <description>使用的 AI 模型标识，如 gpt-4、deepseek-coder 等</description>
+                <attr name="aiModel" displayName="使用的 AI 模型" mandatory="false" published="true" insertable="true" updatable="true" queryable="true" sortable="true" stdDomain="string" maxLength="100">
+                    <description>生成当前版本内容所使用的 AI 模型标识，例如“DeepSeek-V3”。</description>
                 </attr>
             </attrs>
         </entity>
     </entities>
     <relations>
-        <relation name="app_versions" source="AppVersion" sourceProp="appId" target="App" targetProp="versions" targetPropDisplayName="版本列表"/>
-        <relation name="app_active_version" source="App" sourceProp="activeVersion" target="AppVersion"/>
-        <relation name="version_derived_from" source="AppVersion" sourceProp="derivedFrom" target="AppVersion"/>
+        <relation name="app_version" source="AppVersion" sourceProp="appId" sourcePropDisplayName="所属应用"
+                  target="App" targetProp="versions" targetPropDisplayName="版本列表"/>
+        <relation name="app_active_version" source="App" sourceProp="activeVersion" sourcePropDisplayName="已激活版本"
+                  target="AppVersion"/>
+        <relation name="version_derived_from" source="AppVersion" sourceProp="derivedFrom" sourcePropDisplayName="衍生自"
+                  target="AppVersion"/>
     </relations>
 </model-design>
 ```
