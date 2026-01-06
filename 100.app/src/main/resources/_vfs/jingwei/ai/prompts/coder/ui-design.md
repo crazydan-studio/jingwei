@@ -17,10 +17,11 @@
 
 - **语言**：ES6 (ECMAScript 2015)
 - **数据响应式**：Vue 3
-- **图标库**：Lucide Vue Next，导入包名为 lucide-vue-next
-- **组件库**：Naive UI，导入包名为 naive-ui
+- **图标库**：Lucide Vue Next（导入包名为 lucide-vue-next）
+- **组件库**：Naive UI（导入包名为 naive-ui）
 - **样式库**：Tailwind CSS
-- **数据可视化**：Apache ECharts
+- **数据可视化**：Apache ECharts（导入报名为 echarts） + Vue ECharts（导入包名为 vue-echarts）
+- **代码高亮**：highlight.js（导入包名为 highlight.js）
 
 ## **三、数据类型与组件**
 
