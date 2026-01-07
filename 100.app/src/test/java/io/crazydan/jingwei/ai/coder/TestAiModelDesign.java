@@ -23,13 +23,19 @@ import java.util.Map;
 
 import io.crazydan.duzhou.framework.junit.NopJunitTestCase;
 import io.crazydan.jingwei.app.AppGenConfig;
+import io.nop.codegen.XCodeGenerator;
+import io.nop.core.lang.eval.IEvalScope;
 import io.nop.core.lang.xml.XNode;
 import io.nop.core.resource.IResource;
 import io.nop.core.resource.impl.InMemoryTextResource;
 import io.nop.orm.model.OrmModelConstants;
+import io.nop.xlang.api.XLang;
 import io.nop.xlang.xdsl.DslModelHelper;
 import org.junit.jupiter.api.Test;
 
+import static io.crazydan.jingwei.AppConstants.SCOPE_VAR_appGenConfig;
+import static io.crazydan.jingwei.AppConstants.SCOPE_VAR_codeGenModel;
+import static io.crazydan.jingwei.AppConstants.TEMPLATE_APP_MODULE_PATH;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -42,21 +48,48 @@ public class TestAiModelDesign extends NopJunitTestCase {
 
     @Test
     public void test_genOrmModel() {
-        AppGenConfig appGenConfig = new AppGenConfig();
-        appGenConfig.setDomain("app");
-        appGenConfig.setDbQuerySpace("user");
-        appGenConfig.setDbTablePrefix("tbl_3mk2yf_");
-
         String resourcePath = "test-01.ai-model-design.xml";
-        IResource resource = new InMemoryTextResource("/text/" + resourcePath, attachmentXmlText(resourcePath));
-        AiModelDesign modelDesign = new AiModelDesign(resource, appGenConfig);
-
-        Map<String, Object> vars = Map.of();
-
-        AiOrmModel ormModel = modelDesign.genOrmModel(vars);
+        AppGenConfig appGenConfig = createAppGenConfig();
+        AiOrmModel ormModel = genOrmModel(resourcePath, appGenConfig);
         assertNotNull(ormModel);
 
         XNode node = DslModelHelper.dslModelToXNode(OrmModelConstants.XDSL_SCHEMA_ORM, ormModel);
         assertEquals(attachmentXmlText("test-01-result.ai-model-design.xml"), node.xml());
+    }
+
+    @Test
+    public void get_genAppModule() {
+        String resourcePath = "test-01.ai-model-design.xml";
+        AppGenConfig appGenConfig = createAppGenConfig();
+        AiOrmModel ormModel = genOrmModel(resourcePath, appGenConfig);
+
+        XCodeGenerator gen = new XCodeGenerator(TEMPLATE_APP_MODULE_PATH, getTargetDir().getPath());
+        gen.forceOverride(true);
+
+        IEvalScope scope = XLang.newEvalScope();
+        scope.setLocalValue(SCOPE_VAR_appGenConfig, appGenConfig);
+        scope.setLocalValue(SCOPE_VAR_codeGenModel, ormModel);
+
+        gen.execute("", scope);
+    }
+
+    protected AiOrmModel genOrmModel(String path, AppGenConfig appGenConfig) {
+        IResource resource = new InMemoryTextResource("/text/" + path, attachmentXmlText(path));
+        AiModelDesign modelDesign = new AiModelDesign(resource, appGenConfig);
+
+        Map<String, Object> vars = Map.of();
+
+        return modelDesign.genOrmModel(vars);
+    }
+
+    protected AppGenConfig createAppGenConfig() {
+        AppGenConfig appGenConfig = new AppGenConfig();
+
+        appGenConfig.setCode("16834a2287e74be796b6493008e22ac4");
+        appGenConfig.setDomain("app");
+        appGenConfig.setDbQuerySpace("user");
+        appGenConfig.setDbTablePrefix("tbl_3mk2yf_");
+
+        return appGenConfig;
     }
 }

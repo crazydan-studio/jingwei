@@ -32,7 +32,10 @@ public interface AppConstants {
 
     String XLIB_TAG_ATTR_NODE = "node";
 
+    String TEMPLATE_APP_MODULE_PATH = "/jingwei/templates/module";
+
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     String SCOPE_VAR_appGenConfig = "appGenConfig";
+    String SCOPE_VAR_codeGenModel = "codeGenModel";
 }

@@ -1,5 +1,0 @@
-<gen:DefineLoop xpl:lib="/nop/codegen/xlib/gen.xlib">
-    <c:script><![CDATA[
-        builder.defineGlobalVar("appCode", appCode);
-    ]]></c:script>
-</gen:DefineLoop>

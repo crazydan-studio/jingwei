@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<c:include xmlns:c="c"
+           src="/nop/templates/orm/{appName}-dao/src/main/resources/_vfs/{moduleId}/orm/app.orm.xml.xgen"/>

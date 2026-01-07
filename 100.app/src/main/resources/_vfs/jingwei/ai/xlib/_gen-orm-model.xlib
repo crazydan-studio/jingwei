@@ -328,9 +328,14 @@
                     column.displayName = node.attrText('displayName');
                     column.defaultValue = node.attrText('defaultValue');
                     column.comment = $String.trimToNull(node.childContentText('description'));
+                    column.tagSet = [];
 
+                    const deprecated = node.attrBoolean('deprecated');
+                    if (deprecated) {
+                        column.tagSet.add('del');
+                    }
                     const virtual = node.attrBoolean('virtual');
-                    column.notGenCode = node.attrBoolean('deprecated', virtual);
+                    column.notGenCode = deprecated || virtual;
 
                     const dict = node.attrText('dict');
                     if (!$String.isBlank(dict)) {
@@ -374,10 +379,8 @@
                     column.code = 'col_' + column.name;
                     column.domain = 'uuid';
                     column.displayName = 'ID';
-                    column.primary = true;
-                    column.mandatory = true;
-                    column.insertable = true;
-                    column.updatable = false;
+                    column.primary = true; column.mandatory = true;
+                    column.insertable = true; column.updatable = false;
                     column.tagSet = ['seq'];
 
                     return column;
@@ -395,20 +398,25 @@
                     const col1 = new OrmColumnModel();
                     col1.name = 'createdBy'; col1.code = 'col_created_by';
                     col1.domain = 'userFlag'; col1.displayName = '创建者';
+                    col1.insertable = true; col1.updatable = false;
                     const col2 = new OrmColumnModel();
                     col2.name = 'updatedBy'; col2.code = 'col_updated_by';
                     col2.domain = 'userFlag'; col2.displayName = '更新者';
+                    col2.insertable = true; col2.updatable = true;
 
                     const col3 = new OrmColumnModel();
                     col3.name = 'createdAt'; col3.code = 'col_created_at';
                     col3.domain = 'datetime'; col3.displayName = '创建时间';
+                    col3.insertable = true; col3.updatable = false;
                     const col4 = new OrmColumnModel();
                     col4.name = 'updatedAt'; col4.code = 'col_updated_at';
                     col4.domain = 'datetime'; col4.displayName = '更新时间';
+                    col4.insertable = true; col4.updatable = true;
 
                     const col5 = new OrmColumnModel();
                     col5.name = 'deleted'; col5.code = 'col_deleted';
                     col5.domain = 'deleteFlag'; col5.displayName = '是否已删除';
+                    col5.insertable = true; col5.updatable = true;
 
                     return [col1, col2, col3, col4, col5];
                 ]]></c:script>
@@ -444,12 +452,21 @@
 
                     if (domain) {
                         column.domain = domain;
-                        column.tagSet = [];
                     } else {
                         column.stdDomain = stdDomain;
                         column.stdSqlType = stdSqlTypes[stdDomain];
                         column.precision = node.attrInt('precision', node.attrInt('maxLength'));
                         column.scale = node.attrInt('scale');
+                    }
+
+                    if (!node.attrBoolean('published')) {
+                        column.tagSet.add('not-pub');
+                    }
+                    if (!node.attrBoolean('queryable')) {
+                        column.tagSet.add('not-query');
+                    }
+                    if (!node.attrBoolean('sortable')) {
+                        column.tagSet.add('not-sort');
                     }
                 ]]></c:script>
             </source>

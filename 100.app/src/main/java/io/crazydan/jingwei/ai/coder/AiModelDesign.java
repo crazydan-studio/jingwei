@@ -52,7 +52,10 @@ public class AiModelDesign {
     }
 
     public AiOrmModel genOrmModel(Map<String, Object> vars) {
-        return callXlibTag(XLIB_TAG_ModelDesignToOrmModel, vars);
+        AiOrmModel ormModel = callXlibTag(XLIB_TAG_ModelDesignToOrmModel, vars);
+        ormModel.init();
+
+        return ormModel;
     }
 
     public XNode getDesignNode() {

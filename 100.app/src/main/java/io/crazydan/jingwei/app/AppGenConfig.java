@@ -29,7 +29,7 @@ import io.nop.commons.util.StringHelper;
  * @date 2026-01-06
  */
 public class AppGenConfig {
-    private String appCode;
+    private String code;
     /** 应用所处的业务域标识 */
     private String domain;
 
@@ -38,16 +38,20 @@ public class AppGenConfig {
     /** 数据库查询空间，用于区分用户数据空间和开发数据空间，不能为 {@code null} 或空白 */
     private String dbQuerySpace;
 
+    public static String genAppCode() {
+        return StringHelper.generateUUID();
+    }
+
     public static String genDbTablePrefix() {
         return "tbl_" + StringHelper.randomString(6).toLowerCase(Locale.ROOT) + '_';
     }
 
-    public String getAppCode() {
-        return this.appCode;
+    public String getCode() {
+        return this.code;
     }
 
-    public void setAppCode(String appCode) {
-        this.appCode = appCode;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getDomain() {
