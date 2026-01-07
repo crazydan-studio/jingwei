@@ -17,13 +17,12 @@
  * If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
  */
 
-package io.crazydan.jingwei.ai.prompt;
+package io.crazydan.jingwei.ai.coder;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import io.crazydan.duzhou.framework.junit.NopJunitAutoTestCase;
-import io.nop.ai.coder.orm.AiOrmModel;
 import io.nop.ai.core.api.chat.AiChatOptions;
 import io.nop.ai.core.api.messages.AiChatExchange;
 import io.nop.ai.core.command.AiCommand;
@@ -107,8 +106,8 @@ public class TestAiPrompt extends NopJunitAutoTestCase {
 
         command.promptTemplate(promptTemplate);
 
-        XNode node = ((AiOrmModel) command.execute(vars, null).getOutput("RESULT")).getOrmNodeForAi();
-        node.dump();
+//        XNode node = ((AiOrmModel) command.execute(vars, null).getOutput("RESULT")).getOrmNodeForAi();
+//        node.dump();
     }
 
     protected IPromptTemplate loadPrompt(String promptPath) {

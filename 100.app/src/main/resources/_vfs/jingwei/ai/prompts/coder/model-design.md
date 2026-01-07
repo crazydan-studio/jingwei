@@ -29,14 +29,14 @@
 - 状态类属性，如 state、status 等，需要定义为字典
 - 有限枚举值属性（≤20 个固定选项），比如支付方式等需要定义为字典
 - 此类属性统一采用 string 类型
-- 字典必须以**业务模型-用途**形式命名，如 app-version-status，
-  若字典为通用的，则其名字以**业务域-用途**形式命名，如 system-data-type
+- 字典必须以**业务域-用途**形式命名，如 card-status
 - 字典项的 value 采用 3 位数字，比如 010
 - boolean 类型不需要设置字典
 
 ### **3. 属性类型**
 
 - std-domain 可选值：
+  - uuid
   - file: 文件类型
   - fileList: 文件列表类型
   - string: 字符串
@@ -45,13 +45,14 @@
   - double
   - float
   - boolean
+  - date
+  - datetime
   - url
   - text: 纯文本
   - json
   - xml
   - html
   - markdown
-  - uuidv7
 - file-size: 文件大小，支持纯数字或带单位的数字，如 1024、2K、1.2G 等，不带单位的数字表示字节数
 
 ### **4. 内置标签函数**

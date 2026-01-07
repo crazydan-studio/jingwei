@@ -13,4 +13,9 @@
             </demo-data>
         </page>
     </pages>
+
+    <components xdef:body-type="list" xdef:key-attr="name">
+        <component name="!camel-case">
+        </component>
+    </components>
 </ui-design>

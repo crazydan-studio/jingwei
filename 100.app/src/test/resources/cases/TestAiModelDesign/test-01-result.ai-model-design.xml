@@ -1,0 +1,107 @@
+<orm ext:registerShortName="true" ext:allowIdAsColName="true" x:schema="/nop/schema/orm/orm.xdef"
+     xmlns:x="/nop/schema/xdsl.xdef">
+    <dicts>
+        <dict label="应用状态" name="app/app-status" valueType="string">
+            <description>记录应用当前所处的业务状态。</description>
+            <option code="DEVELOPING" description="应用正在开发中，尚未有已激活的版本。" label="开发中" value="010"/>
+            <option code="ENABLED" description="应用已启用，用户可以正常使用该应用。" label="已启用" value="020"/>
+            <option code="DISABLED" description="应用已被禁用，用户无法使用该应用，仅可编辑基本信息。" label="已禁用" value="030"/>
+        </dict>
+        <dict label="应用版本状态" name="app/app-version-status" valueType="string">
+            <description>记录应用版本的生命周期状态。</description>
+            <option code="DEVELOPING" description="版本正在开发或修改中。" label="开发中" value="010"/>
+            <option code="PUBLISHED" description="版本已发布，可以作为应用的激活版本。" label="已发布" value="020"/>
+        </dict>
+    </dicts>
+    <domains>
+        <domain name="userFlag" precision="50" stdSqlType="VARCHAR"/>
+        <domain name="deleteFlag" stdDomain="boolFlag" stdSqlType="BOOLEAN"/>
+        <domain name="uuid" precision="36" stdSqlType="CHAR"/>
+        <domain name="datetime" stdSqlType="BIGINT"/>
+        <domain name="file" precision="64" stdSqlType="CHAR"/>
+        <domain name="url" precision="1024" stdSqlType="VARCHAR"/>
+        <domain name="json" stdSqlType="JSON"/>
+        <domain name="text" stdSqlType="CLOB"/>
+    </domains>
+    <entities>
+        <entity createTimeProp="createdAt" createrProp="createdBy" deleteFlagProp="deleted" displayName="应用" name="App"
+                querySpace="user" registerShortName="true" tableName="tbl_3mk2yf_app" tagSet=""
+                updateTimeProp="updatedAt" updaterProp="updatedBy" useLogicalDelete="true">
+            <columns>
+                <column code="col_id" displayName="ID" domain="uuid" mandatory="true" name="id" primary="true"
+                        propId="1" tagSet="seq" updatable="false"/>
+                <column code="col_code" comment="应用的唯一识别码，在新增时由系统自动生成，全局唯一。" displayName="唯一标识" domain="uuid"
+                        mandatory="true" name="code" tagSet="" updatable="false"/>
+                <column code="col_name" comment="应用的名称，长度不超过 200 个字符，不同应用可以重名。" displayName="名字" mandatory="true"
+                        name="name" precision="200" stdDomain="string" stdSqlType="VARCHAR" meta:minLength="1"
+                        meta:maxLength="200"/>
+                <column code="col_icon"
+                        comment="应用的图标文件，支持 JPG， PNG， SVG， WebP 格式，不支持 GIF 格式。文件标识长度为 64
+                        个字符。"
+                        displayName="图标" domain="file" name="icon" tagSet=""
+                        meta:allowedFileTypes="image/jpeg,image/png,image/svg+xml,image/webp"/>
+                <column code="col_status" comment="应用当前的状态，初始为“开发中”。应用在首次激活版本后会自动切换为“已启用”。" defaultValue="010"
+                        displayName="状态" mandatory="true" name="status" stdDomain="string" stdSqlType="VARCHAR"
+                        ext:dict="app/app-status"/>
+                <column code="col_description" comment="对应用的详细描述，支持 Markdown 格式。" displayName="说明" domain="text"
+                        name="description" tagSet=""/>
+                <column code="col_db_table_prefix" comment="该应用下所有业务模型在数据库中所使用的表前缀，在新增时由系统自动生成，全局唯一。"
+                        displayName="数据库表前缀" mandatory="true" name="dbTablePrefix" stdDomain="string"
+                        stdSqlType="VARCHAR" updatable="false"/>
+                <column code="col_created_by" displayName="创建者" domain="userFlag" name="createdBy" propId="500"/>
+                <column code="col_updated_by" displayName="更新者" domain="userFlag" name="updatedBy" propId="501"/>
+                <column code="col_created_at" displayName="创建时间" domain="datetime" name="createdAt" propId="502"/>
+                <column code="col_updated_at" displayName="更新时间" domain="datetime" name="updatedAt" propId="503"/>
+                <column code="col_deleted" displayName="是否已删除" domain="deleteFlag" name="deleted" propId="504"/>
+            </columns>
+            <comment>用于管理个人或家庭的本地轻量级数字资产应用。</comment>
+            <unique-keys>
+                <unique-key columns="code" constraint="uk_code" name="uk_code"/>
+                <unique-key columns="dbTablePrefix" constraint="uk_dbTablePrefix" name="uk_dbTablePrefix"/>
+            </unique-keys>
+        </entity>
+        <entity createTimeProp="createdAt" createrProp="createdBy" deleteFlagProp="deleted" displayName="应用版本"
+                name="AppVersion" querySpace="user" registerShortName="true" tableName="tbl_3mk2yf_app_version"
+                tagSet="" updateTimeProp="updatedAt" updaterProp="updatedBy" useLogicalDelete="true">
+            <columns>
+                <column code="col_id" displayName="ID" domain="uuid" mandatory="true" name="id" primary="true"
+                        propId="1" tagSet="seq" updatable="false"/>
+                <column code="col_app_id" comment="当前版本所属的应用 ID。" displayName="所属应用ID" mandatory="true" name="appId"
+                        stdDomain="string" stdSqlType="VARCHAR" updatable="false"/>
+                <column code="col_name" comment="版本号，遵循 x.y.z 三段式命名规则，每段最多由 3 位数字组成，例如 1.0.0。" displayName="版本号"
+                        name="name" stdDomain="string" stdSqlType="VARCHAR"/>
+                <column code="col_dev_code" comment="版本在开发阶段的唯一代码，在新增时由系统自动生成，与所属应用 ID 共同保证唯一性。" displayName="开发代码"
+                        mandatory="true" name="devCode" stdDomain="string" stdSqlType="VARCHAR" updatable="false"/>
+                <column code="col_status" comment="版本的状态，初始为“开发中”，发布后变为“已发布”。" defaultValue="010" displayName="状态"
+                        mandatory="true" name="status" stdDomain="string" stdSqlType="VARCHAR"
+                        ext:dict="app/app-version-status"/>
+                <column code="col_description" comment="版本发布说明，描述所实现的功能、特色或对衍生版本所做的变更。" displayName="说明" domain="text"
+                        name="description" tagSet=""/>
+                <column code="col_app_requirements" comment="提交给 AI 的，描述应用整体功能设计的文本需求。" displayName="应用功能设计需求"
+                        domain="text" name="appRequirements" tagSet=""/>
+                <column code="col_model_requirements" comment="提交给 AI 的，描述应用业务模型结构和约束的文本需求。" displayName="业务模型设计需求"
+                        domain="text" name="modelRequirements" tagSet=""/>
+                <column code="col_ui_requirements" comment="提交给 AI 的，描述应用 UI 设计风格和要求的文本需求。" displayName="UI 设计需求"
+                        domain="text" name="uiRequirements" tagSet=""/>
+                <column code="col_model_defs" comment="由 AI 生成或用户编辑的应用业务模型结构定义，为 XML 格式。" displayName="业务模型定义"
+                        domain="text" name="modelDefs" tagSet=""/>
+                <column code="col_ui_defs" comment="由 AI 生成或用户编辑的应用 UI 代码，包含多个页面，为 XML 格式。" displayName="UI 代码"
+                        domain="text" name="uiDefs" tagSet=""/>
+                <column code="col_ai_provider" comment="生成当前版本内容所使用的 AI 服务提供商标识，例如“DeepSeek”。"
+                        displayName="使用的 AI 模型提供商" name="aiProvider" precision="100" stdDomain="string"
+                        stdSqlType="VARCHAR" meta:maxLength="100"/>
+                <column code="col_ai_model" comment="生成当前版本内容所使用的 AI 模型标识，例如“DeepSeek-V3”。" displayName="使用的 AI 模型"
+                        name="aiModel" precision="100" stdDomain="string" stdSqlType="VARCHAR" meta:maxLength="100"/>
+                <column code="col_created_by" displayName="创建者" domain="userFlag" name="createdBy" propId="500"/>
+                <column code="col_updated_by" displayName="更新者" domain="userFlag" name="updatedBy" propId="501"/>
+                <column code="col_created_at" displayName="创建时间" domain="datetime" name="createdAt" propId="502"/>
+                <column code="col_updated_at" displayName="更新时间" domain="datetime" name="updatedAt" propId="503"/>
+                <column code="col_deleted" displayName="是否已删除" domain="deleteFlag" name="deleted" propId="504"/>
+            </columns>
+            <comment>应用的具体版本信息，包含开发需求、生成的模型和 UI 代码等。</comment>
+            <unique-keys>
+                <unique-key columns="appId,devCode" constraint="uk_app_devCode" name="uk_app_devCode"/>
+            </unique-keys>
+        </entity>
+    </entities>
+</orm>

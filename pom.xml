@@ -19,8 +19,9 @@
     </parent>
 
     <modules>
-        <module>100.app</module>
+        <module>080.starter</module>
 
+        <module>100.app</module>
         <module>150.codegen</module>
         <module>600.store</module>
 

@@ -18,7 +18,9 @@
     </dicts>
 
     <entities xdef:body-type="list" xdef:key-attr="name">
-        <entity name="!pascal-case" displayName="string">
+        <entity name="!pascal-case" displayName="string"
+                deprecated="boolean" db:estimatedRowCount="int"
+        >
             <description>string</description>
 
             <orm:unique-keys xdef:body-type="list" xdef:key-attr="name">
@@ -27,12 +29,12 @@
 
             <attrs xdef:body-type="list" xdef:key-attr="name">
                 <attr name="!camel-case" displayName="string"
-                      mandatory="!boolean=false"
+                      propId="!int" mandatory="!boolean=false"
                       virtual="!boolean=false" published="!boolean=true"
                       insertable="!boolean=false" updatable="!boolean=false"
                       queryable="!boolean=false" sortable="!boolean=false"
                       maskPattern="string" datePattern="string"
-                      db:estimatedRowCount="int"
+                      deprecated="boolean"
 
                       dict="dict-name"
                       stdDomain="!std-domain"
@@ -61,4 +63,10 @@
                   targetPropDisplayName="string"
         />
     </relations>
+
+    <services xdef:body-type="list" xdef:key-attr="name">
+        <service name="!entity-name" displayName="string">
+            <description>string</description>
+        </service>
+    </services>
 </model-design>

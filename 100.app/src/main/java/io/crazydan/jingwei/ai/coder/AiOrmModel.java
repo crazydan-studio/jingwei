@@ -17,18 +17,15 @@
  * If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
  */
 
-package io.crazydan.jingwei.ai;
+package io.crazydan.jingwei.ai.coder;
 
-import io.nop.core.lang.xml.XNode;
+import io.nop.orm.model.OrmModel;
 
 /**
  *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
- * @date 2026-01-03
+ * @date 2026-01-06
  */
-public class AiErdModelNormalizer {
+public class AiOrmModel extends OrmModel {
 
-    public static XNode normalize(XNode node) {
-        return node;
-    }
 }
