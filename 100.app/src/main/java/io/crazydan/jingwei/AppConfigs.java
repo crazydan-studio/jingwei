@@ -19,23 +19,23 @@
 
 package io.crazydan.jingwei;
 
+import io.nop.api.core.annotations.core.Description;
+import io.nop.api.core.annotations.core.Locale;
+import io.nop.api.core.config.IConfigReference;
+import io.nop.api.core.util.SourceLocation;
+
+import static io.nop.api.core.config.AppConfig.varRef;
+
 /**
  *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
- * @date 2026-01-06
+ * @date 2026-01-07
  */
-public interface AppConstants {
-    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    String XLIB_AI_APP_GEN_PATH = "/jingwei/ai/xlib/app-gen.xlib";
+@Locale("zh-CN")
+public interface AppConfigs {
+    SourceLocation s_loc = SourceLocation.fromClass(AppConfigs.class);
 
-    String XLIB_TAG_ModelDesignToOrmModel = "ModelDesignToOrmModel";
-
-    String XLIB_TAG_ATTR_NODE = "node";
-
-    String TEMPLATE_APP_MODULE_PATH = "/jingwei/templates/app-module";
-
-    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-    String SCOPE_VAR_appGenConfig = "appGenConfig";
-    String SCOPE_VAR_codeGenModel = "codeGenModel";
+    @Description("访问令牌的超时时间，单位为秒")
+    IConfigReference<Integer> CFG_AUTH_ACCESS_TOKEN_EXPIRE_SECONDS = //
+            varRef(s_loc, "nop.auth.access-token-expire-seconds", Integer.class, 30 * 60);
 }

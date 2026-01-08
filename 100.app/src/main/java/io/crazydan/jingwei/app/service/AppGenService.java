@@ -17,25 +17,11 @@
  * If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
  */
 
-package io.crazydan.jingwei;
+package io.crazydan.jingwei.app.service;
 
 /**
  *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
- * @date 2026-01-06
+ * @date 2026-01-08
  */
-public interface AppConstants {
-    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    String XLIB_AI_APP_GEN_PATH = "/jingwei/ai/xlib/app-gen.xlib";
-
-    String XLIB_TAG_ModelDesignToOrmModel = "ModelDesignToOrmModel";
-
-    String XLIB_TAG_ATTR_NODE = "node";
-
-    String TEMPLATE_APP_MODULE_PATH = "/jingwei/templates/app-module";
-
-    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-    String SCOPE_VAR_appGenConfig = "appGenConfig";
-    String SCOPE_VAR_codeGenModel = "codeGenModel";
-}
+public class AppGenService {}
