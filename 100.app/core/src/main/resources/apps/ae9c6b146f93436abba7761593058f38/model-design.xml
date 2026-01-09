@@ -18,7 +18,7 @@
   ~ If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
   -->
 
-<ui-design xmlns:x="/nop/schema/xdsl.xdef"
-           x:schema="/jingwei/ai/schema/coder/ui-design.xdef"
+<model-design xmlns:x="/nop/schema/xdsl.xdef"
+              x:schema="/jingwei/app/schema/coder/model-design.xdef"
 >
-</ui-design>
+</model-design>

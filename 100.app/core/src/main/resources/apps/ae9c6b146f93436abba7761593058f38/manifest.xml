@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+
 <!--
   - 精卫（JingWei） - 衔木石填沧海，筑屏障护安全
-  - Copyright (C) 2025 Crazydan Studio <https://studio.crazydan.org>
+  - Copyright (C) 2026 Crazydan Studio <https://studio.crazydan.org>
   -
   - This program is free software: you can redistribute it and/or modify
   - it under the terms of the GNU Lesser General Public License as published by
@@ -18,16 +19,24 @@
   - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
   -->
 
-<c:script xmlns:c="c"><![CDATA[
-    const xdefs = [
-        '/jingwei/app/schema/manifest/package.xdef',
-        '/jingwei/app/schema/manifest/post-installation.xdef',
-    ];
+<manifest xmlns:x="/nop/schema/xdsl.xdef"
+          x:schema="/jingwei/app/schema/manifest/package.xdef"
+          name="精卫应用" code="ae9c6b146f93436abba7761593058f38"
+          version="0.1.0" icon="icon.svg"
+>
 
-    xdefs.forEach((xdef) => {
-        codeGenerator
-            // 设置生成代码的存放位置，其相对于当前 Maven 工程的根目录
-            .withTargetDir('../core')
-            .renderModel(xdef, '/nop/templates/xdsl', '/', $scope);
-    });
-]]></c:script>
+    <description>精卫应用设计与管理</description>
+
+    <author name="Crazydan Studio" url="https://studio.crazydan.org"/>
+
+    <designRequirements>
+        <app path="app-requirements.md"/>
+        <model path="model-requirements.md"/>
+        <ui path="ui-requirements.md"/>
+    </designRequirements>
+
+    <coderResources>
+        <model path="model-design.xml"/>
+        <ui path="ui-design.xml"/>
+    </coderResources>
+</manifest>

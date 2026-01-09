@@ -48,7 +48,7 @@ inputs:
 
 outputs:
   - name: RESULT
-    xdefPath: /jingwei/ai/schema/coder/ui-design.xdef
+    xdefPath: /jingwei/app/schema/coder/ui-design.xdef
     format: xml
     outputBuilder: |
       import io.crazydan.jingwei.ai.AiErdModelNormalizer;

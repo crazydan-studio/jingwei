@@ -19,35 +19,45 @@
   - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
   -->
 
-<!-- [应用安装清单]
-> 记录应用安装后的资源清单。
+<!-- [应用打包清单]
+> 记录应用安装包的资源清单，用于提供详细的应用安装包信息。
 >
 -->
 <manifest xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="/nop/schema/xdef.xdef"
           x:schema="/nop/schema/xdef.xdef"
           xdef:bean-package="io.crazydan.jingwei.app.model.manifest"
-          xdef:name="AppInstallationManifest"
-          code="!string" version="!string"
-          installedAt="!datetime"
+          xdef:name="AppPackage_Manifest"
+          name="!string" code="!string" version="!string"
+          icon="file-path"
 >
 
-    <!-- [模块资源]
-    -->
-    <module-resources xdef:body-type="list" xdef:key-attr="path">
-        <resource xdef:ref="AppInstallationResource"
-                  path="!string"
-        />
-    </module-resources>
+    <description>!string</description>
 
-    <!-- [UI 资源]
+    <!-- [应用作者信息]
+    > 作者可以是个人，也可以是组织。
     -->
-    <ui-resources xdef:body-type="list" xdef:key-attr="path">
-        <resource xdef:ref="AppInstallationResource"
-                  path="!string"
-        />
-    </ui-resources>
+    <author xdef:name="AppPackage_Author"
+            name="!string" email="email" url="url"
+    />
 
-    <xdef:define xdef:name="AppInstallationResource"
-                 path="!string"
+    <!-- [应用设计需求]
+    > 应用功能、模型、UI 设计的需求文档。
+    -->
+    <designRequirements xdef:name="AppPackage_DesignRequirements">
+        <app xdef:ref="AppPackage_Resource"/>
+        <model xdef:ref="AppPackage_Resource"/>
+        <ui xdef:ref="AppPackage_Resource"/>
+    </designRequirements>
+
+    <!-- [应用编码资源]
+    > 用于生成应用代码的 DSL 资源。
+    -->
+    <coderResources xdef:name="AppPackage_CoderResources">
+        <model xdef:ref="AppPackage_Resource"/>
+        <ui xdef:ref="AppPackage_Resource"/>
+    </coderResources>
+
+    <xdef:define xdef:name="AppPackage_Resource"
+                 path="!file-path"
     />
 </manifest>

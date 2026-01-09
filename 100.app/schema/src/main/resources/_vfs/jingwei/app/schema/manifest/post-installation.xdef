@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--
+  - 精卫（JingWei） - 衔木石填沧海，筑屏障护安全
+  - Copyright (C) 2026 Crazydan Studio <https://studio.crazydan.org>
+  -
+  - This program is free software: you can redistribute it and/or modify
+  - it under the terms of the GNU Lesser General Public License as published by
+  - the Free Software Foundation, either version 3 of the License, or
+  - (at your option) any later version.
+  -
+  - This program is distributed in the hope that it will be useful,
+  - but WITHOUT ANY WARRANTY; without even the implied warranty of
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  - GNU Lesser General Public License for more details.
+  -
+  - You should have received a copy of the GNU Lesser General Public License
+  - along with this program.
+  - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
+  -->
+
+<!-- [应用安装后清单]
+> 记录应用安装后的资源清单，用于校验已安装应用的完整性。
+>
+-->
+<manifest xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="/nop/schema/xdef.xdef"
+          x:schema="/nop/schema/xdef.xdef"
+          xdef:bean-package="io.crazydan.jingwei.app.model.manifest"
+          xdef:name="AppPostInstallation_Manifest"
+          code="!string" version="!string"
+          installedAt="!datetime"
+>
+
+    <!-- [模块资源]
+    -->
+    <moduleResources xdef:name="AppPostInstallation_ModuleResource"
+                     xdef:body-type="list" xdef:key-attr="path"
+                     xdef:bean-body-prop="body"
+    >
+        <resource xdef:ref="AppPostInstallation_Resource"
+                  path="!file-path"
+        />
+    </moduleResources>
+
+    <!-- [UI 资源]
+    -->
+    <uiResources xdef:name="AppPostInstallation_UiResources"
+                 xdef:body-type="list" xdef:key-attr="path"
+                 xdef:bean-body-prop="body"
+    >
+        <resource xdef:ref="AppPostInstallation_Resource"
+                  path="!file-path"
+        />
+    </uiResources>
+
+    <xdef:define xdef:name="AppPostInstallation_Resource"
+                 path="!file-path"
+    />
+</manifest>
