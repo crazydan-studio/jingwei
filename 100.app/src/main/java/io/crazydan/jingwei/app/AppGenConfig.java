@@ -24,6 +24,7 @@ import java.util.Locale;
 import io.nop.commons.util.StringHelper;
 
 /**
+ * 应用构建配置
  *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
  * @date 2026-01-06

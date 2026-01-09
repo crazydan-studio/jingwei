@@ -1,0 +1,66 @@
+/*
+ * 精卫（JingWei） - 衔木石填沧海，筑屏障护安全
+ * Copyright (C) 2026 Crazydan Studio <https://studio.crazydan.org>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.
+ * If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
+ */
+
+package io.crazydan.jingwei.app.initialize;
+
+import java.io.File;
+
+import io.nop.api.core.config.AppConfig;
+import io.nop.api.core.config.IConfigReference;
+import io.nop.api.core.exceptions.NopException;
+import io.nop.commons.lang.impl.Cancellable;
+import io.nop.commons.util.FileHelper;
+import io.nop.commons.util.StringHelper;
+import io.nop.core.initialize.ICoreInitializer;
+
+import static io.crazydan.jingwei.AppConfigs.CFG_APP_INSTALL_DIR;
+import static io.crazydan.jingwei.AppErrors.ERR_CFG_VALUE_NOT_SPECIFIED;
+import static io.nop.ai.core.AiCoreErrors.ARG_CONFIG_VAR;
+
+/**
+ * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
+ * @date 2026-01-06
+ */
+public class AppCoreInitializer implements ICoreInitializer {
+    private final Cancellable cleanup = new Cancellable();
+
+    @Override
+    public void initialize() {
+        checkDirConfig(CFG_APP_INSTALL_DIR);
+    }
+
+    @Override
+    public void destroy() {
+        this.cleanup.cancel();
+    }
+
+    protected void checkDirConfig(IConfigReference<String> config) {
+        String path = config.get();
+        if (StringHelper.isBlank(path)) {
+            throw new NopException(ERR_CFG_VALUE_NOT_SPECIFIED).source(config) //
+                                                               .param(ARG_CONFIG_VAR, config.getName());
+        }
+
+        String pwd = FileHelper.currentDir().getAbsolutePath();
+        String dir = StringHelper.absolutePath(pwd, path);
+        FileHelper.assureParent(new File(dir + "/any"));
+
+        AppConfig.getConfigProvider().updateConfigValue(config, dir);
+    }
+}

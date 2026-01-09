@@ -19,33 +19,19 @@
 
 package io.crazydan.jingwei;
 
+import io.nop.api.core.exceptions.ErrorCode;
+
+import static io.nop.ai.core.AiCoreErrors.ARG_CONFIG_VAR;
+import static io.nop.api.core.exceptions.ErrorCode.define;
+
 /**
- *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
- * @date 2026-01-06
+ * @date 2026-01-08
  */
-public interface AppConstants {
-    String APP_VFS_NAMESPACE = "xapp";
+public interface AppErrors {
 
-    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    String XLIB_AI_APP_GEN_PATH = "/jingwei/ai/xlib/app-module.xlib";
-
-    String XLIB_TAG_ModelDesignToOrmModel = "ModelDesignToOrmModel";
-
-    String XLIB_TAG_ATTR_NODE = "node";
-
-    String TEMPLATE_APP_MODULE_PATH = "/jingwei/templates/app-module";
-
-    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-    String SCOPE_VAR_codeGenModel = "codeGenModel";
-    String SCOPE_VAR_appGenConfig = "appGenConfig";
-
-    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-    /** 门户应用的缺省应用标识 */
-    String APP_PORTAL_DEFAULT_CODE = "ae9c6b146f93436abba7761593058f38";
-
-    String APP_AI_MODEL_DESIGN_NAME = "app.ai-model-design.xml";
-    String APP_AI_UI_DESIGN_NAME = "app.ai-ui-design.xml";
+    ErrorCode ERR_CFG_VALUE_NOT_SPECIFIED = //
+            define("jingwei.err.cfg.value-not-specified",
+                   "配置项 {" + ARG_CONFIG_VAR + "} 未指定有效值",
+                   ARG_CONFIG_VAR);
 }

@@ -82,7 +82,7 @@
                     d2.stdSqlType = StdSqlType.BOOLEAN;
 
                     const d3 = new OrmDomainModel();
-                    d3.name = 'uuid'; d3.precision = 36;
+                    d3.name = 'uuid'; d3.precision = 32;
                     d3.stdSqlType = StdSqlType.CHAR;
                     const d4 = new OrmDomainModel();
                     d4.name = 'datetime';
@@ -366,6 +366,7 @@
                 <c:script>return column;</c:script>
             </source>
         </_GenOrmModelEntityColumn>
+        <!-- TODO 放在补充阶段构造 -->
         <_GenOrmModelEntityColumnId>
             <attr name="appGenConfig" implicit="true"/>
 
@@ -387,6 +388,7 @@
                 ]]></c:script>
             </source>
         </_GenOrmModelEntityColumnId>
+        <!-- TODO 放在补充阶段构造 -->
         <_GenOrmModelEntityColumnAudits>
             <attr name="appGenConfig" implicit="true"/>
 
@@ -459,6 +461,9 @@
                         column.scale = node.attrInt('scale');
                     }
 
+                    if (node.attrBoolean('internal')) {
+                        column['ui:show'] = 'X';
+                    }
                     if (!node.attrBoolean('published')) {
                         column.tagSet.add('not-pub');
                     }

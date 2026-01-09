@@ -19,11 +19,31 @@
   - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
   -->
 
-<lib xmlns:x="/nop/schema/xdsl.xdef"
-     x:schema="/nop/schema/xlib.xdef"
-     x:extends="_gen-orm-model.xlib,_gen-ui-model.xlib"
+<!-- [应用安装清单]
+> 记录应用安装后的资源清单。
+>
+-->
+<manifest xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="/nop/schema/xdef.xdef"
+          x:schema="/nop/schema/xdef.xdef"
+          xdef:bean-package="io.crazydan.jingwei.app.model.manifest"
+          xdef:name="AppInstallationManifest"
+          code="!string" version="!string"
+          installedAt="!datetime"
 >
 
-    <tags>
-    </tags>
-</lib>
+    <!-- [模块资源]
+    -->
+    <module-resources xdef:body-type="list" xdef:key-attr="path">
+        <resource xdef:name="AppInstallationResource"
+                  path="!string"
+        />
+    </module-resources>
+
+    <!-- [UI 资源]
+    -->
+    <ui-resources xdef:body-type="list" xdef:key-attr="path">
+        <resource xdef:name="AppInstallationResource"
+                  path="!string"
+        />
+    </ui-resources>
+</manifest>

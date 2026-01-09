@@ -23,19 +23,15 @@ import java.util.Map;
 
 import io.crazydan.duzhou.framework.junit.NopJunitTestCase;
 import io.crazydan.jingwei.app.AppGenConfig;
-import io.nop.codegen.XCodeGenerator;
-import io.nop.core.lang.eval.IEvalScope;
+import io.crazydan.jingwei.app.AppGenerator;
+import io.nop.api.core.annotations.autotest.NopTestConfig;
 import io.nop.core.lang.xml.XNode;
 import io.nop.core.resource.IResource;
 import io.nop.core.resource.impl.InMemoryTextResource;
 import io.nop.orm.model.OrmModelConstants;
-import io.nop.xlang.api.XLang;
 import io.nop.xlang.xdsl.DslModelHelper;
 import org.junit.jupiter.api.Test;
 
-import static io.crazydan.jingwei.AppConstants.SCOPE_VAR_appGenConfig;
-import static io.crazydan.jingwei.AppConstants.SCOPE_VAR_codeGenModel;
-import static io.crazydan.jingwei.AppConstants.TEMPLATE_APP_MODULE_PATH;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -44,13 +40,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
  * @date 2026-01-06
  */
+@NopTestConfig(testConfigFile = "classpath:/application.yaml", localDb = true)
 public class TestAiModelDesign extends NopJunitTestCase {
 
     @Test
     public void test_genOrmModel() {
         String resourcePath = "test-01.ai-model-design.xml";
-        AppGenConfig appGenConfig = createAppGenConfig();
-        AiOrmModel ormModel = genOrmModel(resourcePath, appGenConfig);
+        AppGenConfig genConfig = createAppGenConfig();
+        AiOrmModel ormModel = genOrmModel(resourcePath, genConfig);
         assertNotNull(ormModel);
 
         XNode node = DslModelHelper.dslModelToXNode(OrmModelConstants.XDSL_SCHEMA_ORM, ormModel);
@@ -60,21 +57,19 @@ public class TestAiModelDesign extends NopJunitTestCase {
     @Test
     public void get_genAppModule() {
         String resourcePath = "test-01.ai-model-design.xml";
-        AppGenConfig appGenConfig = createAppGenConfig();
-        AiOrmModel ormModel = genOrmModel(resourcePath, appGenConfig);
 
-        XCodeGenerator gen = new XCodeGenerator(TEMPLATE_APP_MODULE_PATH, getTargetDir().getPath());
-        gen.forceOverride(true);
+        AppGenerator gen = new AppGenerator();
+        AppGenConfig genConfig = createAppGenConfig();
 
-        IEvalScope scope = XLang.newEvalScope();
-        scope.setLocalValue(SCOPE_VAR_appGenConfig, appGenConfig);
-        scope.setLocalValue(SCOPE_VAR_codeGenModel, ormModel);
+        gen.genModule(createResource(resourcePath), genConfig);
+    }
 
-        gen.execute("", scope);
+    protected IResource createResource(String path) {
+        return new InMemoryTextResource("/text/" + path, attachmentXmlText(path));
     }
 
     protected AiOrmModel genOrmModel(String path, AppGenConfig appGenConfig) {
-        IResource resource = new InMemoryTextResource("/text/" + path, attachmentXmlText(path));
+        IResource resource = createResource(path);
         AiModelDesign modelDesign = new AiModelDesign(resource, appGenConfig);
 
         Map<String, Object> vars = Map.of();

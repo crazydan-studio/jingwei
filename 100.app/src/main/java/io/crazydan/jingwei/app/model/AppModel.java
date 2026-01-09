@@ -17,29 +17,16 @@
  * If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
  */
 
-package io.crazydan.jingwei;
+package io.crazydan.jingwei.app.model;
 
-import io.nop.api.core.annotations.core.Description;
-import io.nop.api.core.annotations.core.Locale;
-import io.nop.api.core.config.IConfigReference;
-import io.nop.api.core.util.SourceLocation;
-
-import static io.crazydan.jingwei.AppConstants.APP_PORTAL_DEFAULT_CODE;
-import static io.nop.api.core.config.AppConfig.varRef;
+import io.nop.core.resource.IResource;
 
 /**
  *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
- * @date 2026-01-07
+ * @date 2026-01-08
  */
-@Locale("zh-CN")
-public interface AppConfigs {
-    SourceLocation s_loc = SourceLocation.fromClass(AppConfigs.class);
-
-    @Description("门户（系统入口）应用的应用标识")
-    IConfigReference<String> CFG_APP_PORTAL_CODE = //
-            varRef(s_loc, "jingwei.app.portal-code", String.class, APP_PORTAL_DEFAULT_CODE);
-    @Description("应用的安装目录，用于存放应用的模块资源和 Web 资源")
-    IConfigReference<String> CFG_APP_INSTALL_DIR = //
-            varRef(s_loc, "jingwei.app.install-dir", String.class, null);
+public class AppModel {
+    private IResource modelDesignResource;
+    private IResource uiDesignResource;
 }

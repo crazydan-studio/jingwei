@@ -34,7 +34,7 @@
                       insertable="!boolean=false" updatable="!boolean=false"
                       queryable="!boolean=false" sortable="!boolean=false"
                       maskPattern="string" datePattern="string"
-                      deprecated="boolean"
+                      internal="!boolean=false" deprecated="boolean"
 
                       dict="dict-name"
                       stdDomain="!std-domain"

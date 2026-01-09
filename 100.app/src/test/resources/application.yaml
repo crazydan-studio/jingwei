@@ -4,6 +4,10 @@ nop:
   config:
     additional-location: "classpath:/application-local.yaml"
 
+  vfs:
+    custom:
+      ns-mappings: |
+        xapp:${project.build.outputDirectory}/../app
   ai:
     service:
       # LLM引擎执行时是否自动打印所有请求和响应消息
@@ -12,3 +16,7 @@ nop:
       log-dir: none
       # 是否启用系统提示词
       enable-work-mode-system-prompt: true
+
+jingwei:
+  app:
+    install-dir: ${project.build.outputDirectory}/../app

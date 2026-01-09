@@ -36,7 +36,7 @@
 ### **3. 属性类型**
 
 - std-domain 可选值：
-  - uuid
+  - uuid: UUID，不含短横线
   - file: 文件类型
   - fileList: 文件列表类型
   - string: 字符串

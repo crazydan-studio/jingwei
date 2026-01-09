@@ -17,11 +17,34 @@
  * If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
  */
 
-package io.crazydan.jingwei.app.service;
+package io.crazydan.jingwei.app;
+
+import io.nop.core.resource.IResource;
+import io.nop.core.resource.impl.ClassPathResource;
+
+import static io.crazydan.jingwei.AppConstants.APP_PORTAL_DEFAULT_CODE;
+import static io.nop.core.resource.ResourceConstants.RESOURCE_NS_CLASSPATH;
 
 /**
  *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
  * @date 2026-01-08
  */
-public class AppGenService {}
+public class AppLoader {
+
+    public void loadModule(String appCode) {
+        if (APP_PORTAL_DEFAULT_CODE.equals(appCode)) {
+            loadModuleFromClasspath(appCode);
+        } else {
+            loadModuleFromDb(appCode);
+        }
+    }
+
+    protected void loadModuleFromClasspath(String appCode) {
+        IResource resource = new ClassPathResource(RESOURCE_NS_CLASSPATH + ":apps/" + appCode);
+    }
+
+    protected void loadModuleFromDb(String appCode) {
+        //
+    }
+}
