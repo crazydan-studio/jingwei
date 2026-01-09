@@ -34,7 +34,7 @@
     <!-- [模块资源]
     -->
     <module-resources xdef:body-type="list" xdef:key-attr="path">
-        <resource xdef:name="AppInstallationResource"
+        <resource xdef:ref="AppInstallationResource"
                   path="!string"
         />
     </module-resources>
@@ -42,8 +42,12 @@
     <!-- [UI 资源]
     -->
     <ui-resources xdef:body-type="list" xdef:key-attr="path">
-        <resource xdef:name="AppInstallationResource"
+        <resource xdef:ref="AppInstallationResource"
                   path="!string"
         />
     </ui-resources>
+
+    <xdef:define xdef:name="AppInstallationResource"
+                 path="!string"
+    />
 </manifest>
