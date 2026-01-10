@@ -40,21 +40,22 @@
             name="!string" email="email" url="url"
     />
 
-    <!-- [应用的设计需求]
-    > 应用功能、模型、UI 设计的需求文档。
+    <!-- [应用的需求设计资源]
+    > 应用功能、模型、UI 设计的需求说明文档。
     -->
-    <designRequirement xdef:name="AppReleasing_DesignRequirement">
-        <app xdef:ref="resource.xdef"/>
-        <model xdef:ref="resource.xdef"/>
-        <ui xdef:ref="resource.xdef"/>
-    </designRequirement>
+    <requirementResource xdef:name="AppReleasing_RequirementResource">
+        <appDesign xdef:ref="resource.xdef"/>
+
+        <modelDesign xdef:ref="resource.xdef"/>
+        <uiDesign xdef:ref="resource.xdef"/>
+    </requirementResource>
 
     <!-- [应用的编码资源]
     > 用于生成应用代码的 DSL 资源。
     -->
     <coderResource xdef:name="AppReleasing_CoderResource">
-        <model xdef:ref="resource.xdef"/>
-        <ui xdef:ref="resource.xdef"/>
+        <modelDesign xdef:ref="resource.xdef"/>
+        <uiDesign xdef:ref="resource.xdef"/>
     </coderResource>
 
     <!-- [应用的构建产物]
@@ -63,12 +64,17 @@
     <artifactResource xdef:name="AppReleasing_ArtifactResource">
         <model xdef:ref="resource.xdef"
                xdef:unique-attr="path"
-               path="!file-path"
+               path="!file-path" name="!file-path"
         />
 
-        <ui xdef:ref="resource.xdef"
-            xdef:unique-attr="path"
-            path="!file-path"
+        <orm xdef:ref="resource.xdef"
+             xdef:unique-attr="path"
+             path="!file-path" name="!file-path"
+        />
+
+        <page xdef:ref="resource.xdef"
+              xdef:unique-attr="path"
+              path="!file-path" name="!file-path"
         />
     </artifactResource>
 </manifest>

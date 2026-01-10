@@ -25,5 +25,5 @@
           x:schema="/nop/schema/xdef.xdef"
           xdef:bean-package="io.crazydan.jingwei.app.model.manifest"
           xdef:name="AppPackage_Resource"
-          path="!file-path"
+          path="!file-path" name="file-path"
 />

@@ -53,13 +53,6 @@ public abstract class _AppReleasing_Manifest extends io.nop.core.resource.compon
     private java.lang.String _description ;
     
     /**
-     *  应用的设计需求
-     * xml name: designRequirement
-     * > 应用功能、模型、UI 设计的需求文档。
-     */
-    private io.crazydan.jingwei.app.model.manifest.AppReleasing_DesignRequirement _designRequirement ;
-    
-    /**
      *  
      * xml name: icon
      * 
@@ -72,6 +65,13 @@ public abstract class _AppReleasing_Manifest extends io.nop.core.resource.compon
      * 
      */
     private java.lang.String _name ;
+    
+    /**
+     *  应用的需求设计资源
+     * xml name: requirementResource
+     * > 应用功能、模型、UI 设计的需求说明文档。
+     */
+    private io.crazydan.jingwei.app.model.manifest.AppReleasing_RequirementResource _requirementResource ;
     
     /**
      *  
@@ -176,25 +176,6 @@ public abstract class _AppReleasing_Manifest extends io.nop.core.resource.compon
 
     
     /**
-     * 应用的设计需求
-     * xml name: designRequirement
-     *  > 应用功能、模型、UI 设计的需求文档。
-     */
-    
-    public io.crazydan.jingwei.app.model.manifest.AppReleasing_DesignRequirement getDesignRequirement(){
-      return _designRequirement;
-    }
-
-    
-    public void setDesignRequirement(io.crazydan.jingwei.app.model.manifest.AppReleasing_DesignRequirement value){
-        checkAllowChange();
-        
-        this._designRequirement = value;
-           
-    }
-
-    
-    /**
      * 
      * xml name: icon
      *  
@@ -233,6 +214,25 @@ public abstract class _AppReleasing_Manifest extends io.nop.core.resource.compon
 
     
     /**
+     * 应用的需求设计资源
+     * xml name: requirementResource
+     *  > 应用功能、模型、UI 设计的需求说明文档。
+     */
+    
+    public io.crazydan.jingwei.app.model.manifest.AppReleasing_RequirementResource getRequirementResource(){
+      return _requirementResource;
+    }
+
+    
+    public void setRequirementResource(io.crazydan.jingwei.app.model.manifest.AppReleasing_RequirementResource value){
+        checkAllowChange();
+        
+        this._requirementResource = value;
+           
+    }
+
+    
+    /**
      * 
      * xml name: version
      *  
@@ -265,7 +265,7 @@ public abstract class _AppReleasing_Manifest extends io.nop.core.resource.compon
             
            this._coderResource = io.nop.api.core.util.FreezeHelper.deepFreeze(this._coderResource);
             
-           this._designRequirement = io.nop.api.core.util.FreezeHelper.deepFreeze(this._designRequirement);
+           this._requirementResource = io.nop.api.core.util.FreezeHelper.deepFreeze(this._requirementResource);
             
         }
     }
@@ -279,9 +279,9 @@ public abstract class _AppReleasing_Manifest extends io.nop.core.resource.compon
         out.putNotNull("code",this.getCode());
         out.putNotNull("coderResource",this.getCoderResource());
         out.putNotNull("description",this.getDescription());
-        out.putNotNull("designRequirement",this.getDesignRequirement());
         out.putNotNull("icon",this.getIcon());
         out.putNotNull("name",this.getName());
+        out.putNotNull("requirementResource",this.getRequirementResource());
         out.putNotNull("version",this.getVersion());
     }
 
@@ -299,9 +299,9 @@ public abstract class _AppReleasing_Manifest extends io.nop.core.resource.compon
         instance.setCode(this.getCode());
         instance.setCoderResource(this.getCoderResource());
         instance.setDescription(this.getDescription());
-        instance.setDesignRequirement(this.getDesignRequirement());
         instance.setIcon(this.getIcon());
         instance.setName(this.getName());
+        instance.setRequirementResource(this.getRequirementResource());
         instance.setVersion(this.getVersion());
     }
 

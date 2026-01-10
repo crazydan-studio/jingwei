@@ -19,6 +19,8 @@
 
 package io.crazydan.jingwei.app;
 
+import static io.nop.core.resource.ResourceConstants.RESOURCE_NS_CLASSPATH;
+
 /**
  *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
@@ -35,5 +37,12 @@ public interface AppConstants {
     String XDSL_SCHEMA_APP_INSTALLATION_MANIFEST = "/jingwei/app/schema/manifest/installation.xdef";
 
     String APP_MANIFEST_FILE = "manifest.xml";
-    String TEMPLATE_APP_VPATH = NS_VFS_APP + ":/{" + VAR_APP_CODE + "}/{" + VAR_PATH + "}";
+    String TEMPLATE_APP_INSTALLATION_V_PATH = //
+            NS_VFS_APP + ":/{" + VAR_APP_CODE + "}/{" + VAR_PATH + "}";
+    String TEMPLATE_APP_CLASSPATH_V_PATH = //
+            RESOURCE_NS_CLASSPATH + ":/apps/{" + VAR_APP_CODE + "}/{" + VAR_PATH + "}";
+
+    String APP_INSTALLATION_DIR_ORM = "orm";
+    String APP_INSTALLATION_DIR_MODEL = "model";
+    String APP_INSTALLATION_DIR_PAGE = "page";
 }

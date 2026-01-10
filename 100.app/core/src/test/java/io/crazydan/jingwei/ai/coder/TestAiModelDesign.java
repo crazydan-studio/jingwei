@@ -55,13 +55,13 @@ public class TestAiModelDesign extends NopJunitTestCase {
     }
 
     @Test
-    public void get_genAppModule() {
+    public void get_genAppModel() {
         String resourcePath = "test-01.ai-model-design.xml";
 
         AppGenerator gen = new AppGenerator();
         AppGenConfig genConfig = createAppGenConfig();
 
-        gen.genModule(createResource(resourcePath), genConfig);
+        gen.genModel(createResource(resourcePath), genConfig);
     }
 
     protected IResource createResource(String path) {

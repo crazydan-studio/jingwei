@@ -18,10 +18,36 @@ public abstract class _AppPackage_Resource extends io.nop.core.resource.componen
     
     /**
      *  
+     * xml name: name
+     * 
+     */
+    private java.lang.String _name ;
+    
+    /**
+     *  
      * xml name: path
      * 
      */
     private java.lang.String _path ;
+    
+    /**
+     * 
+     * xml name: name
+     *  
+     */
+    
+    public java.lang.String getName(){
+      return _name;
+    }
+
+    
+    public void setName(java.lang.String value){
+        checkAllowChange();
+        
+        this._name = value;
+           
+    }
+
     
     /**
      * 
@@ -57,6 +83,7 @@ public abstract class _AppPackage_Resource extends io.nop.core.resource.componen
     protected void outputJson(IJsonHandler out){
         super.outputJson(out);
         
+        out.putNotNull("name",this.getName());
         out.putNotNull("path",this.getPath());
     }
 
@@ -69,6 +96,7 @@ public abstract class _AppPackage_Resource extends io.nop.core.resource.componen
     protected void copyTo(AppPackage_Resource instance){
         super.copyTo(instance);
         
+        instance.setName(this.getName());
         instance.setPath(this.getPath());
     }
 

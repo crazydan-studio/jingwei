@@ -34,7 +34,6 @@ nop:
     undertow:
       server:
         port: 8181
-        static-dir: ${project.basedir}/_data/web
         compression:
           enabled: true
           # min-response-size: 2048

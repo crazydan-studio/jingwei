@@ -41,12 +41,8 @@ import static io.crazydan.jingwei.AppCoreConstants.TEMPLATE_APP_MODEL_PATH;
  */
 public class AppGenerator {
 
-    /**
-     * 构建应用模块资源，主要为 {@code app.orm.xml}、{@code *.xmeta}、{@code *.xbiz}
-     *
-     * @return 应用模块资源所在的目录路径
-     */
-    public void genModule(IResource modelDesignResource, AppGenConfig genConfig) {
+    /** 构建应用模型资源，主要为 {@code app.orm.xml}、{@code *.xmeta}、{@code *.xbiz} */
+    public void genModel(IResource modelDesignResource, AppGenConfig genConfig) {
         AiModelDesign modelDesign = new AiModelDesign(modelDesignResource, genConfig);
 
         Map<String, Object> vars = Map.of();
@@ -64,8 +60,8 @@ public class AppGenerator {
         gen.execute("", scope);
     }
 
-    /** 构建应用的 UI 资源 */
-    public String genUi(IResource uiDesignResource, AppGenConfig genConfig) {
+    /** 构建应用的页面资源 */
+    public String genPage(IResource uiDesignResource, AppGenConfig genConfig) {
         return null;
     }
 }

@@ -25,13 +25,6 @@ public abstract class _AppInstallation_Manifest extends io.nop.core.resource.com
     private java.lang.String _code ;
     
     /**
-     *  
-     * xml name: installedAt
-     * 
-     */
-    private java.time.LocalDateTime _installedAt ;
-    
-    /**
      *  模型资源
      * xml name: modelResources
      * 
@@ -39,11 +32,18 @@ public abstract class _AppInstallation_Manifest extends io.nop.core.resource.com
     private io.crazydan.jingwei.app.model.manifest.AppInstallation_ModelResources _modelResources ;
     
     /**
-     *  UI 资源
-     * xml name: uiResources
+     *  ORM 资源
+     * xml name: ormResources
      * 
      */
-    private io.crazydan.jingwei.app.model.manifest.AppInstallation_UiResources _uiResources ;
+    private io.crazydan.jingwei.app.model.manifest.AppInstallation_OrmResources _ormResources ;
+    
+    /**
+     *  页面资源
+     * xml name: pageResources
+     * 
+     */
+    private io.crazydan.jingwei.app.model.manifest.AppInstallation_PageResources _pageResources ;
     
     /**
      *  
@@ -72,25 +72,6 @@ public abstract class _AppInstallation_Manifest extends io.nop.core.resource.com
 
     
     /**
-     * 
-     * xml name: installedAt
-     *  
-     */
-    
-    public java.time.LocalDateTime getInstalledAt(){
-      return _installedAt;
-    }
-
-    
-    public void setInstalledAt(java.time.LocalDateTime value){
-        checkAllowChange();
-        
-        this._installedAt = value;
-           
-    }
-
-    
-    /**
      * 模型资源
      * xml name: modelResources
      *  
@@ -110,20 +91,39 @@ public abstract class _AppInstallation_Manifest extends io.nop.core.resource.com
 
     
     /**
-     * UI 资源
-     * xml name: uiResources
+     * ORM 资源
+     * xml name: ormResources
      *  
      */
     
-    public io.crazydan.jingwei.app.model.manifest.AppInstallation_UiResources getUiResources(){
-      return _uiResources;
+    public io.crazydan.jingwei.app.model.manifest.AppInstallation_OrmResources getOrmResources(){
+      return _ormResources;
     }
 
     
-    public void setUiResources(io.crazydan.jingwei.app.model.manifest.AppInstallation_UiResources value){
+    public void setOrmResources(io.crazydan.jingwei.app.model.manifest.AppInstallation_OrmResources value){
         checkAllowChange();
         
-        this._uiResources = value;
+        this._ormResources = value;
+           
+    }
+
+    
+    /**
+     * 页面资源
+     * xml name: pageResources
+     *  
+     */
+    
+    public io.crazydan.jingwei.app.model.manifest.AppInstallation_PageResources getPageResources(){
+      return _pageResources;
+    }
+
+    
+    public void setPageResources(io.crazydan.jingwei.app.model.manifest.AppInstallation_PageResources value){
+        checkAllowChange();
+        
+        this._pageResources = value;
            
     }
 
@@ -157,7 +157,9 @@ public abstract class _AppInstallation_Manifest extends io.nop.core.resource.com
         
            this._modelResources = io.nop.api.core.util.FreezeHelper.deepFreeze(this._modelResources);
             
-           this._uiResources = io.nop.api.core.util.FreezeHelper.deepFreeze(this._uiResources);
+           this._ormResources = io.nop.api.core.util.FreezeHelper.deepFreeze(this._ormResources);
+            
+           this._pageResources = io.nop.api.core.util.FreezeHelper.deepFreeze(this._pageResources);
             
         }
     }
@@ -167,9 +169,9 @@ public abstract class _AppInstallation_Manifest extends io.nop.core.resource.com
         super.outputJson(out);
         
         out.putNotNull("code",this.getCode());
-        out.putNotNull("installedAt",this.getInstalledAt());
         out.putNotNull("modelResources",this.getModelResources());
-        out.putNotNull("uiResources",this.getUiResources());
+        out.putNotNull("ormResources",this.getOrmResources());
+        out.putNotNull("pageResources",this.getPageResources());
         out.putNotNull("version",this.getVersion());
     }
 
@@ -183,9 +185,9 @@ public abstract class _AppInstallation_Manifest extends io.nop.core.resource.com
         super.copyTo(instance);
         
         instance.setCode(this.getCode());
-        instance.setInstalledAt(this.getInstalledAt());
         instance.setModelResources(this.getModelResources());
-        instance.setUiResources(this.getUiResources());
+        instance.setOrmResources(this.getOrmResources());
+        instance.setPageResources(this.getPageResources());
         instance.setVersion(this.getVersion());
     }
 

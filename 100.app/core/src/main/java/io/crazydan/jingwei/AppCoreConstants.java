@@ -26,13 +26,15 @@ package io.crazydan.jingwei;
  */
 public interface AppCoreConstants {
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    String XLIB_AI_APP_GEN_PATH = "/jingwei/ai/xlib/app-model.xlib";
+    String XLIB_AI_APP_MODEL_GEN_PATH = "/jingwei/ai/xlib/app-model.xlib";
+    String XLIB_AI_APP_PAGE_GEN_PATH = "/jingwei/ai/xlib/app-page.xlib";
 
     String XLIB_TAG_ModelDesignToOrmModel = "ModelDesignToOrmModel";
 
     String XLIB_TAG_ATTR_NODE = "node";
 
     String TEMPLATE_APP_MODEL_PATH = "/jingwei/templates/app-model";
+    String TEMPLATE_APP_PAGE_PATH = "/jingwei/templates/app-page";
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

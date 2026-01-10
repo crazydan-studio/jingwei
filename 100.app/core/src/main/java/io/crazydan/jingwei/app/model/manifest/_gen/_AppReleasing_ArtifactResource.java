@@ -25,10 +25,17 @@ public abstract class _AppReleasing_ArtifactResource extends io.nop.core.resourc
     
     /**
      *  应用打包资源
-     * xml name: ui
+     * xml name: orm
      * 
      */
-    private KeyedList<io.crazydan.jingwei.app.model.manifest.AppPackage_Resource> _uis = KeyedList.emptyList();
+    private KeyedList<io.crazydan.jingwei.app.model.manifest.AppPackage_Resource> _orms = KeyedList.emptyList();
+    
+    /**
+     *  应用打包资源
+     * xml name: page
+     * 
+     */
+    private KeyedList<io.crazydan.jingwei.app.model.manifest.AppPackage_Resource> _pages = KeyedList.emptyList();
     
     /**
      * 应用打包资源
@@ -77,47 +84,92 @@ public abstract class _AppReleasing_ArtifactResource extends io.nop.core.resourc
     
     /**
      * 应用打包资源
-     * xml name: ui
+     * xml name: orm
      *  
      */
     
-    public java.util.List<io.crazydan.jingwei.app.model.manifest.AppPackage_Resource> getUis(){
-      return _uis;
+    public java.util.List<io.crazydan.jingwei.app.model.manifest.AppPackage_Resource> getOrms(){
+      return _orms;
     }
 
     
-    public void setUis(java.util.List<io.crazydan.jingwei.app.model.manifest.AppPackage_Resource> value){
+    public void setOrms(java.util.List<io.crazydan.jingwei.app.model.manifest.AppPackage_Resource> value){
         checkAllowChange();
         
-        this._uis = KeyedList.fromList(value, io.crazydan.jingwei.app.model.manifest.AppPackage_Resource::getPath);
+        this._orms = KeyedList.fromList(value, io.crazydan.jingwei.app.model.manifest.AppPackage_Resource::getPath);
            
     }
 
     
-    public io.crazydan.jingwei.app.model.manifest.AppPackage_Resource getUi(String name){
-        return this._uis.getByKey(name);
+    public io.crazydan.jingwei.app.model.manifest.AppPackage_Resource getOrm(String name){
+        return this._orms.getByKey(name);
     }
 
-    public boolean hasUi(String name){
-        return this._uis.containsKey(name);
+    public boolean hasOrm(String name){
+        return this._orms.containsKey(name);
     }
 
-    public void addUi(io.crazydan.jingwei.app.model.manifest.AppPackage_Resource item) {
+    public void addOrm(io.crazydan.jingwei.app.model.manifest.AppPackage_Resource item) {
         checkAllowChange();
-        java.util.List<io.crazydan.jingwei.app.model.manifest.AppPackage_Resource> list = this.getUis();
+        java.util.List<io.crazydan.jingwei.app.model.manifest.AppPackage_Resource> list = this.getOrms();
         if (list == null || list.isEmpty()) {
             list = new KeyedList<>(io.crazydan.jingwei.app.model.manifest.AppPackage_Resource::getPath);
-            setUis(list);
+            setOrms(list);
         }
         list.add(item);
     }
     
-    public java.util.Set<String> keySet_uis(){
-        return this._uis.keySet();
+    public java.util.Set<String> keySet_orms(){
+        return this._orms.keySet();
     }
 
-    public boolean hasUis(){
-        return !this._uis.isEmpty();
+    public boolean hasOrms(){
+        return !this._orms.isEmpty();
+    }
+    
+    /**
+     * 应用打包资源
+     * xml name: page
+     *  
+     */
+    
+    public java.util.List<io.crazydan.jingwei.app.model.manifest.AppPackage_Resource> getPages(){
+      return _pages;
+    }
+
+    
+    public void setPages(java.util.List<io.crazydan.jingwei.app.model.manifest.AppPackage_Resource> value){
+        checkAllowChange();
+        
+        this._pages = KeyedList.fromList(value, io.crazydan.jingwei.app.model.manifest.AppPackage_Resource::getPath);
+           
+    }
+
+    
+    public io.crazydan.jingwei.app.model.manifest.AppPackage_Resource getPage(String name){
+        return this._pages.getByKey(name);
+    }
+
+    public boolean hasPage(String name){
+        return this._pages.containsKey(name);
+    }
+
+    public void addPage(io.crazydan.jingwei.app.model.manifest.AppPackage_Resource item) {
+        checkAllowChange();
+        java.util.List<io.crazydan.jingwei.app.model.manifest.AppPackage_Resource> list = this.getPages();
+        if (list == null || list.isEmpty()) {
+            list = new KeyedList<>(io.crazydan.jingwei.app.model.manifest.AppPackage_Resource::getPath);
+            setPages(list);
+        }
+        list.add(item);
+    }
+    
+    public java.util.Set<String> keySet_pages(){
+        return this._pages.keySet();
+    }
+
+    public boolean hasPages(){
+        return !this._pages.isEmpty();
     }
     
 
@@ -130,7 +182,9 @@ public abstract class _AppReleasing_ArtifactResource extends io.nop.core.resourc
         
            this._models = io.nop.api.core.util.FreezeHelper.deepFreeze(this._models);
             
-           this._uis = io.nop.api.core.util.FreezeHelper.deepFreeze(this._uis);
+           this._orms = io.nop.api.core.util.FreezeHelper.deepFreeze(this._orms);
+            
+           this._pages = io.nop.api.core.util.FreezeHelper.deepFreeze(this._pages);
             
         }
     }
@@ -140,7 +194,8 @@ public abstract class _AppReleasing_ArtifactResource extends io.nop.core.resourc
         super.outputJson(out);
         
         out.putNotNull("models",this.getModels());
-        out.putNotNull("uis",this.getUis());
+        out.putNotNull("orms",this.getOrms());
+        out.putNotNull("pages",this.getPages());
     }
 
     public AppReleasing_ArtifactResource cloneInstance(){
@@ -153,7 +208,8 @@ public abstract class _AppReleasing_ArtifactResource extends io.nop.core.resourc
         super.copyTo(instance);
         
         instance.setModels(this.getModels());
-        instance.setUis(this.getUis());
+        instance.setOrms(this.getOrms());
+        instance.setPages(this.getPages());
     }
 
     protected AppReleasing_ArtifactResource newInstance(){

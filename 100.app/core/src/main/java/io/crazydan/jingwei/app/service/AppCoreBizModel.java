@@ -19,71 +19,179 @@
 
 package io.crazydan.jingwei.app.service;
 
-import java.io.File;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import io.crazydan.duzhou.framework.commons.StringHelper;
 import io.crazydan.jingwei.app.model.AppPage;
+import io.crazydan.jingwei.app.model.manifest.AppInstallation_Manifest;
+import io.crazydan.jingwei.app.model.manifest.AppInstallation_ModelResources;
+import io.crazydan.jingwei.app.model.manifest.AppInstallation_OrmResources;
+import io.crazydan.jingwei.app.model.manifest.AppInstallation_PageResources;
+import io.crazydan.jingwei.app.model.manifest.AppPackage_Resource;
+import io.crazydan.jingwei.app.model.manifest.AppReleasing_ArtifactResource;
+import io.crazydan.jingwei.app.model.manifest.AppReleasing_Manifest;
+import io.crazydan.jingwei.app.util.AppHelper;
+import io.nop.api.core.annotations.biz.BizAction;
 import io.nop.api.core.annotations.biz.BizModel;
 import io.nop.api.core.annotations.biz.BizQuery;
+import io.nop.api.core.annotations.core.Description;
+import io.nop.api.core.annotations.core.Name;
+import io.nop.commons.cache.ICache;
+import io.nop.commons.cache.MapCache;
 import io.nop.core.resource.IResource;
 import io.nop.core.resource.VirtualFileSystem;
-import io.nop.core.resource.impl.ClassPathResource;
 
-import static io.crazydan.jingwei.AppCoreConfigs.CFG_APP_INSTALL_DIR;
+import static io.crazydan.jingwei.app.AppConstants.APP_INSTALLATION_DIR_MODEL;
+import static io.crazydan.jingwei.app.AppConstants.APP_INSTALLATION_DIR_ORM;
+import static io.crazydan.jingwei.app.AppConstants.APP_INSTALLATION_DIR_PAGE;
 import static io.crazydan.jingwei.app.AppConstants.APP_MANIFEST_FILE;
-import static io.crazydan.jingwei.app.AppConstants.TEMPLATE_APP_VPATH;
+import static io.crazydan.jingwei.app.AppConstants.TEMPLATE_APP_CLASSPATH_V_PATH;
+import static io.crazydan.jingwei.app.AppConstants.TEMPLATE_APP_INSTALLATION_V_PATH;
 import static io.crazydan.jingwei.app.AppConstants.VAR_APP_CODE;
 import static io.crazydan.jingwei.app.AppConstants.VAR_PATH;
-import static io.nop.core.resource.ResourceConstants.RESOURCE_NS_CLASSPATH;
 
 /**
+ * 提供与应用相关的核心基础服务接口
  *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
  * @date 2026-01-08
  */
 @BizModel("App")
 public class AppCoreBizModel {
+    private final ICache<String, AppInstallation_Manifest> cache = MapCache.create("app-model-cache", true);
 
-    /** 加载指定应用的指定页面：在 Web 服务中将主动加载门户应用的首页 */
+    /**
+     * 加载指定应用
+     * <p/>
+     * 仅在首次访问应用时才加载其模型资源
+     */
     @BizQuery
-    public AppPage loadPage(String appCode, String pageName) {
-        assureModuleLoaded(appCode);
+    public AppPage loadApp(@Name("appCode") String appCode) {
+        this.cache.computeIfAbsentAsync(appCode, this::assureAppLoaded);
 
         AppPage page = new AppPage();
 
         return page;
     }
 
-    /** 确保指定应用的模块已加载 */
-    public void assureModuleLoaded(String appCode) {
-        if (checkIfModuleReady(appCode)) {
-            return;
+    @Description("确保应用已加载")
+    @BizAction
+    public AppInstallation_Manifest assureAppLoaded(@Name("appCode") String appCode) {
+        AppInstallation_Manifest manifest = loadInstallationManifestFromDir(appCode);
+
+        if (manifest == null) {
+            manifest = installFromDb(appCode);
         }
+        if (manifest == null) {
+            manifest = installFromClasspath(appCode);
+        }
+
+        if (manifest != null) {
+            loadAppModel(manifest);
+        }
+
+        return manifest != null ? manifest : AppInstallation_Manifest.NONE;
     }
 
-    protected void loadModuleFromClasspath(String appCode) {
-        IResource resource = new ClassPathResource(RESOURCE_NS_CLASSPATH + ":apps/" + appCode);
+    @Description("从 classpath 安装应用")
+    @BizAction
+    public AppInstallation_Manifest installFromClasspath(@Name("appCode") String appCode) {
+        IResource resource = loadClasspathResource(appCode, APP_MANIFEST_FILE);
+        AppReleasing_Manifest manifest = AppHelper.loadAppReleasingManifest(resource);
+        if (manifest == null) {
+            return null;
+        }
+
+        installToDir(manifest);
+
+        return loadInstallationManifestFromDir(appCode);
     }
 
-    protected void loadModuleFromDb(String appCode) {
-        // TODO 加载应用已激活版本
+    @Description("从数据库安装应用")
+    @BizAction
+    public AppInstallation_Manifest installFromDb(@Name("appCode") String appCode) {
+        AppInstallation_Manifest manifest = null;
+
+        return manifest;
     }
 
-    protected boolean checkIfModuleReady(String appCode) {
-        IResource manifestResource = loadModuleResource(appCode, APP_MANIFEST_FILE);
+    protected AppInstallation_Manifest loadInstallationManifestFromDir(String appCode) {
+        IResource resource = loadInstallationResource(appCode, APP_MANIFEST_FILE);
 
-        return true;
+        return AppHelper.loadAppInstallationManifest(resource);
     }
 
-    protected IResource loadModuleResource(String appCode, String path) {
+    protected void loadAppModel(AppInstallation_Manifest manifest) {
+        manifest.getOrmResources().getBody().forEach((orm) -> {
+            if ((APP_INSTALLATION_DIR_ORM + "/app.orm.xml").equals(orm.getPath())) {
+                // TODO Load OrmModel
+            }
+        });
+
+        manifest.getModelResources().getBody().forEach((model) -> {
+            // TODO build GraphQLBizModel
+        });
+    }
+
+    protected IResource loadInstallationResource(String appCode, String path) {
+        return loadVfsResource(TEMPLATE_APP_INSTALLATION_V_PATH, appCode, path);
+    }
+
+    protected IResource loadClasspathResource(String appCode, String path) {
+        return loadVfsResource(TEMPLATE_APP_CLASSPATH_V_PATH, appCode, path);
+    }
+
+    protected IResource loadVfsResource(String template, String appCode, String path) {
         Map<String, Object> params = Map.of(VAR_APP_CODE, appCode, VAR_PATH, path);
-        String vpath = StringHelper.renderTemplate(TEMPLATE_APP_VPATH, params::get);
+        String vPath = StringHelper.renderTemplate(template, params::get);
 
-        return VirtualFileSystem.instance().getResource(vpath);
+        return VirtualFileSystem.instance().getResource(vPath);
     }
 
-    protected File getModuleDir(String appCode) {
-        return new File(CFG_APP_INSTALL_DIR.get(), appCode);
+    protected void installToDir(AppReleasing_Manifest releasingManifest) {
+        String appCode = releasingManifest.getCode();
+        AppReleasing_ArtifactResource artifactResource = releasingManifest.getArtifactResource();
+
+        List<AppPackage_Resource> ormResources = artifactResource.getOrms();
+        List<AppPackage_Resource> modelResources = artifactResource.getModels();
+        List<AppPackage_Resource> pageResources = artifactResource.getPages();
+
+        AppInstallation_Manifest manifest = new AppInstallation_Manifest();
+        manifest.setCode(appCode);
+        manifest.setVersion(releasingManifest.getVersion());
+        manifest.setOrmResources(new AppInstallation_OrmResources());
+        manifest.setModelResources(new AppInstallation_ModelResources());
+        manifest.setPageResources(new AppInstallation_PageResources());
+
+        installPackageResources(ormResources,
+                                appCode,
+                                APP_INSTALLATION_DIR_ORM,
+                                manifest.getOrmResources()::addResource);
+        installPackageResources(modelResources,
+                                appCode,
+                                APP_INSTALLATION_DIR_MODEL,
+                                manifest.getModelResources()::addResource);
+        installPackageResources(pageResources,
+                                appCode,
+                                APP_INSTALLATION_DIR_PAGE,
+                                manifest.getPageResources()::addResource);
+
+        IResource manifestResource = loadInstallationResource(appCode, APP_MANIFEST_FILE);
+        AppHelper.saveAppInstallationManifest(manifest, manifestResource);
+    }
+
+    protected void installPackageResources(
+            List<AppPackage_Resource> sources, String appCode, String subPath, Consumer<AppPackage_Resource> consumer) {
+        sources.forEach((source) -> {
+            AppPackage_Resource pkg = new AppPackage_Resource();
+            pkg.setPath(subPath + '/' + source.getName());
+
+            IResource resource = loadInstallationResource(appCode, pkg.getPath());
+            source.getResource().saveToResource(resource);
+
+            consumer.accept(pkg);
+        });
     }
 }

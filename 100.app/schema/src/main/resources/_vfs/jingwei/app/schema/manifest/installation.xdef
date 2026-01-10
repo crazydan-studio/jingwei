@@ -28,7 +28,6 @@
           xdef:bean-package="io.crazydan.jingwei.app.model.manifest"
           xdef:name="AppInstallation_Manifest"
           code="!string" version="!string"
-          installedAt="!datetime"
 >
 
     <!-- [模型资源]
@@ -42,14 +41,25 @@
         />
     </modelResources>
 
-    <!-- [UI 资源]
+    <!-- [ORM 资源]
     -->
-    <uiResources xdef:name="AppInstallation_UiResources"
-                 xdef:body-type="list" xdef:key-attr="path"
-                 xdef:bean-body-prop="body"
+    <ormResources xdef:name="AppInstallation_OrmResources"
+                  xdef:body-type="list" xdef:key-attr="path"
+                  xdef:bean-body-prop="body"
     >
         <resource xdef:ref="resource.xdef"
                   path="!file-path"
         />
-    </uiResources>
+    </ormResources>
+
+    <!-- [页面资源]
+    -->
+    <pageResources xdef:name="AppInstallation_PageResources"
+                   xdef:body-type="list" xdef:key-attr="path"
+                   xdef:bean-body-prop="body"
+    >
+        <resource xdef:ref="resource.xdef"
+                  path="!file-path"
+        />
+    </pageResources>
 </manifest>

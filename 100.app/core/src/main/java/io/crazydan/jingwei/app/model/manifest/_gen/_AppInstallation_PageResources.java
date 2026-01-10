@@ -2,7 +2,7 @@ package io.crazydan.jingwei.app.model.manifest._gen;
 
 import io.nop.commons.collections.KeyedList; //NOPMD NOSONAR - suppressed UnusedImports - Used for List Prop
 import io.nop.core.lang.json.IJsonHandler;
-import io.crazydan.jingwei.app.model.manifest.AppInstallation_UiResources;
+import io.crazydan.jingwei.app.model.manifest.AppInstallation_PageResources;
 import io.nop.commons.util.ClassHelper;
 
 
@@ -14,7 +14,7 @@ import io.nop.commons.util.ClassHelper;
  */
 @SuppressWarnings({"PMD.UselessOverridingMethod","PMD.UnusedLocalVariable",
     "PMD.UnnecessaryFullyQualifiedName","PMD.EmptyControlStatement","java:S116","java:S101","java:S1128","java:S1161"})
-public abstract class _AppInstallation_UiResources extends io.nop.core.resource.component.AbstractComponentModel {
+public abstract class _AppInstallation_PageResources extends io.nop.core.resource.component.AbstractComponentModel {
     
     /**
      *  
@@ -88,20 +88,20 @@ public abstract class _AppInstallation_UiResources extends io.nop.core.resource.
         out.putNotNull("body",this.getBody());
     }
 
-    public AppInstallation_UiResources cloneInstance(){
-        AppInstallation_UiResources instance = newInstance();
+    public AppInstallation_PageResources cloneInstance(){
+        AppInstallation_PageResources instance = newInstance();
         this.copyTo(instance);
         return instance;
     }
 
-    protected void copyTo(AppInstallation_UiResources instance){
+    protected void copyTo(AppInstallation_PageResources instance){
         super.copyTo(instance);
         
         instance.setBody(this.getBody());
     }
 
-    protected AppInstallation_UiResources newInstance(){
-        return (AppInstallation_UiResources) ClassHelper.newInstance(getClass());
+    protected AppInstallation_PageResources newInstance(){
+        return (AppInstallation_PageResources) ClassHelper.newInstance(getClass());
     }
 }
  // resume CPD analysis - CPD-ON

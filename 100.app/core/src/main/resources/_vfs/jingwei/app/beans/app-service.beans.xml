@@ -8,8 +8,7 @@
        x:schema="/nop/schema/beans.xdef"
 >
 
-    <bean id="jingweiAppService"
-          class="io.crazydan.jingwei.app.service.AppCoreBizModel"
-          ioc:default="true"
+    <bean id="io.crazydan.jingwei.app.service.AppCoreBizModel"
+          ioc:type="@bean:id" ioc:default="true"
     />
 </beans>

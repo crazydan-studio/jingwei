@@ -31,7 +31,7 @@ import io.nop.xlang.xpl.IXplTag;
 import io.nop.xlang.xpl.xlib.XplLibHelper;
 
 import static io.crazydan.jingwei.AppCoreConstants.SCOPE_VAR_appGenConfig;
-import static io.crazydan.jingwei.AppCoreConstants.XLIB_AI_APP_GEN_PATH;
+import static io.crazydan.jingwei.AppCoreConstants.XLIB_AI_APP_MODEL_GEN_PATH;
 import static io.crazydan.jingwei.AppCoreConstants.XLIB_TAG_ATTR_NODE;
 import static io.crazydan.jingwei.AppCoreConstants.XLIB_TAG_ModelDesignToOrmModel;
 
@@ -74,7 +74,7 @@ public class AiModelDesign {
 
         Map<String, Object> args = Map.of(XLIB_TAG_ATTR_NODE, getDesignNode());
 
-        IXplTag tag = XplLibHelper.getTag(XLIB_AI_APP_GEN_PATH, tagName);
+        IXplTag tag = XplLibHelper.getTag(XLIB_AI_APP_MODEL_GEN_PATH, tagName);
         return (T) tag.invokeWithNamedArgs(scope, args);
     }
 }

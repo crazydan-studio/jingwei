@@ -21,7 +21,10 @@ package io.crazydan.jingwei.app.util;
 
 import io.crazydan.jingwei.app.model.manifest.AppInstallation_Manifest;
 import io.crazydan.jingwei.app.model.manifest.AppReleasing_Manifest;
+import io.nop.api.core.util.IFreezable;
+import io.nop.api.core.util.INeedInit;
 import io.nop.core.resource.IResource;
+import io.nop.xlang.xdsl.DslModelHelper;
 import io.nop.xlang.xdsl.DslModelParser;
 
 import static io.crazydan.jingwei.app.AppConstants.XDSL_SCHEMA_APP_INSTALLATION_MANIFEST;
@@ -39,6 +42,11 @@ public class AppHelper {
         return loadDslModel(resource, XDSL_SCHEMA_APP_INSTALLATION_MANIFEST);
     }
 
+    /** 保存应用安装包清单 */
+    public static void saveAppInstallationManifest(AppInstallation_Manifest manifest, IResource resource) {
+        DslModelHelper.saveDslModel(XDSL_SCHEMA_APP_INSTALLATION_MANIFEST, manifest, resource);
+    }
+
     /** 加载应用发布包清单，若资源不存在，则返回 {@code null} */
     public static AppReleasing_Manifest loadAppReleasingManifest(IResource resource) {
         return loadDslModel(resource, XDSL_SCHEMA_APP_RELEASING_MANIFEST);
@@ -48,6 +56,15 @@ public class AppHelper {
     public static <T> T loadDslModel(IResource resource, String xdefPath) {
         DslModelParser parser = new DslModelParser(xdefPath);
 
-        return (T) parser.parseFromResource(resource, true);
+        T model = (T) parser.parseFromResource(resource, true);
+
+        if (model instanceof INeedInit) {
+            ((INeedInit) model).init();
+        }
+        if (model instanceof IFreezable) {
+            ((IFreezable) model).freeze(true);
+        }
+
+        return model;
     }
 }
