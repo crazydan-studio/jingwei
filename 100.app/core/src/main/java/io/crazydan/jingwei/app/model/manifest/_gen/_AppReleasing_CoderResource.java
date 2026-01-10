@@ -2,36 +2,36 @@ package io.crazydan.jingwei.app.model.manifest._gen;
 
 import io.nop.commons.collections.KeyedList; //NOPMD NOSONAR - suppressed UnusedImports - Used for List Prop
 import io.nop.core.lang.json.IJsonHandler;
-import io.crazydan.jingwei.app.model.manifest.AppPackage_CoderResources;
+import io.crazydan.jingwei.app.model.manifest.AppReleasing_CoderResource;
 import io.nop.commons.util.ClassHelper;
 
 
 
 // tell cpd to start ignoring code - CPD-OFF
 /**
- * generate from /jingwei/app/schema/manifest/package.xdef <p>
+ * generate from /jingwei/app/schema/manifest/releasing.xdef <p>
  * > 用于生成应用代码的 DSL 资源。
  */
 @SuppressWarnings({"PMD.UselessOverridingMethod","PMD.UnusedLocalVariable",
     "PMD.UnnecessaryFullyQualifiedName","PMD.EmptyControlStatement","java:S116","java:S101","java:S1128","java:S1161"})
-public abstract class _AppPackage_CoderResources extends io.nop.core.resource.component.AbstractComponentModel {
+public abstract class _AppReleasing_CoderResource extends io.nop.core.resource.component.AbstractComponentModel {
     
     /**
-     *  
+     *  应用打包资源
      * xml name: model
      * 
      */
     private io.crazydan.jingwei.app.model.manifest.AppPackage_Resource _model ;
     
     /**
-     *  
+     *  应用打包资源
      * xml name: ui
      * 
      */
     private io.crazydan.jingwei.app.model.manifest.AppPackage_Resource _ui ;
     
     /**
-     * 
+     * 应用打包资源
      * xml name: model
      *  
      */
@@ -50,7 +50,7 @@ public abstract class _AppPackage_CoderResources extends io.nop.core.resource.co
 
     
     /**
-     * 
+     * 应用打包资源
      * xml name: ui
      *  
      */
@@ -91,21 +91,21 @@ public abstract class _AppPackage_CoderResources extends io.nop.core.resource.co
         out.putNotNull("ui",this.getUi());
     }
 
-    public AppPackage_CoderResources cloneInstance(){
-        AppPackage_CoderResources instance = newInstance();
+    public AppReleasing_CoderResource cloneInstance(){
+        AppReleasing_CoderResource instance = newInstance();
         this.copyTo(instance);
         return instance;
     }
 
-    protected void copyTo(AppPackage_CoderResources instance){
+    protected void copyTo(AppReleasing_CoderResource instance){
         super.copyTo(instance);
         
         instance.setModel(this.getModel());
         instance.setUi(this.getUi());
     }
 
-    protected AppPackage_CoderResources newInstance(){
-        return (AppPackage_CoderResources) ClassHelper.newInstance(getClass());
+    protected AppReleasing_CoderResource newInstance(){
+        return (AppReleasing_CoderResource) ClassHelper.newInstance(getClass());
     }
 }
  // resume CPD analysis - CPD-ON

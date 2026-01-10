@@ -19,41 +19,37 @@
   - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
   -->
 
-<!-- [应用安装后清单]
-> 记录应用安装后的资源清单，用于校验已安装应用的完整性。
+<!-- [应用安装包清单]
+> 记录应用安装包中的资源清单。
 >
 -->
 <manifest xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="/nop/schema/xdef.xdef"
           x:schema="/nop/schema/xdef.xdef"
           xdef:bean-package="io.crazydan.jingwei.app.model.manifest"
-          xdef:name="AppPostInstallation_Manifest"
+          xdef:name="AppInstallation_Manifest"
           code="!string" version="!string"
           installedAt="!datetime"
 >
 
-    <!-- [模块资源]
+    <!-- [模型资源]
     -->
-    <moduleResources xdef:name="AppPostInstallation_ModuleResource"
-                     xdef:body-type="list" xdef:key-attr="path"
-                     xdef:bean-body-prop="body"
+    <modelResources xdef:name="AppInstallation_ModelResources"
+                    xdef:body-type="list" xdef:key-attr="path"
+                    xdef:bean-body-prop="body"
     >
-        <resource xdef:ref="AppPostInstallation_Resource"
+        <resource xdef:ref="resource.xdef"
                   path="!file-path"
         />
-    </moduleResources>
+    </modelResources>
 
     <!-- [UI 资源]
     -->
-    <uiResources xdef:name="AppPostInstallation_UiResources"
+    <uiResources xdef:name="AppInstallation_UiResources"
                  xdef:body-type="list" xdef:key-attr="path"
                  xdef:bean-body-prop="body"
     >
-        <resource xdef:ref="AppPostInstallation_Resource"
+        <resource xdef:ref="resource.xdef"
                   path="!file-path"
         />
     </uiResources>
-
-    <xdef:define xdef:name="AppPostInstallation_Resource"
-                 path="!file-path"
-    />
 </manifest>

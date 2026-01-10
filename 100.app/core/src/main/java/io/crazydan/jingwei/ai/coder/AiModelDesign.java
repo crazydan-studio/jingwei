@@ -30,10 +30,10 @@ import io.nop.xlang.api.XLang;
 import io.nop.xlang.xpl.IXplTag;
 import io.nop.xlang.xpl.xlib.XplLibHelper;
 
-import static io.crazydan.jingwei.AppConstants.SCOPE_VAR_appGenConfig;
-import static io.crazydan.jingwei.AppConstants.XLIB_AI_APP_GEN_PATH;
-import static io.crazydan.jingwei.AppConstants.XLIB_TAG_ATTR_NODE;
-import static io.crazydan.jingwei.AppConstants.XLIB_TAG_ModelDesignToOrmModel;
+import static io.crazydan.jingwei.AppCoreConstants.SCOPE_VAR_appGenConfig;
+import static io.crazydan.jingwei.AppCoreConstants.XLIB_AI_APP_GEN_PATH;
+import static io.crazydan.jingwei.AppCoreConstants.XLIB_TAG_ATTR_NODE;
+import static io.crazydan.jingwei.AppCoreConstants.XLIB_TAG_ModelDesignToOrmModel;
 
 /**
  *

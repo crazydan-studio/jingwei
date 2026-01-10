@@ -2,19 +2,19 @@ package io.crazydan.jingwei.app.model.manifest._gen;
 
 import io.nop.commons.collections.KeyedList; //NOPMD NOSONAR - suppressed UnusedImports - Used for List Prop
 import io.nop.core.lang.json.IJsonHandler;
-import io.crazydan.jingwei.app.model.manifest.AppPackage_Author;
+import io.crazydan.jingwei.app.model.manifest.AppReleasing_Author;
 import io.nop.commons.util.ClassHelper;
 
 
 
 // tell cpd to start ignoring code - CPD-OFF
 /**
- * generate from /jingwei/app/schema/manifest/package.xdef <p>
+ * generate from /jingwei/app/schema/manifest/releasing.xdef <p>
  * > 作者可以是个人，也可以是组织。
  */
 @SuppressWarnings({"PMD.UselessOverridingMethod","PMD.UnusedLocalVariable",
     "PMD.UnnecessaryFullyQualifiedName","PMD.EmptyControlStatement","java:S116","java:S101","java:S1128","java:S1161"})
-public abstract class _AppPackage_Author extends io.nop.core.resource.component.AbstractComponentModel {
+public abstract class _AppReleasing_Author extends io.nop.core.resource.component.AbstractComponentModel {
     
     /**
      *  
@@ -114,13 +114,13 @@ public abstract class _AppPackage_Author extends io.nop.core.resource.component.
         out.putNotNull("url",this.getUrl());
     }
 
-    public AppPackage_Author cloneInstance(){
-        AppPackage_Author instance = newInstance();
+    public AppReleasing_Author cloneInstance(){
+        AppReleasing_Author instance = newInstance();
         this.copyTo(instance);
         return instance;
     }
 
-    protected void copyTo(AppPackage_Author instance){
+    protected void copyTo(AppReleasing_Author instance){
         super.copyTo(instance);
         
         instance.setEmail(this.getEmail());
@@ -128,8 +128,8 @@ public abstract class _AppPackage_Author extends io.nop.core.resource.component.
         instance.setUrl(this.getUrl());
     }
 
-    protected AppPackage_Author newInstance(){
-        return (AppPackage_Author) ClassHelper.newInstance(getClass());
+    protected AppReleasing_Author newInstance(){
+        return (AppReleasing_Author) ClassHelper.newInstance(getClass());
     }
 }
  // resume CPD analysis - CPD-ON

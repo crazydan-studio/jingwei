@@ -2,20 +2,20 @@ package io.crazydan.jingwei.app.model.manifest._gen;
 
 import io.nop.commons.collections.KeyedList; //NOPMD NOSONAR - suppressed UnusedImports - Used for List Prop
 import io.nop.core.lang.json.IJsonHandler;
-import io.crazydan.jingwei.app.model.manifest.AppPostInstallation_Manifest;
+import io.crazydan.jingwei.app.model.manifest.AppInstallation_Manifest;
 import io.nop.commons.util.ClassHelper;
 
 
 
 // tell cpd to start ignoring code - CPD-OFF
 /**
- * generate from /jingwei/app/schema/manifest/post-installation.xdef <p>
- * > 记录应用安装后的资源清单，用于校验已安装应用的完整性。
+ * generate from /jingwei/app/schema/manifest/installation.xdef <p>
+ * > 记录应用安装包中的资源清单。
  * >
  */
 @SuppressWarnings({"PMD.UselessOverridingMethod","PMD.UnusedLocalVariable",
     "PMD.UnnecessaryFullyQualifiedName","PMD.EmptyControlStatement","java:S116","java:S101","java:S1128","java:S1161"})
-public abstract class _AppPostInstallation_Manifest extends io.nop.core.resource.component.AbstractComponentModel {
+public abstract class _AppInstallation_Manifest extends io.nop.core.resource.component.AbstractComponentModel {
     
     /**
      *  
@@ -32,18 +32,18 @@ public abstract class _AppPostInstallation_Manifest extends io.nop.core.resource
     private java.time.LocalDateTime _installedAt ;
     
     /**
-     *  模块资源
-     * xml name: moduleResources
+     *  模型资源
+     * xml name: modelResources
      * 
      */
-    private io.crazydan.jingwei.app.model.manifest.AppPostInstallation_ModuleResource _moduleResources ;
+    private io.crazydan.jingwei.app.model.manifest.AppInstallation_ModelResources _modelResources ;
     
     /**
      *  UI 资源
      * xml name: uiResources
      * 
      */
-    private io.crazydan.jingwei.app.model.manifest.AppPostInstallation_UiResources _uiResources ;
+    private io.crazydan.jingwei.app.model.manifest.AppInstallation_UiResources _uiResources ;
     
     /**
      *  
@@ -91,20 +91,20 @@ public abstract class _AppPostInstallation_Manifest extends io.nop.core.resource
 
     
     /**
-     * 模块资源
-     * xml name: moduleResources
+     * 模型资源
+     * xml name: modelResources
      *  
      */
     
-    public io.crazydan.jingwei.app.model.manifest.AppPostInstallation_ModuleResource getModuleResources(){
-      return _moduleResources;
+    public io.crazydan.jingwei.app.model.manifest.AppInstallation_ModelResources getModelResources(){
+      return _modelResources;
     }
 
     
-    public void setModuleResources(io.crazydan.jingwei.app.model.manifest.AppPostInstallation_ModuleResource value){
+    public void setModelResources(io.crazydan.jingwei.app.model.manifest.AppInstallation_ModelResources value){
         checkAllowChange();
         
-        this._moduleResources = value;
+        this._modelResources = value;
            
     }
 
@@ -115,12 +115,12 @@ public abstract class _AppPostInstallation_Manifest extends io.nop.core.resource
      *  
      */
     
-    public io.crazydan.jingwei.app.model.manifest.AppPostInstallation_UiResources getUiResources(){
+    public io.crazydan.jingwei.app.model.manifest.AppInstallation_UiResources getUiResources(){
       return _uiResources;
     }
 
     
-    public void setUiResources(io.crazydan.jingwei.app.model.manifest.AppPostInstallation_UiResources value){
+    public void setUiResources(io.crazydan.jingwei.app.model.manifest.AppInstallation_UiResources value){
         checkAllowChange();
         
         this._uiResources = value;
@@ -155,7 +155,7 @@ public abstract class _AppPostInstallation_Manifest extends io.nop.core.resource
 
         if(cascade){ //NOPMD - suppressed EmptyControlStatement - Auto Gen Code
         
-           this._moduleResources = io.nop.api.core.util.FreezeHelper.deepFreeze(this._moduleResources);
+           this._modelResources = io.nop.api.core.util.FreezeHelper.deepFreeze(this._modelResources);
             
            this._uiResources = io.nop.api.core.util.FreezeHelper.deepFreeze(this._uiResources);
             
@@ -168,29 +168,29 @@ public abstract class _AppPostInstallation_Manifest extends io.nop.core.resource
         
         out.putNotNull("code",this.getCode());
         out.putNotNull("installedAt",this.getInstalledAt());
-        out.putNotNull("moduleResources",this.getModuleResources());
+        out.putNotNull("modelResources",this.getModelResources());
         out.putNotNull("uiResources",this.getUiResources());
         out.putNotNull("version",this.getVersion());
     }
 
-    public AppPostInstallation_Manifest cloneInstance(){
-        AppPostInstallation_Manifest instance = newInstance();
+    public AppInstallation_Manifest cloneInstance(){
+        AppInstallation_Manifest instance = newInstance();
         this.copyTo(instance);
         return instance;
     }
 
-    protected void copyTo(AppPostInstallation_Manifest instance){
+    protected void copyTo(AppInstallation_Manifest instance){
         super.copyTo(instance);
         
         instance.setCode(this.getCode());
         instance.setInstalledAt(this.getInstalledAt());
-        instance.setModuleResources(this.getModuleResources());
+        instance.setModelResources(this.getModelResources());
         instance.setUiResources(this.getUiResources());
         instance.setVersion(this.getVersion());
     }
 
-    protected AppPostInstallation_Manifest newInstance(){
-        return (AppPostInstallation_Manifest) ClassHelper.newInstance(getClass());
+    protected AppInstallation_Manifest newInstance(){
+        return (AppInstallation_Manifest) ClassHelper.newInstance(getClass());
     }
 }
  // resume CPD analysis - CPD-ON

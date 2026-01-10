@@ -7,7 +7,7 @@ nop:
   vfs:
     custom:
       ns-mappings: |
-        xapp:${project.build.outputDirectory}/../app
+        vapp:${project.build.outputDirectory}/../app
   ai:
     service:
       # LLM引擎执行时是否自动打印所有请求和响应消息

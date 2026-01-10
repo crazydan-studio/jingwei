@@ -9,7 +9,7 @@
 >
 
     <bean id="jingweiAppService"
-          class="io.crazydan.jingwei.app.service.AppService"
+          class="io.crazydan.jingwei.app.service.AppCoreBizModel"
           ioc:default="true"
     />
 </beans>

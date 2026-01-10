@@ -17,28 +17,21 @@
  * If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
  */
 
-package io.crazydan.jingwei.app;
+package io.crazydan.jingwei;
 
-import io.nop.core.resource.IResource;
-import io.nop.core.resource.impl.ClassPathResource;
+import io.nop.api.core.exceptions.ErrorCode;
 
-import static io.nop.core.resource.ResourceConstants.RESOURCE_NS_CLASSPATH;
+import static io.nop.ai.core.AiCoreErrors.ARG_CONFIG_VAR;
+import static io.nop.api.core.exceptions.ErrorCode.define;
 
 /**
- *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
  * @date 2026-01-08
  */
-public class AppLoader {
+public interface AppCoreErrors {
 
-    public void loadModule(String appCode) {
-    }
-
-    protected void loadModuleFromClasspath(String appCode) {
-        IResource resource = new ClassPathResource(RESOURCE_NS_CLASSPATH + ":apps/" + appCode);
-    }
-
-    protected void loadModuleFromDb(String appCode) {
-        //
-    }
+    ErrorCode ERR_CFG_VALUE_NOT_SPECIFIED = //
+            define("jingwei.err.app.cfg.value-not-specified",
+                   "配置项 {" + ARG_CONFIG_VAR + "} 未指定有效值",
+                   ARG_CONFIG_VAR);
 }

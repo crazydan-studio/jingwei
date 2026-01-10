@@ -24,7 +24,7 @@ import io.nop.api.core.annotations.core.Locale;
 import io.nop.api.core.config.IConfigReference;
 import io.nop.api.core.util.SourceLocation;
 
-import static io.crazydan.jingwei.AppConstants.APP_PORTAL_DEFAULT_CODE;
+import static io.crazydan.jingwei.AppCoreConstants.APP_PORTAL_DEFAULT_CODE;
 import static io.nop.api.core.config.AppConfig.varRef;
 
 /**
@@ -33,8 +33,8 @@ import static io.nop.api.core.config.AppConfig.varRef;
  * @date 2026-01-07
  */
 @Locale("zh-CN")
-public interface AppConfigs {
-    SourceLocation s_loc = SourceLocation.fromClass(AppConfigs.class);
+public interface AppCoreConfigs {
+    SourceLocation s_loc = SourceLocation.fromClass(AppCoreConfigs.class);
 
     @Description("门户（系统入口）应用的应用标识")
     IConfigReference<String> CFG_APP_PORTAL_CODE = //

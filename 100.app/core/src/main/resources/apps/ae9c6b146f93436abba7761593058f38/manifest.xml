@@ -20,7 +20,7 @@
   -->
 
 <manifest xmlns:x="/nop/schema/xdsl.xdef"
-          x:schema="/jingwei/app/schema/manifest/package.xdef"
+          x:schema="/jingwei/app/schema/manifest/releasing.xdef"
           name="精卫应用" code="ae9c6b146f93436abba7761593058f38"
           version="0.1.0" icon="icon.svg"
 >
@@ -29,14 +29,17 @@
 
     <author name="Crazydan Studio" url="https://studio.crazydan.org"/>
 
-    <designRequirements>
-        <app path="app-requirements.md"/>
-        <model path="model-requirements.md"/>
-        <ui path="ui-requirements.md"/>
-    </designRequirements>
+    <designRequirement>
+        <app path="source/app-requirements.md"/>
+        <model path="source/model-requirements.md"/>
+        <ui path="source/ui-requirements.md"/>
+    </designRequirement>
 
-    <coderResources>
-        <model path="model-design.xml"/>
-        <ui path="ui-design.xml"/>
-    </coderResources>
+    <coderResource>
+        <model path="source/model-design.xml"/>
+        <ui path="source/ui-design.xml"/>
+    </coderResource>
+
+    <artifactResource>
+    </artifactResource>
 </manifest>

@@ -19,45 +19,56 @@
   - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
   -->
 
-<!-- [应用打包清单]
-> 记录应用安装包的资源清单，用于提供详细的应用安装包信息。
+<!-- [应用发布包清单]
+> 记录应用发布包中的资源清单。
 >
 -->
 <manifest xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="/nop/schema/xdef.xdef"
           x:schema="/nop/schema/xdef.xdef"
           xdef:bean-package="io.crazydan.jingwei.app.model.manifest"
-          xdef:name="AppPackage_Manifest"
+          xdef:name="AppReleasing_Manifest"
           name="!string" code="!string" version="!string"
           icon="file-path"
 >
 
     <description>!string</description>
 
-    <!-- [应用作者信息]
+    <!-- [应用的作者信息]
     > 作者可以是个人，也可以是组织。
     -->
-    <author xdef:name="AppPackage_Author"
+    <author xdef:name="AppReleasing_Author"
             name="!string" email="email" url="url"
     />
 
-    <!-- [应用设计需求]
+    <!-- [应用的设计需求]
     > 应用功能、模型、UI 设计的需求文档。
     -->
-    <designRequirements xdef:name="AppPackage_DesignRequirements">
-        <app xdef:ref="AppPackage_Resource"/>
-        <model xdef:ref="AppPackage_Resource"/>
-        <ui xdef:ref="AppPackage_Resource"/>
-    </designRequirements>
+    <designRequirement xdef:name="AppReleasing_DesignRequirement">
+        <app xdef:ref="resource.xdef"/>
+        <model xdef:ref="resource.xdef"/>
+        <ui xdef:ref="resource.xdef"/>
+    </designRequirement>
 
-    <!-- [应用编码资源]
+    <!-- [应用的编码资源]
     > 用于生成应用代码的 DSL 资源。
     -->
-    <coderResources xdef:name="AppPackage_CoderResources">
-        <model xdef:ref="AppPackage_Resource"/>
-        <ui xdef:ref="AppPackage_Resource"/>
-    </coderResources>
+    <coderResource xdef:name="AppReleasing_CoderResource">
+        <model xdef:ref="resource.xdef"/>
+        <ui xdef:ref="resource.xdef"/>
+    </coderResource>
 
-    <xdef:define xdef:name="AppPackage_Resource"
-                 path="!file-path"
-    />
+    <!-- [应用的构建产物]
+    > 将被释放到应用安装目录中的构建产物资源。
+    -->
+    <artifactResource xdef:name="AppReleasing_ArtifactResource">
+        <model xdef:ref="resource.xdef"
+               xdef:unique-attr="path"
+               path="!file-path"
+        />
+
+        <ui xdef:ref="resource.xdef"
+            xdef:unique-attr="path"
+            path="!file-path"
+        />
+    </artifactResource>
 </manifest>

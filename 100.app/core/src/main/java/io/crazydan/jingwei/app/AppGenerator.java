@@ -28,10 +28,10 @@ import io.nop.core.lang.eval.IEvalScope;
 import io.nop.core.resource.IResource;
 import io.nop.xlang.api.XLang;
 
-import static io.crazydan.jingwei.AppConfigs.CFG_APP_INSTALL_DIR;
-import static io.crazydan.jingwei.AppConstants.SCOPE_VAR_appGenConfig;
-import static io.crazydan.jingwei.AppConstants.SCOPE_VAR_codeGenModel;
-import static io.crazydan.jingwei.AppConstants.TEMPLATE_APP_MODULE_PATH;
+import static io.crazydan.jingwei.AppCoreConfigs.CFG_APP_INSTALL_DIR;
+import static io.crazydan.jingwei.AppCoreConstants.SCOPE_VAR_appGenConfig;
+import static io.crazydan.jingwei.AppCoreConstants.SCOPE_VAR_codeGenModel;
+import static io.crazydan.jingwei.AppCoreConstants.TEMPLATE_APP_MODEL_PATH;
 
 /**
  * 应用构建器
@@ -53,7 +53,7 @@ public class AppGenerator {
         AiOrmModel ormModel = modelDesign.genOrmModel(vars);
 
         String targetDir = CFG_APP_INSTALL_DIR.get();
-        XCodeGenerator gen = new XCodeGenerator(TEMPLATE_APP_MODULE_PATH, targetDir);
+        XCodeGenerator gen = new XCodeGenerator(TEMPLATE_APP_MODEL_PATH, targetDir);
         // 保持用户定制的代码不变，仅更新以下划线开头的文件
         gen.forceOverride(false);
 

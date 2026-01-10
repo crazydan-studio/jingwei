@@ -20,15 +20,21 @@
 package io.crazydan.jingwei.app.service;
 
 import java.io.File;
+import java.util.Map;
 
+import io.crazydan.duzhou.framework.commons.StringHelper;
 import io.crazydan.jingwei.app.model.AppPage;
+import io.nop.api.core.annotations.biz.BizModel;
+import io.nop.api.core.annotations.biz.BizQuery;
 import io.nop.core.resource.IResource;
+import io.nop.core.resource.VirtualFileSystem;
 import io.nop.core.resource.impl.ClassPathResource;
-import io.nop.dao.api.IDaoProvider;
-import jakarta.inject.Inject;
 
-import static io.crazydan.jingwei.AppConfigs.CFG_APP_INSTALL_DIR;
-import static io.crazydan.jingwei.AppConstants.APP_PORTAL_DEFAULT_CODE;
+import static io.crazydan.jingwei.AppCoreConfigs.CFG_APP_INSTALL_DIR;
+import static io.crazydan.jingwei.app.AppConstants.APP_MANIFEST_FILE;
+import static io.crazydan.jingwei.app.AppConstants.TEMPLATE_APP_VPATH;
+import static io.crazydan.jingwei.app.AppConstants.VAR_APP_CODE;
+import static io.crazydan.jingwei.app.AppConstants.VAR_PATH;
 import static io.nop.core.resource.ResourceConstants.RESOURCE_NS_CLASSPATH;
 
 /**
@@ -36,11 +42,11 @@ import static io.nop.core.resource.ResourceConstants.RESOURCE_NS_CLASSPATH;
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
  * @date 2026-01-08
  */
-public class AppService {
-    @Inject
-    protected IDaoProvider daoProvider;
+@BizModel("App")
+public class AppCoreBizModel {
 
     /** 加载指定应用的指定页面：在 Web 服务中将主动加载门户应用的首页 */
+    @BizQuery
     public AppPage loadPage(String appCode, String pageName) {
         assureModuleLoaded(appCode);
 
@@ -54,12 +60,6 @@ public class AppService {
         if (checkIfModuleReady(appCode)) {
             return;
         }
-
-        if (APP_PORTAL_DEFAULT_CODE.equals(appCode)) {
-            loadModuleFromClasspath(appCode);
-        } else {
-            loadModuleFromDb(appCode);
-        }
     }
 
     protected void loadModuleFromClasspath(String appCode) {
@@ -71,12 +71,16 @@ public class AppService {
     }
 
     protected boolean checkIfModuleReady(String appCode) {
-        File appModuleDir = getModuleDir(appCode);
-        if (!appModuleDir.isDirectory()) {
-            return false;
-        }
+        IResource manifestResource = loadModuleResource(appCode, APP_MANIFEST_FILE);
 
         return true;
+    }
+
+    protected IResource loadModuleResource(String appCode, String path) {
+        Map<String, Object> params = Map.of(VAR_APP_CODE, appCode, VAR_PATH, path);
+        String vpath = StringHelper.renderTemplate(TEMPLATE_APP_VPATH, params::get);
+
+        return VirtualFileSystem.instance().getResource(vpath);
     }
 
     protected File getModuleDir(String appCode) {

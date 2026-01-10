@@ -17,21 +17,23 @@
  * If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
  */
 
-package io.crazydan.jingwei;
-
-import io.nop.api.core.exceptions.ErrorCode;
-
-import static io.nop.ai.core.AiCoreErrors.ARG_CONFIG_VAR;
-import static io.nop.api.core.exceptions.ErrorCode.define;
+package io.crazydan.jingwei.app;
 
 /**
+ *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
- * @date 2026-01-08
+ * @date 2026-01-06
  */
-public interface AppErrors {
+public interface AppConstants {
+    String VAR_APP_CODE = "appCode";
+    String VAR_PATH = "path";
 
-    ErrorCode ERR_CFG_VALUE_NOT_SPECIFIED = //
-            define("jingwei.err.cfg.value-not-specified",
-                   "配置项 {" + ARG_CONFIG_VAR + "} 未指定有效值",
-                   ARG_CONFIG_VAR);
+    String NS_VFS_APP = "vapp";
+
+    String XDSL_SCHEMA_APP_PACKAGE_RESOURCE = "/jingwei/app/schema/manifest/resource.xdef";
+    String XDSL_SCHEMA_APP_RELEASING_MANIFEST = "/jingwei/app/schema/manifest/releasing.xdef";
+    String XDSL_SCHEMA_APP_INSTALLATION_MANIFEST = "/jingwei/app/schema/manifest/installation.xdef";
+
+    String APP_MANIFEST_FILE = "manifest.xml";
+    String TEMPLATE_APP_VPATH = NS_VFS_APP + ":/{" + VAR_APP_CODE + "}/{" + VAR_PATH + "}";
 }

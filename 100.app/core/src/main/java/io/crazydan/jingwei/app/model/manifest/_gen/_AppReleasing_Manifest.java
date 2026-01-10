@@ -2,27 +2,34 @@ package io.crazydan.jingwei.app.model.manifest._gen;
 
 import io.nop.commons.collections.KeyedList; //NOPMD NOSONAR - suppressed UnusedImports - Used for List Prop
 import io.nop.core.lang.json.IJsonHandler;
-import io.crazydan.jingwei.app.model.manifest.AppPackage_Manifest;
+import io.crazydan.jingwei.app.model.manifest.AppReleasing_Manifest;
 import io.nop.commons.util.ClassHelper;
 
 
 
 // tell cpd to start ignoring code - CPD-OFF
 /**
- * generate from /jingwei/app/schema/manifest/package.xdef <p>
- * > 记录应用安装包的资源清单，用于提供详细的应用安装包信息。
+ * generate from /jingwei/app/schema/manifest/releasing.xdef <p>
+ * > 记录应用发布包中的资源清单。
  * >
  */
 @SuppressWarnings({"PMD.UselessOverridingMethod","PMD.UnusedLocalVariable",
     "PMD.UnnecessaryFullyQualifiedName","PMD.EmptyControlStatement","java:S116","java:S101","java:S1128","java:S1161"})
-public abstract class _AppPackage_Manifest extends io.nop.core.resource.component.AbstractComponentModel {
+public abstract class _AppReleasing_Manifest extends io.nop.core.resource.component.AbstractComponentModel {
     
     /**
-     *  应用作者信息
+     *  应用的构建产物
+     * xml name: artifactResource
+     * > 将被释放到应用安装目录中的构建产物资源。
+     */
+    private io.crazydan.jingwei.app.model.manifest.AppReleasing_ArtifactResource _artifactResource ;
+    
+    /**
+     *  应用的作者信息
      * xml name: author
      * > 作者可以是个人，也可以是组织。
      */
-    private io.crazydan.jingwei.app.model.manifest.AppPackage_Author _author ;
+    private io.crazydan.jingwei.app.model.manifest.AppReleasing_Author _author ;
     
     /**
      *  
@@ -32,11 +39,11 @@ public abstract class _AppPackage_Manifest extends io.nop.core.resource.componen
     private java.lang.String _code ;
     
     /**
-     *  应用编码资源
-     * xml name: coderResources
+     *  应用的编码资源
+     * xml name: coderResource
      * > 用于生成应用代码的 DSL 资源。
      */
-    private io.crazydan.jingwei.app.model.manifest.AppPackage_CoderResources _coderResources ;
+    private io.crazydan.jingwei.app.model.manifest.AppReleasing_CoderResource _coderResource ;
     
     /**
      *  
@@ -46,11 +53,11 @@ public abstract class _AppPackage_Manifest extends io.nop.core.resource.componen
     private java.lang.String _description ;
     
     /**
-     *  应用设计需求
-     * xml name: designRequirements
+     *  应用的设计需求
+     * xml name: designRequirement
      * > 应用功能、模型、UI 设计的需求文档。
      */
-    private io.crazydan.jingwei.app.model.manifest.AppPackage_DesignRequirements _designRequirements ;
+    private io.crazydan.jingwei.app.model.manifest.AppReleasing_DesignRequirement _designRequirement ;
     
     /**
      *  
@@ -74,17 +81,36 @@ public abstract class _AppPackage_Manifest extends io.nop.core.resource.componen
     private java.lang.String _version ;
     
     /**
-     * 应用作者信息
+     * 应用的构建产物
+     * xml name: artifactResource
+     *  > 将被释放到应用安装目录中的构建产物资源。
+     */
+    
+    public io.crazydan.jingwei.app.model.manifest.AppReleasing_ArtifactResource getArtifactResource(){
+      return _artifactResource;
+    }
+
+    
+    public void setArtifactResource(io.crazydan.jingwei.app.model.manifest.AppReleasing_ArtifactResource value){
+        checkAllowChange();
+        
+        this._artifactResource = value;
+           
+    }
+
+    
+    /**
+     * 应用的作者信息
      * xml name: author
      *  > 作者可以是个人，也可以是组织。
      */
     
-    public io.crazydan.jingwei.app.model.manifest.AppPackage_Author getAuthor(){
+    public io.crazydan.jingwei.app.model.manifest.AppReleasing_Author getAuthor(){
       return _author;
     }
 
     
-    public void setAuthor(io.crazydan.jingwei.app.model.manifest.AppPackage_Author value){
+    public void setAuthor(io.crazydan.jingwei.app.model.manifest.AppReleasing_Author value){
         checkAllowChange();
         
         this._author = value;
@@ -112,20 +138,20 @@ public abstract class _AppPackage_Manifest extends io.nop.core.resource.componen
 
     
     /**
-     * 应用编码资源
-     * xml name: coderResources
+     * 应用的编码资源
+     * xml name: coderResource
      *  > 用于生成应用代码的 DSL 资源。
      */
     
-    public io.crazydan.jingwei.app.model.manifest.AppPackage_CoderResources getCoderResources(){
-      return _coderResources;
+    public io.crazydan.jingwei.app.model.manifest.AppReleasing_CoderResource getCoderResource(){
+      return _coderResource;
     }
 
     
-    public void setCoderResources(io.crazydan.jingwei.app.model.manifest.AppPackage_CoderResources value){
+    public void setCoderResource(io.crazydan.jingwei.app.model.manifest.AppReleasing_CoderResource value){
         checkAllowChange();
         
-        this._coderResources = value;
+        this._coderResource = value;
            
     }
 
@@ -150,20 +176,20 @@ public abstract class _AppPackage_Manifest extends io.nop.core.resource.componen
 
     
     /**
-     * 应用设计需求
-     * xml name: designRequirements
+     * 应用的设计需求
+     * xml name: designRequirement
      *  > 应用功能、模型、UI 设计的需求文档。
      */
     
-    public io.crazydan.jingwei.app.model.manifest.AppPackage_DesignRequirements getDesignRequirements(){
-      return _designRequirements;
+    public io.crazydan.jingwei.app.model.manifest.AppReleasing_DesignRequirement getDesignRequirement(){
+      return _designRequirement;
     }
 
     
-    public void setDesignRequirements(io.crazydan.jingwei.app.model.manifest.AppPackage_DesignRequirements value){
+    public void setDesignRequirement(io.crazydan.jingwei.app.model.manifest.AppReleasing_DesignRequirement value){
         checkAllowChange();
         
-        this._designRequirements = value;
+        this._designRequirement = value;
            
     }
 
@@ -233,11 +259,13 @@ public abstract class _AppPackage_Manifest extends io.nop.core.resource.componen
 
         if(cascade){ //NOPMD - suppressed EmptyControlStatement - Auto Gen Code
         
+           this._artifactResource = io.nop.api.core.util.FreezeHelper.deepFreeze(this._artifactResource);
+            
            this._author = io.nop.api.core.util.FreezeHelper.deepFreeze(this._author);
             
-           this._coderResources = io.nop.api.core.util.FreezeHelper.deepFreeze(this._coderResources);
+           this._coderResource = io.nop.api.core.util.FreezeHelper.deepFreeze(this._coderResource);
             
-           this._designRequirements = io.nop.api.core.util.FreezeHelper.deepFreeze(this._designRequirements);
+           this._designRequirement = io.nop.api.core.util.FreezeHelper.deepFreeze(this._designRequirement);
             
         }
     }
@@ -246,37 +274,39 @@ public abstract class _AppPackage_Manifest extends io.nop.core.resource.componen
     protected void outputJson(IJsonHandler out){
         super.outputJson(out);
         
+        out.putNotNull("artifactResource",this.getArtifactResource());
         out.putNotNull("author",this.getAuthor());
         out.putNotNull("code",this.getCode());
-        out.putNotNull("coderResources",this.getCoderResources());
+        out.putNotNull("coderResource",this.getCoderResource());
         out.putNotNull("description",this.getDescription());
-        out.putNotNull("designRequirements",this.getDesignRequirements());
+        out.putNotNull("designRequirement",this.getDesignRequirement());
         out.putNotNull("icon",this.getIcon());
         out.putNotNull("name",this.getName());
         out.putNotNull("version",this.getVersion());
     }
 
-    public AppPackage_Manifest cloneInstance(){
-        AppPackage_Manifest instance = newInstance();
+    public AppReleasing_Manifest cloneInstance(){
+        AppReleasing_Manifest instance = newInstance();
         this.copyTo(instance);
         return instance;
     }
 
-    protected void copyTo(AppPackage_Manifest instance){
+    protected void copyTo(AppReleasing_Manifest instance){
         super.copyTo(instance);
         
+        instance.setArtifactResource(this.getArtifactResource());
         instance.setAuthor(this.getAuthor());
         instance.setCode(this.getCode());
-        instance.setCoderResources(this.getCoderResources());
+        instance.setCoderResource(this.getCoderResource());
         instance.setDescription(this.getDescription());
-        instance.setDesignRequirements(this.getDesignRequirements());
+        instance.setDesignRequirement(this.getDesignRequirement());
         instance.setIcon(this.getIcon());
         instance.setName(this.getName());
         instance.setVersion(this.getVersion());
     }
 
-    protected AppPackage_Manifest newInstance(){
-        return (AppPackage_Manifest) ClassHelper.newInstance(getClass());
+    protected AppReleasing_Manifest newInstance(){
+        return (AppReleasing_Manifest) ClassHelper.newInstance(getClass());
     }
 }
  // resume CPD analysis - CPD-ON

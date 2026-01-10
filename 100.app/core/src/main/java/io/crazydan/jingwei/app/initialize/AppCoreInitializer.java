@@ -29,8 +29,8 @@ import io.nop.commons.util.FileHelper;
 import io.nop.commons.util.StringHelper;
 import io.nop.core.initialize.ICoreInitializer;
 
-import static io.crazydan.jingwei.AppConfigs.CFG_APP_INSTALL_DIR;
-import static io.crazydan.jingwei.AppErrors.ERR_CFG_VALUE_NOT_SPECIFIED;
+import static io.crazydan.jingwei.AppCoreConfigs.CFG_APP_INSTALL_DIR;
+import static io.crazydan.jingwei.AppCoreErrors.ERR_CFG_VALUE_NOT_SPECIFIED;
 import static io.nop.ai.core.AiCoreErrors.ARG_CONFIG_VAR;
 
 /**

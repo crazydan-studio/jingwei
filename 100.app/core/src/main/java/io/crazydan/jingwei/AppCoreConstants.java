@@ -24,17 +24,15 @@ package io.crazydan.jingwei;
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
  * @date 2026-01-06
  */
-public interface AppConstants {
-    String APP_VFS_NAMESPACE = "xapp";
-
+public interface AppCoreConstants {
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    String XLIB_AI_APP_GEN_PATH = "/jingwei/ai/xlib/app-module.xlib";
+    String XLIB_AI_APP_GEN_PATH = "/jingwei/ai/xlib/app-model.xlib";
 
     String XLIB_TAG_ModelDesignToOrmModel = "ModelDesignToOrmModel";
 
     String XLIB_TAG_ATTR_NODE = "node";
 
-    String TEMPLATE_APP_MODULE_PATH = "/jingwei/templates/app-module";
+    String TEMPLATE_APP_MODEL_PATH = "/jingwei/templates/app-model";
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -46,6 +44,7 @@ public interface AppConstants {
     /** 门户应用的缺省应用标识 */
     String APP_PORTAL_DEFAULT_CODE = "ae9c6b146f93436abba7761593058f38";
 
-    String APP_AI_MODEL_DESIGN_NAME = "app.ai-model-design.xml";
-    String APP_AI_UI_DESIGN_NAME = "app.ai-ui-design.xml";
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    String BIZ_APP_ = "";
 }

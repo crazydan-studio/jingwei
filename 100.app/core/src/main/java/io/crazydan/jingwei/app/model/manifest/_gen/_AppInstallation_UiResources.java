@@ -2,26 +2,26 @@ package io.crazydan.jingwei.app.model.manifest._gen;
 
 import io.nop.commons.collections.KeyedList; //NOPMD NOSONAR - suppressed UnusedImports - Used for List Prop
 import io.nop.core.lang.json.IJsonHandler;
-import io.crazydan.jingwei.app.model.manifest.AppPostInstallation_UiResources;
+import io.crazydan.jingwei.app.model.manifest.AppInstallation_UiResources;
 import io.nop.commons.util.ClassHelper;
 
 
 
 // tell cpd to start ignoring code - CPD-OFF
 /**
- * generate from /jingwei/app/schema/manifest/post-installation.xdef <p>
+ * generate from /jingwei/app/schema/manifest/installation.xdef <p>
  * 
  */
 @SuppressWarnings({"PMD.UselessOverridingMethod","PMD.UnusedLocalVariable",
     "PMD.UnnecessaryFullyQualifiedName","PMD.EmptyControlStatement","java:S116","java:S101","java:S1128","java:S1161"})
-public abstract class _AppPostInstallation_UiResources extends io.nop.core.resource.component.AbstractComponentModel {
+public abstract class _AppInstallation_UiResources extends io.nop.core.resource.component.AbstractComponentModel {
     
     /**
      *  
      * xml name: 
      * 
      */
-    private KeyedList<io.crazydan.jingwei.app.model.manifest.AppPostInstallation_Resource> _body = KeyedList.emptyList();
+    private KeyedList<io.crazydan.jingwei.app.model.manifest.AppPackage_Resource> _body = KeyedList.emptyList();
     
     /**
      * 
@@ -29,20 +29,20 @@ public abstract class _AppPostInstallation_UiResources extends io.nop.core.resou
      *  
      */
     
-    public java.util.List<io.crazydan.jingwei.app.model.manifest.AppPostInstallation_Resource> getBody(){
+    public java.util.List<io.crazydan.jingwei.app.model.manifest.AppPackage_Resource> getBody(){
       return _body;
     }
 
     
-    public void setBody(java.util.List<io.crazydan.jingwei.app.model.manifest.AppPostInstallation_Resource> value){
+    public void setBody(java.util.List<io.crazydan.jingwei.app.model.manifest.AppPackage_Resource> value){
         checkAllowChange();
         
-        this._body = KeyedList.fromList(value, io.crazydan.jingwei.app.model.manifest.AppPostInstallation_Resource::getPath);
+        this._body = KeyedList.fromList(value, io.crazydan.jingwei.app.model.manifest.AppPackage_Resource::getPath);
            
     }
 
     
-    public io.crazydan.jingwei.app.model.manifest.AppPostInstallation_Resource getResource(String name){
+    public io.crazydan.jingwei.app.model.manifest.AppPackage_Resource getResource(String name){
         return this._body.getByKey(name);
     }
 
@@ -50,11 +50,11 @@ public abstract class _AppPostInstallation_UiResources extends io.nop.core.resou
         return this._body.containsKey(name);
     }
 
-    public void addResource(io.crazydan.jingwei.app.model.manifest.AppPostInstallation_Resource item) {
+    public void addResource(io.crazydan.jingwei.app.model.manifest.AppPackage_Resource item) {
         checkAllowChange();
-        java.util.List<io.crazydan.jingwei.app.model.manifest.AppPostInstallation_Resource> list = this.getBody();
+        java.util.List<io.crazydan.jingwei.app.model.manifest.AppPackage_Resource> list = this.getBody();
         if (list == null || list.isEmpty()) {
-            list = new KeyedList<>(io.crazydan.jingwei.app.model.manifest.AppPostInstallation_Resource::getPath);
+            list = new KeyedList<>(io.crazydan.jingwei.app.model.manifest.AppPackage_Resource::getPath);
             setBody(list);
         }
         list.add(item);
@@ -88,20 +88,20 @@ public abstract class _AppPostInstallation_UiResources extends io.nop.core.resou
         out.putNotNull("body",this.getBody());
     }
 
-    public AppPostInstallation_UiResources cloneInstance(){
-        AppPostInstallation_UiResources instance = newInstance();
+    public AppInstallation_UiResources cloneInstance(){
+        AppInstallation_UiResources instance = newInstance();
         this.copyTo(instance);
         return instance;
     }
 
-    protected void copyTo(AppPostInstallation_UiResources instance){
+    protected void copyTo(AppInstallation_UiResources instance){
         super.copyTo(instance);
         
         instance.setBody(this.getBody());
     }
 
-    protected AppPostInstallation_UiResources newInstance(){
-        return (AppPostInstallation_UiResources) ClassHelper.newInstance(getClass());
+    protected AppInstallation_UiResources newInstance(){
+        return (AppInstallation_UiResources) ClassHelper.newInstance(getClass());
     }
 }
  // resume CPD analysis - CPD-ON
