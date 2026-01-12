@@ -143,6 +143,10 @@ public class AppCoreBizModel {
         return loadVfsResource(TEMPLATE_APP_INSTALLATION_V_PATH, appCode, path);
     }
 
+    protected IResource loadAppStaticResource(String appCode, String path) {
+        return loadVfsResource(TEMPLATE_APP_STATIC_V_PATH, appCode, path);
+    }
+
     protected IResource loadAppClasspathResource(String appCode, String path) {
         return loadVfsResource(TEMPLATE_APP_CLASSPATH_V_PATH, appCode, path);
     }
@@ -215,11 +219,10 @@ public class AppCoreBizModel {
         // Note: 页面资源需释放到应用静态资源目录
         pageResources.forEach((source) -> {
             AppPackage_Resource pkg = new AppPackage_Resource();
+            pkg.setPath(source.getName());
 
-            IResource resource = loadVfsResource(TEMPLATE_APP_STATIC_V_PATH, appCode, source.getName());
+            IResource resource = loadAppStaticResource(appCode, pkg.getPath());
             source.getResource().saveToResource(resource);
-
-            pkg.setPath(resource.getStdPath());
 
             manifest.getPageResources().addChild(pkg);
         });

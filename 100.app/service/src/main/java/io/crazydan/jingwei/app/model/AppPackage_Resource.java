@@ -31,8 +31,9 @@ public class AppPackage_Resource extends _AppPackage_Resource {
 
     /** 根据当前对象的资源位置加载资源 */
     public IResource getResource() {
+        String inDir = StringHelper.removeLastPart(getLocation().getPath(), '/');
         String path = StringHelper.normalizePath(getPath());
-        String vPath = StringHelper.appendPath(getLocation().getPath(), path);
+        String vPath = StringHelper.appendPath(inDir, path);
 
         return VirtualFileSystem.instance().getResource(vPath, true);
     }

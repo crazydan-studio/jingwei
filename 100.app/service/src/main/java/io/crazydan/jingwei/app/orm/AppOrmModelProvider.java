@@ -19,6 +19,7 @@
 
 package io.crazydan.jingwei.app.orm;
 
+import java.util.Collections;
 import java.util.List;
 
 import io.nop.api.core.context.ContextProvider;
@@ -48,6 +49,8 @@ public class AppOrmModelProvider implements IOrmModelProvider {
     private List<IResource> ormModelResources;
 
     public AppOrmModelProvider() {
+        this.ormModelResources = Collections.emptyList();
+
         this.cache = ResourceTenantManager.instance().makeCacheEntry("dyn-loaded-orm-model-cache", false, null);
         GlobalCacheRegistry.instance().register(this.cache);
     }
@@ -87,7 +90,8 @@ public class AppOrmModelProvider implements IOrmModelProvider {
         OrmModel ormModel = new OrmModelLoader().loadOrmModel(this.ormModelResources);
         LoadedOrmModel ret = new LoadedOrmModel(env, ormModel);
 
-        IOrmInterceptor interceptor = new XplOrmInterceptorLoader().loadInterceptor(List.of());
+        IOrmInterceptor interceptor = //
+                new XplOrmInterceptorLoader().loadInterceptor(Collections.emptyList());
         ret.setOrmInterceptor(interceptor);
 
         return ret;

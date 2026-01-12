@@ -37,6 +37,11 @@ nop:
           # min-response-size: 2048
           mime-types: text/html,text/xml,text/plain,text/javascript,text/css,application/json,application/xml,application/javascript,application/x-shockwave-flash
 
+  vfs:
+    custom:
+      ns-mappings: |
+        app-install-dir:${jingwei.app.install-dir},
+        app-static-dir:${jingwei.app.static-dir}
   ai:
     # 在该目录中以 `{llmName}.txt` 形式按模型名创建文本文件并在其中放置 API Key
     secret-dir: ${project.basedir}/_data/ai/secret

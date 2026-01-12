@@ -210,6 +210,9 @@
                     // 等价于构造 /nop/schema/orm/entity.xdef
                     const entity = new OrmEntityModel();
                     entity.name = node.attrText('name');
+                    // 统一采用动态模型，以避免创建实体 class
+                    entity.className = 'io.nop.orm.support.DynamicOrmEntity';
+
                     entity.tableName = codeGenConfig.dbTablePrefix + $String.camelCaseToUnderscore(entity.name, true);
                     entity.querySpace = codeGenConfig.dbQuerySpace;
                     entity.displayName = node.attrText('displayName');

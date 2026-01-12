@@ -82,7 +82,7 @@ public class TestAiModelDesign extends NopJunitTestCase {
 
         genConfig.setCode("16834a2287e74be796b6493008e22ac4");
         genConfig.setDomain("app");
-        genConfig.setDbQuerySpace("user");
+        //genConfig.setDbQuerySpace("user");
         genConfig.setDbTablePrefix("tbl_3mk2yf_");
 
         return genConfig;
