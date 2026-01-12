@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--
+  - 精卫（JingWei） - 衔木石填沧海，筑屏障护安全
+  - Copyright (C) 2026 Crazydan Studio <https://studio.crazydan.org>
+  -
+  - This program is free software: you can redistribute it and/or modify
+  - it under the terms of the GNU Lesser General Public License as published by
+  - the Free Software Foundation, either version 3 of the License, or
+  - (at your option) any later version.
+  -
+  - This program is distributed in the hope that it will be useful,
+  - but WITHOUT ANY WARRANTY; without even the implied warranty of
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  - GNU Lesser General Public License for more details.
+  -
+  - You should have received a copy of the GNU Lesser General Public License
+  - along with this program.
+  - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
+  -->
+
+<lib xmlns:x="/nop/schema/xdsl.xdef" xmlns:c="c" xmlns:xpl="xpl" xmlns:thisLib="thisLib"
+     x:schema="/nop/schema/xlib.xdef"
+>
+
+    <tags>
+        <ModelDesignToOrmModel outputMode="none">
+            <description>
+                将 xxx.ai-model-design.xml 转换为 OrmModel 对象，
+                以便于后续生成 xxx.orm.xml、xxx.xmeta、xxx.xbiz 等 DSL
+            </description>
+
+            <attr name="codeGenConfig" implicit="true"/>
+            <attr name="node" type="io.nop.core.lang.xml.XNode"/>
+
+            <source>
+                <c:script><![CDATA[
+                    import io.nop.orm.model.OrmModelConstants;
+                    import io.crazydan.jingwei.app.coder.model.AiOrmModel;
+
+                    // 等价于构造 /nop/schema/orm/orm.xdef
+                    const ormModel = new AiOrmModel();
+                    ormModel['ext:registerShortName'] = true;
+                    ormModel[OrmModelConstants.EXT_ALLOW_ID_AS_COL_NAME] = true;
+                ]]></c:script>
+
+                <thisLib:_GenOrmModelDomains xpl:return="domains"/>
+                <c:script>ormModel.domains = domains;</c:script>
+
+                <c:for items="${node.getChildren()}" var="childNode">
+                    <c:if test="${childNode.tagName == 'dicts'}">
+                        <thisLib:_GenOrmModelDicts node="${childNode}" xpl:return="dicts"/>
+                        <c:script>ormModel.dicts = dicts;</c:script>
+                    </c:if>
+                    <c:if test="${childNode.tagName == 'entities'}">
+                        <thisLib:_GenOrmModelEntities node="${childNode}" xpl:return="entities"/>
+                        <c:script>
+                            ormModel.entities = entities;
+                        </c:script>
+                    </c:if>
+                </c:for>
+
+                <c:script>return ormModel;</c:script>
+            </source>
+        </ModelDesignToOrmModel>
+
+        <_GenOrmModelDomains>
+            <attr name="codeGenConfig" implicit="true"/>
+
+            <source>
+                <c:script><![CDATA[
+                    import io.nop.orm.model.OrmModelConstants;
+                    import io.nop.commons.type.StdSqlType;
+                    import io.nop.orm.model.OrmDomainModel;
+
+                    const d1 = new OrmDomainModel();
+                    d1.name = 'userFlag'; d1.precision = 50;
+                    d1.stdSqlType = StdSqlType.VARCHAR;
+                    const d2 = new OrmDomainModel();
+                    d2.name = 'deleteFlag';
+                    d2.stdDomain = OrmModelConstants.DOMAIN_BOOL_FLAG;
+                    d2.stdSqlType = StdSqlType.BOOLEAN;
+
+                    const d3 = new OrmDomainModel();
+                    d3.name = 'uuid'; d3.precision = 32;
+                    d3.stdSqlType = StdSqlType.CHAR;
+                    const d4 = new OrmDomainModel();
+                    d4.name = 'datetime';
+                    d4.stdSqlType = StdSqlType.BIGINT;
+                    const d5 = new OrmDomainModel();
+                    d5.name = 'file'; d5.precision = 64;
+                    d5.stdSqlType = StdSqlType.CHAR;
+
+                    const d6 = new OrmDomainModel();
+                    d6.name = 'url'; d6.precision = 1024;
+                    d6.stdSqlType = StdSqlType.VARCHAR;
+                    const d7 = new OrmDomainModel();
+                    d7.name = 'json';
+                    d7.stdSqlType = StdSqlType.JSON;
+                    const d8 = new OrmDomainModel();
+                    d8.name = 'text';
+                    d8.stdSqlType = StdSqlType.CLOB;
+
+                    return [d1, d2, d3, d4, d5, d6, d7, d8];
+                ]]></c:script>
+            </source>
+        </_GenOrmModelDomains>
+        <_GenOrmModelDicts>
+            <attr name="codeGenConfig" implicit="true"/>
+            <attr name="node" type="io.nop.core.lang.xml.XNode"/>
+
+            <source>
+                <c:script>const dicts = [];</c:script>
+
+                <c:for items="${node.getChildren()}" var="childNode">
+                    <thisLib:_GenOrmModelDict node="${childNode}" xpl:return="dict"/>
+                    <c:script>dicts.add(dict);</c:script>
+                </c:for>
+
+                <c:script>return dicts;</c:script>
+            </source>
+        </_GenOrmModelDicts>
+        <_GenOrmModelDict>
+            <attr name="codeGenConfig" implicit="true"/>
+            <attr name="node" type="io.nop.core.lang.xml.XNode"/>
+
+            <source>
+                <c:script><![CDATA[
+                    import io.nop.api.core.beans.DictBean;
+
+                    // 等价于构造 /nop/schema/orm/dict.xdef
+                    const dict = new DictBean();
+                    dict.name = codeGenConfig.domain + '/' + node.attrText('name');
+                    dict.label = node.attrText('displayName');
+                    dict.valueType = 'string';
+                ]]></c:script>
+
+                <c:for items="${node.getChildren()}" var="childNode">
+                    <c:if test="${childNode.tagName == 'description'}">
+                        <c:script>
+                            dict.description = $String.trimToNull(childNode.contentText());
+                        </c:script>
+                    </c:if>
+                    <c:if test="${childNode.tagName == 'options'}">
+                        <thisLib:_GenOrmModelDictOptions node="${childNode}" xpl:return="options"/>
+                        <c:script>dict.options = options;</c:script>
+                    </c:if>
+                </c:for>
+
+                <c:script>return dict;</c:script>
+            </source>
+        </_GenOrmModelDict>
+        <_GenOrmModelDictOptions>
+            <attr name="codeGenConfig" implicit="true"/>
+            <attr name="node" type="io.nop.core.lang.xml.XNode"/>
+
+            <source>
+                <c:script>const options = [];</c:script>
+
+                <c:for items="${node.getChildren()}" var="childNode">
+                    <thisLib:_GenOrmModelDictOption node="${childNode}" xpl:return="option"/>
+                    <c:script>options.add(option);</c:script>
+                </c:for>
+
+                <c:script>return options;</c:script>
+            </source>
+        </_GenOrmModelDictOptions>
+        <_GenOrmModelDictOption>
+            <attr name="codeGenConfig" implicit="true"/>
+            <attr name="node" type="io.nop.core.lang.xml.XNode"/>
+
+            <source>
+                <c:script><![CDATA[
+                    import io.nop.api.core.beans.DictOptionBean;
+
+                    const option = new DictOptionBean();
+                    option.value = node.attrText('value');
+                    option.code = node.attrText('code');
+                    option.label = node.attrText('displayName');
+                    option.description = $String.trimToNull(node.childContentText('description'));
+
+                    return option;
+                ]]></c:script>
+            </source>
+        </_GenOrmModelDictOption>
+
+        <_GenOrmModelEntities>
+            <attr name="codeGenConfig" implicit="true"/>
+            <attr name="node" type="io.nop.core.lang.xml.XNode"/>
+
+            <source>
+                <c:script>const entities = [];</c:script>
+
+                <c:for items="${node.getChildren()}" var="childNode">
+                    <thisLib:_GenOrmModelEntity node="${childNode}" xpl:return="entity"/>
+                    <c:script>entities.add(entity);</c:script>
+                </c:for>
+
+                <c:script>return entities;</c:script>
+            </source>
+        </_GenOrmModelEntities>
+        <_GenOrmModelEntity>
+            <attr name="codeGenConfig" implicit="true"/>
+            <attr name="node" type="io.nop.core.lang.xml.XNode"/>
+
+            <source>
+                <c:script><![CDATA[
+                    import io.nop.orm.model.OrmEntityModel;
+
+                    // 等价于构造 /nop/schema/orm/entity.xdef
+                    const entity = new OrmEntityModel();
+                    entity.name = node.attrText('name');
+                    entity.tableName = codeGenConfig.dbTablePrefix + $String.camelCaseToUnderscore(entity.name, true);
+                    entity.querySpace = codeGenConfig.dbQuerySpace;
+                    entity.displayName = node.attrText('displayName');
+                    entity.tagSet = [];
+
+                    entity.notGenCode = node.attrBoolean('deprecated');
+                    entity['db:estimatedRowCount'] = node.attrInt('db:estimatedRowCount');
+
+                    entity.registerShortName = true;
+                    entity.useLogicalDelete = true;
+                    entity.deleteFlagProp = 'deleted';
+                    entity.createrProp = 'createdBy';
+                    entity.createTimeProp = 'createdAt';
+                    entity.updaterProp = 'updatedBy';
+                    entity.updateTimeProp = 'updatedAt';
+                ]]></c:script>
+
+                <c:for items="${node.getChildren()}" var="childNode">
+                    <c:if test="${childNode.tagName == 'description'}">
+                        <c:script>
+                            entity.comment = $String.trimToNull(childNode.contentText());
+                        </c:script>
+                    </c:if>
+                    <c:if test="${childNode.tagName == 'orm:unique-keys'}">
+                        <thisLib:_GenOrmModelEntityUniqueKeys node="${childNode}" xpl:return="uniqueKeys"/>
+                        <c:script>entity.uniqueKeys = uniqueKeys;</c:script>
+                    </c:if>
+                    <c:if test="${childNode.tagName == 'attrs'}">
+                        <thisLib:_GenOrmModelEntityColumns node="${childNode}" xpl:return="columns"/>
+                        <c:script>entity.columns = columns;</c:script>
+                    </c:if>
+                </c:for>
+
+                <c:script>return entity;</c:script>
+            </source>
+        </_GenOrmModelEntity>
+        <_GenOrmModelEntityUniqueKeys>
+            <attr name="codeGenConfig" implicit="true"/>
+            <attr name="node" type="io.nop.core.lang.xml.XNode"/>
+
+            <source>
+                <c:script>
+                    import io.nop.orm.model.OrmUniqueKeyModel;
+
+                    const uniqueKeys = [];
+                </c:script>
+
+                <c:for items="${node.getChildren()}" var="childNode">
+                    <c:script>
+                        const uk = new OrmUniqueKeyModel();
+                        const ukName = childNode.attrText('name');
+                        uk.name = ukName;
+                        uk.columns = $String.parseCsvList(childNode.contentText());
+                        uk.constraint = $String.startsWithIgnoreCase(ukName, 'uk_')
+                        ? ukName : 'uk_' + ukName;
+
+                        uniqueKeys.add(uk);
+                    </c:script>
+                </c:for>
+
+                <c:script>return uniqueKeys;</c:script>
+            </source>
+        </_GenOrmModelEntityUniqueKeys>
+        <_GenOrmModelEntityColumns>
+            <attr name="codeGenConfig" implicit="true"/>
+            <attr name="node" type="io.nop.core.lang.xml.XNode"/>
+
+            <source>
+                <c:script>
+                    const columns = [];
+                </c:script>
+
+                <thisLib:_GenOrmModelEntityColumnId xpl:return="colId"/>
+                <c:script>
+                    colId.propId = 1;
+                    columns.add(colId);
+                </c:script>
+
+                <c:for items="${node.getChildren()}" var="childNode">
+                    <thisLib:_GenOrmModelEntityColumn node="${childNode}" xpl:return="column"/>
+                    <c:script xpl:if="!column.primary">
+                        columns.add(column);
+                    </c:script>
+                </c:for>
+
+                <c:script>
+                    let propId = 500;
+                </c:script>
+                <thisLib:_GenOrmModelEntityColumnAudits xpl:return="colAudits"/>
+                <c:for items="${colAudits}" var="col">
+                    <c:script>
+                        col.propId = propId++;
+                        columns.add(col);
+                    </c:script>
+                </c:for>
+
+                <c:script>return columns;</c:script>
+            </source>
+        </_GenOrmModelEntityColumns>
+        <_GenOrmModelEntityColumn>
+            <attr name="codeGenConfig" implicit="true"/>
+            <attr name="node" type="io.nop.core.lang.xml.XNode"/>
+
+            <source>
+                <c:script><![CDATA[
+                    import io.nop.orm.model.OrmModelConstants;
+                    import io.nop.orm.model.OrmColumnModel;
+
+                    const column = new OrmColumnModel();
+                    column.propId = node.attrInt('propId');
+                    column.name = node.attrText('name');
+                    column.code = 'col_' + $String.camelCaseToUnderscore(column.name, true);
+                    column.mandatory = node.attrBoolean('mandatory');
+                    column.insertable = node.attrBoolean('insertable');
+                    column.updatable = node.attrBoolean('updatable');
+                    column.displayName = node.attrText('displayName');
+                    column.defaultValue = node.attrText('defaultValue');
+                    column.comment = $String.trimToNull(node.childContentText('description'));
+                    column.tagSet = [];
+
+                    const deprecated = node.attrBoolean('deprecated');
+                    if (deprecated) {
+                        column.tagSet.add('del');
+                    }
+                    const virtual = node.attrBoolean('virtual');
+                    column.notGenCode = deprecated || virtual;
+
+                    const dict = node.attrText('dict');
+                    if (!$String.isBlank(dict)) {
+                        column[OrmModelConstants.EXT_DICT] = codeGenConfig.domain + '/' + dict;
+                    }
+
+                    column['meta:maskPattern'] = node.attrText('maskPattern');
+                    column['meta:datePattern'] = node.attrText('datePattern');
+                    column['meta:minValue'] = node.attrDouble('minValue');
+                    column['meta:maxValue'] = node.attrDouble('maxValue');
+                    column['meta:minLength'] = node.attrInt('minLength');
+                    column['meta:maxLength'] = node.attrInt('maxLength');
+                    column['meta:allowedFileTypes'] = node.attrText('allowedFileTypes');
+                    if (virtual) {
+                        column['meta:computed'] = node.childContentText('computed');
+                    }
+
+                    ['minFileSize', 'maxFileSize'].forEach(name => {
+                        const val = node.attrText(name);
+                        column['meta:' + name] = !$String.isBlank(val) ? $String.parseSize(val) : null;
+                    });
+                ]]></c:script>
+
+                <thisLib:_ProcessOrmModelEntityColumn
+                        column="${column}" node="${node}"
+                />
+
+                <c:script>return column;</c:script>
+            </source>
+        </_GenOrmModelEntityColumn>
+        <!-- TODO 放在补充阶段构造 -->
+        <_GenOrmModelEntityColumnId>
+            <attr name="codeGenConfig" implicit="true"/>
+
+            <source>
+                <c:script><![CDATA[
+                    import io.nop.orm.model.OrmModelConstants;
+                    import io.nop.orm.model.OrmColumnModel;
+
+                    const column = new OrmColumnModel();
+                    column.name = OrmModelConstants.PROP_ID;
+                    column.code = 'col_' + column.name;
+                    column.domain = 'uuid';
+                    column.displayName = 'ID';
+                    column.primary = true; column.mandatory = true;
+                    column.insertable = true; column.updatable = false;
+                    column.tagSet = ['seq'];
+
+                    return column;
+                ]]></c:script>
+            </source>
+        </_GenOrmModelEntityColumnId>
+        <!-- TODO 放在补充阶段构造 -->
+        <_GenOrmModelEntityColumnAudits>
+            <attr name="codeGenConfig" implicit="true"/>
+
+            <source>
+                <c:script><![CDATA[
+                    import io.nop.orm.model.OrmModelConstants;
+                    import io.nop.orm.model.OrmColumnModel;
+
+                    const col1 = new OrmColumnModel();
+                    col1.name = 'createdBy'; col1.code = 'col_created_by';
+                    col1.domain = 'userFlag'; col1.displayName = '创建者';
+                    col1.insertable = true; col1.updatable = false;
+                    const col2 = new OrmColumnModel();
+                    col2.name = 'updatedBy'; col2.code = 'col_updated_by';
+                    col2.domain = 'userFlag'; col2.displayName = '更新者';
+                    col2.insertable = true; col2.updatable = true;
+
+                    const col3 = new OrmColumnModel();
+                    col3.name = 'createdAt'; col3.code = 'col_created_at';
+                    col3.domain = 'datetime'; col3.displayName = '创建时间';
+                    col3.insertable = true; col3.updatable = false;
+                    const col4 = new OrmColumnModel();
+                    col4.name = 'updatedAt'; col4.code = 'col_updated_at';
+                    col4.domain = 'datetime'; col4.displayName = '更新时间';
+                    col4.insertable = true; col4.updatable = true;
+
+                    const col5 = new OrmColumnModel();
+                    col5.name = 'deleted'; col5.code = 'col_deleted';
+                    col5.domain = 'deleteFlag'; col5.displayName = '是否已删除';
+                    col5.insertable = true; col5.updatable = true;
+
+                    return [col1, col2, col3, col4, col5];
+                ]]></c:script>
+            </source>
+        </_GenOrmModelEntityColumnAudits>
+        <_ProcessOrmModelEntityColumn>
+            <attr name="codeGenConfig" implicit="true"/>
+            <attr name="column" type="io.nop.orm.model.OrmColumnModel"/>
+            <attr name="node" type="io.nop.core.lang.xml.XNode"/>
+
+            <source>
+                <c:script><![CDATA[
+                    import io.nop.commons.type.StdSqlType;
+
+                    const stdDomain = node.attrText('stdDomain');
+                    const stdSqlTypes = {
+                        fileList: StdSqlType.VARCHAR,
+                        string: StdSqlType.VARCHAR,
+                        long: StdSqlType.BIGINT,
+                        int: StdSqlType.INTEGER,
+                        double: StdSqlType.DOUBLE,
+                        float: StdSqlType.FLOAT,
+                        boolean: StdSqlType.BOOLEAN,
+                    };
+                    const domains = {
+                        uuid: 'uuid', file: 'file',
+                        date: 'datetime', datetime: 'datetime',
+                        url: 'url', json: 'json',
+                        text: 'text', xml: 'text',
+                        html: 'text', markdown: 'text',
+                    };
+                    const domain = domains[stdDomain];
+
+                    if (domain) {
+                        column.domain = domain;
+                    } else {
+                        column.stdDomain = stdDomain;
+                        column.stdSqlType = stdSqlTypes[stdDomain];
+                        column.precision = node.attrInt('precision', node.attrInt('maxLength'));
+                        column.scale = node.attrInt('scale');
+                    }
+
+                    if (node.attrBoolean('internal')) {
+                        column['ui:show'] = 'X';
+                    }
+                    if (!node.attrBoolean('published')) {
+                        column.tagSet.add('not-pub');
+                    }
+                    if (!node.attrBoolean('queryable')) {
+                        column.tagSet.add('not-query');
+                    }
+                    if (!node.attrBoolean('sortable')) {
+                        column.tagSet.add('not-sort');
+                    }
+                ]]></c:script>
+            </source>
+        </_ProcessOrmModelEntityColumn>
+    </tags>
+</lib>

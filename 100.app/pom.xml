@@ -19,6 +19,7 @@
 
     <modules>
         <module>schema</module>
+        <module>coder</module>
         <module>codegen</module>
 
         <module>service</module>

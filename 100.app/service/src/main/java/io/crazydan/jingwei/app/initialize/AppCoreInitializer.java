@@ -21,17 +21,19 @@ package io.crazydan.jingwei.app.initialize;
 
 import java.io.File;
 
+import io.crazydan.jingwei.app.service.AppCoreBizModel;
 import io.nop.api.core.config.AppConfig;
 import io.nop.api.core.config.IConfigReference;
 import io.nop.api.core.exceptions.NopException;
+import io.nop.api.core.ioc.BeanContainer;
 import io.nop.commons.lang.impl.Cancellable;
 import io.nop.commons.util.FileHelper;
 import io.nop.commons.util.StringHelper;
 import io.nop.core.initialize.ICoreInitializer;
 
-import static io.crazydan.jingwei.AppCoreConfigs.CFG_APP_INSTALL_DIR;
-import static io.crazydan.jingwei.AppCoreConfigs.CFG_APP_STATIC_DIR;
-import static io.crazydan.jingwei.AppCoreErrors.ERR_CFG_VALUE_NOT_SPECIFIED;
+import static io.crazydan.jingwei.app.AppCoreConfigs.CFG_APP_INSTALL_DIR;
+import static io.crazydan.jingwei.app.AppCoreConfigs.CFG_APP_STATIC_DIR;
+import static io.crazydan.jingwei.app.AppCoreErrors.ERR_CFG_VALUE_NOT_SPECIFIED;
 import static io.nop.ai.core.AiCoreErrors.ARG_CONFIG_VAR;
 
 /**
@@ -42,9 +44,16 @@ public class AppCoreInitializer implements ICoreInitializer {
     private final Cancellable cleanup = new Cancellable();
 
     @Override
+    public int order() {
+        return LOW_PRIORITY;
+    }
+
+    @Override
     public void initialize() {
         checkDirConfig(CFG_APP_STATIC_DIR);
         checkDirConfig(CFG_APP_INSTALL_DIR);
+
+        loadEnabledApps();
     }
 
     @Override
@@ -52,7 +61,7 @@ public class AppCoreInitializer implements ICoreInitializer {
         this.cleanup.cancel();
     }
 
-    protected void checkDirConfig(IConfigReference<String> config) {
+    private void checkDirConfig(IConfigReference<String> config) {
         String path = config.get();
         if (StringHelper.isBlank(path)) {
             throw new NopException(ERR_CFG_VALUE_NOT_SPECIFIED).source(config) //
@@ -64,5 +73,10 @@ public class AppCoreInitializer implements ICoreInitializer {
         FileHelper.assureParent(new File(dir + "/any"));
 
         AppConfig.getConfigProvider().updateConfigValue(config, dir);
+    }
+
+    private void loadEnabledApps() {
+        AppCoreBizModel biz = BeanContainer.instance().getBeanByType(AppCoreBizModel.class);
+        biz.loadEnabledApps();
     }
 }

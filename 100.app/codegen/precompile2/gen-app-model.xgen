@@ -24,6 +24,8 @@
     const xdefs = [
         AppConstants.XDSL_SCHEMA_APP_PACKAGE_RESOURCE,
         AppConstants.XDSL_SCHEMA_APP_RELEASING_MANIFEST,
+
+        AppConstants.XDSL_SCHEMA_APP_LOCAL_STORE_MANIFEST,
         AppConstants.XDSL_SCHEMA_APP_INSTALLATION_MANIFEST,
     ];
 

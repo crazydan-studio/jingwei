@@ -4,7 +4,8 @@ nop:
   vfs:
     custom:
       ns-mappings: |
-        app-install-dir:${jingwei.app.install-dir}
+        app-install-dir:${jingwei.app.install-dir},
+        app-static-dir:${jingwei.app.static-dir}
   ai:
     service:
       # LLM引擎执行时是否自动打印所有请求和响应消息

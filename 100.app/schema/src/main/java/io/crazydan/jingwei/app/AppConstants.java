@@ -30,19 +30,24 @@ public interface AppConstants {
     String VAR_APP_CODE = "appCode";
     String VAR_PATH = "path";
 
-    String VFS_NS_INSTALL_APP = "app-install-dir";
+    String VFS_NS_INSTALLATION_APP = "app-install-dir";
+    String VFS_NS_STATIC_APP = "app-static-dir";
 
     String XDSL_SCHEMA_APP_PACKAGE_RESOURCE = "/jingwei/app/schema/manifest/resource.xdef";
     String XDSL_SCHEMA_APP_RELEASING_MANIFEST = "/jingwei/app/schema/manifest/releasing.xdef";
+    String XDSL_SCHEMA_APP_LOCAL_STORE_MANIFEST = "/jingwei/app/schema/manifest/local-store.xdef";
     String XDSL_SCHEMA_APP_INSTALLATION_MANIFEST = "/jingwei/app/schema/manifest/installation.xdef";
 
     String APP_MANIFEST_FILE = "manifest.xml";
+    String TEMPLATE_APP_STORE_V_PATH = //
+            VFS_NS_INSTALLATION_APP + ":/{" + VAR_PATH + "}";
     String TEMPLATE_APP_INSTALLATION_V_PATH = //
-            VFS_NS_INSTALL_APP + ":/{" + VAR_APP_CODE + "}/{" + VAR_PATH + "}";
+            VFS_NS_INSTALLATION_APP + ":/app/{" + VAR_APP_CODE + "}/{" + VAR_PATH + "}";
+    String TEMPLATE_APP_STATIC_V_PATH = //
+            VFS_NS_STATIC_APP + ":/app/{" + VAR_APP_CODE + "}/{" + VAR_PATH + "}";
     String TEMPLATE_APP_CLASSPATH_V_PATH = //
-            RESOURCE_NS_CLASSPATH + ":apps/{" + VAR_APP_CODE + "}/{" + VAR_PATH + "}";
+            RESOURCE_NS_CLASSPATH + ":app/{" + VAR_APP_CODE + "}/{" + VAR_PATH + "}";
 
     String APP_INSTALLATION_DIR_ORM = "orm";
     String APP_INSTALLATION_DIR_MODEL = "model";
-    String APP_INSTALLATION_DIR_PAGE = "page";
 }

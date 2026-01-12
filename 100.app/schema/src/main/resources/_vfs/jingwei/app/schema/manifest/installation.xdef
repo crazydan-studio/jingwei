@@ -25,7 +25,7 @@
 -->
 <manifest xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="/nop/schema/xdef.xdef"
           x:schema="/nop/schema/xdef.xdef"
-          xdef:bean-package="io.crazydan.jingwei.app.model.manifest"
+          xdef:bean-package="io.crazydan.jingwei.app.model"
           xdef:name="AppInstallation_Manifest"
           code="!string" version="!string"
 >
@@ -34,7 +34,7 @@
     -->
     <modelResources xdef:name="AppInstallation_ModelResources"
                     xdef:body-type="list" xdef:key-attr="path"
-                    xdef:bean-body-prop="body"
+                    xdef:bean-body-prop="children" xdef:bean-child-name="child"
     >
         <resource xdef:ref="resource.xdef"
                   path="!file-path"
@@ -45,7 +45,7 @@
     -->
     <ormResources xdef:name="AppInstallation_OrmResources"
                   xdef:body-type="list" xdef:key-attr="path"
-                  xdef:bean-body-prop="body"
+                  xdef:bean-body-prop="children" xdef:bean-child-name="child"
     >
         <resource xdef:ref="resource.xdef"
                   path="!file-path"
@@ -56,7 +56,7 @@
     -->
     <pageResources xdef:name="AppInstallation_PageResources"
                    xdef:body-type="list" xdef:key-attr="path"
-                   xdef:bean-body-prop="body"
+                   xdef:bean-body-prop="children" xdef:bean-child-name="child"
     >
         <resource xdef:ref="resource.xdef"
                   path="!file-path"

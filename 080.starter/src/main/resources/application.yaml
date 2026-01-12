@@ -31,7 +31,7 @@ nop:
     undertow:
       server:
         port: 8181
-        static-dir: ${project.basedir}/_data/web-static
+        static-dir: ${jingwei.app.static-dir}
         compression:
           enabled: true
           # min-response-size: 2048
@@ -50,5 +50,5 @@ nop:
 
 jingwei:
   app:
-    static-dir: ${nop.extension.undertow.server.static-dir}/app
+    static-dir: ${project.basedir}/_data/app-pages
     install-dir: ${project.basedir}/_data/app-installed

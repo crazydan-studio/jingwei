@@ -19,8 +19,9 @@
 
 package io.crazydan.jingwei.app.util;
 
-import io.crazydan.jingwei.app.model.manifest.AppInstallation_Manifest;
-import io.crazydan.jingwei.app.model.manifest.AppReleasing_Manifest;
+import io.crazydan.jingwei.app.model.AppInstallation_Manifest;
+import io.crazydan.jingwei.app.model.AppLocalStore_Manifest;
+import io.crazydan.jingwei.app.model.AppReleasing_Manifest;
 import io.nop.api.core.util.IFreezable;
 import io.nop.api.core.util.INeedInit;
 import io.nop.core.resource.IResource;
@@ -28,6 +29,7 @@ import io.nop.xlang.xdsl.DslModelHelper;
 import io.nop.xlang.xdsl.DslModelParser;
 
 import static io.crazydan.jingwei.app.AppConstants.XDSL_SCHEMA_APP_INSTALLATION_MANIFEST;
+import static io.crazydan.jingwei.app.AppConstants.XDSL_SCHEMA_APP_LOCAL_STORE_MANIFEST;
 import static io.crazydan.jingwei.app.AppConstants.XDSL_SCHEMA_APP_RELEASING_MANIFEST;
 
 /**
@@ -36,6 +38,16 @@ import static io.crazydan.jingwei.app.AppConstants.XDSL_SCHEMA_APP_RELEASING_MAN
  * @date 2026-01-09
  */
 public class AppHelper {
+
+    /** 加载应用本地仓库清单，若资源不存在，则返回 {@code null} */
+    public static AppLocalStore_Manifest loadAppLocalStoreManifest(IResource resource) {
+        return loadDslModel(resource, XDSL_SCHEMA_APP_LOCAL_STORE_MANIFEST);
+    }
+
+    /** 保存应用本地仓库清单 */
+    public static void saveAppLocalStoreManifest(AppLocalStore_Manifest manifest, IResource resource) {
+        DslModelHelper.saveDslModel(XDSL_SCHEMA_APP_LOCAL_STORE_MANIFEST, manifest, resource);
+    }
 
     /** 加载应用安装包清单，若资源不存在，则返回 {@code null} */
     public static AppInstallation_Manifest loadAppInstallationManifest(IResource resource) {

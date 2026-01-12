@@ -11,4 +11,6 @@
     <bean id="io.crazydan.jingwei.app.service.AppCoreBizModel"
           ioc:type="@bean:id" ioc:default="true"
     />
+
+    <bean id="appOrmModelProvider" class="io.crazydan.jingwei.app.orm.AppOrmModelProvider"/>
 </beans>

@@ -25,7 +25,7 @@
 -->
 <manifest xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="/nop/schema/xdef.xdef"
           x:schema="/nop/schema/xdef.xdef"
-          xdef:bean-package="io.crazydan.jingwei.app.model.manifest"
+          xdef:bean-package="io.crazydan.jingwei.app.model"
           xdef:name="AppReleasing_Manifest"
           name="!string" code="!string" version="!string"
           icon="file-path"
