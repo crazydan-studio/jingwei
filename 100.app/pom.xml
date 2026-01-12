@@ -21,6 +21,6 @@
         <module>schema</module>
         <module>codegen</module>
 
-        <module>core</module>
+        <module>service</module>
     </modules>
 </project>

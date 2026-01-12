@@ -1,13 +1,10 @@
 nop:
   debug: true
-  # Note: 在 application-local.yaml 中配置敏感数据
-  config:
-    additional-location: "classpath:/application-local.yaml"
 
   vfs:
     custom:
       ns-mappings: |
-        vapp:${project.build.outputDirectory}/../app
+        app-install-dir:${jingwei.app.install-dir}
   ai:
     service:
       # LLM引擎执行时是否自动打印所有请求和响应消息
@@ -19,4 +16,5 @@ nop:
 
 jingwei:
   app:
-    install-dir: ${project.build.outputDirectory}/../app
+    static-dir: ${project.build.outputDirectory}/../app-pages
+    install-dir: ${project.build.outputDirectory}/../app-installed

@@ -95,7 +95,7 @@
 
             <dependency>
                 <groupId>io.crazydan.jingwei</groupId>
-                <artifactId>jingwei-app-core</artifactId>
+                <artifactId>jingwei-app-service</artifactId>
                 <version>${jingwei.version}</version>
             </dependency>
             <dependency>

@@ -26,6 +26,7 @@ import io.nop.api.core.util.SourceLocation;
 
 import static io.crazydan.jingwei.AppCoreConstants.APP_PORTAL_DEFAULT_CODE;
 import static io.nop.api.core.config.AppConfig.varRef;
+import static io.nop.api.core.config.AppConfig.withPlaceholder;
 
 /**
  *
@@ -39,7 +40,11 @@ public interface AppCoreConfigs {
     @Description("门户（系统入口）应用的应用标识")
     IConfigReference<String> CFG_APP_PORTAL_CODE = //
             varRef(s_loc, "jingwei.app.portal-code", String.class, APP_PORTAL_DEFAULT_CODE);
-    @Description("应用的安装目录，用于存放应用的模块资源和 Web 资源")
+
+    @Description("应用的静态资源目录，用于存放应用的 Web 静态资源")
+    IConfigReference<String> CFG_APP_STATIC_DIR = //
+            withPlaceholder(varRef(s_loc, "jingwei.app.static-dir", String.class, null));
+    @Description("应用的安装目录，用于存放应用的模块资源")
     IConfigReference<String> CFG_APP_INSTALL_DIR = //
-            varRef(s_loc, "jingwei.app.install-dir", String.class, null);
+            withPlaceholder(varRef(s_loc, "jingwei.app.install-dir", String.class, null));
 }

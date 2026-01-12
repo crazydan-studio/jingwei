@@ -2,9 +2,6 @@
 
 nop:
   debug: true
-  # Note: 在 application-local.yaml 中配置敏感数据
-  config:
-    additional-location: "classpath:/application-local.yaml"
 
   orm:
     init-database-schema: true
@@ -34,6 +31,7 @@ nop:
     undertow:
       server:
         port: 8181
+        static-dir: ${project.basedir}/_data/web-static
         compression:
           enabled: true
           # min-response-size: 2048
@@ -49,3 +47,8 @@ nop:
       mock-dir: ${project.basedir}/_data/ai/mock
       # 是否启用系统提示词
       enable-work-mode-system-prompt: true
+
+jingwei:
+  app:
+    static-dir: ${nop.extension.undertow.server.static-dir}/app
+    install-dir: ${project.basedir}/_data/app-installed

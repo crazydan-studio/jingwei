@@ -30,6 +30,7 @@ import io.nop.commons.util.StringHelper;
 import io.nop.core.initialize.ICoreInitializer;
 
 import static io.crazydan.jingwei.AppCoreConfigs.CFG_APP_INSTALL_DIR;
+import static io.crazydan.jingwei.AppCoreConfigs.CFG_APP_STATIC_DIR;
 import static io.crazydan.jingwei.AppCoreErrors.ERR_CFG_VALUE_NOT_SPECIFIED;
 import static io.nop.ai.core.AiCoreErrors.ARG_CONFIG_VAR;
 
@@ -42,6 +43,7 @@ public class AppCoreInitializer implements ICoreInitializer {
 
     @Override
     public void initialize() {
+        checkDirConfig(CFG_APP_STATIC_DIR);
         checkDirConfig(CFG_APP_INSTALL_DIR);
     }
 

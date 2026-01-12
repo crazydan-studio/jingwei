@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <name>JingWei App - Core</name>
-    <artifactId>jingwei-app-core</artifactId>
+    <name>JingWei App - Service</name>
+    <artifactId>jingwei-app-service</artifactId>
 
     <parent>
         <groupId>io.crazydan.jingwei</groupId>

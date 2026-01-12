@@ -173,6 +173,7 @@ public class AppCoreBizModel {
                                 appCode,
                                 APP_INSTALLATION_DIR_MODEL,
                                 manifest.getModelResources()::addResource);
+        // TODO 释放页面资源到 CFG_APP_STATIC_DIR
         installPackageResources(pageResources,
                                 appCode,
                                 APP_INSTALLATION_DIR_PAGE,

@@ -1,0 +1,7 @@
+"%dev":
+  nop.codegen.trace.enabled: true
+
+nop:
+  config:
+    # Note: 在 application-local.yaml 中配置敏感数据
+    additional-location: "classpath:/application-local.yaml"
