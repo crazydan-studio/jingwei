@@ -36,6 +36,9 @@ public interface AppCoderConstants {
     String TEMPLATE_APP_MODEL_PATH = "/jingwei/app/templates/app-model";
     String TEMPLATE_APP_PAGE_PATH = "/jingwei/app/templates/app-page";
 
+    String TEMPLATE_DIR_MODEL = "model";
+    String TEMPLATE_DIR_ORM = "orm";
+
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     String SCOPE_VAR_codeGenModel = "codeGenModel";

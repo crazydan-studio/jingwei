@@ -276,6 +276,9 @@ public class AppCoreBizModel {
 
         AppCodeGenerator gen = new AppCodeGenerator();
         gen.genModels(target.toFile(), resource, genConfig);
+
+        AppPackage_Resource.fromPaths(gen.getOrms()).forEach(ormResources::addChild);
+        AppPackage_Resource.fromPaths(gen.getModels()).forEach(modelResources::addChild);
     }
 
     /** 根据 UI 设计生成应用页面资源 */
@@ -293,6 +296,8 @@ public class AppCoreBizModel {
 
         AppCodeGenerator gen = new AppCodeGenerator();
         gen.genPages(target.toFile(), resource, genConfig);
+
+        AppPackage_Resource.fromPaths(gen.getPages()).forEach(pageResources::addChild);
     }
 
     protected AppCodeGenConfig createAppGenConfig(AppReleasing_Manifest manifest) {

@@ -19,6 +19,9 @@
 
 package io.crazydan.jingwei.app.model;
 
+import java.util.List;
+import java.util.stream.Stream;
+
 import io.crazydan.duzhou.framework.commons.StringHelper;
 import io.crazydan.jingwei.app.model._gen._AppPackage_Resource;
 import io.nop.core.resource.IResource;
@@ -36,5 +39,16 @@ public class AppPackage_Resource extends _AppPackage_Resource {
         String vPath = StringHelper.appendPath(inDir, path);
 
         return VirtualFileSystem.instance().getResource(vPath, true);
+    }
+
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    public static Stream<AppPackage_Resource> fromPaths(List<String> paths) {
+        return paths.stream().map((path) -> {
+            AppPackage_Resource pkg = new AppPackage_Resource();
+            pkg.setPath(path);
+
+            return pkg;
+        });
     }
 }

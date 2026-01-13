@@ -19,16 +19,14 @@
 
 package io.crazydan.jingwei.app.initialize;
 
-import java.io.File;
-
+import io.crazydan.duzhou.framework.commons.FileHelper;
+import io.crazydan.duzhou.framework.commons.StringHelper;
 import io.crazydan.jingwei.app.service.AppCoreBizModel;
 import io.nop.api.core.config.AppConfig;
 import io.nop.api.core.config.IConfigReference;
 import io.nop.api.core.exceptions.NopException;
 import io.nop.api.core.ioc.BeanContainer;
 import io.nop.commons.lang.impl.Cancellable;
-import io.nop.commons.util.FileHelper;
-import io.nop.commons.util.StringHelper;
 import io.nop.core.initialize.ICoreInitializer;
 
 import static io.crazydan.jingwei.app.AppCoreConfigs.CFG_APP_INSTALL_DIR;
@@ -70,7 +68,7 @@ public class AppCoreInitializer implements ICoreInitializer {
 
         String pwd = FileHelper.currentDir().getAbsolutePath();
         String dir = StringHelper.absolutePath(pwd, path);
-        FileHelper.assureParent(new File(dir + "/any"));
+        FileHelper.assureDirExists(dir);
 
         AppConfig.getConfigProvider().updateConfigValue(config, dir);
     }

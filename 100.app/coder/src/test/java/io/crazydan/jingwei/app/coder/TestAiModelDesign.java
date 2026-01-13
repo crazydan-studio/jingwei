@@ -19,6 +19,7 @@
 
 package io.crazydan.jingwei.app.coder;
 
+import java.io.File;
 import java.util.Map;
 
 import io.crazydan.duzhou.framework.junit.NopJunitTestCase;
@@ -61,7 +62,8 @@ public class TestAiModelDesign extends NopJunitTestCase {
         AppCodeGenerator gen = new AppCodeGenerator();
         AppCodeGenConfig genConfig = createAppGenConfig();
 
-        gen.genModels(getTargetDir(), createResource(resourcePath), genConfig);
+        File targetDir = new File(getTargetDir(), genConfig.getCode());
+        gen.genModels(targetDir, createResource(resourcePath), genConfig);
     }
 
     protected IResource createResource(String path) {

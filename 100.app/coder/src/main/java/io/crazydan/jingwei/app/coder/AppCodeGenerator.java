@@ -20,12 +20,14 @@
 package io.crazydan.jingwei.app.coder;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+import io.crazydan.duzhou.framework.commons.FileHelper;
 import io.crazydan.jingwei.app.coder.model.AiModelDesign;
 import io.crazydan.jingwei.app.coder.model.AiOrmModel;
 import io.nop.codegen.XCodeGenerator;
-import io.nop.commons.util.FileHelper;
 import io.nop.core.lang.eval.IEvalScope;
 import io.nop.core.resource.IResource;
 import io.nop.xlang.api.XLang;
@@ -33,6 +35,8 @@ import io.nop.xlang.api.XLang;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.SCOPE_VAR_codeGenConfig;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.SCOPE_VAR_codeGenModel;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.TEMPLATE_APP_MODEL_PATH;
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.TEMPLATE_DIR_MODEL;
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.TEMPLATE_DIR_ORM;
 
 /**
  * 应用构建器
@@ -41,6 +45,9 @@ import static io.crazydan.jingwei.app.coder.AppCoderConstants.TEMPLATE_APP_MODEL
  * @date 2026-01-08
  */
 public class AppCodeGenerator {
+    private final List<String> models = new ArrayList<>();
+    private final List<String> orms = new ArrayList<>();
+    private final List<String> pages = new ArrayList<>();
 
     /** 构建应用模型资源，主要为 {@code app.orm.xml}、{@code *.xmeta}、{@code *.xbiz} */
     public void genModels(File targetDir, IResource modelDesignResource, AppCodeGenConfig genConfig) {
@@ -49,8 +56,10 @@ public class AppCodeGenerator {
         Map<String, Object> vars = Map.of();
         AiOrmModel ormModel = modelDesign.genOrmModel(vars);
 
-        String dir = FileHelper.getAbsolutePath(targetDir);
-        XCodeGenerator gen = new XCodeGenerator(TEMPLATE_APP_MODEL_PATH, dir);
+        String targetDirPath = FileHelper.getAbsolutePath(targetDir);
+        FileHelper.assureDirExists(targetDir);
+
+        XCodeGenerator gen = new XCodeGenerator(TEMPLATE_APP_MODEL_PATH, targetDirPath);
         // 保持用户定制的代码不变，仅更新以下划线开头的文件
         gen.forceOverride(false);
 
@@ -60,11 +69,33 @@ public class AppCodeGenerator {
 
         gen.execute("", scope);
 
-        // TODO 返回生成的资源文件名（相对于释放目录）
+        List<String> paths = FileHelper.findFilePaths(targetDir, TEMPLATE_DIR_ORM + "/**/*", true, true);
+        this.orms.addAll(paths);
+
+        paths = FileHelper.findFilePaths(targetDir, TEMPLATE_DIR_MODEL + "/**/*", true, true);
+        this.models.addAll(paths);
     }
 
     /** 构建应用的页面资源 */
-    public String genPages(File targetDir, IResource uiDesignResource, AppCodeGenConfig genConfig) {
-        return null;
+    public void genPages(File targetDir, IResource uiDesignResource, AppCodeGenConfig genConfig) {
+        String targetDirPath = FileHelper.getAbsolutePath(targetDir);
+        FileHelper.assureDirExists(targetDir);
+
+        List<String> paths = FileHelper.findFilePaths(targetDir, "**/*", true, true);
+        this.pages.addAll(paths);
+    }
+
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    public List<String> getModels() {
+        return this.models;
+    }
+
+    public List<String> getOrms() {
+        return this.orms;
+    }
+
+    public List<String> getPages() {
+        return this.pages;
     }
 }
