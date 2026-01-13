@@ -17,31 +17,18 @@
  * If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
  */
 
-package io.crazydan.jingwei.app.coder;
+package io.crazydan.jingwei.app.coder.normalizer;
+
+import io.nop.core.lang.xml.XNode;
 
 /**
  *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
- * @date 2026-01-06
+ * @date 2026-01-13
  */
-public interface AppCoderConstants {
-    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    String XLIB_APP_MODEL_GEN_PATH = "/jingwei/app/coder/xlib/app-model.xlib";
-    String XLIB_APP_PAGE_GEN_PATH = "/jingwei/app/coder/xlib/app-page.xlib";
+public class AiModelDesignNormalizer {
 
-    String XLIB_TAG_ModelDesignToOrmModel = "ModelDesignToOrmModel";
-    String XLIB_TAG_UiDesignToUiModel = "UiDesignToUiModel";
-
-    String TAG_ATTR_node = "node";
-
-    String TEMPLATE_APP_MODEL_PATH = "/jingwei/app/templates/app-model";
-    String TEMPLATE_APP_PAGE_PATH = "/jingwei/app/templates/app-page";
-
-    String TEMPLATE_DIR_MODEL = "model";
-    String TEMPLATE_DIR_ORM = "orm";
-
-    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-    String SCOPE_VAR_codeGenModel = "codeGenModel";
-    String SCOPE_VAR_codeGenConfig = "codeGenConfig";
+    public static XNode normalize(XNode node) {
+        return node;
+    }
 }

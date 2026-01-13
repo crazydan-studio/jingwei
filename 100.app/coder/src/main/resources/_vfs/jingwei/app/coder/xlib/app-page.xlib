@@ -19,10 +19,89 @@
   - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
   -->
 
-<lib xmlns:x="/nop/schema/xdsl.xdef"
+<lib xmlns:x="/nop/schema/xdsl.xdef" xmlns:c="c" xmlns:xpl="xpl" xmlns:thisLib="thisLib"
      x:schema="/nop/schema/xlib.xdef"
 >
 
     <tags>
+        <UiDesignToUiModel>
+            <description>
+                将 xxx.ai-model-design.xml 转换为 OrmModel 对象，
+                以便于后续生成 xxx.orm.xml、xxx.xmeta、xxx.xbiz 等 DSL
+            </description>
+
+            <attr name="codeGenConfig" implicit="true"/>
+            <attr name="node" type="io.nop.core.lang.xml.XNode"/>
+
+            <source>
+                <c:script><![CDATA[
+                    import io.crazydan.jingwei.app.coder.model.AiUiModel;
+
+                    const uiModel = new AiUiModel();
+                ]]></c:script>
+
+                <c:for items="${node.getChildren()}" var="childNode">
+                    <c:if test="${childNode.tagName == 'page'}">
+                        <thisLib:_GenUiModelPage node="${childNode}" xpl:return="page"/>
+                        <c:script>uiModel.page = page;</c:script>
+                    </c:if>
+                    <c:if test="${childNode.tagName == 'components'}">
+                        <thisLib:_GenUiModelComponents node="${childNode}" xpl:return="components"/>
+                        <c:script>uiModel.components = components;</c:script>
+                    </c:if>
+                </c:for>
+
+                <c:script>return uiModel;</c:script>
+            </source>
+        </UiDesignToUiModel>
+
+        <_GenUiModelPage>
+            <attr name="codeGenConfig" implicit="true"/>
+            <attr name="node" type="io.nop.core.lang.xml.XNode"/>
+
+            <source>
+                <c:script><![CDATA[
+                    import io.crazydan.jingwei.app.coder.model.AiUiModel.Page;
+
+                    const page = new Page();
+                    page.title = node.attrText('title');
+                    page.body = $String.trimToNull(node.contentText());
+
+                    return page;
+                ]]></c:script>
+            </source>
+        </_GenUiModelPage>
+
+        <_GenUiModelComponents>
+            <attr name="codeGenConfig" implicit="true"/>
+            <attr name="node" type="io.nop.core.lang.xml.XNode"/>
+
+            <source>
+                <c:script>const components = [];</c:script>
+
+                <c:for items="${node.getChildren()}" var="childNode">
+                    <thisLib:_GenUiModelComponent node="${childNode}" xpl:return="component"/>
+                    <c:script>components.add(component);</c:script>
+                </c:for>
+
+                <c:script>return components;</c:script>
+            </source>
+        </_GenUiModelComponents>
+        <_GenUiModelComponent>
+            <attr name="codeGenConfig" implicit="true"/>
+            <attr name="node" type="io.nop.core.lang.xml.XNode"/>
+
+            <source>
+                <c:script><![CDATA[
+                    import io.crazydan.jingwei.app.coder.model.AiUiModel.Component;
+
+                    const component = new Component();
+                    component.name = node.attrText('name');
+                    component.body = $String.trimToNull(node.contentText());
+
+                    return component;
+                ]]></c:script>
+            </source>
+        </_GenUiModelComponent>
     </tags>
 </lib>

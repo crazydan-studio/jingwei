@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<!-- [UI 设计]
-> 采用单页面多组件方案，避免引入过多资源文件。
--->
 <ui-design xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="/nop/schema/xdef.xdef"
            x:schema="/nop/schema/xdef.xdef"
 >

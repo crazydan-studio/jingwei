@@ -27,6 +27,8 @@ import java.util.Map;
 import io.crazydan.duzhou.framework.commons.FileHelper;
 import io.crazydan.jingwei.app.coder.model.AiModelDesign;
 import io.crazydan.jingwei.app.coder.model.AiOrmModel;
+import io.crazydan.jingwei.app.coder.model.AiUiDesign;
+import io.crazydan.jingwei.app.coder.model.AiUiModel;
 import io.nop.codegen.XCodeGenerator;
 import io.nop.core.lang.eval.IEvalScope;
 import io.nop.core.resource.IResource;
@@ -35,6 +37,7 @@ import io.nop.xlang.api.XLang;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.SCOPE_VAR_codeGenConfig;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.SCOPE_VAR_codeGenModel;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.TEMPLATE_APP_MODEL_PATH;
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.TEMPLATE_APP_PAGE_PATH;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.TEMPLATE_DIR_MODEL;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.TEMPLATE_DIR_ORM;
 
@@ -78,8 +81,25 @@ public class AppCodeGenerator {
 
     /** 构建应用的页面资源 */
     public void genPages(File targetDir, IResource uiDesignResource, AppCodeGenConfig genConfig) {
+        AiUiDesign uiDesign = new AiUiDesign(uiDesignResource, genConfig);
+
+        Map<String, Object> vars = Map.of();
+        AiUiModel uiModel = uiDesign.genUiModel(vars);
+
         String targetDirPath = FileHelper.getAbsolutePath(targetDir);
         FileHelper.assureDirExists(targetDir);
+
+        XCodeGenerator gen = new XCodeGenerator(TEMPLATE_APP_PAGE_PATH, targetDirPath);
+        // 保持用户定制的代码不变，仅更新以下划线开头的文件
+        gen.forceOverride(false);
+
+        IEvalScope scope = XLang.newEvalScope();
+        scope.setLocalValue(SCOPE_VAR_codeGenConfig, genConfig);
+        scope.setLocalValue(SCOPE_VAR_codeGenModel, uiModel);
+
+        gen.execute("", scope);
+
+        // TODO 调用 npm 构建源码
 
         List<String> paths = FileHelper.findFilePaths(targetDir, "**/*", true, true);
         this.pages.addAll(paths);

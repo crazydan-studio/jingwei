@@ -21,14 +21,61 @@ package io.crazydan.jingwei.app.coder.model;
 
 import java.util.Map;
 
+import io.crazydan.jingwei.app.coder.AppCodeGenConfig;
+import io.nop.core.lang.eval.IEvalScope;
+import io.nop.core.lang.xml.XNode;
+import io.nop.core.lang.xml.parse.XNodeParser;
+import io.nop.core.resource.IResource;
+import io.nop.xlang.api.XLang;
+import io.nop.xlang.xpl.IXplTag;
+import io.nop.xlang.xpl.xlib.XplLibHelper;
+
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.SCOPE_VAR_codeGenConfig;
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.TAG_ATTR_node;
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.XLIB_APP_PAGE_GEN_PATH;
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.XLIB_TAG_UiDesignToUiModel;
+
 /**
  *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
  * @date 2026-01-07
  */
 public class AiUiDesign {
+    private final IResource resource;
+    private final AppCodeGenConfig genConfig;
+
+    private XNode designNode;
+
+    public AiUiDesign(IResource resource, AppCodeGenConfig genConfig) {
+        this.resource = resource;
+        this.genConfig = genConfig;
+    }
 
     public AiUiModel genUiModel(Map<String, Object> vars) {
-        return null;
+        AiUiModel uiModel = callXlibTag(XLIB_TAG_UiDesignToUiModel, vars);
+        uiModel.init();
+
+        return uiModel;
+    }
+
+    public XNode getDesignNode() {
+        if (this.designNode == null) {
+            this.designNode = XNodeParser.instance().parseFromResource(this.resource);
+        }
+        return this.designNode;
+    }
+
+    protected <T> T callXlibTag(String tagName, Map<String, Object> vars) {
+        IXplTag tag = XplLibHelper.getTag(XLIB_APP_PAGE_GEN_PATH, tagName);
+
+        IEvalScope scope = XLang.newEvalScope();
+        if (vars != null) {
+            scope.setLocalValues(vars);
+        }
+        scope.setLocalValue(SCOPE_VAR_codeGenConfig, this.genConfig);
+
+        XNode node = getDesignNode();
+        Map<String, Object> args = Map.of(TAG_ATTR_node, node);
+        return (T) tag.invokeWithNamedArgs(scope, args);
     }
 }

@@ -25,6 +25,8 @@ import java.util.Map;
 import io.crazydan.duzhou.framework.junit.NopJunitTestCase;
 import io.crazydan.jingwei.app.coder.model.AiModelDesign;
 import io.crazydan.jingwei.app.coder.model.AiOrmModel;
+import io.crazydan.jingwei.app.coder.model.AiUiDesign;
+import io.crazydan.jingwei.app.coder.model.AiUiModel;
 import io.nop.api.core.annotations.autotest.NopTestConfig;
 import io.nop.core.lang.xml.XNode;
 import io.nop.core.resource.IResource;
@@ -42,11 +44,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @date 2026-01-06
  */
 @NopTestConfig(testConfigFile = "classpath:/application.yaml", localDb = true)
-public class TestAiModelDesign extends NopJunitTestCase {
+public class TestAppCodeGenerator extends NopJunitTestCase {
 
     @Test
     public void test_genOrmModel() {
         String resourcePath = "test-01.ai-model-design.xml";
+
         AppCodeGenConfig genConfig = createAppGenConfig();
         AiOrmModel ormModel = genOrmModel(resourcePath, genConfig);
         assertNotNull(ormModel);
@@ -66,6 +69,30 @@ public class TestAiModelDesign extends NopJunitTestCase {
         gen.genModels(targetDir, createResource(resourcePath), genConfig);
     }
 
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    @Test
+    public void test_genUiModel() {
+        String resourcePath = "test-10.ai-ui-design.xml";
+
+        AppCodeGenConfig genConfig = createAppGenConfig();
+        AiUiModel uiModel = genUiModel(resourcePath, genConfig);
+        assertNotNull(uiModel);
+    }
+
+    @Test
+    public void get_genAppPage() {
+        String resourcePath = "test-10.ai-ui-design.xml";
+
+        AppCodeGenerator gen = new AppCodeGenerator();
+        AppCodeGenConfig genConfig = createAppGenConfig();
+
+        File targetDir = new File(getTargetDir(), genConfig.getCode() + "/page");
+        gen.genPages(targetDir, createResource(resourcePath), genConfig);
+    }
+
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
     protected IResource createResource(String path) {
         return new InMemoryTextResource("/text/" + path, attachmentXmlText(path));
     }
@@ -77,6 +104,15 @@ public class TestAiModelDesign extends NopJunitTestCase {
         Map<String, Object> vars = Map.of();
 
         return modelDesign.genOrmModel(vars);
+    }
+
+    protected AiUiModel genUiModel(String path, AppCodeGenConfig genConfig) {
+        IResource resource = createResource(path);
+        AiUiDesign uiDesign = new AiUiDesign(resource, genConfig);
+
+        Map<String, Object> vars = Map.of();
+
+        return uiDesign.genUiModel(vars);
     }
 
     protected AppCodeGenConfig createAppGenConfig() {

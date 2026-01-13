@@ -1,5 +1,8 @@
-```xml
-<ui-design>
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<ui-design xmlns:x="/nop/schema/xdsl.xdef"
+           x:schema="/jingwei/app/schema/coder/ui-design.xdef"
+>
     <page title="个人数字资产应用开发系统"><![CDATA[
 <template>
   <div class="min-h-screen bg-gray-50">
@@ -385,11 +388,11 @@ const handleCreateApp = (appData) => {
     activeVersion: null,
     versions: []
   }
-  
+
   apps.value.unshift(newApp)
   showCreateModal.value = false
   message.success('应用创建成功')
-  
+
   // 创建初始版本并跳转到开发页面
   const newVersion = {
     id: Date.now().toString() + '_v1',
@@ -408,9 +411,9 @@ const handleCreateApp = (appData) => {
     active: false,
     derivedFromId: null
   }
-  
+
   newApp.versions.push(newVersion)
-  
+
   // 切换到开发页面
   currentVersion.value = newVersion
   currentVersionApp.value = newApp
@@ -471,20 +474,20 @@ const handlePublishVersion = (version) => {
         const vIndex = app.versions.findIndex(v => v.id === version.id)
         if (vIndex !== -1) {
           app.versions[vIndex].status = 'PUBLISHED'
-          
+
           // 如果是第一个发布版本，自动激活
           const publishedVersions = app.versions.filter(v => v.status === 'PUBLISHED')
           if (publishedVersions.length === 1) {
             app.versions.forEach(v => v.active = false)
             app.versions[vIndex].active = true
             app.activeVersion = { id: version.id, name: version.name, devCode: version.devCode }
-            
+
             // 更新应用状态为已启用
             if (app.status !== 'ENABLED') {
               app.status = 'ENABLED'
             }
           }
-          
+
           message.success('版本发布成功')
         }
       }
@@ -497,7 +500,7 @@ const handleActivateVersion = (version) => {
     message.error('只有已发布的版本才能被激活')
     return
   }
-  
+
   dialog.warning({
     title: '激活版本',
     content: '确定要激活此版本吗？激活后应用将使用此版本的业务模型和UI。',
@@ -511,12 +514,12 @@ const handleActivateVersion = (version) => {
         if (vIndex !== -1) {
           app.versions[vIndex].active = true
           app.activeVersion = { id: version.id, name: version.name, devCode: version.devCode }
-          
+
           // 更新应用状态为已启用
           if (app.status !== 'ENABLED') {
             app.status = 'ENABLED'
           }
-          
+
           message.success('版本激活成功')
         }
       }
@@ -529,13 +532,13 @@ const handleDeleteVersion = (version) => {
     message.error('已发布版本不可删除')
     return
   }
-  
+
   const app = apps.value.find(a => a.id === version.appId)
   if (app && app.versions.length <= 1) {
     message.error('应用至少需要保留一个版本')
     return
   }
-  
+
   dialog.warning({
     title: '确认删除',
     content: `确定要删除版本「${version.name || version.devCode}」吗？`,
@@ -570,27 +573,27 @@ const handlePublishVersionInDev = (publishData) => {
       app.versions[vIndex].status = 'PUBLISHED'
       app.versions[vIndex].name = publishData.name || app.versions[vIndex].devCode
       app.versions[vIndex].description = publishData.description
-      
+
       // 更新当前版本数据
       currentVersion.value = { ...currentVersion.value, ...app.versions[vIndex] }
-      
+
       // 如果是第一个发布版本，自动激活
       const publishedVersions = app.versions.filter(v => v.status === 'PUBLISHED')
       if (publishedVersions.length === 1) {
         app.versions.forEach(v => v.active = false)
         app.versions[vIndex].active = true
-        app.activeVersion = { 
-          id: currentVersion.value.id, 
-          name: currentVersion.value.name, 
-          devCode: currentVersion.value.devCode 
+        app.activeVersion = {
+          id: currentVersion.value.id,
+          name: currentVersion.value.name,
+          devCode: currentVersion.value.devCode
         }
-        
+
         // 更新应用状态为已启用
         if (app.status !== 'ENABLED') {
           app.status = 'ENABLED'
         }
       }
-      
+
       message.success('版本发布成功')
     }
   }
@@ -601,24 +604,24 @@ const handleActivateVersionInDev = () => {
     message.error('只有已发布的版本才能被激活')
     return
   }
-  
+
   const app = apps.value.find(a => a.id === currentVersion.value.appId)
   if (app) {
     app.versions.forEach(v => v.active = false)
     const vIndex = app.versions.findIndex(v => v.id === currentVersion.value.id)
     if (vIndex !== -1) {
       app.versions[vIndex].active = true
-      app.activeVersion = { 
-        id: currentVersion.value.id, 
-        name: currentVersion.value.name, 
-        devCode: currentVersion.value.devCode 
+      app.activeVersion = {
+        id: currentVersion.value.id,
+        name: currentVersion.value.name,
+        devCode: currentVersion.value.devCode
       }
-      
+
       // 更新应用状态为已启用
       if (app.status !== 'ENABLED') {
         app.status = 'ENABLED'
       }
-      
+
       message.success('版本激活成功')
     }
   }
@@ -627,7 +630,7 @@ const handleActivateVersionInDev = () => {
 const handleGenerateCode = (requirements) => {
   // 模拟AI生成代码
   message.success('AI正在生成代码，请稍候...')
-  
+
   setTimeout(() => {
     // 更新当前版本的数据
     const app = apps.value.find(a => a.id === currentVersion.value.appId)
@@ -638,7 +641,7 @@ const handleGenerateCode = (requirements) => {
         app.versions[vIndex].appRequirements = requirements.appRequirements
         app.versions[vIndex].modelRequirements = requirements.modelRequirements
         app.versions[vIndex].uiRequirements = requirements.uiRequirements
-        
+
         // 生成模拟的模型定义
         app.versions[vIndex].modelDefs = `<?xml version="1.0" encoding="UTF-8"?>
 <model-design>
@@ -663,7 +666,7 @@ const handleGenerateCode = (requirements) => {
     </entity>
   </entities>
 </model-design>`
-        
+
         // 生成模拟的UI定义
         app.versions[vIndex].uiDefs = `<?xml version="1.0" encoding="UTF-8"?>
 <ui-design>
@@ -689,7 +692,7 @@ const handleGenerateCode = (requirements) => {
     </page>
   </pages>
 </ui-design>`
-        
+
         // 更新当前版本数据
         currentVersion.value = { ...currentVersion.value, ...app.versions[vIndex] }
         message.success('代码生成成功')
@@ -763,7 +766,7 @@ onMounted(() => {
             </n-tag>
           </div>
         </div>
-        
+
         <!-- 下拉菜单 -->
         <n-dropdown
           :options="getDropdownOptions(app)"
@@ -959,7 +962,7 @@ const handleDropdownSelect = (key, app) => {
           </div>
         </div>
       </template>
-      
+
       <!-- 操作栏 -->
       <div class="flex justify-between items-center mb-4">
         <div>
@@ -1160,7 +1163,7 @@ const columns = [
     width: 200,
     render: (row) => {
       const buttons = []
-      
+
       // 设计按钮
       buttons.push(
         h(NButton, {
@@ -1169,7 +1172,7 @@ const columns = [
           onClick: () => emit('design-version', row)
         }, { default: () => '设计' })
       )
-      
+
       // 发布按钮（仅开发中状态）
       if (row.status === 'DEVELOPING') {
         buttons.push(
@@ -1180,7 +1183,7 @@ const columns = [
           }, { default: () => '发布' })
         )
       }
-      
+
       // 激活按钮（已发布且未激活）
       if (row.status === 'PUBLISHED' && !row.active) {
         buttons.push(
@@ -1191,7 +1194,7 @@ const columns = [
           }, { default: () => '激活' })
         )
       }
-      
+
       // 衍生按钮（已发布）
       if (row.status === 'PUBLISHED') {
         buttons.push(
@@ -1202,7 +1205,7 @@ const columns = [
           }, { default: () => '衍生' })
         )
       }
-      
+
       // 删除按钮（仅开发中）
       if (row.status === 'DEVELOPING') {
         buttons.push(
@@ -1217,7 +1220,7 @@ const columns = [
           })
         )
       }
-      
+
       return h('div', { class: 'flex flex-wrap gap-1' }, buttons)
     }
   }
@@ -1243,7 +1246,7 @@ const handleCreateVersionSubmit = () => {
     message.error('请输入版本号或选择衍生版本')
     return
   }
-  
+
   // 创建新版本逻辑
   const version = {
     id: Date.now().toString(),
@@ -1262,7 +1265,7 @@ const handleCreateVersionSubmit = () => {
     active: false,
     derivedFromId: newVersion.value.derivedFromId
   }
-  
+
   if (!props.app.versions) {
     props.app.versions = []
   }
@@ -1298,7 +1301,7 @@ const handleDeriveClick = (version) => {
 
 const getNextVersion = (version) => {
   if (!version) return '1.0.0'
-  
+
   const parts = version.split('.').map(Number)
   if (parts.length === 3 && !isNaN(parts[2])) {
     parts[2] += 1
@@ -1344,7 +1347,7 @@ window.addEventListener('resize', () => {
         <span>创建新应用</span>
       </div>
     </template>
-    
+
     <n-form
       ref="formRef"
       :model="formData"
@@ -1363,7 +1366,7 @@ window.addEventListener('resize', () => {
           clearable
         />
       </n-form-item>
-      
+
       <n-form-item label="应用图标" path="icon">
         <n-upload
           accept="image/jpeg,image/png,image/svg+xml,image/webp"
@@ -1393,7 +1396,7 @@ window.addEventListener('resize', () => {
           <img :src="formData.icon" class="w-16 h-16 rounded-lg object-cover border" />
         </div>
       </n-form-item>
-      
+
       <n-form-item label="应用说明" path="description">
         <n-input
           v-model:value="formData.description"
@@ -1405,7 +1408,7 @@ window.addEventListener('resize', () => {
         />
       </n-form-item>
     </n-form>
-    
+
     <template #action>
       <div class="flex justify-end space-x-3">
         <n-button @click="handleCancel">
@@ -1466,23 +1469,23 @@ const rules = {
 const beforeIconUpload = (data) => {
   const file = data.file.file
   const allowedTypes = ['image/jpeg', 'image/png', 'image/svg+xml', 'image/webp']
-  
+
   if (!allowedTypes.includes(file.type)) {
     message.error('只支持 JPG, PNG, SVG, WebP 格式的图片')
     return false
   }
-  
+
   if (file.size > 2 * 1024 * 1024) {
     message.error('图片大小不能超过2MB')
     return false
   }
-  
+
   const reader = new FileReader()
   reader.onload = (e) => {
     formData.value.icon = e.target.result
   }
   reader.readAsDataURL(file)
-  
+
   return false
 }
 
@@ -1494,7 +1497,7 @@ const handleSubmit = () => {
   formRef.value?.validate((errors) => {
     if (!errors) {
       submitting.value = true
-      
+
       // 模拟提交过程
       setTimeout(() => {
         emit('submit', { ...formData.value })
@@ -1548,7 +1551,7 @@ watch(() => props.visible, (newVal) => {
         <span>编辑应用</span>
       </div>
     </template>
-    
+
     <n-form
       ref="formRef"
       :model="formData"
@@ -1567,7 +1570,7 @@ watch(() => props.visible, (newVal) => {
           clearable
         />
       </n-form-item>
-      
+
       <n-form-item label="应用图标" path="icon">
         <n-upload
           accept="image/jpeg,image/png,image/svg+xml,image/webp"
@@ -1597,7 +1600,7 @@ watch(() => props.visible, (newVal) => {
           <img :src="formData.icon" class="w-16 h-16 rounded-lg object-cover border" />
         </div>
       </n-form-item>
-      
+
       <n-form-item label="应用说明" path="description">
         <n-input
           v-model:value="formData.description"
@@ -1609,7 +1612,7 @@ watch(() => props.visible, (newVal) => {
         />
       </n-form-item>
     </n-form>
-    
+
     <template #action>
       <div class="flex justify-end space-x-3">
         <n-button @click="handleCancel">
@@ -1684,23 +1687,23 @@ watch(() => props.app, (newApp) => {
 const beforeIconUpload = (data) => {
   const file = data.file.file
   const allowedTypes = ['image/jpeg', 'image/png', 'image/svg+xml', 'image/webp']
-  
+
   if (!allowedTypes.includes(file.type)) {
     message.error('只支持 JPG, PNG, SVG, WebP 格式的图片')
     return false
   }
-  
+
   if (file.size > 2 * 1024 * 1024) {
     message.error('图片大小不能超过2MB')
     return false
   }
-  
+
   const reader = new FileReader()
   reader.onload = (e) => {
     formData.value.icon = e.target.result
   }
   reader.readAsDataURL(file)
-  
+
   return false
 }
 
@@ -1712,7 +1715,7 @@ const handleSubmit = () => {
   formRef.value?.validate((errors) => {
     if (!errors) {
       submitting.value = true
-      
+
       // 模拟提交过程
       setTimeout(() => {
         emit('submit', { ...formData.value })
@@ -1805,7 +1808,7 @@ const handleCancel = () => {
           <h2 class="font-medium text-gray-700">需求编辑</h2>
           <p class="text-sm text-gray-500">调整需求描述或选择AI模型后重新生成</p>
         </div>
-        
+
         <div class="flex-1 overflow-auto p-4 space-y-6">
           <!-- AI模型选择 -->
           <div class="space-y-2">
@@ -1930,7 +1933,7 @@ const handleCancel = () => {
                 业务模型
               </div>
             </template>
-            
+
             <!-- 模型标签内标签页 -->
             <n-tabs
               v-model:value="modelSubTab"
@@ -1991,7 +1994,7 @@ const handleCancel = () => {
                 {{ page.displayName }}
               </div>
             </template>
-            
+
             <!-- UI标签内标签页 -->
             <n-tabs
               v-model:value="page.activeSubTab"
@@ -2249,9 +2252,9 @@ const initData = () => {
     modelRequirements: props.version.modelRequirements || '',
     uiRequirements: props.version.uiRequirements || ''
   }
-  
+
   modelDefs.value = props.version.modelDefs || ''
-  
+
   // 解析UI定义中的页面
   if (props.version.uiDefs) {
     try {
@@ -2318,7 +2321,7 @@ const handleActivateConfirm = () => {
 const handleGenerate = () => {
   generating.value = true
   emit('generate-code', requirements.value)
-  
+
   // 模拟生成过程
   setTimeout(() => {
     generating.value = false
@@ -2337,7 +2340,7 @@ const handleUpdateUI = (page) => {
     }
     return p
   })
-  
+
   // 这里应该将整个uiPages转换回XML格式的uiDefs
   // 但为了简化，我们只发送一个简单的消息
   emit('update-ui', 'UI代码已更新')
@@ -2379,4 +2382,3 @@ watch(() => props.version, (newVersion) => {
 ]]></component>
     </components>
 </ui-design>
-```

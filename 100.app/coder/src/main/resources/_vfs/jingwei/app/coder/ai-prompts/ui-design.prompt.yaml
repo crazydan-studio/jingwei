@@ -16,7 +16,7 @@ template: |
   
   【设计规范】
   
-  {{include: /jingwei/ai/prompts/coder/ui-design.md}}
+  {{include: /jingwei/app/coder/ai-prompts/ui-design.md}}
   
   【完整性检查】
   
@@ -51,5 +51,5 @@ outputs:
     xdefPath: /jingwei/app/schema/coder/ui-design.xdef
     format: xml
     outputBuilder: |
-      import io.crazydan.jingwei.ai.AiErdModelNormalizer;
-      return AiErdModelNormalizer.normalize(value);
+      import io.crazydan.jingwei.app.coder.normalizer.AiUiDesignNormalizer;
+      return AiUiDesignNormalizer.normalize(value);
