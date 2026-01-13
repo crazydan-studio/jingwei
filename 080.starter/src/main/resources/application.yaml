@@ -57,3 +57,8 @@ jingwei:
   app:
     static-dir: ${project.basedir}/_data/app-pages
     install-dir: ${project.basedir}/_data/app-installed
+    build:
+      node_modules:
+        path: ${project.basedir}/../node_modules
+      npm:
+        path: /usr/bin/npm

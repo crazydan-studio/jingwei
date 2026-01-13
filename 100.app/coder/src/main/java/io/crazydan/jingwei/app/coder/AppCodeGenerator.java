@@ -20,26 +20,45 @@
 package io.crazydan.jingwei.app.coder;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import io.crazydan.duzhou.framework.commons.FileHelper;
+import io.crazydan.duzhou.framework.commons.StringHelper;
 import io.crazydan.jingwei.app.coder.model.AiModelDesign;
 import io.crazydan.jingwei.app.coder.model.AiOrmModel;
 import io.crazydan.jingwei.app.coder.model.AiUiDesign;
 import io.crazydan.jingwei.app.coder.model.AiUiModel;
+import io.nop.api.core.exceptions.NopException;
 import io.nop.codegen.XCodeGenerator;
 import io.nop.core.lang.eval.IEvalScope;
 import io.nop.core.resource.IResource;
+import io.nop.shell.DefaultShellOutputCollector;
+import io.nop.shell.ShellCommand;
+import io.nop.shell.ShellRunner;
 import io.nop.xlang.api.XLang;
 
+import static io.crazydan.jingwei.app.coder.AppCoderConfigs.CFG_APP_BUILD_NODE_MODULES_PATH;
+import static io.crazydan.jingwei.app.coder.AppCoderConfigs.CFG_APP_BUILD_NPM_PATH;
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.BUILD_DIR_DIST;
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.BUILD_DIR_HIDDEN_BUILD;
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.BUILD_DIR_NODE_MODULES;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.SCOPE_VAR_codeGenConfig;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.SCOPE_VAR_codeGenModel;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.TEMPLATE_APP_MODEL_PATH;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.TEMPLATE_APP_PAGE_PATH;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.TEMPLATE_DIR_MODEL;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.TEMPLATE_DIR_ORM;
+import static io.crazydan.jingwei.app.coder.AppCoderErrors.ERR_BUILD_FAILED_TO_CREATE_NODE_MODULES_LINK;
+import static io.crazydan.jingwei.app.coder.AppCoderErrors.ERR_BUILD_NODE_MODULES_PATH_NOT_SPECIFIED;
+import static io.crazydan.jingwei.app.coder.AppCoderErrors.ERR_BUILD_NPM_NOT_USABLE;
+import static io.crazydan.jingwei.app.coder.AppCoderErrors.ERR_BUILD_NPM_PATH_NOT_SPECIFIED;
+import static io.crazydan.jingwei.app.coder.AppCoderErrors.ERR_BUILD_RUN_ERROR;
+import static io.nop.ai.core.AiCoreErrors.ARG_CONFIG_VAR;
+import static io.nop.xlang.XLangErrors.ARG_ERROR;
+import static io.nop.xlang.XLangErrors.ARG_PATH;
 
 /**
  * 应用构建器
@@ -81,17 +100,17 @@ public class AppCodeGenerator {
 
     /** 构建应用的页面资源 */
     public void genPages(File targetDir, IResource uiDesignResource, AppCodeGenConfig genConfig) {
+        String buildDirPath = preparePageBuildDir(targetDir);
+        File buildDir = new File(buildDirPath);
+
         AiUiDesign uiDesign = new AiUiDesign(uiDesignResource, genConfig);
 
         Map<String, Object> vars = Map.of();
         AiUiModel uiModel = uiDesign.genUiModel(vars);
 
-        String targetDirPath = FileHelper.getAbsolutePath(targetDir);
-        FileHelper.assureDirExists(targetDir);
-
-        XCodeGenerator gen = new XCodeGenerator(TEMPLATE_APP_PAGE_PATH, targetDirPath);
-        // 保持用户定制的代码不变，仅更新以下划线开头的文件
-        gen.forceOverride(false);
+        XCodeGenerator gen = new XCodeGenerator(TEMPLATE_APP_PAGE_PATH, buildDirPath);
+        // 前端代码不支持用户定制，因此，强制更新所有文件
+        gen.forceOverride(true);
 
         IEvalScope scope = XLang.newEvalScope();
         scope.setLocalValue(SCOPE_VAR_codeGenConfig, genConfig);
@@ -99,7 +118,11 @@ public class AppCodeGenerator {
 
         gen.execute("", scope);
 
-        // TODO 调用 npm 构建源码
+        buildPageSourceCode(buildDir);
+
+        File buildDistDir = new File(buildDir, BUILD_DIR_DIST);
+        FileHelper.copyWithFilter(buildDistDir, targetDir, null);
+        FileHelper.removeDir(buildDir);
 
         List<String> paths = FileHelper.findFilePaths(targetDir, "**/*", true, true);
         this.pages.addAll(paths);
@@ -117,5 +140,73 @@ public class AppCodeGenerator {
 
     public List<String> getPages() {
         return this.pages;
+    }
+
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    private String preparePageBuildDir(File targetDir) {
+        String npmPath = CFG_APP_BUILD_NPM_PATH.get();
+        if (StringHelper.isBlank(npmPath)) {
+            throw new NopException(ERR_BUILD_NPM_PATH_NOT_SPECIFIED).param(ARG_CONFIG_VAR,
+                                                                           CFG_APP_BUILD_NPM_PATH.getName());
+        }
+        File npmFile = new File(npmPath);
+        if (!npmFile.exists() || !npmFile.isFile()) {
+            throw new NopException(ERR_BUILD_NPM_NOT_USABLE).param(ARG_PATH, npmPath);
+        }
+
+        String nodeModulesPath = CFG_APP_BUILD_NODE_MODULES_PATH.get();
+        if (StringHelper.isBlank(nodeModulesPath)) {
+            throw new NopException(ERR_BUILD_NODE_MODULES_PATH_NOT_SPECIFIED).param(ARG_CONFIG_VAR,
+                                                                                    CFG_APP_BUILD_NODE_MODULES_PATH.getName());
+        }
+        nodeModulesPath = StringHelper.normalizePath(nodeModulesPath);
+
+        File nodeModulesDir = new File(nodeModulesPath);
+        FileHelper.assureDirExists(nodeModulesDir);
+
+        File buildDir = new File(targetDir, BUILD_DIR_HIDDEN_BUILD);
+        FileHelper.removeDir(buildDir);
+        FileHelper.assureDirExists(buildDir);
+
+        File nodeModulesInBuildDir = new File(buildDir, BUILD_DIR_NODE_MODULES);
+        try {
+            Files.createSymbolicLink(nodeModulesInBuildDir.toPath(), nodeModulesDir.getAbsoluteFile().toPath());
+        } catch (Exception e) {
+            throw new NopException(ERR_BUILD_FAILED_TO_CREATE_NODE_MODULES_LINK, e);
+        }
+
+        return FileHelper.getAbsolutePath(buildDir);
+    }
+
+    private void buildPageSourceCode(File buildDir) {
+        String npmPath = CFG_APP_BUILD_NPM_PATH.get();
+
+        // 不做依赖安装，其会删除软链接，造成 node_modules 无法被共享。
+        // 该过程也涉及外网访问，可能需要代理加速
+        //runCommand(npmPath + " install", buildDir);
+
+        runCommand(npmPath + " run build", buildDir);
+    }
+
+    private void runCommand(String command, File workDir) {
+        ShellCommand cmd = new ShellCommand();
+        // Note: npm 的执行器为 node，不能使用 sh/bash 运行 npm
+        String[] args = ShellCommand.splitCommandLine(command);
+        for (String arg : args) {
+            cmd.addCmd(arg);
+        }
+
+        cmd.redirectErrorStream(true);
+        cmd.workDir(workDir.getAbsolutePath());
+
+        ShellRunner runner = new ShellRunner();
+        DefaultShellOutputCollector collector = new DefaultShellOutputCollector();
+
+        int exitCode = runner.run(cmd, collector);
+        if (exitCode != 0) {
+            String msg = collector.getOutput() + '\n' + collector.getError();
+            throw new NopException(ERR_BUILD_RUN_ERROR).param(ARG_ERROR, msg);
+        }
     }
 }

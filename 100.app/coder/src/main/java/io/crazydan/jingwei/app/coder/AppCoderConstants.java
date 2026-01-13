@@ -44,4 +44,11 @@ public interface AppCoderConstants {
 
     String SCOPE_VAR_codeGenModel = "codeGenModel";
     String SCOPE_VAR_codeGenConfig = "codeGenConfig";
+
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    String BUILD_DIR_HIDDEN_BUILD = ".build";
+    String BUILD_DIR_NODE_MODULES = "node_modules";
+    String BUILD_DIR_DIST = "dist";
+    String BUILD_DIST_FILE_NAME = "index";
 }

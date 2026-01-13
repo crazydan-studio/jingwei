@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<c:unit xmlns:c="c" xmlns:xpl="xpl"
+        xpl:outputMode="text"
+>
+    <c:script>
+        import io.crazydan.jingwei.app.coder.AppCoderConstants;
+
+        const outDir = AppCoderConstants.BUILD_DIR_DIST;
+        const indexFile = AppCoderConstants.BUILD_DIST_FILE_NAME;
+    </c:script>
+
+    <c:unit><![CDATA[import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import { viteExternalsPlugin } from 'vite-plugin-externals';
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [
+    vue(),
+    viteExternalsPlugin({
+      vue: 'Vue',
+      'naive-ui': 'naive',
+      'highlight.js': 'hljs'
+    })
+  ],
+  build: {
+    outDir: '${outDir}',
+    lib: {
+      entry: 'src/main.js',
+      name: 'App',
+      formats: ['es'],
+      fileName: '${indexFile}',
+      cssFileName: '${indexFile}'
+    }
+  }
+});
+]]></c:unit>
+</c:unit>

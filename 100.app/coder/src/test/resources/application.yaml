@@ -9,3 +9,11 @@ nop:
       log-dir: none
       # 是否启用系统提示词
       enable-work-mode-system-prompt: true
+
+jingwei:
+  app:
+    build:
+      node_modules:
+        path: ${project.basedir}/../../node_modules
+      npm:
+        path: /usr/bin/npm

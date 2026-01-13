@@ -19,8 +19,12 @@
 
 package io.crazydan.jingwei.app.coder;
 
+import io.nop.api.core.annotations.core.Description;
 import io.nop.api.core.annotations.core.Locale;
+import io.nop.api.core.config.IConfigReference;
 import io.nop.api.core.util.SourceLocation;
+
+import static io.nop.api.core.config.AppConfig.varRef;
 
 /**
  *
@@ -31,4 +35,10 @@ import io.nop.api.core.util.SourceLocation;
 public interface AppCoderConfigs {
     SourceLocation s_loc = SourceLocation.fromClass(AppCoderConfigs.class);
 
+    @Description("npm 可执行文件路径")
+    IConfigReference<String> CFG_APP_BUILD_NPM_PATH = //
+            varRef(s_loc, "jingwei.app.build.npm.path", String.class, null);
+    @Description("共享的 node_modules 目录路径。必须提前在该目录中安装构建所需的依赖包，构建过程中不会尝试更新")
+    IConfigReference<String> CFG_APP_BUILD_NODE_MODULES_PATH = //
+            varRef(s_loc, "jingwei.app.build.node_modules.path", String.class, null);
 }

@@ -1,6 +1,7 @@
 application-local.yaml
 _data/
 _dump/
+node_modules/
 
 target/
 !.mvn/wrapper/maven-wrapper.jar
