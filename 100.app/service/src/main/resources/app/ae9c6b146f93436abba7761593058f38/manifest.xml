@@ -21,8 +21,8 @@
 
 <manifest xmlns:x="/nop/schema/xdsl.xdef"
           x:schema="/jingwei/app/schema/manifest/releasing.xdef"
-          name="精卫应用" code="ae9c6b146f93436abba7761593058f38"
-          version="0.1.0" icon="icon.svg"
+          bizDomain="app" code="ae9c6b146f93436abba7761593058f38"
+          name="精卫应用" version="0.1.0" icon="icon.svg"
 >
 
     <description>精卫应用设计与管理</description>

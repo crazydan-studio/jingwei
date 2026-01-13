@@ -17,44 +17,18 @@
  * If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
  */
 
-package io.crazydan.jingwei.app.coder;
-
-import java.util.Locale;
+package io.crazydan.jingwei.app.util;
 
 import io.crazydan.duzhou.framework.commons.StringHelper;
 
 /**
- * 应用构建配置
  *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
- * @date 2026-01-06
+ * @date 2026-01-13
  */
-public class AppCodeGenConfig {
-    /** 应用唯一标识，不能为 {@code null} 或空白 */
-    private String code;
-    /** 应用所处的业务域标识，不能为 {@code null} 或空白 */
-    private String bizDomain;
+public class AppHelper {
 
-    public String getCode() {
-        return this.code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getBizDomain() {
-        return this.bizDomain;
-    }
-
-    public void setBizDomain(String appDomain) {
-        this.bizDomain = appDomain.toLowerCase(Locale.ROOT);
-    }
-
-    public String genTableName(String entityName) {
-        String prefix = getBizDomain().replace('-', '_');
-        String name = StringHelper.camelCaseToUnderscore(entityName, true);
-
-        return "tbl_" + prefix + '_' + name;
+    public static String genAppCode() {
+        return StringHelper.generateUUID();
     }
 }

@@ -130,7 +130,7 @@
 
                     // 等价于构造 /nop/schema/orm/dict.xdef
                     const dict = new DictBean();
-                    dict.name = codeGenConfig.domain + '/' + node.attrText('name');
+                    dict.name = codeGenConfig.bizDomain + '/' + node.attrText('name');
                     dict.label = node.attrText('displayName');
                     dict.valueType = 'string';
                 ]]></c:script>
@@ -213,8 +213,8 @@
                     // 统一采用动态模型，以避免创建实体 class
                     entity.className = 'io.nop.orm.support.DynamicOrmEntity';
 
-                    entity.tableName = codeGenConfig.dbTablePrefix + $String.camelCaseToUnderscore(entity.name, true);
-                    entity.querySpace = codeGenConfig.dbQuerySpace;
+                    entity.tableName = codeGenConfig.genTableName(entity.name);
+                    //entity.querySpace = codeGenConfig.dbQuerySpace;
                     entity.displayName = node.attrText('displayName');
                     entity.tagSet = [];
 
@@ -342,7 +342,7 @@
 
                     const dict = node.attrText('dict');
                     if (!$String.isBlank(dict)) {
-                        column[OrmModelConstants.EXT_DICT] = codeGenConfig.domain + '/' + dict;
+                        column[OrmModelConstants.EXT_DICT] = codeGenConfig.bizDomain + '/' + dict;
                     }
 
                     column['meta:maskPattern'] = node.attrText('maskPattern');

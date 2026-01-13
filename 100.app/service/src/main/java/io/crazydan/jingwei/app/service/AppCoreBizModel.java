@@ -26,6 +26,8 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import io.crazydan.duzhou.framework.commons.StringHelper;
+import io.crazydan.jingwei.app.coder.AppCodeGenConfig;
+import io.crazydan.jingwei.app.coder.AppCodeGenerator;
 import io.crazydan.jingwei.app.model.AppInstallation_Manifest;
 import io.crazydan.jingwei.app.model.AppInstallation_ModelResources;
 import io.crazydan.jingwei.app.model.AppInstallation_OrmResources;
@@ -35,7 +37,7 @@ import io.crazydan.jingwei.app.model.AppPackage_Resource;
 import io.crazydan.jingwei.app.model.AppReleasing_ArtifactResource;
 import io.crazydan.jingwei.app.model.AppReleasing_Manifest;
 import io.crazydan.jingwei.app.orm.AppOrmModelProvider;
-import io.crazydan.jingwei.app.util.AppHelper;
+import io.crazydan.jingwei.app.util.AppModelHelper;
 import io.nop.api.core.annotations.biz.BizAction;
 import io.nop.api.core.annotations.biz.BizModel;
 import io.nop.api.core.annotations.biz.BizMutation;
@@ -52,10 +54,12 @@ import jakarta.inject.Inject;
 import static io.crazydan.jingwei.app.AppConstants.APP_INSTALLATION_DIR_MODEL;
 import static io.crazydan.jingwei.app.AppConstants.APP_INSTALLATION_DIR_ORM;
 import static io.crazydan.jingwei.app.AppConstants.APP_MANIFEST_FILE;
-import static io.crazydan.jingwei.app.AppConstants.TEMPLATE_APP_CLASSPATH_V_PATH;
-import static io.crazydan.jingwei.app.AppConstants.TEMPLATE_APP_INSTALLATION_V_PATH;
-import static io.crazydan.jingwei.app.AppConstants.TEMPLATE_APP_STATIC_V_PATH;
-import static io.crazydan.jingwei.app.AppConstants.TEMPLATE_APP_STORE_V_PATH;
+import static io.crazydan.jingwei.app.AppConstants.TEMPLATE_APP_CLASSPATH_VPATH;
+import static io.crazydan.jingwei.app.AppConstants.TEMPLATE_APP_INSTALLATION_ROOT_VPATH;
+import static io.crazydan.jingwei.app.AppConstants.TEMPLATE_APP_INSTALLATION_VPATH;
+import static io.crazydan.jingwei.app.AppConstants.TEMPLATE_APP_STATIC_ROOT_VPATH;
+import static io.crazydan.jingwei.app.AppConstants.TEMPLATE_APP_STATIC_VPATH;
+import static io.crazydan.jingwei.app.AppConstants.TEMPLATE_APP_STORE_VPATH;
 import static io.crazydan.jingwei.app.AppConstants.VAR_APP_CODE;
 import static io.crazydan.jingwei.app.AppConstants.VAR_PATH;
 
@@ -102,7 +106,7 @@ public class AppCoreBizModel {
     @BizAction
     public AppInstallation_Manifest installAppFromClasspath(@Name("appCode") String appCode) {
         IResource resource = loadAppClasspathResource(appCode, APP_MANIFEST_FILE);
-        AppReleasing_Manifest manifest = AppHelper.loadAppReleasingManifest(resource);
+        AppReleasing_Manifest manifest = AppModelHelper.loadAppReleasingManifest(resource);
         if (manifest == null) {
             return null;
         }
@@ -123,8 +127,8 @@ public class AppCoreBizModel {
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     protected AppLocalStore_Manifest loadAppLocalStoreManifest() {
-        IResource resource = loadVfsResource(TEMPLATE_APP_STORE_V_PATH, "", APP_MANIFEST_FILE);
-        AppLocalStore_Manifest manifest = AppHelper.loadAppLocalStoreManifest(resource);
+        IResource resource = loadVfsResource(TEMPLATE_APP_STORE_VPATH, "", APP_MANIFEST_FILE);
+        AppLocalStore_Manifest manifest = AppModelHelper.loadAppLocalStoreManifest(resource);
 
         // 至少需加载门户应用
         if (manifest == null) {
@@ -136,19 +140,19 @@ public class AppCoreBizModel {
     protected AppInstallation_Manifest loadAppInstallationManifestFromDir(String appCode) {
         IResource resource = loadAppInstallationResource(appCode, APP_MANIFEST_FILE);
 
-        return AppHelper.loadAppInstallationManifest(resource);
+        return AppModelHelper.loadAppInstallationManifest(resource);
     }
 
     protected IResource loadAppInstallationResource(String appCode, String path) {
-        return loadVfsResource(TEMPLATE_APP_INSTALLATION_V_PATH, appCode, path);
+        return loadVfsResource(TEMPLATE_APP_INSTALLATION_VPATH, appCode, path);
     }
 
     protected IResource loadAppStaticResource(String appCode, String path) {
-        return loadVfsResource(TEMPLATE_APP_STATIC_V_PATH, appCode, path);
+        return loadVfsResource(TEMPLATE_APP_STATIC_VPATH, appCode, path);
     }
 
     protected IResource loadAppClasspathResource(String appCode, String path) {
-        return loadVfsResource(TEMPLATE_APP_CLASSPATH_V_PATH, appCode, path);
+        return loadVfsResource(TEMPLATE_APP_CLASSPATH_VPATH, appCode, path);
     }
 
     protected IResource loadVfsResource(String template, String appCode, String path) {
@@ -206,29 +210,37 @@ public class AppCoreBizModel {
         manifest.setModelResources(new AppInstallation_ModelResources());
         manifest.setPageResources(new AppInstallation_PageResources());
 
-        // Note: 模型资源释放到应用安装目录
-        installAppPackageResources(ormResources,
-                                   appCode,
-                                   APP_INSTALLATION_DIR_ORM,
-                                   manifest.getOrmResources()::addChild);
-        installAppPackageResources(modelResources,
-                                   appCode,
-                                   APP_INSTALLATION_DIR_MODEL,
-                                   manifest.getModelResources()::addChild);
+        if (ormResources.isEmpty() || modelResources.isEmpty()) {
+            genAppModels(releasingManifest, manifest.getOrmResources(), manifest.getModelResources());
+        } else {
+            // Note: 模型资源释放到应用安装目录
+            installAppPackageResources(ormResources,
+                                       appCode,
+                                       APP_INSTALLATION_DIR_ORM,
+                                       manifest.getOrmResources()::addChild);
+            installAppPackageResources(modelResources,
+                                       appCode,
+                                       APP_INSTALLATION_DIR_MODEL,
+                                       manifest.getModelResources()::addChild);
+        }
 
-        // Note: 页面资源需释放到应用静态资源目录
-        pageResources.forEach((source) -> {
-            AppPackage_Resource pkg = new AppPackage_Resource();
-            pkg.setPath(source.getName());
+        if (pageResources.isEmpty()) {
+            genAppPages(releasingManifest, manifest.getPageResources());
+        } else {
+            // Note: 页面资源需释放到应用静态资源目录
+            pageResources.forEach((source) -> {
+                AppPackage_Resource pkg = new AppPackage_Resource();
+                pkg.setPath(source.getName());
 
-            IResource resource = loadAppStaticResource(appCode, pkg.getPath());
-            source.getResource().saveToResource(resource);
+                IResource resource = loadAppStaticResource(appCode, pkg.getPath());
+                source.getResource().saveToResource(resource);
 
-            manifest.getPageResources().addChild(pkg);
-        });
+                manifest.getPageResources().addChild(pkg);
+            });
+        }
 
         IResource manifestResource = loadAppInstallationResource(appCode, APP_MANIFEST_FILE);
-        AppHelper.saveAppInstallationManifest(manifest, manifestResource);
+        AppModelHelper.saveAppInstallationManifest(manifest, manifestResource);
     }
 
     protected void installAppPackageResources(
@@ -242,5 +254,53 @@ public class AppCoreBizModel {
 
             consumer.accept(pkg);
         });
+    }
+
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    /** 根据模型设计生成应用模型定义 {@code app.orm.xml}、{@code *.xmeta}、{@code *.xbiz} */
+    protected void genAppModels(
+            AppReleasing_Manifest manifest, AppInstallation_OrmResources ormResources,
+            AppInstallation_ModelResources modelResources
+    ) {
+        AppPackage_Resource source = manifest.getCoderResource().getModelDesign();
+        if (source == null) {
+            return;
+        }
+        IResource resource = source.getResource();
+
+        String appCode = manifest.getCode();
+        AppCodeGenConfig genConfig = createAppGenConfig(manifest);
+
+        IResource target = loadVfsResource(TEMPLATE_APP_INSTALLATION_ROOT_VPATH, appCode, "");
+
+        AppCodeGenerator gen = new AppCodeGenerator();
+        gen.genModels(target.toFile(), resource, genConfig);
+    }
+
+    /** 根据 UI 设计生成应用页面资源 */
+    protected void genAppPages(AppReleasing_Manifest manifest, AppInstallation_PageResources pageResources) {
+        AppPackage_Resource source = manifest.getCoderResource().getUiDesign();
+        if (source == null) {
+            return;
+        }
+        IResource resource = source.getResource();
+
+        String appCode = manifest.getCode();
+        AppCodeGenConfig genConfig = createAppGenConfig(manifest);
+
+        IResource target = loadVfsResource(TEMPLATE_APP_STATIC_ROOT_VPATH, appCode, "");
+
+        AppCodeGenerator gen = new AppCodeGenerator();
+        gen.genPages(target.toFile(), resource, genConfig);
+    }
+
+    protected AppCodeGenConfig createAppGenConfig(AppReleasing_Manifest manifest) {
+        AppCodeGenConfig genConfig = new AppCodeGenConfig();
+
+        genConfig.setCode(manifest.getCode());
+        genConfig.setBizDomain(manifest.getBizDomain());
+
+        return genConfig;
     }
 }

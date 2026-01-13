@@ -21,8 +21,11 @@ package io.crazydan.jingwei.app.model;
 
 import io.crazydan.jingwei.app.model._gen._AppReleasing_CoderResource;
 
-public class AppReleasing_CoderResource extends _AppReleasing_CoderResource{
-    public AppReleasing_CoderResource(){
+public class AppReleasing_CoderResource extends _AppReleasing_CoderResource {
+    public static final AppReleasing_CoderResource NONE = new AppReleasing_CoderResource() {{
+        freeze(true);
+    }};
 
+    public AppReleasing_CoderResource() {
     }
 }

@@ -31,7 +31,7 @@ public interface AppCoderConstants {
 
     String XLIB_TAG_ModelDesignToOrmModel = "ModelDesignToOrmModel";
 
-    String XLIB_TAG_ATTR_NODE = "node";
+    String TAG_ATTR_node = "node";
 
     String TEMPLATE_APP_MODEL_PATH = "/jingwei/app/templates/app-model";
     String TEMPLATE_APP_PAGE_PATH = "/jingwei/app/templates/app-page";

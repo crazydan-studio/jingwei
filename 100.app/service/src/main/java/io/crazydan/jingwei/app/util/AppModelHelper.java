@@ -37,7 +37,7 @@ import static io.crazydan.jingwei.app.AppConstants.XDSL_SCHEMA_APP_RELEASING_MAN
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
  * @date 2026-01-09
  */
-public class AppHelper {
+public class AppModelHelper {
 
     /** 加载应用本地仓库清单，若资源不存在，则返回 {@code null} */
     public static AppLocalStore_Manifest loadAppLocalStoreManifest(IResource resource) {

@@ -32,6 +32,20 @@ public class AppReleasing_Manifest extends _AppReleasing_Manifest implements INe
     @Override
     public void init() {
         // TODO artifactResource 中的 name 必须设置
+        // TODO 必须属性校验
+        // TODO requirementResource、coderResource 必须
+    }
+
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    @Override
+    public AppReleasing_CoderResource getCoderResource() {
+        return firstNonNull(super.getCoderResource(), AppReleasing_CoderResource.NONE);
+    }
+
+    @Override
+    public AppReleasing_RequirementResource getRequirementResource() {
+        return firstNonNull(super.getRequirementResource(), AppReleasing_RequirementResource.NONE);
     }
 
     /** @return 始终不返回 {@code null} */

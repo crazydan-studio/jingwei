@@ -61,7 +61,7 @@ public class TestAiModelDesign extends NopJunitTestCase {
         AppCodeGenerator gen = new AppCodeGenerator();
         AppCodeGenConfig genConfig = createAppGenConfig();
 
-        gen.genModel(getTargetDir().getAbsolutePath(), createResource(resourcePath), genConfig);
+        gen.genModels(getTargetDir(), createResource(resourcePath), genConfig);
     }
 
     protected IResource createResource(String path) {
@@ -81,9 +81,7 @@ public class TestAiModelDesign extends NopJunitTestCase {
         AppCodeGenConfig genConfig = new AppCodeGenConfig();
 
         genConfig.setCode("16834a2287e74be796b6493008e22ac4");
-        genConfig.setDomain("app");
-        //genConfig.setDbQuerySpace("user");
-        genConfig.setDbTablePrefix("tbl_3mk2yf_");
+        genConfig.setBizDomain("app");
 
         return genConfig;
     }

@@ -31,8 +31,8 @@ import io.nop.xlang.xpl.IXplTag;
 import io.nop.xlang.xpl.xlib.XplLibHelper;
 
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.SCOPE_VAR_codeGenConfig;
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.TAG_ATTR_node;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.XLIB_APP_MODEL_GEN_PATH;
-import static io.crazydan.jingwei.app.coder.AppCoderConstants.XLIB_TAG_ATTR_NODE;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.XLIB_TAG_ModelDesignToOrmModel;
 
 /**
@@ -66,15 +66,16 @@ public class AiModelDesign {
     }
 
     protected <T> T callXlibTag(String tagName, Map<String, Object> vars) {
+        IXplTag tag = XplLibHelper.getTag(XLIB_APP_MODEL_GEN_PATH, tagName);
+
         IEvalScope scope = XLang.newEvalScope();
         if (vars != null) {
             scope.setLocalValues(vars);
-            scope.setLocalValue(SCOPE_VAR_codeGenConfig, this.genConfig);
         }
+        scope.setLocalValue(SCOPE_VAR_codeGenConfig, this.genConfig);
 
-        Map<String, Object> args = Map.of(XLIB_TAG_ATTR_NODE, getDesignNode());
-
-        IXplTag tag = XplLibHelper.getTag(XLIB_APP_MODEL_GEN_PATH, tagName);
+        XNode node = getDesignNode();
+        Map<String, Object> args = Map.of(TAG_ATTR_node, node);
         return (T) tag.invokeWithNamedArgs(scope, args);
     }
 }

@@ -33,6 +33,13 @@ public abstract class _AppReleasing_Manifest extends io.nop.core.resource.compon
     
     /**
      *  
+     * xml name: bizDomain
+     * 
+     */
+    private java.lang.String _bizDomain ;
+    
+    /**
+     *  
      * xml name: code
      * 
      */
@@ -114,6 +121,25 @@ public abstract class _AppReleasing_Manifest extends io.nop.core.resource.compon
         checkAllowChange();
         
         this._author = value;
+           
+    }
+
+    
+    /**
+     * 
+     * xml name: bizDomain
+     *  
+     */
+    
+    public java.lang.String getBizDomain(){
+      return _bizDomain;
+    }
+
+    
+    public void setBizDomain(java.lang.String value){
+        checkAllowChange();
+        
+        this._bizDomain = value;
            
     }
 
@@ -276,6 +302,7 @@ public abstract class _AppReleasing_Manifest extends io.nop.core.resource.compon
         
         out.putNotNull("artifactResource",this.getArtifactResource());
         out.putNotNull("author",this.getAuthor());
+        out.putNotNull("bizDomain",this.getBizDomain());
         out.putNotNull("code",this.getCode());
         out.putNotNull("coderResource",this.getCoderResource());
         out.putNotNull("description",this.getDescription());
@@ -296,6 +323,7 @@ public abstract class _AppReleasing_Manifest extends io.nop.core.resource.compon
         
         instance.setArtifactResource(this.getArtifactResource());
         instance.setAuthor(this.getAuthor());
+        instance.setBizDomain(this.getBizDomain());
         instance.setCode(this.getCode());
         instance.setCoderResource(this.getCoderResource());
         instance.setDescription(this.getDescription());

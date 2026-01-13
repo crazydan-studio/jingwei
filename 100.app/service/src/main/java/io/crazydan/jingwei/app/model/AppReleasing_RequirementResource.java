@@ -21,8 +21,11 @@ package io.crazydan.jingwei.app.model;
 
 import io.crazydan.jingwei.app.model._gen._AppReleasing_RequirementResource;
 
-public class AppReleasing_RequirementResource extends _AppReleasing_RequirementResource{
-    public AppReleasing_RequirementResource(){
+public class AppReleasing_RequirementResource extends _AppReleasing_RequirementResource {
+    public static final AppReleasing_RequirementResource NONE = new AppReleasing_RequirementResource() {{
+        freeze(true);
+    }};
 
+    public AppReleasing_RequirementResource() {
     }
 }

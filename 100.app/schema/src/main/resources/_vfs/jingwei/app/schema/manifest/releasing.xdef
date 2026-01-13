@@ -27,7 +27,8 @@
           x:schema="/nop/schema/xdef.xdef"
           xdef:bean-package="io.crazydan.jingwei.app.model"
           xdef:name="AppReleasing_Manifest"
-          name="!string" code="!string" version="!string"
+          bizDomain="!ns-name" code="!string"
+          name="!string" version="!string"
           icon="file-path"
 >
 
@@ -41,7 +42,7 @@
     />
 
     <!-- [应用的需求设计资源]
-    > 应用功能、模型、UI 设计的需求说明文档。
+    > 应用功能、模型、UI 设计的需求说明文档。应用功能需求必须指定，而模型和 UI 需求必须至少指定一项。
     -->
     <requirementResource xdef:name="AppReleasing_RequirementResource">
         <appDesign xdef:ref="resource.xdef"/>
@@ -51,7 +52,7 @@
     </requirementResource>
 
     <!-- [应用的编码资源]
-    > 用于生成应用代码的 DSL 资源。
+    > 用于生成应用代码的 DSL 资源。根据需求设计资源确定模型和 UI 设计资源是否必须包含。
     -->
     <coderResource xdef:name="AppReleasing_CoderResource">
         <modelDesign xdef:ref="resource.xdef"/>
@@ -59,7 +60,7 @@
     </coderResource>
 
     <!-- [应用的构建产物]
-    > 将被释放到应用安装目录中的构建产物资源。
+    > 将被释放到应用安装目录中的构建产物资源。若未指定，则在安装时动态构建。
     -->
     <artifactResource xdef:name="AppReleasing_ArtifactResource">
         <model xdef:ref="resource.xdef"

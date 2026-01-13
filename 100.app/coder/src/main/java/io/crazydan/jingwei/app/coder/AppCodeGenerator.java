@@ -19,11 +19,13 @@
 
 package io.crazydan.jingwei.app.coder;
 
+import java.io.File;
 import java.util.Map;
 
 import io.crazydan.jingwei.app.coder.model.AiModelDesign;
 import io.crazydan.jingwei.app.coder.model.AiOrmModel;
 import io.nop.codegen.XCodeGenerator;
+import io.nop.commons.util.FileHelper;
 import io.nop.core.lang.eval.IEvalScope;
 import io.nop.core.resource.IResource;
 import io.nop.xlang.api.XLang;
@@ -41,13 +43,14 @@ import static io.crazydan.jingwei.app.coder.AppCoderConstants.TEMPLATE_APP_MODEL
 public class AppCodeGenerator {
 
     /** 构建应用模型资源，主要为 {@code app.orm.xml}、{@code *.xmeta}、{@code *.xbiz} */
-    public void genModel(String targetDir, IResource modelDesignResource, AppCodeGenConfig genConfig) {
+    public void genModels(File targetDir, IResource modelDesignResource, AppCodeGenConfig genConfig) {
         AiModelDesign modelDesign = new AiModelDesign(modelDesignResource, genConfig);
 
         Map<String, Object> vars = Map.of();
         AiOrmModel ormModel = modelDesign.genOrmModel(vars);
 
-        XCodeGenerator gen = new XCodeGenerator(TEMPLATE_APP_MODEL_PATH, targetDir);
+        String dir = FileHelper.getAbsolutePath(targetDir);
+        XCodeGenerator gen = new XCodeGenerator(TEMPLATE_APP_MODEL_PATH, dir);
         // 保持用户定制的代码不变，仅更新以下划线开头的文件
         gen.forceOverride(false);
 
@@ -56,10 +59,12 @@ public class AppCodeGenerator {
         scope.setLocalValue(SCOPE_VAR_codeGenModel, ormModel);
 
         gen.execute("", scope);
+
+        // TODO 返回生成的资源文件名（相对于释放目录）
     }
 
     /** 构建应用的页面资源 */
-    public String genPage(IResource uiDesignResource, AppCodeGenConfig genConfig) {
+    public String genPages(File targetDir, IResource uiDesignResource, AppCodeGenConfig genConfig) {
         return null;
     }
 }
