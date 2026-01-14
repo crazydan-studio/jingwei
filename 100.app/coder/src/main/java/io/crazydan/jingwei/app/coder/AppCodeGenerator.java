@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.crazydan.duzhou.framework.commons.FileHelper;
+import io.crazydan.duzhou.framework.commons.ShellHelper;
 import io.crazydan.duzhou.framework.commons.StringHelper;
 import io.crazydan.jingwei.app.coder.model.AiModelDesign;
 import io.crazydan.jingwei.app.coder.model.AiOrmModel;
@@ -35,9 +36,6 @@ import io.nop.api.core.exceptions.NopException;
 import io.nop.codegen.XCodeGenerator;
 import io.nop.core.lang.eval.IEvalScope;
 import io.nop.core.resource.IResource;
-import io.nop.shell.DefaultShellOutputCollector;
-import io.nop.shell.ShellCommand;
-import io.nop.shell.ShellRunner;
 import io.nop.xlang.api.XLang;
 
 import static io.crazydan.jingwei.app.coder.AppCoderConfigs.CFG_APP_BUILD_NODE_MODULES_PATH;
@@ -55,9 +53,7 @@ import static io.crazydan.jingwei.app.coder.AppCoderErrors.ERR_BUILD_FAILED_TO_C
 import static io.crazydan.jingwei.app.coder.AppCoderErrors.ERR_BUILD_NODE_MODULES_PATH_NOT_SPECIFIED;
 import static io.crazydan.jingwei.app.coder.AppCoderErrors.ERR_BUILD_NPM_NOT_USABLE;
 import static io.crazydan.jingwei.app.coder.AppCoderErrors.ERR_BUILD_NPM_PATH_NOT_SPECIFIED;
-import static io.crazydan.jingwei.app.coder.AppCoderErrors.ERR_BUILD_RUN_ERROR;
 import static io.nop.ai.core.AiCoreErrors.ARG_CONFIG_VAR;
-import static io.nop.xlang.XLangErrors.ARG_ERROR;
 import static io.nop.xlang.XLangErrors.ARG_PATH;
 
 /**
@@ -184,29 +180,8 @@ public class AppCodeGenerator {
 
         // 不做依赖安装，其会删除软链接，造成 node_modules 无法被共享。
         // 该过程也涉及外网访问，可能需要代理加速
-        //runCommand(npmPath + " install", buildDir);
+        //ShellHelper.runExecutable(npmPath, new String[] { "install" }, buildDir, true);
 
-        runCommand(npmPath + " run build", buildDir);
-    }
-
-    private void runCommand(String command, File workDir) {
-        ShellCommand cmd = new ShellCommand();
-        // Note: npm 的执行器为 node，不能使用 sh/bash 运行 npm
-        String[] args = ShellCommand.splitCommandLine(command);
-        for (String arg : args) {
-            cmd.addCmd(arg);
-        }
-
-        cmd.redirectErrorStream(true);
-        cmd.workDir(workDir.getAbsolutePath());
-
-        ShellRunner runner = new ShellRunner();
-        DefaultShellOutputCollector collector = new DefaultShellOutputCollector();
-
-        int exitCode = runner.run(cmd, collector);
-        if (exitCode != 0) {
-            String msg = collector.getOutput() + '\n' + collector.getError();
-            throw new NopException(ERR_BUILD_RUN_ERROR).param(ARG_ERROR, msg);
-        }
+        ShellHelper.runExecutable(npmPath, new String[] { "run", "build" }, buildDir, true);
     }
 }

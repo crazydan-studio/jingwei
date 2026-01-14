@@ -24,7 +24,6 @@ import io.nop.api.core.exceptions.ErrorCode;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.BUILD_DIR_NODE_MODULES;
 import static io.nop.ai.core.AiCoreErrors.ARG_CONFIG_VAR;
 import static io.nop.api.core.exceptions.ErrorCode.define;
-import static io.nop.xlang.XLangErrors.ARG_ERROR;
 import static io.nop.xlang.XLangErrors.ARG_PATH;
 
 /**
@@ -53,8 +52,4 @@ public interface AppCoderErrors {
             define("jingwei.err.app.build.npm-not-usable",
                    "NPM 文件 {" + ARG_PATH + "} 不存在或不是可执行的",
                    ARG_PATH);
-
-    ErrorCode ERR_BUILD_RUN_ERROR = //
-            define("jingwei.err.app.build.run-error", //
-                   "构建出现异常：{" + ARG_ERROR + "}", ARG_ERROR);
 }
