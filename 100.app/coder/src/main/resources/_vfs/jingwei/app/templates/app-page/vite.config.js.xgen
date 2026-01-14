@@ -17,23 +17,6 @@ import { compression } from 'vite-plugin-compression2';
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [
-    vue(),
-    viteExternalsPlugin({
-      vue: 'Vue',
-      'naive-ui': 'naive',
-      'highlight.js': 'hljs'
-    }),
-    // https://github.com/nonzzz/vite-plugin-compression
-    compression({
-      algorithms: ['brotliCompress'],
-      include: /\.(html|xml|css|json|js|mjs|svg|yaml|yml|toml)$/,
-      // 大于 1kb 则执行压缩
-      threshold: 1024,
-      // 是否删除原始非压缩文件
-      deleteOriginalAssets: true
-    })
-  ],
   build: {
     outDir: '${outDir}',
     // Note: 只有 terser 才支持压缩 es 模块代码
@@ -52,7 +35,24 @@ export default defineConfig({
       fileName: '${indexFile}',
       cssFileName: '${indexFile}'
     }
-  }
+  },
+  plugins: [
+    vue(),
+    viteExternalsPlugin({
+      vue: 'Vue',
+      'naive-ui': 'naive',
+      'highlight.js': 'hljs'
+    }),
+    // https://github.com/nonzzz/vite-plugin-compression
+    compression({
+      algorithms: ['brotliCompress'],
+      include: /\.(html|xml|css|json|js|mjs|svg|yaml|yml|toml)$/,
+      // 大于 1kb 则执行压缩
+      threshold: 1024,
+      // 是否删除原始非压缩文件
+      deleteOriginalAssets: true
+    })
+  ]
 });
 ]]></c:unit>
 </c:unit>

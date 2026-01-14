@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>精卫 - 您的个人数字资产平台</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script src="https://unpkg.com/naive-ui@2.43.2/dist/index.prod.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- https://app.unpkg.com/@highlightjs/cdn-assets@11.11.1/files/styles -->
+    <!-- <link
+      rel="stylesheet"
+      href="https://unpkg.com/@highlightjs/cdn-assets@11.11.1/styles/atom-one-dark.min.css"
+    /> -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@highlightjs/cdn-assets@11.11.1/styles/atom-one-light.min.css"
+    />
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@11.11.1/highlight.min.js"></script>
+    <script>
+      const ROOT_URL_PATH = '';
+      const __global_app_config__ = {
+        // 是否为预览模式
+        inPreview: false,
+        // 门户应用的标识
+        protalCode: 'ae9c6b146f93436abba7761593058f38',
+        // 接口配置信息
+        api: {
+          graphql: ROOT_URL_PATH + '/graphql',
+          fileUpload: ROOT_URL_PATH + '/f/upload',
+          appStatic: ROOT_URL_PATH + '/app'
+        }
+      };
+
+      // Nodejs 打包需要该配置信息
+      const process = {
+        env: {
+          NODE_ENV: __global_app_config__.inPreview
+            ? 'development'
+            : 'production'
+        }
+      };
+    </script>
+
+    <script type="module" src="/src/main.js"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+  </body>
+</html>

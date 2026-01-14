@@ -25,7 +25,7 @@ import io.nop.undertow.UndertowServer;
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
  * @date 2026-01-01
  */
-public class JingWeiWebStarter extends UndertowServer {
+public class JingWeiStarter extends UndertowServer {
 
     public static void main(String[] args) {
         start(args);

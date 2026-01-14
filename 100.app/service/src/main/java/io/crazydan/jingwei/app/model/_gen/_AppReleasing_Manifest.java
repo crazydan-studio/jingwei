@@ -20,7 +20,7 @@ public abstract class _AppReleasing_Manifest extends io.nop.core.resource.compon
     /**
      *  应用的构建产物
      * xml name: artifactResource
-     * > 将被释放到应用安装目录中的构建产物资源。
+     * > 将被释放到应用安装目录中的构建产物资源。若未指定，则在安装时动态构建。
      */
     private io.crazydan.jingwei.app.model.AppReleasing_ArtifactResource _artifactResource ;
     
@@ -48,7 +48,7 @@ public abstract class _AppReleasing_Manifest extends io.nop.core.resource.compon
     /**
      *  应用的编码资源
      * xml name: coderResource
-     * > 用于生成应用代码的 DSL 资源。
+     * > 用于生成应用代码的 DSL 资源。根据需求设计资源确定模型和 UI 设计资源是否必须包含。
      */
     private io.crazydan.jingwei.app.model.AppReleasing_CoderResource _coderResource ;
     
@@ -76,7 +76,7 @@ public abstract class _AppReleasing_Manifest extends io.nop.core.resource.compon
     /**
      *  应用的需求设计资源
      * xml name: requirementResource
-     * > 应用功能、模型、UI 设计的需求说明文档。
+     * > 应用功能、模型、UI 设计的需求说明文档。应用功能需求必须指定，而模型和 UI 需求必须至少指定一项。
      */
     private io.crazydan.jingwei.app.model.AppReleasing_RequirementResource _requirementResource ;
     
@@ -90,7 +90,7 @@ public abstract class _AppReleasing_Manifest extends io.nop.core.resource.compon
     /**
      * 应用的构建产物
      * xml name: artifactResource
-     *  > 将被释放到应用安装目录中的构建产物资源。
+     *  > 将被释放到应用安装目录中的构建产物资源。若未指定，则在安装时动态构建。
      */
     
     public io.crazydan.jingwei.app.model.AppReleasing_ArtifactResource getArtifactResource(){
@@ -166,7 +166,7 @@ public abstract class _AppReleasing_Manifest extends io.nop.core.resource.compon
     /**
      * 应用的编码资源
      * xml name: coderResource
-     *  > 用于生成应用代码的 DSL 资源。
+     *  > 用于生成应用代码的 DSL 资源。根据需求设计资源确定模型和 UI 设计资源是否必须包含。
      */
     
     public io.crazydan.jingwei.app.model.AppReleasing_CoderResource getCoderResource(){
@@ -242,7 +242,7 @@ public abstract class _AppReleasing_Manifest extends io.nop.core.resource.compon
     /**
      * 应用的需求设计资源
      * xml name: requirementResource
-     *  > 应用功能、模型、UI 设计的需求说明文档。
+     *  > 应用功能、模型、UI 设计的需求说明文档。应用功能需求必须指定，而模型和 UI 需求必须至少指定一项。
      */
     
     public io.crazydan.jingwei.app.model.AppReleasing_RequirementResource getRequirementResource(){

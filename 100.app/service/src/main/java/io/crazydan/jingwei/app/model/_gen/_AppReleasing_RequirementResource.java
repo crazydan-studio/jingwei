@@ -10,7 +10,7 @@ import io.nop.commons.util.ClassHelper;
 // tell cpd to start ignoring code - CPD-OFF
 /**
  * generate from /jingwei/app/schema/manifest/releasing.xdef <p>
- * > 应用功能、模型、UI 设计的需求说明文档。
+ * > 应用功能、模型、UI 设计的需求说明文档。应用功能需求必须指定，而模型和 UI 需求必须至少指定一项。
  */
 @SuppressWarnings({"PMD.UselessOverridingMethod","PMD.UnusedLocalVariable",
     "PMD.UnnecessaryFullyQualifiedName","PMD.EmptyControlStatement","java:S116","java:S101","java:S1128","java:S1161"})

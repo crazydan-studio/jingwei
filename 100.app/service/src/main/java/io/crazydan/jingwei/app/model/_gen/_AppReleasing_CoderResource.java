@@ -10,7 +10,7 @@ import io.nop.commons.util.ClassHelper;
 // tell cpd to start ignoring code - CPD-OFF
 /**
  * generate from /jingwei/app/schema/manifest/releasing.xdef <p>
- * > 用于生成应用代码的 DSL 资源。
+ * > 用于生成应用代码的 DSL 资源。根据需求设计资源确定模型和 UI 设计资源是否必须包含。
  */
 @SuppressWarnings({"PMD.UselessOverridingMethod","PMD.UnusedLocalVariable",
     "PMD.UnnecessaryFullyQualifiedName","PMD.EmptyControlStatement","java:S116","java:S101","java:S1128","java:S1161"})

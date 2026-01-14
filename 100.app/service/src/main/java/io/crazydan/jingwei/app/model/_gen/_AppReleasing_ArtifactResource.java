@@ -10,7 +10,7 @@ import io.nop.commons.util.ClassHelper;
 // tell cpd to start ignoring code - CPD-OFF
 /**
  * generate from /jingwei/app/schema/manifest/releasing.xdef <p>
- * > 将被释放到应用安装目录中的构建产物资源。
+ * > 将被释放到应用安装目录中的构建产物资源。若未指定，则在安装时动态构建。
  */
 @SuppressWarnings({"PMD.UselessOverridingMethod","PMD.UnusedLocalVariable",
     "PMD.UnnecessaryFullyQualifiedName","PMD.EmptyControlStatement","java:S116","java:S101","java:S1128","java:S1161"})
