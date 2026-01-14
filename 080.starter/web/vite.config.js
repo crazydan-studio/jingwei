@@ -4,6 +4,7 @@ import { viteExternalsPlugin } from 'vite-plugin-externals';
 import { compression } from 'vite-plugin-compression2';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 import { createHtmlPlugin } from 'vite-plugin-html';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -21,6 +22,40 @@ export default defineConfig({
     viteExternalsPlugin({
       vue: 'Vue',
       'naive-ui': 'naive'
+    }),
+    viteStaticCopy({
+      targets: [
+        {
+          src: 'node_modules/vue/dist/vue.global.prod.js',
+          dest: 'assets',
+          rename: 'vue.min.js'
+        },
+        {
+          src: 'node_modules/naive-ui/dist/index.prod.js',
+          dest: 'assets',
+          rename: 'naive-ui.min.js'
+        },
+        {
+          src: 'node_modules/@tailwindcss/browser/dist/index.global.js',
+          dest: 'assets',
+          rename: 'tailwindcss.min.js'
+        },
+        {
+          src: 'node_modules/@highlightjs/cdn-assets/highlight.min.js',
+          dest: 'assets',
+          rename: 'highlightjs.min.js'
+        },
+        {
+          src: 'node_modules/@highlightjs/cdn-assets/styles/atom-one-dark.min.css',
+          dest: 'assets/highlightjs',
+          rename: 'atom-one-dark.min.css'
+        },
+        {
+          src: 'node_modules/@highlightjs/cdn-assets/styles/atom-one-light.min.css',
+          dest: 'assets/highlightjs',
+          rename: 'atom-one-light.min.css'
+        }
+      ]
     }),
     // https://github.com/vbenjs/vite-plugin-html
     createHtmlPlugin({

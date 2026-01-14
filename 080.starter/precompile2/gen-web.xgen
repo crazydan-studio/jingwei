@@ -34,5 +34,6 @@
 
     // 直接将构建产物复制到 target 中，避免污染源码
     const webTargetDir = new File(rootDir, 'target/classes/META-INF/resources');
+    FileHelper.removeDir(webTargetDir);
     FileHelper.copyWithFilter(webDistDir, webTargetDir, null);
 ]]></c:script>
