@@ -40,8 +40,7 @@ export default defineConfig({
             name: 'preset-default',
             params: {
               overrides: {
-                cleanupNumericValues: false,
-                removeViewBox: false
+                cleanupNumericValues: false
               },
               cleanupIDs: {
                 minify: false,
