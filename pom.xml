@@ -22,6 +22,8 @@
         <module>080.starter</module>
 
         <module>100.app</module>
+        <module>600.apps</module>
+
         <module>150.codegen</module>
         <module>600.store</module>
 
@@ -106,6 +108,12 @@
             <dependency>
                 <groupId>io.crazydan.jingwei</groupId>
                 <artifactId>jingwei-app-service</artifactId>
+                <version>${jingwei.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.crazydan.jingwei</groupId>
+                <artifactId>jingwei-apps-portal</artifactId>
                 <version>${jingwei.version}</version>
             </dependency>
 
