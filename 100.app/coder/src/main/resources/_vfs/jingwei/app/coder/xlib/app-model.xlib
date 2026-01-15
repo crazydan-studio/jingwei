@@ -203,13 +203,15 @@
 
             <source>
                 <c:script><![CDATA[
+                    import io.nop.commons.util.ClassHelper;
                     import io.nop.orm.model.OrmEntityModel;
+                    import io.nop.orm.support.DynamicOrmEntity;
 
                     // 等价于构造 /nop/schema/orm/entity.xdef
                     const entity = new OrmEntityModel();
                     entity.name = node.attrText('name');
                     // 统一采用动态模型，以避免创建实体 class
-                    entity.className = 'io.nop.orm.support.DynamicOrmEntity';
+                    entity.className = ClassHelper.getCanonicalClassName(DynamicOrmEntity);
 
                     entity.tableName = codeGenConfig.genTableName(entity.name);
                     //entity.querySpace = codeGenConfig.dbQuerySpace;

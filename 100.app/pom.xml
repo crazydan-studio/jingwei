@@ -7,6 +7,7 @@
     <name>JingWei App</name>
     <artifactId>jingwei-app</artifactId>
     <packaging>pom</packaging>
+    <description>精卫平台的应用抽象和定义层，用于统一规范应用的打包、安装等逻辑</description>
 
     <parent>
         <groupId>io.crazydan.jingwei</groupId>

@@ -6,6 +6,7 @@
 
     <name>JingWei Starter</name>
     <artifactId>jingwei-starter</artifactId>
+    <description>精卫平台的 Web 服务启动器，其将被打包为最终的可执行 jar 包</description>
 
     <parent>
         <groupId>io.crazydan.jingwei</groupId>
@@ -24,6 +25,10 @@
             <artifactId>nop-undertow-starter</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>io.crazydan.jingwei</groupId>
+            <artifactId>jingwei-apps-portal</artifactId>
+        </dependency>
         <dependency>
             <groupId>io.crazydan.jingwei</groupId>
             <artifactId>jingwei-app-service</artifactId>

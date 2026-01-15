@@ -1,6 +1,6 @@
 /*
  * 精卫（JingWei） - 衔木石填沧海，筑屏障护安全
- * Copyright (C) 2025 Crazydan Studio <https://studio.crazydan.org>
+ * Copyright (C) 2026 Crazydan Studio <https://studio.crazydan.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,7 +17,7 @@
  * If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
  */
 
-package io.crazydan.jingwei;
+package io.crazydan.jingwei.app;
 
 import java.io.File;
 

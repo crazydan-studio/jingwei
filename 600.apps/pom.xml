@@ -7,6 +7,7 @@
     <name>JingWei Apps</name>
     <artifactId>jingwei-apps</artifactId>
     <packaging>pom</packaging>
+    <description>精卫平台内置的应用集合</description>
 
     <parent>
         <groupId>io.crazydan.jingwei</groupId>

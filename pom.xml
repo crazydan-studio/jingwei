@@ -9,7 +9,7 @@
     <artifactId>jingwei-parent</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <description>JingWei - Personal Data Management and Storage</description>
+    <description>精卫（JingWei）—— 个人数字资产平台</description>
     <url>https://jingwei.crazydan.io</url>
 
     <parent>
@@ -23,11 +23,6 @@
 
         <module>100.app</module>
         <module>600.apps</module>
-
-        <module>150.codegen</module>
-        <module>600.store</module>
-
-        <module>800.common</module>
     </modules>
 
     <dependencies>
@@ -44,7 +39,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <jingwei.version>0.1.0-SNAPSHOT</jingwei.version>
-        <duckdb.version>1.4.2.0</duckdb.version>
         <nop-extensions.version>1.0.0-SNAPSHOT</nop-extensions.version>
     </properties>
 
@@ -91,12 +85,6 @@
             <!-- 本项目子模块，便于其他项目引入 -->
             <dependency>
                 <groupId>io.crazydan.jingwei</groupId>
-                <artifactId>jingwei-codegen</artifactId>
-                <version>${jingwei.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.crazydan.jingwei</groupId>
                 <artifactId>jingwei-app-schema</artifactId>
                 <version>${jingwei.version}</version>
             </dependency>
@@ -116,28 +104,12 @@
                 <artifactId>jingwei-apps-portal</artifactId>
                 <version>${jingwei.version}</version>
             </dependency>
-
-            <dependency>
-                <groupId>io.crazydan.jingwei</groupId>
-                <artifactId>jingwei-store-model</artifactId>
-                <version>${jingwei.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.crazydan.jingwei</groupId>
-                <artifactId>jingwei-store-api</artifactId>
-                <version>${jingwei.version}</version>
-            </dependency>
             <!-- End -->
 
             <dependency>
                 <groupId>io.github.entropy-cloud.extensions</groupId>
                 <artifactId>nop-undertow-starter</artifactId>
                 <version>${nop-extensions.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.duckdb</groupId>
-                <artifactId>duckdb_jdbc</artifactId>
-                <version>${duckdb.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

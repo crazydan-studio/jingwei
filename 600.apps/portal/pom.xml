@@ -6,6 +6,7 @@
 
     <name>JingWei Apps - Portal</name>
     <artifactId>jingwei-apps-portal</artifactId>
+    <description>精卫平台缺省的门户应用，作为平台初始的应用管理实现</description>
 
     <parent>
         <groupId>io.crazydan.jingwei</groupId>
