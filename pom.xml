@@ -19,10 +19,11 @@
     </parent>
 
     <modules>
-        <module>080.starter</module>
-
+        <!-- Note: 模块声明顺序会影响构建顺序 -->
         <module>100.app</module>
         <module>600.apps</module>
+
+        <module>080.starter</module>
     </modules>
 
     <dependencies>
@@ -86,6 +87,11 @@
             <dependency>
                 <groupId>io.crazydan.jingwei</groupId>
                 <artifactId>jingwei-app-schema</artifactId>
+                <version>${jingwei.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.crazydan.jingwei</groupId>
+                <artifactId>jingwei-app-model</artifactId>
                 <version>${jingwei.version}</version>
             </dependency>
             <dependency>

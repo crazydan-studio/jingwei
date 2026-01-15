@@ -20,7 +20,6 @@
 package io.crazydan.jingwei.app.coder;
 
 import java.io.File;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -49,12 +48,9 @@ import static io.crazydan.jingwei.app.coder.AppCoderConstants.TEMPLATE_APP_MODEL
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.TEMPLATE_APP_PAGE_PATH;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.TEMPLATE_DIR_MODEL;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.TEMPLATE_DIR_ORM;
-import static io.crazydan.jingwei.app.coder.AppCoderErrors.ERR_BUILD_FAILED_TO_CREATE_NODE_MODULES_LINK;
 import static io.crazydan.jingwei.app.coder.AppCoderErrors.ERR_BUILD_NODE_MODULES_PATH_NOT_SPECIFIED;
-import static io.crazydan.jingwei.app.coder.AppCoderErrors.ERR_BUILD_NPM_NOT_USABLE;
 import static io.crazydan.jingwei.app.coder.AppCoderErrors.ERR_BUILD_NPM_PATH_NOT_SPECIFIED;
 import static io.nop.ai.core.AiCoreErrors.ARG_CONFIG_VAR;
-import static io.nop.xlang.XLangErrors.ARG_PATH;
 
 /**
  * 应用构建器
@@ -63,9 +59,21 @@ import static io.nop.xlang.XLangErrors.ARG_PATH;
  * @date 2026-01-08
  */
 public class AppCodeGenerator {
+    private final String npmPath;
+    private final String nodeModulesPath;
+
     private final List<String> models = new ArrayList<>();
     private final List<String> orms = new ArrayList<>();
     private final List<String> pages = new ArrayList<>();
+
+    public AppCodeGenerator() {
+        this(CFG_APP_BUILD_NPM_PATH.get(), CFG_APP_BUILD_NODE_MODULES_PATH.get());
+    }
+
+    public AppCodeGenerator(String npmPath, String nodeModulesPath) {
+        this.npmPath = StringHelper.normalizePath(npmPath);
+        this.nodeModulesPath = StringHelper.normalizePath(nodeModulesPath);
+    }
 
     /** 构建应用模型资源，主要为 {@code app.orm.xml}、{@code *.xmeta}、{@code *.xbiz} */
     public void genModels(File targetDir, IResource modelDesignResource, AppCodeGenConfig genConfig) {
@@ -118,7 +126,7 @@ public class AppCodeGenerator {
 
         File buildDistDir = new File(buildDir, BUILD_DIR_DIST);
         FileHelper.copyWithFilter(buildDistDir, targetDir, null);
-        FileHelper.removeDir(buildDir);
+        FileHelper.deleteDir(buildDir);
 
         List<String> paths = FileHelper.findFilePaths(targetDir, "**/*", true, true);
         this.pages.addAll(paths);
@@ -141,47 +149,34 @@ public class AppCodeGenerator {
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     private String preparePageBuildDir(File targetDir) {
-        String npmPath = CFG_APP_BUILD_NPM_PATH.get();
-        if (StringHelper.isBlank(npmPath)) {
+        if (StringHelper.isBlank(this.npmPath)) {
             throw new NopException(ERR_BUILD_NPM_PATH_NOT_SPECIFIED).param(ARG_CONFIG_VAR,
                                                                            CFG_APP_BUILD_NPM_PATH.getName());
         }
-        File npmFile = new File(npmPath);
-        if (!npmFile.exists() || !npmFile.isFile()) {
-            throw new NopException(ERR_BUILD_NPM_NOT_USABLE).param(ARG_PATH, npmPath);
-        }
 
-        String nodeModulesPath = CFG_APP_BUILD_NODE_MODULES_PATH.get();
-        if (StringHelper.isBlank(nodeModulesPath)) {
+        if (StringHelper.isBlank(this.nodeModulesPath)) {
             throw new NopException(ERR_BUILD_NODE_MODULES_PATH_NOT_SPECIFIED).param(ARG_CONFIG_VAR,
                                                                                     CFG_APP_BUILD_NODE_MODULES_PATH.getName());
         }
-        nodeModulesPath = StringHelper.normalizePath(nodeModulesPath);
 
-        File nodeModulesDir = new File(nodeModulesPath);
+        File nodeModulesDir = new File(this.nodeModulesPath);
         FileHelper.assureDirExists(nodeModulesDir);
 
         File buildDir = new File(targetDir, BUILD_DIR_HIDDEN_BUILD);
-        FileHelper.removeDir(buildDir);
+        FileHelper.deleteDir(buildDir);
         FileHelper.assureDirExists(buildDir);
 
         File nodeModulesInBuildDir = new File(buildDir, BUILD_DIR_NODE_MODULES);
-        try {
-            Files.createSymbolicLink(nodeModulesInBuildDir.toPath(), nodeModulesDir.getAbsoluteFile().toPath());
-        } catch (Exception e) {
-            throw new NopException(ERR_BUILD_FAILED_TO_CREATE_NODE_MODULES_LINK, e);
-        }
+        FileHelper.createSymbolLink(nodeModulesInBuildDir, nodeModulesDir);
 
         return FileHelper.getAbsolutePath(buildDir);
     }
 
     private void buildPageSourceCode(File buildDir) {
-        String npmPath = CFG_APP_BUILD_NPM_PATH.get();
-
         // 不做依赖安装，其会删除软链接，造成 node_modules 无法被共享。
         // 该过程也涉及外网访问，可能需要代理加速
         //ShellHelper.runExecutable(npmPath, new String[] { "install" }, buildDir, true);
 
-        ShellHelper.runExecutable(npmPath, new String[] { "run", "build" }, buildDir, true);
+        ShellHelper.runExecutable(this.npmPath, new String[] { "run", "build" }, buildDir, true);
     }
 }

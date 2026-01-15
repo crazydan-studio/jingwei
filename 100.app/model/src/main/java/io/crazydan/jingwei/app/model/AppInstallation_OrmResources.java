@@ -17,17 +17,18 @@
  * If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
  */
 
-package io.crazydan.jingwei.app;
+package io.crazydan.jingwei.app.model;
 
-import io.crazydan.duzhou.framework.codegen.MavenProjectCodeGen;
+import io.crazydan.jingwei.app.model._gen._AppInstallation_OrmResources;
 
-/**
- * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
- * @date 2025-11-14
- */
-public class AppKernelCodeGen extends MavenProjectCodeGen {
+public class AppInstallation_OrmResources extends _AppInstallation_OrmResources {
+    public static final AppInstallation_OrmResources NONE = new AppInstallation_OrmResources();
 
-    public static void main(String[] args) {
-        run(AppKernelCodeGen.class);
+    static {
+        // Note: 不能对该静态常量创建匿名类，否则，其 cloneInstance() 将无法构造其实例
+        NONE.freeze(true);
+    }
+
+    public AppInstallation_OrmResources() {
     }
 }

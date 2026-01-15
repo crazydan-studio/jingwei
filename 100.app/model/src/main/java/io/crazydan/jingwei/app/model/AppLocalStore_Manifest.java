@@ -22,41 +22,14 @@ package io.crazydan.jingwei.app.model;
 import io.crazydan.jingwei.app.model._gen._AppLocalStore_Manifest;
 
 import static io.crazydan.duzhou.framework.commons.ObjectHelper.firstNonNull;
-import static io.crazydan.jingwei.app.AppCoreConfigs.CFG_APP_PORTAL_CODE;
 
 public class AppLocalStore_Manifest extends _AppLocalStore_Manifest {
-    /** 仅包含门户应用的本地仓库清单 */
-    public static final AppLocalStore_Manifest DEFAULT = new AppLocalStore_Manifest() {{
-        AppLocalStore_App app = createPortalApp();
-
-        AppLocalStore_EnabledApps enabledApps = new AppLocalStore_EnabledApps();
-        enabledApps.addChild(app);
-
-        setEnabledApps(enabledApps);
-
-        freeze(true);
-    }};
 
     public AppLocalStore_Manifest() {
     }
 
     @Override
     public AppLocalStore_EnabledApps getEnabledApps() {
-        AppLocalStore_EnabledApps apps = firstNonNull(super.getEnabledApps(), AppLocalStore_EnabledApps.NONE);
-
-        // 确保始终包含门户应用
-        AppLocalStore_App portalApp = apps.getChild(CFG_APP_PORTAL_CODE.get());
-        if (portalApp == null) {
-            apps = apps.cloneInstance();
-            apps.getChildren().add(0, createPortalApp());
-        }
-        return apps;
-    }
-
-    private static AppLocalStore_App createPortalApp() {
-        AppLocalStore_App app = new AppLocalStore_App();
-        app.setCode(CFG_APP_PORTAL_CODE.get());
-
-        return app;
+        return firstNonNull(super.getEnabledApps(), AppLocalStore_EnabledApps.NONE);
     }
 }

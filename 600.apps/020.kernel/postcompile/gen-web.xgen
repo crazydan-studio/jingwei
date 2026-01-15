@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
   - 精卫（JingWei） - 衔木石填沧海，筑屏障护安全
-  - Copyright (C) 2025 Crazydan Studio <https://studio.crazydan.org>
+  - Copyright (C) 2026 Crazydan Studio <https://studio.crazydan.org>
   -
   - This program is free software: you can redistribute it and/or modify
   - it under the terms of the GNU Lesser General Public License as published by
@@ -20,25 +20,23 @@
 
 <c:script xmlns:c="c"><![CDATA[
     import java.io.File;
-    import java.nio.file.Files;
     import io.crazydan.duzhou.framework.commons.ShellHelper;
     import io.crazydan.duzhou.framework.commons.FileHelper;
 
-    // Note: codeGenerator.getTargetRootPath() 得到的是带 file: 前缀的 url 路径，需要移除该前缀
-    const rootDir = FileHelper.resolveFile(codeGenerator.getTargetRootPath());
+    const rootDir = FileHelper.getMavenProjectRoot(codeGenerator);
+    const sharedNodeModulesDir = FileHelper.getAbsoluteFile(rootDir, '../../900.builder/node_modules');
+
     const webSrcDir = new File(rootDir, 'web');
     const webDistDir = new File(webSrcDir, 'dist');
     const webTargetDir = new File(rootDir, 'target/classes/META-INF/resources');
-    const sharedNodeModulesDir = FileHelper.getAbsoluteFile(new File(rootDir, '../../900.builder/node_modules'));
-    const webNodeModulesDir = new File(webSrcDir, 'node_modules');
+    const webNodeModulesLink = new File(webSrcDir, 'node_modules');
 
-    if (!webNodeModulesDir.exists()) {
-        Files.createSymbolicLink(webNodeModulesDir.toPath(), sharedNodeModulesDir.toPath());
-    }
+    FileHelper.deleteDir(webNodeModulesLink);
+    FileHelper.createSymbolLink(webNodeModulesLink, sharedNodeModulesDir);
 
     ShellHelper.runExecutable('npm', ['run', 'build' ], webSrcDir, true);
 
     // 直接将构建产物复制到 target 中，避免污染源码
-    FileHelper.removeDir(webTargetDir);
+    FileHelper.deleteDir(webTargetDir);
     FileHelper.copyWithFilter(webDistDir, webTargetDir, null);
 ]]></c:script>

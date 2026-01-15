@@ -39,6 +39,7 @@ public interface AppCoderConstants {
 
     String TEMPLATE_DIR_MODEL = "model";
     String TEMPLATE_DIR_ORM = "orm";
+    String TEMPLATE_DIR_PAGE = "page";
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -51,4 +52,6 @@ public interface AppCoderConstants {
     String BUILD_DIR_NODE_MODULES = "node_modules";
     String BUILD_DIR_DIST = "dist";
     String BUILD_DIST_FILE_NAME = "index";
+
+    String PACK_DIR_ARTIFACT = "artifact";
 }

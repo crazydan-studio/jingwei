@@ -22,9 +22,12 @@ package io.crazydan.jingwei.app.model;
 import io.crazydan.jingwei.app.model._gen._AppReleasing_RequirementResource;
 
 public class AppReleasing_RequirementResource extends _AppReleasing_RequirementResource {
-    public static final AppReleasing_RequirementResource NONE = new AppReleasing_RequirementResource() {{
-        freeze(true);
-    }};
+    public static final AppReleasing_RequirementResource NONE = new AppReleasing_RequirementResource();
+
+    static {
+        // Note: 不能对该静态常量创建匿名类，否则，其 cloneInstance() 将无法构造其实例
+        NONE.freeze(true);
+    }
 
     public AppReleasing_RequirementResource() {
     }

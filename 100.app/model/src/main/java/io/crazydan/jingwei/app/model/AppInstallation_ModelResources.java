@@ -19,13 +19,16 @@
 
 package io.crazydan.jingwei.app.model;
 
-import io.crazydan.jingwei.app.model._gen._AppInstallation_PageResources;
+import io.crazydan.jingwei.app.model._gen._AppInstallation_ModelResources;
 
-public class AppInstallation_PageResources extends _AppInstallation_PageResources {
-    public static final AppInstallation_PageResources NONE = new AppInstallation_PageResources() {{
-        freeze(true);
-    }};
+public class AppInstallation_ModelResources extends _AppInstallation_ModelResources {
+    public static final AppInstallation_ModelResources NONE = new AppInstallation_ModelResources();
 
-    public AppInstallation_PageResources() {
+    static {
+        // Note: 不能对该静态常量创建匿名类，否则，其 cloneInstance() 将无法构造其实例
+        NONE.freeze(true);
+    }
+
+    public AppInstallation_ModelResources() {
     }
 }

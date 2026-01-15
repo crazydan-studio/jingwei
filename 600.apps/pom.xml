@@ -34,5 +34,10 @@
             <artifactId>nop-shell</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>io.github.entropy-cloud</groupId>
+            <artifactId>nop-orm</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>

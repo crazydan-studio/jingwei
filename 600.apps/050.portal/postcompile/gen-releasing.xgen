@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  - 精卫（JingWei） - 衔木石填沧海，筑屏障护安全
+  - Copyright (C) 2026 Crazydan Studio <https://studio.crazydan.org>
+  -
+  - This program is free software: you can redistribute it and/or modify
+  - it under the terms of the GNU Lesser General Public License as published by
+  - the Free Software Foundation, either version 3 of the License, or
+  - (at your option) any later version.
+  -
+  - This program is distributed in the hope that it will be useful,
+  - but WITHOUT ANY WARRANTY; without even the implied warranty of
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  - GNU Lesser General Public License for more details.
+  -
+  - You should have received a copy of the GNU Lesser General Public License
+  - along with this program.
+  - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
+  -->
+
+<c:script xmlns:c="c"><![CDATA[
+    import java.io.File;
+    import io.crazydan.duzhou.framework.commons.FileHelper;
+    import io.crazydan.jingwei.app.util.AppModelHelper;
+    import io.crazydan.jingwei.app.coder.AppReleasingPacker;
+    import io.crazydan.jingwei.app.AppConstants;
+    import io.nop.core.resource.ResourceConstants;
+
+    const rootDir = FileHelper.getMavenProjectRoot(codeGenerator);
+    const sharedNodeModulesDir = FileHelper.getAbsoluteFile(rootDir, '../../900.builder/node_modules');
+
+    const sourceDir = new File(rootDir, 'src/main/resources/app');
+    const targetDir = new File(rootDir, 'target/classes/app');
+    const packerDir = new File(rootDir, 'target/packer');
+
+    FileHelper.deleteDir(packerDir);
+    FileHelper.deleteDir(targetDir);
+    FileHelper.copyWithFilter(sourceDir, targetDir, null);
+    FileHelper.copyWithFilter(sourceDir, packerDir, null);
+
+    const manifestVPath = ResourceConstants.RESOURCE_NS_CLASSPATH + ':app/' + AppConstants.APP_MANIFEST_FILE;
+    const manifestResource = AppModelHelper.getVfsResource(manifestVPath);
+
+    const packer = new AppReleasingPacker('npm', sharedNodeModulesDir.getAbsolutePath());
+    const manifest = packer.packTo(manifestResource, packerDir);
+    FileHelper.deleteDir(targetDir);
+
+    const pkgDir = new File(targetDir, manifest.getCode());
+    // 直接将构建产物复制到 target 中，避免污染源码
+    FileHelper.moveDirFilesTo(packerDir, pkgDir);
+]]></c:script>

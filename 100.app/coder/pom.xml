@@ -19,7 +19,7 @@
     <dependencies>
         <dependency>
             <groupId>io.crazydan.jingwei</groupId>
-            <artifactId>jingwei-app-schema</artifactId>
+            <artifactId>jingwei-app-model</artifactId>
         </dependency>
 
         <dependency>
@@ -30,6 +30,7 @@
             <groupId>io.github.entropy-cloud</groupId>
             <artifactId>nop-orm-model</artifactId>
         </dependency>
+
         <dependency>
             <groupId>io.github.entropy-cloud</groupId>
             <artifactId>nop-codegen</artifactId>

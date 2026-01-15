@@ -19,13 +19,16 @@
 
 package io.crazydan.jingwei.app.model;
 
-import io.crazydan.jingwei.app.model._gen._AppReleasing_ArtifactResource;
+import io.crazydan.jingwei.app.model._gen._AppLocalStore_EnabledApps;
 
-public class AppReleasing_ArtifactResource extends _AppReleasing_ArtifactResource {
-    public static final AppReleasing_ArtifactResource NONE = new AppReleasing_ArtifactResource() {{
-        freeze(true);
-    }};
+public class AppLocalStore_EnabledApps extends _AppLocalStore_EnabledApps {
+    public static final AppLocalStore_EnabledApps NONE = new AppLocalStore_EnabledApps();
 
-    public AppReleasing_ArtifactResource() {
+    static {
+        // Note: 不能对该静态常量创建匿名类，否则，其 cloneInstance() 将无法构造其实例
+        NONE.freeze(true);
+    }
+
+    public AppLocalStore_EnabledApps() {
     }
 }

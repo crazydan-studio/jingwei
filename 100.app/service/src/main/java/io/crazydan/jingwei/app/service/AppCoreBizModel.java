@@ -32,6 +32,8 @@ import io.crazydan.jingwei.app.model.AppInstallation_Manifest;
 import io.crazydan.jingwei.app.model.AppInstallation_ModelResources;
 import io.crazydan.jingwei.app.model.AppInstallation_OrmResources;
 import io.crazydan.jingwei.app.model.AppInstallation_PageResources;
+import io.crazydan.jingwei.app.model.AppLocalStore_App;
+import io.crazydan.jingwei.app.model.AppLocalStore_EnabledApps;
 import io.crazydan.jingwei.app.model.AppLocalStore_Manifest;
 import io.crazydan.jingwei.app.model.AppPackage_Resource;
 import io.crazydan.jingwei.app.model.AppReleasing_ArtifactResource;
@@ -45,7 +47,6 @@ import io.nop.api.core.annotations.core.Description;
 import io.nop.api.core.annotations.core.Name;
 import io.nop.biz.api.IBizObjectManager;
 import io.nop.core.resource.IResource;
-import io.nop.core.resource.VirtualFileSystem;
 import io.nop.graphql.core.reflection.GraphQLBizModel;
 import io.nop.graphql.core.reflection.GraphQLBizModels;
 import io.nop.orm.IOrmTemplate;
@@ -62,6 +63,7 @@ import static io.crazydan.jingwei.app.AppConstants.TEMPLATE_APP_STATIC_VPATH;
 import static io.crazydan.jingwei.app.AppConstants.TEMPLATE_APP_STORE_VPATH;
 import static io.crazydan.jingwei.app.AppConstants.VAR_APP_CODE;
 import static io.crazydan.jingwei.app.AppConstants.VAR_PATH;
+import static io.crazydan.jingwei.app.AppCoreConfigs.CFG_APP_PORTAL_CODE;
 
 /**
  * 提供与应用相关的核心基础服务接口
@@ -128,12 +130,34 @@ public class AppCoreBizModel {
 
     protected AppLocalStore_Manifest loadAppLocalStoreManifest() {
         IResource resource = loadVfsResource(TEMPLATE_APP_STORE_VPATH, "", APP_MANIFEST_FILE);
-        AppLocalStore_Manifest manifest = AppModelHelper.loadAppLocalStoreManifest(resource);
 
-        // 至少需加载门户应用
+        AppLocalStore_Manifest manifest = AppModelHelper.loadAppLocalStoreManifest(resource);
         if (manifest == null) {
-            manifest = AppLocalStore_Manifest.DEFAULT;
+            manifest = new AppLocalStore_Manifest();
         }
+
+        // 确保始终包含门户应用
+        AppLocalStore_App portalApp = new AppLocalStore_App();
+        portalApp.setCode(CFG_APP_PORTAL_CODE.get());
+
+        AppLocalStore_EnabledApps apps = manifest.getEnabledApps();
+        if (apps.hasChild(portalApp.getCode())) {
+            return manifest;
+        }
+
+        if (manifest.frozen()) {
+            manifest = manifest.cloneInstance();
+        }
+        if (apps.frozen()) {
+            apps = apps.cloneInstance();
+            apps.setChildren(new ArrayList<>(apps.getChildren()));
+
+            manifest.setEnabledApps(apps);
+        }
+        apps.getChildren().add(0, portalApp);
+
+        manifest.freeze(true);
+
         return manifest;
     }
 
@@ -159,7 +183,7 @@ public class AppCoreBizModel {
         Map<String, Object> params = Map.of(VAR_APP_CODE, appCode, VAR_PATH, path);
         String vPath = StringHelper.renderTemplate(template, params::get);
 
-        return VirtualFileSystem.instance().getResource(vPath);
+        return AppModelHelper.getVfsResource(vPath);
     }
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -277,8 +301,8 @@ public class AppCoreBizModel {
         AppCodeGenerator gen = new AppCodeGenerator();
         gen.genModels(target.toFile(), resource, genConfig);
 
-        AppPackage_Resource.fromPaths(gen.getOrms()).forEach(ormResources::addChild);
-        AppPackage_Resource.fromPaths(gen.getModels()).forEach(modelResources::addChild);
+        AppPackage_Resource.fromPaths(gen.getOrms(), null, false).forEach(ormResources::addChild);
+        AppPackage_Resource.fromPaths(gen.getModels(), null, false).forEach(modelResources::addChild);
     }
 
     /** 根据 UI 设计生成应用页面资源 */
@@ -297,7 +321,7 @@ public class AppCoreBizModel {
         AppCodeGenerator gen = new AppCodeGenerator();
         gen.genPages(target.toFile(), resource, genConfig);
 
-        AppPackage_Resource.fromPaths(gen.getPages()).forEach(pageResources::addChild);
+        AppPackage_Resource.fromPaths(gen.getPages(), null, false).forEach(pageResources::addChild);
     }
 
     protected AppCodeGenConfig createAppGenConfig(AppReleasing_Manifest manifest) {

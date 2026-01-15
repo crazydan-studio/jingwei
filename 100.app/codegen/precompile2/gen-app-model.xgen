@@ -32,7 +32,7 @@
     xdefs.forEach((xdef) => {
         codeGenerator
             // 设置生成代码的存放位置，其相对于当前 Maven 工程的根目录
-            .withTargetDir('../service')
+            .withTargetDir('../model')
             .renderModel(xdef, '/nop/templates/xdsl', '/', $scope);
     });
 ]]></c:script>

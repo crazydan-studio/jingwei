@@ -40,20 +40,11 @@
         <uiDesign path="source/ui-design.xml"/>
     </coderResource>
 
-    <artifactResource>
+    <!--<artifactResource>
         <model path="artifact/model/App/App.xmeta" name="App/App.xmeta"/>
-        <model path="artifact/model/App/_App.xmeta" name="App/_App.xmeta"/>
-        <model path="artifact/model/App/App.xbiz" name="App/App.xbiz"/>
-        <model path="artifact/model/App/_App.xbiz" name="App/_App.xbiz"/>
-        <model path="artifact/model/AppVersion/AppVersion.xmeta" name="AppVersion/AppVersion.xmeta"/>
-        <model path="artifact/model/AppVersion/_AppVersion.xmeta" name="AppVersion/_AppVersion.xmeta"/>
-        <model path="artifact/model/AppVersion/AppVersion.xbiz" name="AppVersion/AppVersion.xbiz"/>
-        <model path="artifact/model/AppVersion/_AppVersion.xbiz" name="AppVersion/_AppVersion.xbiz"/>
 
         <orm path="artifact/orm/app.orm.xml" name="app.orm.xml"/>
-        <orm path="artifact/orm/_app.orm.xml" name="_app.orm.xml"/>
 
         <page path="artifact/page/index.js" name="index.js"/>
-        <page path="artifact/page/index.css" name="index.css"/>
-    </artifactResource>
+    </artifactResource>-->
 </manifest>

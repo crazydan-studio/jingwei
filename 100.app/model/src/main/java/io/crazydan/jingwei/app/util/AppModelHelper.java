@@ -25,6 +25,7 @@ import io.crazydan.jingwei.app.model.AppReleasing_Manifest;
 import io.nop.api.core.util.IFreezable;
 import io.nop.api.core.util.INeedInit;
 import io.nop.core.resource.IResource;
+import io.nop.core.resource.VirtualFileSystem;
 import io.nop.xlang.xdsl.DslModelHelper;
 import io.nop.xlang.xdsl.DslModelParser;
 
@@ -64,6 +65,11 @@ public class AppModelHelper {
         return loadDslModel(resource, XDSL_SCHEMA_APP_RELEASING_MANIFEST);
     }
 
+    /** 保存应用发布包清单 */
+    public static void saveAppReleasingManifest(AppReleasing_Manifest manifest, IResource resource) {
+        DslModelHelper.saveDslModel(XDSL_SCHEMA_APP_RELEASING_MANIFEST, manifest, resource);
+    }
+
     /** 加载 DSL 模型，若资源不存在，则返回 {@code null} */
     public static <T> T loadDslModel(IResource resource, String xdefPath) {
         DslModelParser parser = new DslModelParser(xdefPath);
@@ -78,5 +84,9 @@ public class AppModelHelper {
         }
 
         return model;
+    }
+
+    public static IResource getVfsResource(String vPath) {
+        return VirtualFileSystem.instance().getResource(vPath);
     }
 }

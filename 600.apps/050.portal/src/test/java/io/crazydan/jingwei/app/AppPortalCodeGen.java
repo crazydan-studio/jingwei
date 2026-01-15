@@ -17,15 +17,17 @@
  * If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
  */
 
-package io.crazydan.jingwei.app.model;
+package io.crazydan.jingwei.app;
 
-import io.crazydan.jingwei.app.model._gen._AppLocalStore_EnabledApps;
+import io.crazydan.duzhou.framework.codegen.MavenProjectCodeGen;
 
-public class AppLocalStore_EnabledApps extends _AppLocalStore_EnabledApps {
-    public static final AppLocalStore_EnabledApps NONE = new AppLocalStore_EnabledApps() {{
-        freeze(true);
-    }};
+/**
+ * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
+ * @date 2025-11-15
+ */
+public class AppPortalCodeGen extends MavenProjectCodeGen {
 
-    public AppLocalStore_EnabledApps() {
+    public static void main(String[] args) {
+        run(AppPortalCodeGen.class);
     }
 }
