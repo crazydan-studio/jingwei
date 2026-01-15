@@ -35,7 +35,7 @@ import io.nop.core.initialize.CoreInitialization;
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
  * @date 2025-11-14
  */
-public class JingWeiStarterCodeGen {
+public class AppKernelCodeGen {
 
     public static void main(String[] args) {
         AppConfig.getConfigProvider()
@@ -51,7 +51,7 @@ public class JingWeiStarterCodeGen {
     }
 
     public static void run() {
-        File projectDir = MavenDirHelper.projectDir(JingWeiStarterCodeGen.class);
+        File projectDir = MavenDirHelper.projectDir(AppKernelCodeGen.class);
 
         XCodeGenerator.runPrecompile(projectDir, "/", false);
         XCodeGenerator.runPrecompile2(projectDir, "/", false);

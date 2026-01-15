@@ -27,8 +27,13 @@
 
         <dependency>
             <groupId>io.crazydan.jingwei</groupId>
+            <artifactId>jingwei-apps-kernel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.crazydan.jingwei</groupId>
             <artifactId>jingwei-apps-portal</artifactId>
         </dependency>
+
         <dependency>
             <groupId>io.crazydan.jingwei</groupId>
             <artifactId>jingwei-app-service</artifactId>
@@ -51,11 +56,6 @@
 
     <build>
         <plugins>
-            <!-- Note：该插件的配置见 io.github.entropy-cloud:nop-entropy -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>

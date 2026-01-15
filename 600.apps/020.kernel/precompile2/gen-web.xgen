@@ -20,20 +20,25 @@
 
 <c:script xmlns:c="c"><![CDATA[
     import java.io.File;
+    import java.nio.file.Files;
     import io.crazydan.duzhou.framework.commons.ShellHelper;
     import io.crazydan.duzhou.framework.commons.FileHelper;
-    import io.crazydan.jingwei.app.coder.AppCoderConfigs;
 
     // Note: codeGenerator.getTargetRootPath() 得到的是带 file: 前缀的 url 路径，需要移除该前缀
     const rootDir = FileHelper.resolveFile(codeGenerator.getTargetRootPath());
     const webSrcDir = new File(rootDir, 'web');
     const webDistDir = new File(webSrcDir, 'dist');
+    const webTargetDir = new File(rootDir, 'target/classes/META-INF/resources');
+    const sharedNodeModulesDir = FileHelper.getAbsoluteFile(new File(rootDir, '../../900.builder/node_modules'));
+    const webNodeModulesDir = new File(webSrcDir, 'node_modules');
 
-    const npmPath = AppCoderConfigs.CFG_APP_BUILD_NPM_PATH.get();
-    ShellHelper.runExecutable(npmPath, ['run', 'build' ], webSrcDir, true);
+    if (!webNodeModulesDir.exists()) {
+        Files.createSymbolicLink(webNodeModulesDir.toPath(), sharedNodeModulesDir.toPath());
+    }
+
+    ShellHelper.runExecutable('npm', ['run', 'build' ], webSrcDir, true);
 
     // 直接将构建产物复制到 target 中，避免污染源码
-    const webTargetDir = new File(rootDir, 'target/classes/META-INF/resources');
     FileHelper.removeDir(webTargetDir);
     FileHelper.copyWithFilter(webDistDir, webTargetDir, null);
 ]]></c:script>

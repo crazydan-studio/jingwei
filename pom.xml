@@ -101,6 +101,11 @@
 
             <dependency>
                 <groupId>io.crazydan.jingwei</groupId>
+                <artifactId>jingwei-apps-kernel</artifactId>
+                <version>${jingwei.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.crazydan.jingwei</groupId>
                 <artifactId>jingwei-apps-portal</artifactId>
                 <version>${jingwei.version}</version>
             </dependency>

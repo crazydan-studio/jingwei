@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <name>JingWei Apps - Portal</name>
-    <artifactId>jingwei-apps-portal</artifactId>
-    <description>精卫平台缺省的门户应用，作为平台初始的应用管理实现</description>
+    <name>JingWei Apps - Kernel</name>
+    <artifactId>jingwei-apps-kernel</artifactId>
+    <description>精卫平台的应用核心模块，其负责加载应用，并为应用提供基础的运行支持</description>
 
     <parent>
         <groupId>io.crazydan.jingwei</groupId>
@@ -18,9 +18,15 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>io.crazydan.jingwei</groupId>
-            <artifactId>jingwei-app-coder</artifactId>
-        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Note：该插件的配置见 io.github.entropy-cloud:nop-entropy -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>
