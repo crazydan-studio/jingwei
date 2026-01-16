@@ -45,6 +45,7 @@ import io.nop.api.core.annotations.biz.BizModel;
 import io.nop.api.core.annotations.biz.BizMutation;
 import io.nop.api.core.annotations.core.Description;
 import io.nop.api.core.annotations.core.Name;
+import io.nop.api.core.exceptions.NopException;
 import io.nop.biz.api.IBizObjectManager;
 import io.nop.core.resource.IResource;
 import io.nop.graphql.core.reflection.GraphQLBizModel;
@@ -64,6 +65,8 @@ import static io.crazydan.jingwei.app.AppConstants.TEMPLATE_APP_STORE_VPATH;
 import static io.crazydan.jingwei.app.AppConstants.VAR_APP_CODE;
 import static io.crazydan.jingwei.app.AppConstants.VAR_PATH;
 import static io.crazydan.jingwei.app.AppCoreConfigs.CFG_APP_PORTAL_CODE;
+import static io.crazydan.jingwei.app.AppCoreErrors.ERR_BIZ_APP_NOT_EXIST;
+import static io.nop.xlang.XLangErrors.ARG_CODE;
 
 /**
  * 提供与应用相关的核心基础服务接口
@@ -80,6 +83,17 @@ public class AppCoreBizModel {
 
     @Inject
     IBizObjectManager bizObjectManager;
+
+    @Description("加载指定应用的页面")
+    @BizMutation
+    public Map<String, Object> loadAppPage(@Name("app") String appCode, @Name("preview") Boolean forPreview) {
+        AppInstallation_Manifest manifest = assureAppInstalled(appCode);
+        if (manifest == null) {
+            throw new NopException(ERR_BIZ_APP_NOT_EXIST).param(ARG_CODE, appCode);
+        }
+
+        return assureAppPageGenerated(appCode, forPreview);
+    }
 
     @Description("加载全部已启用的应用")
     @BizMutation
@@ -101,7 +115,7 @@ public class AppCoreBizModel {
             manifest = installAppFromClasspath(appCode);
         }
 
-        return manifest != null ? manifest : AppInstallation_Manifest.NONE;
+        return manifest;
     }
 
     @Description("从 classpath 安装应用")
@@ -124,6 +138,18 @@ public class AppCoreBizModel {
         AppInstallation_Manifest manifest = null;
 
         return manifest;
+    }
+
+    @Description("确保应用页面已生成")
+    @BizAction
+    public Map<String, Object> assureAppPageGenerated(
+            @Name("app") String appCode,
+            @Name("preview") Boolean forPreview
+    ) {
+        return new HashMap<>() {{
+            put("js", "/app/" + appCode + "/index.js");
+            put("css", List.of("/app/" + appCode + "/index.css"));
+        }};
     }
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

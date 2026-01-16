@@ -35,11 +35,13 @@ export default defineConfig({
           dest: 'assets',
           rename: 'naive-ui.min.js'
         },
+        //
         {
           src: 'node_modules/@tailwindcss/browser/dist/index.global.js',
           dest: 'assets',
           rename: 'tailwindcss.min.js'
         },
+        //
         {
           src: 'node_modules/@highlightjs/cdn-assets/highlight.min.js',
           dest: 'assets',

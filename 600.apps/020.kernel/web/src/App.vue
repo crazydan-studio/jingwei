@@ -4,41 +4,18 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { createDiscreteApi } from 'naive-ui';
 
-import { getAppConfig, loadApp } from './utils';
+import { getAppConfig, getAppCodeFromLocation, loadAppPage } from './utils';
 
-// https://www.naiveui.com/zh-CN/os-theme/components/discrete
-const { message, notification, dialog, loadingBar, modal } = //
-  createDiscreteApi(
-    ['message', 'dialog', 'notification', 'loadingBar', 'modal'],
-    {}
-  );
+const appConfig = getAppConfig();
 
 const appRef = ref(null);
 onMounted(async () => {
-  const appConfig = getAppConfig();
+  // 按配置绑定 id
+  appRef.value.id = appConfig.containerId;
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const appCode = urlParams.get('app') || appConfig.protalCode;
+  const appCode = getAppCodeFromLocation() || appConfig.protalCode;
 
-  // 修改地址栏，从而支持后退
-  if (appCode != appConfig.protalCode) {
-    const url = new URL(window.location.href);
-    url.searchParams.set('app', appCode);
-    window.history.pushState({}, '', url);
-  }
-
-  try {
-    const app = await loadApp(appCode);
-    app?.mount(appRef.value, appConfig);
-  } catch (e) {
-    dialog.error({
-      title: '异常提醒',
-      content: 'App ' + appCode + ' loading failed: ' + e,
-      positiveText: '确认',
-      maskClosable: false,
-    });
-  }
+  await loadAppPage({ appCode, el: appRef.value });
 });
 </script>

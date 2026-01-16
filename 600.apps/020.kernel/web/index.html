@@ -22,16 +22,21 @@
     <script src="${staticContextRoot}/assets/naive-ui.min.js"></script>
     <script src="${staticContextRoot}/assets/tailwindcss.min.js"></script>
     <script src="${staticContextRoot}/assets/highlightjs.min.js"></script>
-    <link rel="stylesheet" href="${staticContextRoot}/assets/highlightjs/atom-one-light.min.css" />
+    <link
+      rel="stylesheet"
+      href="${staticContextRoot}/assets/highlightjs/atom-one-light.min.css"
+    />
     <script>
       window.__global_app_config__ = {
+        // 应用挂载容器的 id
+        containerId: 'main-app',
         // 门户应用的标识
         protalCode: '${portalCode}',
         // 接口配置信息
         api: {
+          static: '${staticContextRoot}',
           graphql: '${apiContextRoot}/graphql',
-          fileUpload: '${apiContextRoot}/f/upload',
-          appStatic: '${apiContextRoot}/app'
+          fileUpload: '${apiContextRoot}/f/upload'
         }
       };
     </script>
@@ -39,6 +44,6 @@
     <script type="module" src="/src/main.js"></script>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="main"></div>
   </body>
 </html>

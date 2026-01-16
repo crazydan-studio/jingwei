@@ -24,12 +24,6 @@ import io.crazydan.jingwei.app.model._gen._AppInstallation_Manifest;
 import static io.crazydan.duzhou.framework.commons.ObjectHelper.firstNonNull;
 
 public class AppInstallation_Manifest extends _AppInstallation_Manifest {
-    public static final AppInstallation_Manifest NONE = new AppInstallation_Manifest();
-
-    static {
-        // Note: 不能对该静态常量创建匿名类，否则，其 cloneInstance() 将无法构造其实例
-        NONE.freeze(true);
-    }
 
     public AppInstallation_Manifest() {
     }

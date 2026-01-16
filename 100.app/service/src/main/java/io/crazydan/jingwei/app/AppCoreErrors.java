@@ -23,6 +23,7 @@ import io.nop.api.core.exceptions.ErrorCode;
 
 import static io.nop.ai.core.AiCoreErrors.ARG_CONFIG_VAR;
 import static io.nop.api.core.exceptions.ErrorCode.define;
+import static io.nop.xlang.XLangErrors.ARG_CODE;
 
 /**
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
@@ -34,4 +35,8 @@ public interface AppCoreErrors {
             define("jingwei.err.app.cfg.value-not-specified",
                    "配置项 {" + ARG_CONFIG_VAR + "} 未指定有效值",
                    ARG_CONFIG_VAR);
+
+    ErrorCode ERR_BIZ_APP_NOT_EXIST = //
+            define("jingwei.err.app.biz.app-not-exist", //
+                   "应用 {" + ARG_CODE + "} 不存在", ARG_CODE);
 }
