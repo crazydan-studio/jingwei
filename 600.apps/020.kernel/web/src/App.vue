@@ -6,7 +6,7 @@
 import { ref, onMounted } from 'vue';
 import { createDiscreteApi } from 'naive-ui';
 
-import { loadApp } from './utils/app';
+import { getAppConfig, loadApp } from './utils';
 
 // https://www.naiveui.com/zh-CN/os-theme/components/discrete
 const { message, notification, dialog, loadingBar, modal } = //
@@ -17,7 +17,7 @@ const { message, notification, dialog, loadingBar, modal } = //
 
 const appRef = ref(null);
 onMounted(async () => {
-  const appConfig = __global_app_config__;
+  const appConfig = getAppConfig();
 
   const urlParams = new URLSearchParams(window.location.search);
   const appCode = urlParams.get('app') || appConfig.protalCode;

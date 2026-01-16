@@ -30,6 +30,7 @@ import io.nop.commons.lang.impl.Cancellable;
 import io.nop.core.initialize.ICoreInitializer;
 
 import static io.crazydan.jingwei.app.AppCoreConfigs.CFG_APP_INSTALL_DIR;
+import static io.crazydan.jingwei.app.AppCoreConfigs.CFG_APP_PORTAL_CODE;
 import static io.crazydan.jingwei.app.AppCoreConfigs.CFG_APP_STATIC_DIR;
 import static io.crazydan.jingwei.app.AppCoreErrors.ERR_CFG_VALUE_NOT_SPECIFIED;
 import static io.nop.ai.core.AiCoreErrors.ARG_CONFIG_VAR;
@@ -43,7 +44,7 @@ public class AppCoreInitializer implements ICoreInitializer {
 
     @Override
     public int order() {
-        return LOW_PRIORITY;
+        return NORMAL_PRIORITY + 2000;
     }
 
     @Override
@@ -74,6 +75,11 @@ public class AppCoreInitializer implements ICoreInitializer {
     }
 
     private void loadEnabledApps() {
+        if (StringHelper.isBlank(CFG_APP_PORTAL_CODE.get())) {
+            throw new NopException(ERR_CFG_VALUE_NOT_SPECIFIED).source(CFG_APP_PORTAL_CODE) //
+                                                               .param(ARG_CONFIG_VAR, CFG_APP_PORTAL_CODE.getName());
+        }
+
         AppCoreBizModel biz = BeanContainer.instance().getBeanByType(AppCoreBizModel.class);
         biz.loadEnabledApps();
     }

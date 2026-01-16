@@ -18,32 +18,20 @@
       href="https://unpkg.com/@highlightjs/cdn-assets@11.11.1/styles/atom-one-light.min.css"
     /> -->
     <!-- <script src="https://unpkg.com/@highlightjs/cdn-assets@11.11.1/highlight.min.js"></script> -->
-    <script src="assets/vue.min.js"></script>
-    <script src="assets/naive-ui.min.js"></script>
-    <script src="assets/tailwindcss.min.js"></script>
-    <script src="assets/highlightjs.min.js"></script>
-    <link rel="stylesheet" href="assets/highlightjs/atom-one-light.min.css" />
+    <script src="${staticContextRoot}/assets/vue.min.js"></script>
+    <script src="${staticContextRoot}/assets/naive-ui.min.js"></script>
+    <script src="${staticContextRoot}/assets/tailwindcss.min.js"></script>
+    <script src="${staticContextRoot}/assets/highlightjs.min.js"></script>
+    <link rel="stylesheet" href="${staticContextRoot}/assets/highlightjs/atom-one-light.min.css" />
     <script>
-      const ROOT_URL_PATH = '';
-      const __global_app_config__ = {
-        // 是否为预览模式
-        inPreview: false,
+      window.__global_app_config__ = {
         // 门户应用的标识
-        protalCode: 'ae9c6b146f93436abba7761593058f38',
+        protalCode: '${portalCode}',
         // 接口配置信息
         api: {
-          graphql: ROOT_URL_PATH + '/graphql',
-          fileUpload: ROOT_URL_PATH + '/f/upload',
-          appStatic: ROOT_URL_PATH + '/app'
-        }
-      };
-
-      // Nodejs 打包需要该配置信息
-      const process = {
-        env: {
-          NODE_ENV: __global_app_config__.inPreview
-            ? 'development'
-            : 'production'
+          graphql: '${apiContextRoot}/graphql',
+          fileUpload: '${apiContextRoot}/f/upload',
+          appStatic: '${apiContextRoot}/app'
         }
       };
     </script>

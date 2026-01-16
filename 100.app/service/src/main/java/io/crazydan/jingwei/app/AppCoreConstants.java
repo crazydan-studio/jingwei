@@ -27,10 +27,5 @@ package io.crazydan.jingwei.app;
 public interface AppCoreConstants {
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-    /** 门户应用的缺省应用标识 */
-    String APP_PORTAL_DEFAULT_CODE = "ae9c6b146f93436abba7761593058f38";
-
-    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
     String BIZ_APP_ = "";
 }

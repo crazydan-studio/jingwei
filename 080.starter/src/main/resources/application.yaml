@@ -55,6 +55,7 @@ nop:
 
 jingwei:
   app:
+    portal-code: ae9c6b146f93436abba7761593058f38
     static-dir: ${project.basedir}/_data/app-pages
     install-dir: ${project.basedir}/_data/app-installed
     build:

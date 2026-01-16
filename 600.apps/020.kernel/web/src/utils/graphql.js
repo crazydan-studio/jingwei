@@ -1,5 +1,5 @@
-const appConfig = __global_app_config__;
+import { getAppConfig } from './app';
 
-export async function sendGraphQL(doc) {
-    //
+export async function graphql(doc) {
+  //
 }
