@@ -2,30 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+
     <title>精卫 - 您的个人数字资产平台</title>
-    <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script> -->
-    <!-- <script src="https://unpkg.com/naive-ui@2.43.2/dist/index.prod.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> -->
-    <!-- https://app.unpkg.com/@highlightjs/cdn-assets@11.11.1/files/styles -->
-    <!-- <link
-      rel="stylesheet"
-      href="https://unpkg.com/@highlightjs/cdn-assets@11.11.1/styles/atom-one-dark.min.css"
-    /> -->
-    <!-- <link
-      rel="stylesheet"
-      href="https://unpkg.com/@highlightjs/cdn-assets@11.11.1/styles/atom-one-light.min.css"
-    /> -->
-    <!-- <script src="https://unpkg.com/@highlightjs/cdn-assets@11.11.1/highlight.min.js"></script> -->
-    <script src="${staticContextRoot}/assets/vue.min.js"></script>
-    <script src="${staticContextRoot}/assets/naive-ui.min.js"></script>
-    <script src="${staticContextRoot}/assets/tailwindcss.min.js"></script>
-    <script src="${staticContextRoot}/assets/highlightjs.min.js"></script>
-    <link
-      rel="stylesheet"
-      href="${staticContextRoot}/assets/highlightjs/atom-one-light.min.css"
-    />
+
     <script>
       window.__global_app_config__ = {
         // 应用挂载容器的 id
@@ -40,10 +21,21 @@
         }
       };
     </script>
-
-    <script type="module" src="/src/main.js"></script>
   </head>
   <body>
     <div id="main"></div>
+
+    <script src="${staticContextRoot}/assets/vue.min.js"></script>
+    <script src="${staticContextRoot}/assets/naive-ui.min.js"></script>
+    <script src="${staticContextRoot}/assets/tailwindcss.min.js"></script>
+    <script src="${staticContextRoot}/assets/highlightjs.min.js"></script>
+
+    <script src="${staticContextRoot}/utils.js"></script>
+    <script src="${staticContextRoot}/main.js"></script>
+
+    <link
+      rel="stylesheet"
+      href="${staticContextRoot}/assets/highlightjs/atom-one-light.min.css"
+    />
   </body>
 </html>

@@ -35,6 +35,7 @@
     FileHelper.createSymbolLink(webNodeModulesLink, sharedNodeModulesDir);
 
     ShellHelper.runExecutable('npm', ['run', 'build' ], webSrcDir, true);
+    ShellHelper.runExecutable('npm', ['run', 'build', '--workspaces' ], webSrcDir, true);
 
     // 直接将构建产物复制到 target 中，避免污染源码
     FileHelper.deleteDir(webTargetDir);

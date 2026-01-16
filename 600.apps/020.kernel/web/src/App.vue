@@ -5,7 +5,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 
-import { getAppConfig, getAppCodeFromLocation, loadAppPage } from './utils';
+import { getAppConfig, getAppCodeFromLocation, loadAppPage } from '@app-utils';
 
 const appConfig = getAppConfig();
 

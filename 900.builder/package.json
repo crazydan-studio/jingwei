@@ -1,5 +1,5 @@
 {
-  "name": "jingwei-builder",
+  "name": "app-shared-libs",
   "private": true,
   "version": "0.0.0",
   "dependencies": {

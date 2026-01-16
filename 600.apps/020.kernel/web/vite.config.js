@@ -11,9 +11,12 @@ export default defineConfig({
   build: {
     copyPublicDir: true,
     rollupOptions: {
+      input: {
+        index: 'index.html',
+        main: 'src/main.js'
+      },
       output: {
-        entryFileNames: 'index.js',
-        assetFileNames: 'assets/[name].[ext]'
+        entryFileNames: '[name].js'
       }
     }
   },
@@ -21,7 +24,8 @@ export default defineConfig({
     vue(),
     viteExternalsPlugin({
       vue: 'Vue',
-      'naive-ui': 'naive'
+      'naive-ui': 'naive',
+      '@app-utils': 'AppUtils'
     }),
     viteStaticCopy({
       targets: [

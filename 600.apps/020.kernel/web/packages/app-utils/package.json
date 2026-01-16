@@ -1,16 +1,11 @@
 {
-  "name": "app-main",
+  "name": "@app-utils",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "build": "vite build"
   },
-  "workspaces": [
-    "packages/*"
-  ],
-  "dependencies": {
-    "@app-utils": "*"
-  },
+  "dependencies": {},
   "devDependencies": {}
 }
