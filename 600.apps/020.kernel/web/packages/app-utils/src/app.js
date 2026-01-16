@@ -5,11 +5,16 @@ const URL_PARAM_APP = 'app';
 
 /** 加载应用页面 */
 export async function loadAppPage({ appCode, el, forPreview }) {
-  // TODO 开始等待
+  const appConfig = getAppConfig();
+  if (!el) {
+    el = document.getElementById(appConfig.containerId);
+  }
+  el.classList.add('loading');
+
   try {
     await doLoadAppPage({ appCode, el, forPreview });
   } finally {
-    // TODO 结束等待
+    el.classList.add('done');
   }
 }
 
@@ -41,9 +46,6 @@ async function doLoadAppPage({ appCode, el, forPreview }) {
 
   const app = await import(ctx + App__loadAppPage.js);
 
-  if (!el) {
-    el = document.getElementById(appConfig.containerId);
-  }
   if (el.__app__) {
     el.__app__.umount();
   }

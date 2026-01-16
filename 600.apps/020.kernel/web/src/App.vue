@@ -1,5 +1,5 @@
 <template>
-  <div ref="appRef"></div>
+  <div ref="appRef" class="loading"></div>
 </template>
 
 <script setup>

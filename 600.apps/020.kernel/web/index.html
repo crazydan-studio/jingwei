@@ -21,17 +21,69 @@
         }
       };
     </script>
+
+    <style>
+      html,
+      body,
+      #main {
+        min-width: 100dvw;
+        min-height: 100dvh;
+      }
+
+      .loading {
+        min-width: 100%;
+        min-height: 100%;
+        --spinner-image: url('${staticContextRoot}/loading.svg');
+      }
+      .loading.done {
+        min-width: unset;
+        min-height: unset;
+      }
+
+      .loading::after {
+        z-index: 10000;
+        opacity: 1;
+        transition: opacity 0.5s ease-out;
+        transition-delay: 0.2s;
+        pointer-events: none;
+
+        overflow: hidden;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+
+        content: '';
+        background-image: var(--spinner-image);
+        background-color: #fff;
+        background-position: center;
+        background-size: 10rem;
+        background-repeat: no-repeat;
+      }
+      .loading.done::after {
+        opacity: 0;
+      }
+
+      .loading > * {
+        opacity: 0;
+        transition: opacity 0.5s ease-in;
+      }
+      .loading.done > * {
+        opacity: 1;
+      }
+    </style>
   </head>
   <body>
     <div id="main"></div>
 
-    <script src="${staticContextRoot}/assets/vue.min.js"></script>
-    <script src="${staticContextRoot}/assets/naive-ui.min.js"></script>
-    <script src="${staticContextRoot}/assets/tailwindcss.min.js"></script>
-    <script src="${staticContextRoot}/assets/highlightjs.min.js"></script>
+    <script defer src="${staticContextRoot}/assets/vue.min.js"></script>
+    <script defer src="${staticContextRoot}/assets/naive-ui.min.js"></script>
+    <script defer src="${staticContextRoot}/assets/tailwindcss.min.js"></script>
+    <script defer src="${staticContextRoot}/assets/highlightjs.min.js"></script>
 
-    <script src="${staticContextRoot}/utils.js"></script>
-    <script src="${staticContextRoot}/main.js"></script>
+    <script defer src="${staticContextRoot}/utils.js"></script>
+    <script defer src="${staticContextRoot}/main.js"></script>
 
     <link
       rel="stylesheet"
