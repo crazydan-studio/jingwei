@@ -19,10 +19,24 @@ public abstract class _AppInstallation_Manifest extends io.nop.core.resource.com
     
     /**
      *  
+     * xml name: bizDomain
+     * 
+     */
+    private java.lang.String _bizDomain ;
+    
+    /**
+     *  
      * xml name: code
      * 
      */
     private java.lang.String _code ;
+    
+    /**
+     *  源码资源
+     * xml name: coderResource
+     * > 用于重新生成模型和页面代码的 DSL 资源。
+     */
+    private io.crazydan.jingwei.app.model.AppInstallation_CoderResource _coderResource ;
     
     /**
      *  模型资源
@@ -54,6 +68,25 @@ public abstract class _AppInstallation_Manifest extends io.nop.core.resource.com
     
     /**
      * 
+     * xml name: bizDomain
+     *  
+     */
+    
+    public java.lang.String getBizDomain(){
+      return _bizDomain;
+    }
+
+    
+    public void setBizDomain(java.lang.String value){
+        checkAllowChange();
+        
+        this._bizDomain = value;
+           
+    }
+
+    
+    /**
+     * 
      * xml name: code
      *  
      */
@@ -67,6 +100,25 @@ public abstract class _AppInstallation_Manifest extends io.nop.core.resource.com
         checkAllowChange();
         
         this._code = value;
+           
+    }
+
+    
+    /**
+     * 源码资源
+     * xml name: coderResource
+     *  > 用于重新生成模型和页面代码的 DSL 资源。
+     */
+    
+    public io.crazydan.jingwei.app.model.AppInstallation_CoderResource getCoderResource(){
+      return _coderResource;
+    }
+
+    
+    public void setCoderResource(io.crazydan.jingwei.app.model.AppInstallation_CoderResource value){
+        checkAllowChange();
+        
+        this._coderResource = value;
            
     }
 
@@ -155,6 +207,8 @@ public abstract class _AppInstallation_Manifest extends io.nop.core.resource.com
 
         if(cascade){ //NOPMD - suppressed EmptyControlStatement - Auto Gen Code
         
+           this._coderResource = io.nop.api.core.util.FreezeHelper.deepFreeze(this._coderResource);
+            
            this._modelResources = io.nop.api.core.util.FreezeHelper.deepFreeze(this._modelResources);
             
            this._ormResources = io.nop.api.core.util.FreezeHelper.deepFreeze(this._ormResources);
@@ -168,7 +222,9 @@ public abstract class _AppInstallation_Manifest extends io.nop.core.resource.com
     protected void outputJson(IJsonHandler out){
         super.outputJson(out);
         
+        out.putNotNull("bizDomain",this.getBizDomain());
         out.putNotNull("code",this.getCode());
+        out.putNotNull("coderResource",this.getCoderResource());
         out.putNotNull("modelResources",this.getModelResources());
         out.putNotNull("ormResources",this.getOrmResources());
         out.putNotNull("pageResources",this.getPageResources());
@@ -184,7 +240,9 @@ public abstract class _AppInstallation_Manifest extends io.nop.core.resource.com
     protected void copyTo(AppInstallation_Manifest instance){
         super.copyTo(instance);
         
+        instance.setBizDomain(this.getBizDomain());
         instance.setCode(this.getCode());
+        instance.setCoderResource(this.getCoderResource());
         instance.setModelResources(this.getModelResources());
         instance.setOrmResources(this.getOrmResources());
         instance.setPageResources(this.getPageResources());

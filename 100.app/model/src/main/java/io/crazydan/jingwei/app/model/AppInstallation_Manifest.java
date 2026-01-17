@@ -42,4 +42,9 @@ public class AppInstallation_Manifest extends _AppInstallation_Manifest {
     public AppInstallation_PageResources getPageResources() {
         return firstNonNull(super.getPageResources(), AppInstallation_PageResources.NONE);
     }
+
+    @Override
+    public AppInstallation_CoderResource getCoderResource() {
+        return firstNonNull(super.getCoderResource(), AppInstallation_CoderResource.NONE);
+    }
 }

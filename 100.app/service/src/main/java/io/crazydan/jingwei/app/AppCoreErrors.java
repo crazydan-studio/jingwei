@@ -39,4 +39,7 @@ public interface AppCoreErrors {
     ErrorCode ERR_BIZ_APP_NOT_EXIST = //
             define("jingwei.err.app.biz.app-not-exist", //
                    "应用 {" + ARG_CODE + "} 不存在", ARG_CODE);
+    ErrorCode ERR_BIZ_APP_NO_PAGE = //
+            define("jingwei.err.app.biz.app-no-page", //
+                   "应用 {" + ARG_CODE + "} 没有 UI 页面", ARG_CODE);
 }

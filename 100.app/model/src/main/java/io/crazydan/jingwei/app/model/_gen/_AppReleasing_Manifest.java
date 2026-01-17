@@ -46,7 +46,7 @@ public abstract class _AppReleasing_Manifest extends io.nop.core.resource.compon
     private java.lang.String _code ;
     
     /**
-     *  应用的编码资源
+     *  应用的源码资源
      * xml name: coderResource
      * > 用于生成应用代码的 DSL 资源。根据需求设计资源确定模型和 UI 设计资源是否必须包含。
      */
@@ -164,7 +164,7 @@ public abstract class _AppReleasing_Manifest extends io.nop.core.resource.compon
 
     
     /**
-     * 应用的编码资源
+     * 应用的源码资源
      * xml name: coderResource
      *  > 用于生成应用代码的 DSL 资源。根据需求设计资源确定模型和 UI 设计资源是否必须包含。
      */

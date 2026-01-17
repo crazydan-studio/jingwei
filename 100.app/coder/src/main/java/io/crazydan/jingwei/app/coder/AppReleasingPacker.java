@@ -34,6 +34,8 @@ import static io.crazydan.jingwei.app.AppConstants.APP_MANIFEST_FILE;
 import static io.crazydan.jingwei.app.coder.AppCoderConfigs.CFG_APP_BUILD_NODE_MODULES_PATH;
 import static io.crazydan.jingwei.app.coder.AppCoderConfigs.CFG_APP_BUILD_NPM_PATH;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.PACK_DIR_ARTIFACT;
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.TEMPLATE_DIR_MODEL;
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.TEMPLATE_DIR_ORM;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.TEMPLATE_DIR_PAGE;
 
 /**
@@ -64,7 +66,7 @@ public class AppReleasingPacker {
         IResource targetManifestResource = new FileResource('/' + targetManifestFile.getName(), targetManifestFile);
         AppModelHelper.saveAppReleasingManifest(manifest, targetManifestResource);
 
-        return manifest;
+        return AppModelHelper.loadAppReleasingManifest(targetManifestResource);
     }
 
     /** 根据不完整的发布包清单打包构建包含构建产物的完整发布包 */
@@ -103,8 +105,21 @@ public class AppReleasingPacker {
 
         AppReleasing_ArtifactResource artifactResource = manifest.getArtifactResource();
         if (artifactResource != AppReleasing_ArtifactResource.NONE) {
-            AppPackage_Resource.fromPaths(gen.getOrms(), resourcePrefix, true).forEach(artifactResource::addOrm);
-            AppPackage_Resource.fromPaths(gen.getModels(), resourcePrefix, true).forEach(artifactResource::addModel);
+            gen.getOrms().stream().map((path) -> {
+                String name = path.replaceAll(TEMPLATE_DIR_ORM + '/', "");
+                AppPackage_Resource pkg = new AppPackage_Resource();
+                pkg.setName(name);
+                pkg.setPath(resourcePrefix + path);
+                return pkg;
+            }).forEach(artifactResource::addOrm);
+
+            gen.getModels().stream().map((path) -> {
+                String name = path.replaceAll(TEMPLATE_DIR_MODEL + '/', "");
+                AppPackage_Resource pkg = new AppPackage_Resource();
+                pkg.setName(name);
+                pkg.setPath(resourcePrefix + path);
+                return pkg;
+            }).forEach(artifactResource::addModel);
         }
     }
 
@@ -123,7 +138,12 @@ public class AppReleasingPacker {
 
         AppReleasing_ArtifactResource artifactResource = manifest.getArtifactResource();
         if (artifactResource != AppReleasing_ArtifactResource.NONE) {
-            AppPackage_Resource.fromPaths(gen.getPages(), resourcePrefix, true).forEach(artifactResource::addPage);
+            gen.getPages().stream().map((path) -> {
+                AppPackage_Resource pkg = new AppPackage_Resource();
+                pkg.setPath(resourcePrefix + path);
+                pkg.setName(path);
+                return pkg;
+            }).forEach(artifactResource::addPage);
         }
     }
 

@@ -28,6 +28,7 @@ import java.util.function.Consumer;
 import io.crazydan.duzhou.framework.commons.StringHelper;
 import io.crazydan.jingwei.app.coder.AppCodeGenConfig;
 import io.crazydan.jingwei.app.coder.AppCodeGenerator;
+import io.crazydan.jingwei.app.model.AppInstallation_CoderResource;
 import io.crazydan.jingwei.app.model.AppInstallation_Manifest;
 import io.crazydan.jingwei.app.model.AppInstallation_ModelResources;
 import io.crazydan.jingwei.app.model.AppInstallation_OrmResources;
@@ -37,6 +38,7 @@ import io.crazydan.jingwei.app.model.AppLocalStore_EnabledApps;
 import io.crazydan.jingwei.app.model.AppLocalStore_Manifest;
 import io.crazydan.jingwei.app.model.AppPackage_Resource;
 import io.crazydan.jingwei.app.model.AppReleasing_ArtifactResource;
+import io.crazydan.jingwei.app.model.AppReleasing_CoderResource;
 import io.crazydan.jingwei.app.model.AppReleasing_Manifest;
 import io.crazydan.jingwei.app.orm.AppOrmModelProvider;
 import io.crazydan.jingwei.app.util.AppModelHelper;
@@ -66,6 +68,7 @@ import static io.crazydan.jingwei.app.AppConstants.VAR_APP_CODE;
 import static io.crazydan.jingwei.app.AppConstants.VAR_PATH;
 import static io.crazydan.jingwei.app.AppCoreConfigs.CFG_APP_PORTAL_CODE;
 import static io.crazydan.jingwei.app.AppCoreErrors.ERR_BIZ_APP_NOT_EXIST;
+import static io.crazydan.jingwei.app.AppCoreErrors.ERR_BIZ_APP_NO_PAGE;
 import static io.nop.xlang.XLangErrors.ARG_CODE;
 
 /**
@@ -87,16 +90,24 @@ public class AppCoreBizModel {
     @Description("加载指定应用的页面")
     @BizMutation
     public Map<String, Object> loadAppPage(@Name("app") String appCode, @Name("preview") Boolean forPreview) {
+        // TODO 加载应用预览页面 /preview/{appCode}/{version}/index.js
+
         AppInstallation_Manifest manifest = assureAppInstalled(appCode);
         if (manifest == null) {
             throw new NopException(ERR_BIZ_APP_NOT_EXIST).param(ARG_CODE, appCode);
         }
 
-        return assureAppPageGenerated(appCode, forPreview);
+        // TODO 需线程加锁
+        manifest = prepareAppPages(manifest);
+        if (!manifest.getPageResources().hasChildren()) {
+            throw new NopException(ERR_BIZ_APP_NO_PAGE).param(ARG_CODE, appCode);
+        }
+
+        return getAppPageStaticPath(manifest);
     }
 
     @Description("加载全部已启用的应用")
-    @BizMutation
+    @BizAction
     public void loadEnabledApps() {
         AppLocalStore_Manifest manifest = loadAppLocalStoreManifest();
 
@@ -138,18 +149,6 @@ public class AppCoreBizModel {
         AppInstallation_Manifest manifest = null;
 
         return manifest;
-    }
-
-    @Description("确保应用页面已生成")
-    @BizAction
-    public Map<String, Object> assureAppPageGenerated(
-            @Name("app") String appCode,
-            @Name("preview") Boolean forPreview
-    ) {
-        return new HashMap<>() {{
-            put("js", "/app/" + appCode + "/index.js");
-            put("css", List.of("/app/" + appCode + "/index.css"));
-        }};
     }
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -206,10 +205,15 @@ public class AppCoreBizModel {
     }
 
     protected IResource loadVfsResource(String template, String appCode, String path) {
-        Map<String, Object> params = Map.of(VAR_APP_CODE, appCode, VAR_PATH, path);
-        String vPath = StringHelper.renderTemplate(template, params::get);
+        String vPath = getVPath(template, appCode, path);
 
         return AppModelHelper.getVfsResource(vPath);
+    }
+
+    protected String getVPath(String template, String appCode, String path) {
+        Map<String, Object> params = Map.of(VAR_APP_CODE, appCode, VAR_PATH, path);
+
+        return StringHelper.renderTemplate(template, params::get);
     }
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -247,14 +251,16 @@ public class AppCoreBizModel {
 
     protected void installAppToDir(AppReleasing_Manifest releasingManifest) {
         String appCode = releasingManifest.getCode();
-        AppReleasing_ArtifactResource artifactResource = releasingManifest.getArtifactResource();
 
+        // ===========================
+        AppReleasing_ArtifactResource artifactResource = releasingManifest.getArtifactResource();
         List<AppPackage_Resource> ormResources = artifactResource.getOrms();
         List<AppPackage_Resource> modelResources = artifactResource.getModels();
         List<AppPackage_Resource> pageResources = artifactResource.getPages();
 
         AppInstallation_Manifest manifest = new AppInstallation_Manifest();
         manifest.setCode(appCode);
+        manifest.setBizDomain(releasingManifest.getBizDomain());
         manifest.setVersion(releasingManifest.getVersion());
         manifest.setOrmResources(new AppInstallation_OrmResources());
         manifest.setModelResources(new AppInstallation_ModelResources());
@@ -274,20 +280,24 @@ public class AppCoreBizModel {
                                        manifest.getModelResources()::addChild);
         }
 
-        if (pageResources.isEmpty()) {
-            genAppPages(releasingManifest, manifest.getPageResources());
-        } else {
-            // Note: 页面资源需释放到应用静态资源目录
-            pageResources.forEach((source) -> {
-                AppPackage_Resource pkg = new AppPackage_Resource();
-                pkg.setPath(source.getName());
+        // Note: 若存在已构建的页面资源，则将其释放到应用静态资源目录，否则，在首次访问时自动构建
+        pageResources.forEach((source) -> {
+            AppPackage_Resource pkg = new AppPackage_Resource();
+            pkg.setPath(source.getName());
 
-                IResource resource = loadAppStaticResource(appCode, pkg.getPath());
-                source.getResource().saveToResource(resource);
+            IResource resource = loadAppStaticResource(appCode, pkg.getPath());
+            source.getResource().saveToResource(resource);
 
-                manifest.getPageResources().addChild(pkg);
-            });
-        }
+            manifest.getPageResources().addChild(pkg);
+        });
+
+        // ==============================
+        AppReleasing_CoderResource coderResource = releasingManifest.getCoderResource();
+        manifest.setCoderResource(new AppInstallation_CoderResource());
+
+        installAppCoderResource(manifest.getCoderResource(), coderResource, appCode);
+
+        // ==============================
 
         IResource manifestResource = loadAppInstallationResource(appCode, APP_MANIFEST_FILE);
         AppModelHelper.saveAppInstallationManifest(manifest, manifestResource);
@@ -304,6 +314,89 @@ public class AppCoreBizModel {
 
             consumer.accept(pkg);
         });
+    }
+
+    protected void installAppCoderResource(
+            AppInstallation_CoderResource targetCoderResource, //
+            AppReleasing_CoderResource coderResource, String appCode
+    ) {
+        AppPackage_Resource[] sources = new AppPackage_Resource[] {
+                coderResource.getModelDesign(), coderResource.getUiDesign()
+        };
+
+        for (AppPackage_Resource source : sources) {
+            if (source == null) {
+                continue;
+            }
+
+            AppPackage_Resource pkg = new AppPackage_Resource();
+            if (source == coderResource.getModelDesign()) {
+                pkg.setPath("src/model-design.xml");
+                targetCoderResource.setModelDesign(pkg);
+            } else if (source == coderResource.getUiDesign()) {
+                pkg.setPath("src/ui-design.xml");
+                targetCoderResource.setUiDesign(pkg);
+            }
+
+            IResource resource = loadAppInstallationResource(appCode, pkg.getPath());
+            source.getResource().saveToResource(resource);
+        }
+    }
+
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    protected AppInstallation_Manifest prepareAppPages(AppInstallation_Manifest manifest) {
+        String appCode = manifest.getCode();
+
+        boolean pageGenerated = manifest.getPageResources().hasChildren();
+        for (AppPackage_Resource pkg : manifest.getPageResources().getChildren()) {
+            IResource resource = loadAppStaticResource(appCode, pkg.getPath());
+            if (!resource.exists()) {
+                pageGenerated = false;
+                break;
+            }
+        }
+
+        // 页面已生成或无 UI 设计资源时，无需处理
+        if (pageGenerated || manifest.getCoderResource().getUiDesign() == null) {
+            return manifest;
+        }
+
+        IResource manifestResource = AppModelHelper.getVfsResource(manifest.resourcePath());
+        manifest = manifest.cloneInstance();
+        manifest.setPageResources(new AppInstallation_PageResources());
+
+        AppPackage_Resource source = manifest.getCoderResource().getUiDesign();
+        AppCodeGenConfig genConfig = createAppGenConfig(manifest);
+
+        genAppPages(appCode, genConfig, source, manifest.getPageResources());
+
+        AppModelHelper.saveAppInstallationManifest(manifest, manifestResource);
+
+        return AppModelHelper.loadAppInstallationManifest(manifestResource);
+    }
+
+    protected Map<String, Object> getAppPageStaticPath(AppInstallation_Manifest manifest) {
+        Map<String, Object> result = new HashMap<>();
+
+        String appCode = manifest.getCode();
+        manifest.getPageResources().getChildren().forEach((page) -> {
+            String vPath = getVPath(TEMPLATE_APP_STATIC_VPATH, appCode, page.getPath());
+            String staticPath = StringHelper.nextPart(vPath, ':');
+
+            if (staticPath.endsWith(".br") || staticPath.endsWith(".gz") || staticPath.endsWith(".zst")) {
+                staticPath = StringHelper.removeLastPart(staticPath, '.');
+            }
+
+            if (staticPath.endsWith(".js")) {
+                result.put("js", staticPath);
+            } else if (staticPath.endsWith(".css")) {
+                List<String> list = (List<String>) result.computeIfAbsent("css", (k) -> new ArrayList<>());
+                list.add(staticPath);
+            }
+        });
+
+        return result;
     }
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -327,8 +420,8 @@ public class AppCoreBizModel {
         AppCodeGenerator gen = new AppCodeGenerator();
         gen.genModels(target.toFile(), resource, genConfig);
 
-        AppPackage_Resource.fromPaths(gen.getOrms(), null, false).forEach(ormResources::addChild);
-        AppPackage_Resource.fromPaths(gen.getModels(), null, false).forEach(modelResources::addChild);
+        AppPackage_Resource.fromPaths(gen.getOrms()).forEach(ormResources::addChild);
+        AppPackage_Resource.fromPaths(gen.getModels()).forEach(modelResources::addChild);
     }
 
     /** 根据 UI 设计生成应用页面资源 */
@@ -337,20 +430,36 @@ public class AppCoreBizModel {
         if (source == null) {
             return;
         }
-        IResource resource = source.getResource();
 
         String appCode = manifest.getCode();
         AppCodeGenConfig genConfig = createAppGenConfig(manifest);
 
+        genAppPages(appCode, genConfig, source, pageResources);
+    }
+
+    protected void genAppPages(
+            String appCode, AppCodeGenConfig genConfig, //
+            AppPackage_Resource page, AppInstallation_PageResources pageResources
+    ) {
+        IResource resource = page.getResource();
         IResource target = loadVfsResource(TEMPLATE_APP_STATIC_ROOT_VPATH, appCode, "");
 
         AppCodeGenerator gen = new AppCodeGenerator();
         gen.genPages(target.toFile(), resource, genConfig);
 
-        AppPackage_Resource.fromPaths(gen.getPages(), null, false).forEach(pageResources::addChild);
+        AppPackage_Resource.fromPaths(gen.getPages()).forEach(pageResources::addChild);
     }
 
     protected AppCodeGenConfig createAppGenConfig(AppReleasing_Manifest manifest) {
+        AppCodeGenConfig genConfig = new AppCodeGenConfig();
+
+        genConfig.setCode(manifest.getCode());
+        genConfig.setBizDomain(manifest.getBizDomain());
+
+        return genConfig;
+    }
+
+    protected AppCodeGenConfig createAppGenConfig(AppInstallation_Manifest manifest) {
         AppCodeGenConfig genConfig = new AppCodeGenConfig();
 
         genConfig.setCode(manifest.getCode());

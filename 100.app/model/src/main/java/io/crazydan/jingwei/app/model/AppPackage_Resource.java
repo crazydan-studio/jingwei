@@ -27,8 +27,6 @@ import io.crazydan.jingwei.app.model._gen._AppPackage_Resource;
 import io.nop.core.resource.IResource;
 import io.nop.core.resource.VirtualFileSystem;
 
-import static io.crazydan.duzhou.framework.commons.ObjectHelper.firstNonNull;
-
 public class AppPackage_Resource extends _AppPackage_Resource {
 
     public AppPackage_Resource() {
@@ -45,13 +43,10 @@ public class AppPackage_Resource extends _AppPackage_Resource {
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-    public static Stream<AppPackage_Resource> fromPaths(List<String> paths, String pathPrefix, boolean withName) {
+    public static Stream<AppPackage_Resource> fromPaths(List<String> paths) {
         return paths.stream().map((path) -> {
             AppPackage_Resource pkg = new AppPackage_Resource();
-            pkg.setPath(firstNonNull(pathPrefix, "") + path);
-            if (withName) {
-                pkg.setName(path);
-            }
+            pkg.setPath(path);
 
             return pkg;
         });
