@@ -4,17 +4,18 @@ import { graphql } from './http';
 const URL_PARAM_APP = 'app';
 
 /** 加载应用页面 */
-export async function loadAppPage({ appCode, el, forPreview }) {
+export async function loadAppPage({ appCode, el, forPreview, loading }) {
   const appConfig = getAppConfig();
   if (!el) {
     el = document.getElementById(appConfig.containerId);
   }
-  el.classList.add('loading');
+
+  loading && startAppLoadingAnimation(el);
 
   try {
     await doLoadAppPage({ appCode, el, forPreview });
   } finally {
-    el.classList.add('done');
+    loading && endAppLoadingAnimation(el);
   }
 }
 
@@ -29,6 +30,20 @@ export function updateAppCodeInLocation(appCode) {
   url.searchParams.set(URL_PARAM_APP, appCode);
 
   window.history.pushState({}, '', url);
+}
+
+export function startAppLoadingAnimation(el) {
+  el.style.setProperty('--spinner-text', '\'页面加载中，请稍等。。。\'');
+
+  el.classList.add('loading');
+}
+
+export function endAppLoadingAnimation(el) {
+  el.addEventListener('transitionend', () => {
+    el.classList.remove('loading', 'done');
+  });
+
+  el.classList.add('done');
 }
 
 async function doLoadAppPage({ appCode, el, forPreview }) {

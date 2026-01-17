@@ -1,11 +1,17 @@
 <template>
-  <div ref="appRef" class="loading"></div>
+  <div ref="appRef"></div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 
-import { getAppConfig, getAppCodeFromLocation, loadAppPage } from '@app-utils';
+import {
+  getAppConfig, getAppCodeFromLocation, loadAppPage,
+  startAppLoadingAnimation, endAppLoadingAnimation
+} from '@app-utils';
+
+const mainEl = document.getElementById('main');
+startAppLoadingAnimation(mainEl);
 
 const appConfig = getAppConfig();
 
@@ -16,6 +22,8 @@ onMounted(async () => {
 
   const appCode = getAppCodeFromLocation() || appConfig.protalCode;
 
-  await loadAppPage({ appCode, el: appRef.value });
+  await loadAppPage({ appCode, el: appRef.value, loading: false });
+
+  endAppLoadingAnimation(mainEl);
 });
 </script>

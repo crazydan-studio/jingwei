@@ -28,20 +28,19 @@
       #main {
         min-width: 100dvw;
         min-height: 100dvh;
+        overflow: hidden;
       }
 
       .loading {
         min-width: 100%;
         min-height: 100%;
+        --spinner-text: '';
+        --spinner-size: 10rem;
         --spinner-image: url('${staticContextRoot}/loading.svg');
       }
-      .loading.done {
-        min-width: unset;
-        min-height: unset;
-      }
 
+      .loading::before,
       .loading::after {
-        z-index: 10000;
         opacity: 1;
         transition: opacity 0.5s ease-out;
         transition-delay: 0.2s;
@@ -49,18 +48,36 @@
 
         overflow: hidden;
         position: absolute;
-        top: 0;
         bottom: 0;
         left: 0;
         right: 0;
+      }
+
+      .loading::before {
+        z-index: 10001;
+        top: var(--spinner-size);
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        content: var(--spinner-text);
+        font-size: 1.5em;
+        color: #0099e5;
+      }
+      .loading::after {
+        z-index: 10000;
+        top: 0;
 
         content: '';
         background-image: var(--spinner-image);
         background-color: #fff;
         background-position: center;
-        background-size: 10rem;
+        background-size: var(--spinner-size);
         background-repeat: no-repeat;
       }
+
+      .loading.done::before,
       .loading.done::after {
         opacity: 0;
       }
@@ -75,7 +92,7 @@
     </style>
   </head>
   <body>
-    <div id="main"></div>
+    <div id="main" class="loading"></div>
 
     <script defer src="${staticContextRoot}/assets/vue.min.js"></script>
     <script defer src="${staticContextRoot}/assets/naive-ui.min.js"></script>
