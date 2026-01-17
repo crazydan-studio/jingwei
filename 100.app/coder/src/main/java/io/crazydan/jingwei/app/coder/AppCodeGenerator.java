@@ -46,8 +46,8 @@ import static io.crazydan.jingwei.app.coder.AppCoderConstants.SCOPE_VAR_codeGenC
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.SCOPE_VAR_codeGenModel;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.TEMPLATE_APP_MODEL_PATH;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.TEMPLATE_APP_PAGE_PATH;
-import static io.crazydan.jingwei.app.coder.AppCoderConstants.TEMPLATE_DIR_MODEL;
-import static io.crazydan.jingwei.app.coder.AppCoderConstants.TEMPLATE_DIR_ORM;
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.APP_DIR_MODEL;
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.APP_DIR_ORM;
 import static io.crazydan.jingwei.app.coder.AppCoderErrors.ERR_BUILD_NODE_MODULES_PATH_NOT_SPECIFIED;
 import static io.crazydan.jingwei.app.coder.AppCoderErrors.ERR_BUILD_NPM_PATH_NOT_SPECIFIED;
 import static io.nop.ai.core.AiCoreErrors.ARG_CONFIG_VAR;
@@ -76,7 +76,7 @@ public class AppCodeGenerator {
     }
 
     /** 构建应用模型资源，主要为 {@code app.orm.xml}、{@code *.xmeta}、{@code *.xbiz} */
-    public void genModels(File targetDir, IResource modelDesignResource, AppCodeGenConfig genConfig) {
+    public void genModels(IResource modelDesignResource, File targetDir, AppCodeGenConfig genConfig) {
         AiModelDesign modelDesign = new AiModelDesign(modelDesignResource, genConfig);
 
         Map<String, Object> vars = Map.of();
@@ -95,15 +95,15 @@ public class AppCodeGenerator {
 
         gen.execute("", scope);
 
-        List<String> paths = FileHelper.findFilePaths(targetDir, TEMPLATE_DIR_ORM + "/**/*", true, true);
+        List<String> paths = FileHelper.findFilePaths(targetDir, APP_DIR_ORM + "/**/*", true, true);
         this.orms.addAll(paths);
 
-        paths = FileHelper.findFilePaths(targetDir, TEMPLATE_DIR_MODEL + "/**/*", true, true);
+        paths = FileHelper.findFilePaths(targetDir, APP_DIR_MODEL + "/**/*", true, true);
         this.models.addAll(paths);
     }
 
     /** 构建应用的页面资源 */
-    public void genPages(File targetDir, IResource uiDesignResource, AppCodeGenConfig genConfig) {
+    public void genPages(IResource uiDesignResource, File targetDir, AppCodeGenConfig genConfig) {
         String buildDirPath = preparePageBuildDir(targetDir);
         File buildDir = new File(buildDirPath);
 

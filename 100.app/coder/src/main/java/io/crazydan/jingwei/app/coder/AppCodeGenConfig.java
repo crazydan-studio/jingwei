@@ -22,6 +22,8 @@ package io.crazydan.jingwei.app.coder;
 import java.util.Locale;
 
 import io.crazydan.duzhou.framework.commons.StringHelper;
+import io.crazydan.jingwei.app.model.AppInstallation_Manifest;
+import io.crazydan.jingwei.app.model.AppReleasing_Manifest;
 
 /**
  * 应用构建配置
@@ -34,6 +36,24 @@ public class AppCodeGenConfig {
     private String code;
     /** 应用所处的业务域标识，不能为 {@code null} 或空白 */
     private String bizDomain;
+
+    public static AppCodeGenConfig from(AppReleasing_Manifest manifest) {
+        AppCodeGenConfig config = new AppCodeGenConfig();
+
+        config.setCode(manifest.getCode());
+        config.setBizDomain(manifest.getBizDomain());
+
+        return config;
+    }
+
+    public static AppCodeGenConfig from(AppInstallation_Manifest manifest) {
+        AppCodeGenConfig config = new AppCodeGenConfig();
+
+        config.setCode(manifest.getCode());
+        config.setBizDomain(manifest.getBizDomain());
+
+        return config;
+    }
 
     public String getCode() {
         return this.code;
@@ -51,6 +71,7 @@ public class AppCodeGenConfig {
         this.bizDomain = appDomain.toLowerCase(Locale.ROOT);
     }
 
+    /** 在 xlib 函数中调用 */
     public String genTableName(String entityName) {
         String prefix = getBizDomain().replace('-', '_');
         String name = StringHelper.camelCaseToUnderscore(entityName, true);

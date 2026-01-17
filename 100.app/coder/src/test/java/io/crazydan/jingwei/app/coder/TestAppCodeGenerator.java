@@ -66,7 +66,7 @@ public class TestAppCodeGenerator extends NopJunitTestCase {
         AppCodeGenConfig genConfig = createAppGenConfig();
 
         File targetDir = new File(getTargetDir(), genConfig.getCode());
-        gen.genModels(targetDir, createResource(resourcePath), genConfig);
+        gen.genModels(createResource(resourcePath), targetDir, genConfig);
     }
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -88,7 +88,7 @@ public class TestAppCodeGenerator extends NopJunitTestCase {
         AppCodeGenConfig genConfig = createAppGenConfig();
 
         File targetDir = new File(getTargetDir(), genConfig.getCode() + "/page");
-        gen.genPages(targetDir, createResource(resourcePath), genConfig);
+        gen.genPages(createResource(resourcePath), targetDir, genConfig);
     }
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

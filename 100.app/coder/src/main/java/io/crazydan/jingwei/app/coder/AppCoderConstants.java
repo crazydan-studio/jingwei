@@ -37,10 +37,6 @@ public interface AppCoderConstants {
     String TEMPLATE_APP_MODEL_PATH = "/jingwei/app/templates/app-model";
     String TEMPLATE_APP_PAGE_PATH = "/jingwei/app/templates/app-page";
 
-    String TEMPLATE_DIR_MODEL = "model";
-    String TEMPLATE_DIR_ORM = "orm";
-    String TEMPLATE_DIR_PAGE = "page";
-
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     String SCOPE_VAR_codeGenModel = "codeGenModel";
@@ -53,5 +49,12 @@ public interface AppCoderConstants {
     String BUILD_DIR_DIST = "dist";
     String BUILD_DIST_FILE_NAME = "index";
 
-    String PACK_DIR_ARTIFACT = "artifact";
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    String APP_DIR_MODEL = "model";
+    String APP_DIR_ORM = "orm";
+    String APP_DIR_PAGE = "page";
+    String APP_DIR_ARTIFACT = "artifact";
+    String APP_DIR_SOURCE = "source";
+    String APP_DIR_SRC = "src";
 }

@@ -59,6 +59,13 @@
         <uiDesign xdef:ref="resource.xdef"/>
     </coderResource>
 
+<!--    &lt;!&ndash; [应用的源码差量资源]
+    &ndash;&gt;
+    <deltaCoderResource xdef:name="AppReleasing_DeltaCoderResource">
+        <modelDesign xdef:ref="resource.xdef"/>
+        <uiDesign xdef:ref="resource.xdef"/>
+    </deltaCoderResource>-->
+
     <!-- [应用的构建产物]
     > 将被释放到应用安装目录中的构建产物资源。若未指定，则在安装时动态构建。
     -->

@@ -21,31 +21,30 @@
 <c:script xmlns:c="c"><![CDATA[
     import java.io.File;
     import io.crazydan.duzhou.framework.commons.FileHelper;
-    import io.crazydan.jingwei.app.util.AppModelHelper;
-    import io.crazydan.jingwei.app.coder.AppReleasingPacker;
+    import io.crazydan.jingwei.app.coder.AppReleasingBuilder;
     import io.crazydan.jingwei.app.AppConstants;
     import io.nop.core.resource.ResourceConstants;
 
     const rootDir = FileHelper.getMavenProjectRoot(codeGenerator);
     const sharedNodeModulesDir = FileHelper.getAbsoluteFile(rootDir, '../../900.builder/node_modules');
 
+    const builder = new AppReleasingBuilder('npm', sharedNodeModulesDir.getAbsolutePath());
+
     const sourceDir = new File(rootDir, 'src/main/resources/app');
     const targetDir = new File(rootDir, 'target/classes/app');
-    const packerDir = new File(rootDir, 'target/packer');
+    const buildDir = new File(rootDir, 'target/app-builder');
 
-    FileHelper.deleteDir(packerDir);
+    FileHelper.deleteDir(buildDir);
     FileHelper.deleteDir(targetDir);
     FileHelper.copyWithFilter(sourceDir, targetDir, null);
-    FileHelper.copyWithFilter(sourceDir, packerDir, null);
+    FileHelper.copyWithFilter(sourceDir, buildDir, null);
 
     const manifestVPath = ResourceConstants.RESOURCE_NS_CLASSPATH + ':app/' + AppConstants.APP_MANIFEST_FILE;
-    const manifestResource = AppModelHelper.getVfsResource(manifestVPath);
 
-    const packer = new AppReleasingPacker('npm', sharedNodeModulesDir.getAbsolutePath());
-    const manifest = packer.packTo(manifestResource, packerDir);
+    const manifest = builder.build(manifestVPath, buildDir);
     FileHelper.deleteDir(targetDir);
 
     const pkgDir = new File(targetDir, manifest.getCode());
     // 直接将构建产物复制到 target 中，避免污染源码
-    FileHelper.moveDirFilesTo(packerDir, pkgDir);
+    FileHelper.moveDirFilesTo(buildDir, pkgDir);
 ]]></c:script>

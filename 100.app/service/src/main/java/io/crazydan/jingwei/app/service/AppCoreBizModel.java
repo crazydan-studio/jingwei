@@ -367,7 +367,7 @@ public class AppCoreBizModel {
         manifest.setPageResources(new AppInstallation_PageResources());
 
         AppPackage_Resource source = manifest.getCoderResource().getUiDesign();
-        AppCodeGenConfig genConfig = createAppGenConfig(manifest);
+        AppCodeGenConfig genConfig = AppCodeGenConfig.from(manifest);
 
         genAppPages(appCode, genConfig, source, manifest.getPageResources());
 
@@ -413,12 +413,12 @@ public class AppCoreBizModel {
         IResource resource = source.getResource();
 
         String appCode = manifest.getCode();
-        AppCodeGenConfig genConfig = createAppGenConfig(manifest);
+        AppCodeGenConfig genConfig = AppCodeGenConfig.from(manifest);
 
         IResource target = loadVfsResource(TEMPLATE_APP_INSTALLATION_ROOT_VPATH, appCode, "");
 
         AppCodeGenerator gen = new AppCodeGenerator();
-        gen.genModels(target.toFile(), resource, genConfig);
+        gen.genModels(resource, target.toFile(), genConfig);
 
         AppPackage_Resource.fromPaths(gen.getOrms()).forEach(ormResources::addChild);
         AppPackage_Resource.fromPaths(gen.getModels()).forEach(modelResources::addChild);
@@ -432,7 +432,7 @@ public class AppCoreBizModel {
         }
 
         String appCode = manifest.getCode();
-        AppCodeGenConfig genConfig = createAppGenConfig(manifest);
+        AppCodeGenConfig genConfig = AppCodeGenConfig.from(manifest);
 
         genAppPages(appCode, genConfig, source, pageResources);
     }
@@ -445,26 +445,8 @@ public class AppCoreBizModel {
         IResource target = loadVfsResource(TEMPLATE_APP_STATIC_ROOT_VPATH, appCode, "");
 
         AppCodeGenerator gen = new AppCodeGenerator();
-        gen.genPages(target.toFile(), resource, genConfig);
+        gen.genPages(resource, target.toFile(), genConfig);
 
         AppPackage_Resource.fromPaths(gen.getPages()).forEach(pageResources::addChild);
-    }
-
-    protected AppCodeGenConfig createAppGenConfig(AppReleasing_Manifest manifest) {
-        AppCodeGenConfig genConfig = new AppCodeGenConfig();
-
-        genConfig.setCode(manifest.getCode());
-        genConfig.setBizDomain(manifest.getBizDomain());
-
-        return genConfig;
-    }
-
-    protected AppCodeGenConfig createAppGenConfig(AppInstallation_Manifest manifest) {
-        AppCodeGenConfig genConfig = new AppCodeGenConfig();
-
-        genConfig.setCode(manifest.getCode());
-        genConfig.setBizDomain(manifest.getBizDomain());
-
-        return genConfig;
     }
 }
