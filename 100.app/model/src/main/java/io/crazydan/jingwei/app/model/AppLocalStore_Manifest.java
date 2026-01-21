@@ -19,6 +19,7 @@
 
 package io.crazydan.jingwei.app.model;
 
+import io.crazydan.duzhou.framework.commons.StringHelper;
 import io.crazydan.jingwei.app.model._gen._AppLocalStore_Manifest;
 
 import static io.crazydan.duzhou.framework.commons.ObjectHelper.firstNonNull;
@@ -31,5 +32,10 @@ public class AppLocalStore_Manifest extends _AppLocalStore_Manifest {
     @Override
     public AppLocalStore_EnabledApps getEnabledApps() {
         return firstNonNull(super.getEnabledApps(), AppLocalStore_EnabledApps.NONE);
+    }
+
+    public String getPortalAppCode() {
+        AppLocalStore_App app = getPortalApp();
+        return app != null && StringHelper.isNotBlank(app.getCode()) ? app.getCode() : null;
     }
 }

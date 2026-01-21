@@ -26,6 +26,10 @@ export function getAppCodeFromLocation() {
 }
 
 export function updateAppCodeInLocation(appCode) {
+  if (!appCode) {
+    return;
+  }
+
   const url = new URL(window.location.href);
   url.searchParams.set(URL_PARAM_APP, appCode);
 
@@ -33,7 +37,7 @@ export function updateAppCodeInLocation(appCode) {
 }
 
 export function startAppLoadingAnimation(el) {
-  el.style.setProperty('--spinner-text', '\'页面加载中，请稍等。。。\'');
+  el.style.setProperty('--spinner-text', "'页面加载中，请稍等。。。'");
 
   el.classList.add('loading');
 }
@@ -52,7 +56,7 @@ async function doLoadAppPage({ appCode, el, forPreview }) {
 
   const { App__loadAppPage } = await graphql(
     `
-      mutation ($app: String!, $preview: Boolean) {
+      mutation ($app: String, $preview: Boolean) {
         App__loadAppPage(app: $app, preview: $preview)
       }
     `,

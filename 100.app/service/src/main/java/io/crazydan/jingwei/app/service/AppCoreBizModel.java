@@ -34,7 +34,6 @@ import io.crazydan.jingwei.app.model.AppInstallation_ModelResources;
 import io.crazydan.jingwei.app.model.AppInstallation_OrmResources;
 import io.crazydan.jingwei.app.model.AppInstallation_PageResources;
 import io.crazydan.jingwei.app.model.AppLocalStore_App;
-import io.crazydan.jingwei.app.model.AppLocalStore_EnabledApps;
 import io.crazydan.jingwei.app.model.AppLocalStore_Manifest;
 import io.crazydan.jingwei.app.model.AppPackage_Resource;
 import io.crazydan.jingwei.app.model.AppReleasing_ArtifactResource;
@@ -47,6 +46,7 @@ import io.nop.api.core.annotations.biz.BizModel;
 import io.nop.api.core.annotations.biz.BizMutation;
 import io.nop.api.core.annotations.core.Description;
 import io.nop.api.core.annotations.core.Name;
+import io.nop.api.core.annotations.core.Optional;
 import io.nop.api.core.exceptions.NopException;
 import io.nop.biz.api.IBizObjectManager;
 import io.nop.core.resource.IResource;
@@ -69,6 +69,8 @@ import static io.crazydan.jingwei.app.AppConstants.VAR_PATH;
 import static io.crazydan.jingwei.app.AppCoreConfigs.CFG_APP_PORTAL_CODE;
 import static io.crazydan.jingwei.app.AppCoreErrors.ERR_BIZ_APP_NOT_EXIST;
 import static io.crazydan.jingwei.app.AppCoreErrors.ERR_BIZ_APP_NO_PAGE;
+import static io.crazydan.jingwei.app.AppCoreErrors.ERR_CFG_VALUE_NOT_SPECIFIED;
+import static io.nop.ai.core.AiCoreErrors.ARG_CONFIG_VAR;
 import static io.nop.xlang.XLangErrors.ARG_CODE;
 
 /**
@@ -89,8 +91,15 @@ public class AppCoreBizModel {
 
     @Description("加载指定应用的页面")
     @BizMutation
-    public Map<String, Object> loadAppPage(@Name("app") String appCode, @Name("preview") Boolean forPreview) {
+    public Map<String, Object> loadAppPage(
+            @Optional @Name("app") String appCode,
+            @Optional @Name("preview") Boolean forPreview
+    ) {
         // TODO 加载应用预览页面 /preview/{appCode}/{version}/index.js
+
+        if (StringHelper.isBlank(appCode)) {
+            appCode = getPortalAppCode();
+        }
 
         AppInstallation_Manifest manifest = assureAppInstalled(appCode);
         if (manifest == null) {
@@ -153,35 +162,30 @@ public class AppCoreBizModel {
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+    protected String getPortalAppCode() {
+        AppLocalStore_Manifest manifest = loadAppLocalStoreManifest();
+
+        return manifest.getPortalAppCode();
+    }
+
     protected AppLocalStore_Manifest loadAppLocalStoreManifest() {
         IResource resource = loadVfsResource(TEMPLATE_APP_STORE_VPATH, "", APP_MANIFEST_FILE);
-
         AppLocalStore_Manifest manifest = AppModelHelper.loadAppLocalStoreManifest(resource);
+
+        // TODO 完善门户页面配置检查和异常信息
         if (manifest == null) {
+            AppLocalStore_App app = new AppLocalStore_App();
+            app.setCode(CFG_APP_PORTAL_CODE.get());
+
+            if (StringHelper.isBlank(app.getCode())) {
+                throw new NopException(ERR_CFG_VALUE_NOT_SPECIFIED).source(CFG_APP_PORTAL_CODE) //
+                                                                   .param(ARG_CONFIG_VAR,
+                                                                          CFG_APP_PORTAL_CODE.getName());
+            }
+
             manifest = new AppLocalStore_Manifest();
+            manifest.setPortalApp(app);
         }
-
-        // 确保始终包含门户应用
-        AppLocalStore_App portalApp = new AppLocalStore_App();
-        portalApp.setCode(CFG_APP_PORTAL_CODE.get());
-
-        AppLocalStore_EnabledApps apps = manifest.getEnabledApps();
-        if (apps.hasChild(portalApp.getCode())) {
-            return manifest;
-        }
-
-        if (manifest.frozen()) {
-            manifest = manifest.cloneInstance();
-        }
-        if (apps.frozen()) {
-            apps = apps.cloneInstance();
-            apps.setChildren(new ArrayList<>(apps.getChildren()));
-
-            manifest.setEnabledApps(apps);
-        }
-        apps.getChildren().add(0, portalApp);
-
-        manifest.freeze(true);
 
         return manifest;
     }
@@ -222,24 +226,24 @@ public class AppCoreBizModel {
         List<IResource> ormModelResources = new ArrayList<>();
         Map<String, GraphQLBizModel> bizModels = new HashMap<>();
 
-        manifest.getEnabledApps()
-                .getChildren()
-                .stream()
-                .map((app) -> assureAppInstalled(app.getCode()))
-                .forEach((appManifest) -> {
-                    appManifest.getModelResources().getChildren().forEach((model) -> {
-                        IResource resource = loadAppInstallationResource(appManifest.getCode(), model.getPath());
+        List<AppLocalStore_App> apps = new ArrayList<>();
+        apps.add(manifest.getPortalApp());
+        apps.addAll(manifest.getEnabledApps().getChildren());
 
-                        GraphQLBizModels.discoverBizModel(bizModels, resource);
-                    });
+        apps.stream().map((app) -> assureAppInstalled(app.getCode())).forEach((appManifest) -> {
+            appManifest.getModelResources().getChildren().forEach((model) -> {
+                IResource resource = loadAppInstallationResource(appManifest.getCode(), model.getPath());
 
-                    appManifest.getOrmResources().getChildren().forEach((orm) -> {
-                        if ("orm/app.orm.xml".equals(orm.getPath())) {
-                            IResource resource = loadAppInstallationResource(appManifest.getCode(), orm.getPath());
-                            ormModelResources.add(resource);
-                        }
-                    });
-                });
+                GraphQLBizModels.discoverBizModel(bizModels, resource);
+            });
+
+            appManifest.getOrmResources().getChildren().forEach((orm) -> {
+                if ("orm/app.orm.xml".equals(orm.getPath())) {
+                    IResource resource = loadAppInstallationResource(appManifest.getCode(), orm.getPath());
+                    ormModelResources.add(resource);
+                }
+            });
+        });
 
         this.bizObjectManager.setDynamicBizModels(GraphQLBizModels.fromBizModels(bizModels));
 

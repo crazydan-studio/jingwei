@@ -29,12 +29,18 @@
           xdef:name="AppLocalStore_Manifest"
 >
 
+    <portalApp xdef:ref="AppLocalStore_App"/>
+
     <enabledApps xdef:name="AppLocalStore_EnabledApps"
                  xdef:body-type="list" xdef:key-attr="code"
                  xdef:bean-body-prop="children" xdef:bean-child-name="child"
     >
-        <app xdef:name="AppLocalStore_App"
+        <app xdef:ref="AppLocalStore_App"
              code="!string"
         />
     </enabledApps>
+
+    <xdef:define xdef:name="AppLocalStore_App"
+                 code="!string"
+    />
 </manifest>

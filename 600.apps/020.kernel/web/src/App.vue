@@ -20,7 +20,7 @@ onMounted(async () => {
   // 按配置绑定 id
   appRef.value.id = appConfig.containerId;
 
-  const appCode = getAppCodeFromLocation() || appConfig.protalCode;
+  const appCode = getAppCodeFromLocation();
 
   await loadAppPage({ appCode, el: appRef.value, loading: false });
 

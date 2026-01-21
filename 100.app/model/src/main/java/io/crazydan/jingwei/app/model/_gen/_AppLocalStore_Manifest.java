@@ -25,6 +25,13 @@ public abstract class _AppLocalStore_Manifest extends io.nop.core.resource.compo
     private io.crazydan.jingwei.app.model.AppLocalStore_EnabledApps _enabledApps ;
     
     /**
+     *  
+     * xml name: portalApp
+     * 
+     */
+    private io.crazydan.jingwei.app.model.AppLocalStore_App _portalApp ;
+    
+    /**
      * 
      * xml name: enabledApps
      *  
@@ -43,6 +50,25 @@ public abstract class _AppLocalStore_Manifest extends io.nop.core.resource.compo
     }
 
     
+    /**
+     * 
+     * xml name: portalApp
+     *  
+     */
+    
+    public io.crazydan.jingwei.app.model.AppLocalStore_App getPortalApp(){
+      return _portalApp;
+    }
+
+    
+    public void setPortalApp(io.crazydan.jingwei.app.model.AppLocalStore_App value){
+        checkAllowChange();
+        
+        this._portalApp = value;
+           
+    }
+
+    
 
     @Override
     public void freeze(boolean cascade){
@@ -53,6 +79,8 @@ public abstract class _AppLocalStore_Manifest extends io.nop.core.resource.compo
         
            this._enabledApps = io.nop.api.core.util.FreezeHelper.deepFreeze(this._enabledApps);
             
+           this._portalApp = io.nop.api.core.util.FreezeHelper.deepFreeze(this._portalApp);
+            
         }
     }
 
@@ -61,6 +89,7 @@ public abstract class _AppLocalStore_Manifest extends io.nop.core.resource.compo
         super.outputJson(out);
         
         out.putNotNull("enabledApps",this.getEnabledApps());
+        out.putNotNull("portalApp",this.getPortalApp());
     }
 
     public AppLocalStore_Manifest cloneInstance(){
@@ -73,6 +102,7 @@ public abstract class _AppLocalStore_Manifest extends io.nop.core.resource.compo
         super.copyTo(instance);
         
         instance.setEnabledApps(this.getEnabledApps());
+        instance.setPortalApp(this.getPortalApp());
     }
 
     protected AppLocalStore_Manifest newInstance(){
