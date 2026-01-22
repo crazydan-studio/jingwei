@@ -103,7 +103,7 @@ public class AppReleasingBuilder extends AppCodeGenerator {
 
         AppModelHelper.saveAppReleasingManifest(completed, targetManifestResource);
 
-        return completed;
+        return AppModelHelper.loadAppReleasingManifest(targetManifestResource);
     }
 
     private void copySource(AppReleasing_Manifest manifest, File targetDir) {

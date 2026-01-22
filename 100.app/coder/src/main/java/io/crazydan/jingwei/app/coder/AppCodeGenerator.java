@@ -20,8 +20,6 @@
 package io.crazydan.jingwei.app.coder;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import io.crazydan.duzhou.framework.commons.FileHelper;
@@ -46,8 +44,6 @@ import static io.crazydan.jingwei.app.coder.AppCoderConstants.SCOPE_VAR_codeGenC
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.SCOPE_VAR_codeGenModel;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.TEMPLATE_APP_MODEL_PATH;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.TEMPLATE_APP_PAGE_PATH;
-import static io.crazydan.jingwei.app.coder.AppCoderConstants.APP_DIR_MODEL;
-import static io.crazydan.jingwei.app.coder.AppCoderConstants.APP_DIR_ORM;
 import static io.crazydan.jingwei.app.coder.AppCoderErrors.ERR_BUILD_NODE_MODULES_PATH_NOT_SPECIFIED;
 import static io.crazydan.jingwei.app.coder.AppCoderErrors.ERR_BUILD_NPM_PATH_NOT_SPECIFIED;
 import static io.nop.ai.core.AiCoreErrors.ARG_CONFIG_VAR;
@@ -58,13 +54,9 @@ import static io.nop.ai.core.AiCoreErrors.ARG_CONFIG_VAR;
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
  * @date 2026-01-08
  */
-public class AppCodeGenerator {
+public abstract class AppCodeGenerator {
     private final String npmPath;
     private final String nodeModulesPath;
-
-    private final List<String> models = new ArrayList<>();
-    private final List<String> orms = new ArrayList<>();
-    private final List<String> pages = new ArrayList<>();
 
     public AppCodeGenerator() {
         this(CFG_APP_BUILD_NPM_PATH.get(), CFG_APP_BUILD_NODE_MODULES_PATH.get());
@@ -76,7 +68,7 @@ public class AppCodeGenerator {
     }
 
     /** 构建应用模型资源，主要为 {@code app.orm.xml}、{@code *.xmeta}、{@code *.xbiz} */
-    public void genModels(IResource modelDesignResource, File targetDir, AppCodeGenConfig genConfig) {
+    protected void genModels(IResource modelDesignResource, File targetDir, AppCodeGenConfig genConfig) {
         AiModelDesign modelDesign = new AiModelDesign(modelDesignResource, genConfig);
 
         Map<String, Object> vars = Map.of();
@@ -94,16 +86,10 @@ public class AppCodeGenerator {
         scope.setLocalValue(SCOPE_VAR_codeGenModel, ormModel);
 
         gen.execute("", scope);
-
-        List<String> paths = FileHelper.findFilePaths(targetDir, APP_DIR_ORM + "/**/*", true, true);
-        this.orms.addAll(paths);
-
-        paths = FileHelper.findFilePaths(targetDir, APP_DIR_MODEL + "/**/*", true, true);
-        this.models.addAll(paths);
     }
 
     /** 构建应用的页面资源 */
-    public void genPages(IResource uiDesignResource, File targetDir, AppCodeGenConfig genConfig) {
+    protected void genPages(IResource uiDesignResource, File targetDir, AppCodeGenConfig genConfig) {
         String buildDirPath = preparePageBuildDir(targetDir);
         File buildDir = new File(buildDirPath);
 
@@ -127,23 +113,6 @@ public class AppCodeGenerator {
         File buildDistDir = new File(buildDir, BUILD_DIR_DIST);
         FileHelper.copyWithFilter(buildDistDir, targetDir, null);
         FileHelper.deleteDir(buildDir);
-
-        List<String> paths = FileHelper.findFilePaths(targetDir, "**/*", true, true);
-        this.pages.addAll(paths);
-    }
-
-    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-    public List<String> getModels() {
-        return this.models;
-    }
-
-    public List<String> getOrms() {
-        return this.orms;
-    }
-
-    public List<String> getPages() {
-        return this.pages;
     }
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

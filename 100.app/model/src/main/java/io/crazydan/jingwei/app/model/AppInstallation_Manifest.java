@@ -28,6 +28,21 @@ public class AppInstallation_Manifest extends _AppInstallation_Manifest {
     public AppInstallation_Manifest() {
     }
 
+    public static AppInstallation_Manifest from(AppReleasing_Manifest releasing) {
+        AppInstallation_Manifest manifest = new AppInstallation_Manifest();
+
+        manifest.setCode(releasing.getCode());
+        manifest.setBizDomain(releasing.getBizDomain());
+        manifest.setVersion(releasing.getVersion());
+
+        manifest.setOrmResources(new AppInstallation_OrmResources());
+        manifest.setModelResources(new AppInstallation_ModelResources());
+        manifest.setPageResources(new AppInstallation_PageResources());
+        manifest.setCoderResource(new AppInstallation_CoderResource());
+
+        return manifest;
+    }
+
     @Override
     public AppInstallation_ModelResources getModelResources() {
         return firstNonNull(super.getModelResources(), AppInstallation_ModelResources.NONE);

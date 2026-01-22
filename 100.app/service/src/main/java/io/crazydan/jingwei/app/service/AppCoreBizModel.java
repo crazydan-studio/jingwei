@@ -19,25 +19,19 @@
 
 package io.crazydan.jingwei.app.service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
+import java.util.Objects;
 
 import io.crazydan.duzhou.framework.commons.StringHelper;
-import io.crazydan.jingwei.app.coder.AppCodeGenConfig;
-import io.crazydan.jingwei.app.coder.AppCodeGenerator;
-import io.crazydan.jingwei.app.model.AppInstallation_CoderResource;
+import io.crazydan.jingwei.app.coder.AppInstallationBuilder;
 import io.crazydan.jingwei.app.model.AppInstallation_Manifest;
-import io.crazydan.jingwei.app.model.AppInstallation_ModelResources;
-import io.crazydan.jingwei.app.model.AppInstallation_OrmResources;
-import io.crazydan.jingwei.app.model.AppInstallation_PageResources;
 import io.crazydan.jingwei.app.model.AppLocalStore_App;
 import io.crazydan.jingwei.app.model.AppLocalStore_Manifest;
 import io.crazydan.jingwei.app.model.AppPackage_Resource;
-import io.crazydan.jingwei.app.model.AppReleasing_ArtifactResource;
-import io.crazydan.jingwei.app.model.AppReleasing_CoderResource;
 import io.crazydan.jingwei.app.model.AppReleasing_Manifest;
 import io.crazydan.jingwei.app.orm.AppOrmModelProvider;
 import io.crazydan.jingwei.app.util.AppModelHelper;
@@ -55,8 +49,6 @@ import io.nop.graphql.core.reflection.GraphQLBizModels;
 import io.nop.orm.IOrmTemplate;
 import jakarta.inject.Inject;
 
-import static io.crazydan.jingwei.app.AppConstants.APP_INSTALLATION_DIR_MODEL;
-import static io.crazydan.jingwei.app.AppConstants.APP_INSTALLATION_DIR_ORM;
 import static io.crazydan.jingwei.app.AppConstants.APP_MANIFEST_FILE;
 import static io.crazydan.jingwei.app.AppConstants.TEMPLATE_APP_CLASSPATH_VPATH;
 import static io.crazydan.jingwei.app.AppConstants.TEMPLATE_APP_INSTALLATION_ROOT_VPATH;
@@ -70,6 +62,7 @@ import static io.crazydan.jingwei.app.AppCoreConfigs.CFG_APP_PORTAL_CODE;
 import static io.crazydan.jingwei.app.AppCoreErrors.ERR_BIZ_APP_NOT_EXIST;
 import static io.crazydan.jingwei.app.AppCoreErrors.ERR_BIZ_APP_NO_PAGE;
 import static io.crazydan.jingwei.app.AppCoreErrors.ERR_CFG_VALUE_NOT_SPECIFIED;
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.APP_FILE_ORM_DSL;
 import static io.nop.ai.core.AiCoreErrors.ARG_CONFIG_VAR;
 import static io.nop.xlang.XLangErrors.ARG_CODE;
 
@@ -106,7 +99,6 @@ public class AppCoreBizModel {
             throw new NopException(ERR_BIZ_APP_NOT_EXIST).param(ARG_CODE, appCode);
         }
 
-        // TODO 需线程加锁
         manifest = prepareAppPages(manifest);
         if (!manifest.getPageResources().hasChildren()) {
             throw new NopException(ERR_BIZ_APP_NO_PAGE).param(ARG_CODE, appCode);
@@ -117,47 +109,122 @@ public class AppCoreBizModel {
 
     @Description("加载全部已启用的应用")
     @BizAction
-    public void loadEnabledApps() {
+    public synchronized void loadEnabledApps() {
         AppLocalStore_Manifest manifest = loadAppLocalStoreManifest();
 
-        doLoadEnabledApps(manifest);
+        loadEnabledApps(manifest);
     }
 
     @Description("确保应用已安装")
     @BizAction
     public AppInstallation_Manifest assureAppInstalled(@Name("appCode") String appCode) {
-        AppInstallation_Manifest manifest = loadAppInstallationManifestFromDir(appCode);
+        IResource resource = loadAppInstallationResource(appCode, APP_MANIFEST_FILE);
+        AppInstallation_Manifest manifest = AppModelHelper.loadAppInstallationManifest(resource);
 
-        if (manifest == null) {
-            manifest = installAppFromDb(appCode);
-        }
         if (manifest == null) {
             manifest = installAppFromClasspath(appCode);
         }
-
         return manifest;
     }
 
     @Description("从 classpath 安装应用")
     @BizAction
     public AppInstallation_Manifest installAppFromClasspath(@Name("appCode") String appCode) {
-        IResource resource = loadAppClasspathResource(appCode, APP_MANIFEST_FILE);
+        IResource resource = loadVfsResource(TEMPLATE_APP_CLASSPATH_VPATH, appCode, APP_MANIFEST_FILE);
         AppReleasing_Manifest manifest = AppModelHelper.loadAppReleasingManifest(resource);
         if (manifest == null) {
             return null;
         }
 
-        installAppToDir(manifest);
+        File targetDir = loadVfsResource(TEMPLATE_APP_INSTALLATION_ROOT_VPATH, appCode, "").toFile();
+        File pageTargetDir = loadVfsResource(TEMPLATE_APP_STATIC_ROOT_VPATH, appCode, "").toFile();
 
-        return loadAppInstallationManifestFromDir(appCode);
+        AppInstallationBuilder builder = new AppInstallationBuilder();
+
+        return builder.install(manifest, targetDir, pageTargetDir);
     }
 
-    @Description("从数据库安装应用")
-    @BizAction
-    public AppInstallation_Manifest installAppFromDb(@Name("appCode") String appCode) {
-        AppInstallation_Manifest manifest = null;
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-        return manifest;
+    protected void loadEnabledApps(AppLocalStore_Manifest manifest) {
+        List<IResource> ormModelResources = new ArrayList<>();
+        Map<String, GraphQLBizModel> bizModels = new HashMap<>();
+
+        List<AppLocalStore_App> apps = new ArrayList<>();
+        apps.add(manifest.getPortalApp());
+        apps.addAll(manifest.getEnabledApps().getChildren());
+
+        apps.stream()
+            .map((app) -> assureAppInstalled(app.getCode()))
+            .filter(Objects::nonNull)
+            .forEach((appManifest) -> {
+                appManifest.getModelResources().getChildren().forEach((model) -> {
+                    IResource resource = loadAppInstallationResource(appManifest.getCode(), model.getPath());
+
+                    GraphQLBizModels.discoverBizModel(bizModels, resource);
+                });
+
+                appManifest.getOrmResources().getChildren().forEach((orm) -> {
+                    if (APP_FILE_ORM_DSL.equals(orm.getPath())) {
+                        IResource resource = loadAppInstallationResource(appManifest.getCode(), orm.getPath());
+                        ormModelResources.add(resource);
+                    }
+                });
+            });
+
+        this.bizObjectManager.setDynamicBizModels(GraphQLBizModels.fromBizModels(bizModels));
+
+        this.ormModelProvider.setOrmModelResources(ormModelResources);
+        this.ormTemplate.reloadModel();
+    }
+
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    protected AppInstallation_Manifest prepareAppPages(AppInstallation_Manifest manifest) {
+        String appCode = manifest.getCode();
+
+        boolean pageGenerated = manifest.getPageResources().hasChildren();
+        for (AppPackage_Resource pkg : manifest.getPageResources().getChildren()) {
+            IResource resource = loadVfsResource(TEMPLATE_APP_STATIC_VPATH, appCode, pkg.getPath());
+            if (!resource.exists()) {
+                pageGenerated = false;
+                break;
+            }
+        }
+
+        if (pageGenerated) {
+            return manifest;
+        }
+
+        File targetDir = loadVfsResource(TEMPLATE_APP_STATIC_ROOT_VPATH, appCode, "").toFile();
+        AppInstallation_Manifest cloned = manifest.cloneInstance();
+
+        AppInstallationBuilder builder = new AppInstallationBuilder();
+        builder.buildPages(cloned, targetDir);
+
+        IResource manifestResource = AppModelHelper.getVfsResource(manifest.resourcePath());
+        AppModelHelper.saveAppInstallationManifest(cloned, manifestResource);
+
+        return AppModelHelper.loadAppInstallationManifest(manifestResource);
+    }
+
+    protected Map<String, Object> getAppPageStaticPath(AppInstallation_Manifest manifest) {
+        Map<String, Object> result = new HashMap<>();
+
+        String appCode = manifest.getCode();
+        manifest.getPageResources().getChildren().forEach((page) -> {
+            String vPath = getVPath(TEMPLATE_APP_STATIC_VPATH, appCode, page.getName());
+            String staticPath = StringHelper.nextPart(vPath, ':');
+
+            if (staticPath.endsWith(".js")) {
+                result.put("js", staticPath);
+            } else if (staticPath.endsWith(".css")) {
+                List<String> list = (List<String>) result.computeIfAbsent("css", (k) -> new ArrayList<>());
+                list.add(staticPath);
+            }
+        });
+
+        return result;
     }
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -190,22 +257,8 @@ public class AppCoreBizModel {
         return manifest;
     }
 
-    protected AppInstallation_Manifest loadAppInstallationManifestFromDir(String appCode) {
-        IResource resource = loadAppInstallationResource(appCode, APP_MANIFEST_FILE);
-
-        return AppModelHelper.loadAppInstallationManifest(resource);
-    }
-
     protected IResource loadAppInstallationResource(String appCode, String path) {
         return loadVfsResource(TEMPLATE_APP_INSTALLATION_VPATH, appCode, path);
-    }
-
-    protected IResource loadAppStaticResource(String appCode, String path) {
-        return loadVfsResource(TEMPLATE_APP_STATIC_VPATH, appCode, path);
-    }
-
-    protected IResource loadAppClasspathResource(String appCode, String path) {
-        return loadVfsResource(TEMPLATE_APP_CLASSPATH_VPATH, appCode, path);
     }
 
     protected IResource loadVfsResource(String template, String appCode, String path) {
@@ -218,239 +271,5 @@ public class AppCoreBizModel {
         Map<String, Object> params = Map.of(VAR_APP_CODE, appCode, VAR_PATH, path);
 
         return StringHelper.renderTemplate(template, params::get);
-    }
-
-    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-    protected synchronized void doLoadEnabledApps(AppLocalStore_Manifest manifest) {
-        List<IResource> ormModelResources = new ArrayList<>();
-        Map<String, GraphQLBizModel> bizModels = new HashMap<>();
-
-        List<AppLocalStore_App> apps = new ArrayList<>();
-        apps.add(manifest.getPortalApp());
-        apps.addAll(manifest.getEnabledApps().getChildren());
-
-        apps.stream().map((app) -> assureAppInstalled(app.getCode())).forEach((appManifest) -> {
-            appManifest.getModelResources().getChildren().forEach((model) -> {
-                IResource resource = loadAppInstallationResource(appManifest.getCode(), model.getPath());
-
-                GraphQLBizModels.discoverBizModel(bizModels, resource);
-            });
-
-            appManifest.getOrmResources().getChildren().forEach((orm) -> {
-                if ("orm/app.orm.xml".equals(orm.getPath())) {
-                    IResource resource = loadAppInstallationResource(appManifest.getCode(), orm.getPath());
-                    ormModelResources.add(resource);
-                }
-            });
-        });
-
-        this.bizObjectManager.setDynamicBizModels(GraphQLBizModels.fromBizModels(bizModels));
-
-        this.ormModelProvider.setOrmModelResources(ormModelResources);
-        this.ormTemplate.reloadModel();
-    }
-
-    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-    protected void installAppToDir(AppReleasing_Manifest releasingManifest) {
-        String appCode = releasingManifest.getCode();
-
-        // ===========================
-        AppReleasing_ArtifactResource artifactResource = releasingManifest.getArtifactResource();
-        List<AppPackage_Resource> ormResources = artifactResource.getOrms();
-        List<AppPackage_Resource> modelResources = artifactResource.getModels();
-        List<AppPackage_Resource> pageResources = artifactResource.getPages();
-
-        AppInstallation_Manifest manifest = new AppInstallation_Manifest();
-        manifest.setCode(appCode);
-        manifest.setBizDomain(releasingManifest.getBizDomain());
-        manifest.setVersion(releasingManifest.getVersion());
-        manifest.setOrmResources(new AppInstallation_OrmResources());
-        manifest.setModelResources(new AppInstallation_ModelResources());
-        manifest.setPageResources(new AppInstallation_PageResources());
-
-        if (ormResources.isEmpty() || modelResources.isEmpty()) {
-            genAppModels(releasingManifest, manifest.getOrmResources(), manifest.getModelResources());
-        } else {
-            // Note: 模型资源释放到应用安装目录
-            installAppPackageResources(ormResources,
-                                       appCode,
-                                       APP_INSTALLATION_DIR_ORM,
-                                       manifest.getOrmResources()::addChild);
-            installAppPackageResources(modelResources,
-                                       appCode,
-                                       APP_INSTALLATION_DIR_MODEL,
-                                       manifest.getModelResources()::addChild);
-        }
-
-        // Note: 若存在已构建的页面资源，则将其释放到应用静态资源目录，否则，在首次访问时自动构建
-        pageResources.forEach((source) -> {
-            AppPackage_Resource pkg = new AppPackage_Resource();
-            pkg.setPath(source.getName());
-
-            IResource resource = loadAppStaticResource(appCode, pkg.getPath());
-            source.getResource().saveToResource(resource);
-
-            manifest.getPageResources().addChild(pkg);
-        });
-
-        // ==============================
-        AppReleasing_CoderResource coderResource = releasingManifest.getCoderResource();
-        manifest.setCoderResource(new AppInstallation_CoderResource());
-
-        installAppCoderResource(manifest.getCoderResource(), coderResource, appCode);
-
-        // ==============================
-
-        IResource manifestResource = loadAppInstallationResource(appCode, APP_MANIFEST_FILE);
-        AppModelHelper.saveAppInstallationManifest(manifest, manifestResource);
-    }
-
-    protected void installAppPackageResources(
-            List<AppPackage_Resource> sources, String appCode, String subPath, Consumer<AppPackage_Resource> consumer) {
-        sources.forEach((source) -> {
-            AppPackage_Resource pkg = new AppPackage_Resource();
-            pkg.setPath(subPath + '/' + source.getName());
-
-            IResource resource = loadAppInstallationResource(appCode, pkg.getPath());
-            source.getResource().saveToResource(resource);
-
-            consumer.accept(pkg);
-        });
-    }
-
-    protected void installAppCoderResource(
-            AppInstallation_CoderResource targetCoderResource, //
-            AppReleasing_CoderResource coderResource, String appCode
-    ) {
-        AppPackage_Resource[] sources = new AppPackage_Resource[] {
-                coderResource.getModelDesign(), coderResource.getUiDesign()
-        };
-
-        for (AppPackage_Resource source : sources) {
-            if (source == null) {
-                continue;
-            }
-
-            AppPackage_Resource pkg = new AppPackage_Resource();
-            if (source == coderResource.getModelDesign()) {
-                pkg.setPath("src/model-design.xml");
-                targetCoderResource.setModelDesign(pkg);
-            } else if (source == coderResource.getUiDesign()) {
-                pkg.setPath("src/ui-design.xml");
-                targetCoderResource.setUiDesign(pkg);
-            }
-
-            IResource resource = loadAppInstallationResource(appCode, pkg.getPath());
-            source.getResource().saveToResource(resource);
-        }
-    }
-
-    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-    protected AppInstallation_Manifest prepareAppPages(AppInstallation_Manifest manifest) {
-        String appCode = manifest.getCode();
-
-        boolean pageGenerated = manifest.getPageResources().hasChildren();
-        for (AppPackage_Resource pkg : manifest.getPageResources().getChildren()) {
-            IResource resource = loadAppStaticResource(appCode, pkg.getPath());
-            if (!resource.exists()) {
-                pageGenerated = false;
-                break;
-            }
-        }
-
-        // 页面已生成或无 UI 设计资源时，无需处理
-        if (pageGenerated || manifest.getCoderResource().getUiDesign() == null) {
-            return manifest;
-        }
-
-        IResource manifestResource = AppModelHelper.getVfsResource(manifest.resourcePath());
-        manifest = manifest.cloneInstance();
-        manifest.setPageResources(new AppInstallation_PageResources());
-
-        AppPackage_Resource source = manifest.getCoderResource().getUiDesign();
-        AppCodeGenConfig genConfig = AppCodeGenConfig.from(manifest);
-
-        genAppPages(appCode, genConfig, source, manifest.getPageResources());
-
-        AppModelHelper.saveAppInstallationManifest(manifest, manifestResource);
-
-        return AppModelHelper.loadAppInstallationManifest(manifestResource);
-    }
-
-    protected Map<String, Object> getAppPageStaticPath(AppInstallation_Manifest manifest) {
-        Map<String, Object> result = new HashMap<>();
-
-        String appCode = manifest.getCode();
-        manifest.getPageResources().getChildren().forEach((page) -> {
-            String vPath = getVPath(TEMPLATE_APP_STATIC_VPATH, appCode, page.getPath());
-            String staticPath = StringHelper.nextPart(vPath, ':');
-
-            if (staticPath.endsWith(".br") || staticPath.endsWith(".gz") || staticPath.endsWith(".zst")) {
-                staticPath = StringHelper.removeLastPart(staticPath, '.');
-            }
-
-            if (staticPath.endsWith(".js")) {
-                result.put("js", staticPath);
-            } else if (staticPath.endsWith(".css")) {
-                List<String> list = (List<String>) result.computeIfAbsent("css", (k) -> new ArrayList<>());
-                list.add(staticPath);
-            }
-        });
-
-        return result;
-    }
-
-    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-    /** 根据模型设计生成应用模型定义 {@code app.orm.xml}、{@code *.xmeta}、{@code *.xbiz} */
-    protected void genAppModels(
-            AppReleasing_Manifest manifest, AppInstallation_OrmResources ormResources,
-            AppInstallation_ModelResources modelResources
-    ) {
-        AppPackage_Resource source = manifest.getCoderResource().getModelDesign();
-        if (source == null) {
-            return;
-        }
-        IResource resource = source.getResource();
-
-        String appCode = manifest.getCode();
-        AppCodeGenConfig genConfig = AppCodeGenConfig.from(manifest);
-
-        IResource target = loadVfsResource(TEMPLATE_APP_INSTALLATION_ROOT_VPATH, appCode, "");
-
-        AppCodeGenerator gen = new AppCodeGenerator();
-        gen.genModels(resource, target.toFile(), genConfig);
-
-        AppPackage_Resource.fromPaths(gen.getOrms()).forEach(ormResources::addChild);
-        AppPackage_Resource.fromPaths(gen.getModels()).forEach(modelResources::addChild);
-    }
-
-    /** 根据 UI 设计生成应用页面资源 */
-    protected void genAppPages(AppReleasing_Manifest manifest, AppInstallation_PageResources pageResources) {
-        AppPackage_Resource source = manifest.getCoderResource().getUiDesign();
-        if (source == null) {
-            return;
-        }
-
-        String appCode = manifest.getCode();
-        AppCodeGenConfig genConfig = AppCodeGenConfig.from(manifest);
-
-        genAppPages(appCode, genConfig, source, pageResources);
-    }
-
-    protected void genAppPages(
-            String appCode, AppCodeGenConfig genConfig, //
-            AppPackage_Resource page, AppInstallation_PageResources pageResources
-    ) {
-        IResource resource = page.getResource();
-        IResource target = loadVfsResource(TEMPLATE_APP_STATIC_ROOT_VPATH, appCode, "");
-
-        AppCodeGenerator gen = new AppCodeGenerator();
-        gen.genPages(resource, target.toFile(), genConfig);
-
-        AppPackage_Resource.fromPaths(gen.getPages()).forEach(pageResources::addChild);
     }
 }

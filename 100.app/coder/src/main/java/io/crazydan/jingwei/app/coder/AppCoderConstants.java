@@ -57,4 +57,7 @@ public interface AppCoderConstants {
     String APP_DIR_ARTIFACT = "artifact";
     String APP_DIR_SOURCE = "source";
     String APP_DIR_SRC = "src";
+    String APP_FILE_MODEL_DESIGN = "model-design.xml";
+    String APP_FILE_UI_DESIGN = "ui-design.xml";
+    String APP_FILE_ORM_DSL = "orm/app.orm.xml";
 }

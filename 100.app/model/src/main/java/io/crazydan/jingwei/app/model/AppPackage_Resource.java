@@ -43,12 +43,14 @@ public class AppPackage_Resource extends _AppPackage_Resource {
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-    public static Stream<AppPackage_Resource> fromPaths(List<String> paths) {
-        return paths.stream().map((path) -> {
-            AppPackage_Resource pkg = new AppPackage_Resource();
-            pkg.setPath(path);
+    public static AppPackage_Resource fromPath(String path) {
+        AppPackage_Resource pkg = new AppPackage_Resource();
+        pkg.setPath(path);
 
-            return pkg;
-        });
+        return pkg;
+    }
+
+    public static Stream<AppPackage_Resource> fromPaths(List<String> paths) {
+        return paths.stream().map(AppPackage_Resource::fromPath);
     }
 }
