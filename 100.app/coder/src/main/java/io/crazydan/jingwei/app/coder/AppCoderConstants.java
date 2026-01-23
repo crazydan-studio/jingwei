@@ -25,6 +25,10 @@ package io.crazydan.jingwei.app.coder;
  * @date 2026-01-06
  */
 public interface AppCoderConstants {
+
+    String ORM_DEFAULT_DOMAINS_PATH = "/jingwei/app/coder/default/orm-domains.xml";
+    String ORM_DEFAULT_ENTITY_PATH = "/jingwei/app/coder/default/orm-entity.xml";
+
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     String XLIB_APP_MODEL_GEN_PATH = "/jingwei/app/coder/xlib/app-model.xlib";
     String XLIB_APP_PAGE_GEN_PATH = "/jingwei/app/coder/xlib/app-page.xlib";

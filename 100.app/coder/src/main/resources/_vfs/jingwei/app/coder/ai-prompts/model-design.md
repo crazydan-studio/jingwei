@@ -8,6 +8,7 @@
 ### **1. 属性定义 <attr>**
 
 - name、stdDomain、displayName（属性名称）、mandatory（是否必须）必填
+- propId 从 20 开始，最大不超过 2000，且保持连续递增分配
 - 不使用 JSON 属性，完全展开为具体的属性定义
 - 对于密码、密钥等敏感数据，需设置 published 为 false，即数据不对外开放，且一般支持
   insertable（可新增）和 updatable（可更新），但不支持 queryable（可查询）和 sortable（可排序）

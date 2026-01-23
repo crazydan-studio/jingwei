@@ -1,0 +1,53 @@
+<orm xmlns:x="/nop/schema/xdsl.xdef" x:schema="/nop/schema/orm/orm.xdef" xmlns:ext="ext" ext:registerShortName="true"
+     ext:allowIdAsColName="true">
+    <domains>
+        <domain name="userFlag" precision="50" stdSqlType="VARCHAR"/>
+        <domain name="deleteFlag" stdDomain="boolFlag" stdSqlType="BOOLEAN"/>
+        <domain name="uuid" precision="32" stdSqlType="CHAR"/>
+        <domain name="datetime" stdSqlType="BIGINT"/>
+        <domain name="url" precision="1024" stdSqlType="VARCHAR"/>
+        <domain name="file" precision="64" stdSqlType="CHAR"/>
+        <domain name="json" stdSqlType="JSON"/>
+        <domain name="text" stdSqlType="CLOB"/>
+        <domain name="xml" stdSqlType="CLOB"/>
+    </domains>
+    <entities>
+        <entity name="App" className="io.nop.orm.support.DynamicOrmEntity" registerShortName="true"
+                useLogicalDelete="true" deleteFlagProp="deleted" createrProp="createdBy" createTimeProp="createdAt"
+                updaterProp="updatedBy" updateTimeProp="updatedAt">
+            <columns>
+                <column name="name" code="col_name" propId="20"/>
+                <column name="id" code="col_id" propId="1" domain="uuid" displayName="ID" primary="true"
+                        mandatory="true" insertable="true" updatable="false" tagSet="seq"/>
+                <column name="createdBy" code="col_created_by" propId="2" domain="userFlag" displayName="创建者"
+                        insertable="true" updatable="false"/>
+                <column name="updatedBy" code="col_updated_by" propId="3" domain="userFlag" displayName="更新者"
+                        insertable="true" updatable="true"/>
+                <column name="createdAt" code="col_created_at" propId="4" domain="datetime" displayName="创建时间"
+                        insertable="true" updatable="false"/>
+                <column name="updatedAt" code="col_updated_at" propId="5" domain="datetime" displayName="更新时间"
+                        insertable="true" updatable="true"/>
+                <column name="deleted" updatable="true" code="col_deleted" propId="6" domain="deleteFlag"
+                        displayName="是否已删除" insertable="true"/>
+            </columns>
+        </entity>
+        <entity name="AppVersion" className="io.nop.orm.support.DynamicOrmEntity" registerShortName="true"
+                useLogicalDelete="true" deleteFlagProp="deleted" createrProp="createdBy" createTimeProp="createdAt"
+                updaterProp="updatedBy" updateTimeProp="updatedAt">
+            <columns>
+                <column name="id" code="col_id" propId="1" domain="uuid" displayName="ID" primary="true"
+                        mandatory="true" insertable="true" updatable="false" tagSet="seq"/>
+                <column name="createdBy" updatable="false" code="col_created_by" propId="2" domain="userFlag"
+                        displayName="创建者" insertable="true"/>
+                <column name="updatedBy" code="col_updated_by" propId="3" domain="userFlag" displayName="更新者"
+                        insertable="true" updatable="true"/>
+                <column name="createdAt" code="col_created_at" propId="4" domain="datetime" displayName="创建时间"
+                        insertable="true" updatable="false"/>
+                <column name="updatedAt" code="col_updated_at" propId="5" domain="datetime" displayName="更新时间"
+                        insertable="true" updatable="true"/>
+                <column name="deleted" code="col_deleted" propId="6" domain="deleteFlag" displayName="是否已删除"
+                        insertable="true" updatable="true"/>
+            </columns>
+        </entity>
+    </entities>
+</orm>

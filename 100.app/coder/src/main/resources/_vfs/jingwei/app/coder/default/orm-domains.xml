@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--
+  ~ 精卫（JingWei） - 衔木石填沧海，筑屏障护安全
+  ~ Copyright (C) 2026 Crazydan Studio <https://studio.crazydan.org>
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with this program.
+  ~ If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
+  -->
+
+<orm xmlns:x="/nop/schema/xdsl.xdef" xmlns:ext="ext"
+     x:schema="/nop/schema/orm/orm.xdef"
+     ext:registerShortName="true" ext:allowIdAsColName="true"
+>
+
+    <domains>
+        <domain name="userFlag" precision="50" stdSqlType="VARCHAR"/>
+        <domain name="deleteFlag" stdDomain="boolFlag" stdSqlType="BOOLEAN"/>
+
+        <domain name="uuid" precision="32" stdSqlType="CHAR"/>
+
+        <domain name="datetime" stdSqlType="BIGINT"/>
+        <domain name="url" precision="1024" stdSqlType="VARCHAR"/>
+        <domain name="file" precision="64" stdSqlType="CHAR"/>
+
+        <domain name="json" stdSqlType="JSON"/>
+        <domain name="text" stdSqlType="CLOB"/>
+    </domains>
+</orm>

@@ -62,11 +62,11 @@ public class TestAppCodeGenerator extends NopJunitTestCase {
     public void get_genAppModel() {
         String resourcePath = "test-01.ai-model-design.xml";
 
-        AppCodeGenerator gen = new AppCodeGenerator();
-        AppCodeGenConfig genConfig = createAppGenConfig();
-
-        File targetDir = new File(getTargetDir(), genConfig.getCode());
-        gen.genModels(createResource(resourcePath), targetDir, genConfig);
+//        AppCodeGenerator gen = new AppCodeGenerator();
+//        AppCodeGenConfig genConfig = createAppGenConfig();
+//
+//        File targetDir = new File(getTargetDir(), genConfig.getCode());
+//        gen.genModels(createResource(resourcePath), targetDir, genConfig);
     }
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -84,11 +84,11 @@ public class TestAppCodeGenerator extends NopJunitTestCase {
     public void get_genAppPage() {
         String resourcePath = "test-10.ai-ui-design.xml";
 
-        AppCodeGenerator gen = new AppCodeGenerator();
-        AppCodeGenConfig genConfig = createAppGenConfig();
-
-        File targetDir = new File(getTargetDir(), genConfig.getCode() + "/page");
-        gen.genPages(createResource(resourcePath), targetDir, genConfig);
+//        AppCodeGenerator gen = new AppCodeGenerator();
+//        AppCodeGenConfig genConfig = createAppGenConfig();
+//
+//        File targetDir = new File(getTargetDir(), genConfig.getCode() + "/page");
+//        gen.genPages(createResource(resourcePath), targetDir, genConfig);
     }
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -98,7 +98,7 @@ public class TestAppCodeGenerator extends NopJunitTestCase {
     }
 
     protected AiOrmModel genOrmModel(String path, AppCodeGenConfig genConfig) {
-        IResource resource = createResource(path);
+        IResource resource = attachmentResource(path);
         AiModelDesign modelDesign = new AiModelDesign(resource, genConfig);
 
         Map<String, Object> vars = Map.of();

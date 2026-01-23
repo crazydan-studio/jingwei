@@ -22,6 +22,7 @@ package io.crazydan.jingwei.app.coder.model;
 import java.util.Map;
 
 import io.crazydan.jingwei.app.coder.AppCodeGenConfig;
+import io.crazydan.jingwei.app.coder.normalizer.AiModelDesignNormalizer;
 import io.nop.core.lang.eval.IEvalScope;
 import io.nop.core.lang.xml.XNode;
 import io.nop.core.lang.xml.parse.XNodeParser;
@@ -61,6 +62,7 @@ public class AiModelDesign {
     public XNode getDesignNode() {
         if (this.designNode == null) {
             this.designNode = XNodeParser.instance().parseFromResource(this.resource);
+            AiModelDesignNormalizer.normalize(this.designNode);
         }
         return this.designNode;
     }

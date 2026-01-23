@@ -74,6 +74,8 @@ import static io.nop.xlang.XLangErrors.ARG_CODE;
  */
 @BizModel("App")
 public class AppCoreBizModel {
+    // TODO 缓存与锁
+
     @Inject
     IOrmTemplate ormTemplate;
     @Inject
