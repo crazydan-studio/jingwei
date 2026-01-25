@@ -37,10 +37,10 @@ public class TestAiModelDesignNormalizer extends NopJunitTestCase {
 
     @Test
     public void test_normalize() {
-        XNode node = attachmentXNode("test-01.orm.xml");
+        XNode node = attachmentXNode("test-01.ai-model-design.xml");
 
         AiModelDesignNormalizer.normalize(node);
 
-        assertEquals(attachmentXmlText("test-01-result.orm.xml"), node.xml());
+        assertEquals(attachmentXmlText("test-01-result.ai-model-design.xml"), node.xml());
     }
 }

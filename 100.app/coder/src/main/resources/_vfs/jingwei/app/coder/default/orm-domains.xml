@@ -19,9 +19,8 @@
   ~ If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
   -->
 
-<orm xmlns:x="/nop/schema/xdsl.xdef" xmlns:ext="ext"
+<orm xmlns:x="/nop/schema/xdsl.xdef"
      x:schema="/nop/schema/orm/orm.xdef"
-     ext:registerShortName="true" ext:allowIdAsColName="true"
 >
 
     <domains>

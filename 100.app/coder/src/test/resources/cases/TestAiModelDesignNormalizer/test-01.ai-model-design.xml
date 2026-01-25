@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<model-design xmlns:x="/nop/schema/xdsl.xdef" xmlns:ext="ext"
+              x:schema="/jingwei/app/schema/coder/model-design.xdef"
+>
+    <entities>
+        <entity name="App">
+            <attrs>
+                <attr name="code" propId="20"/>
+                <attr name="id" propId="1" ext:primary="true" domain="uuid" displayName="ID" mandatory="true"
+                      insertable="true" updatable="false"/>
+                <attr name="createdBy" propId="2" domain="userFlag" displayName="创建者" insertable="true"
+                      updatable="false"/>
+                <attr name="updatedBy" propId="3" domain="userFlag" displayName="更新者" insertable="true"
+                      updatable="true"/>
+                <attr name="createdAt" propId="4" domain="datetime" displayName="创建时间" insertable="true"
+                      updatable="false"/>
+                <attr name="updatedAt" propId="5" domain="datetime" displayName="更新时间" insertable="true"
+                      updatable="true"/>
+                <attr name="deleted" updatable="true" propId="6" domain="deleteFlag" displayName="是否已删除"
+                      insertable="true"/>
+            </attrs>
+        </entity>
+        <entity name="AppVersion">
+            <attrs>
+                <attr name="id" propId="1" ext:primary="true" domain="uuid" displayName="ID" mandatory="true"
+                      insertable="true" updatable="false"/>
+                <attr name="createdBy" updatable="false" propId="2" domain="userFlag" displayName="创建者"
+                      insertable="true"/>
+                <attr name="updatedBy" propId="3" domain="userFlag" displayName="更新者" insertable="true"
+                      updatable="true"/>
+                <attr name="createdAt" propId="4" domain="datetime" displayName="创建时间" insertable="true"
+                      updatable="false"/>
+                <attr name="updatedAt" propId="5" domain="datetime" displayName="更新时间" insertable="true"
+                      updatable="true"/>
+                <attr name="deleted" propId="6" domain="deleteFlag" displayName="是否已删除" insertable="true"
+                      updatable="true"/>
+            </attrs>
+        </entity>
+    </entities>
+</model-design>

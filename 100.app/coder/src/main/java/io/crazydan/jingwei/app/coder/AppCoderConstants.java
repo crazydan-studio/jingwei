@@ -27,7 +27,6 @@ package io.crazydan.jingwei.app.coder;
 public interface AppCoderConstants {
 
     String ORM_DEFAULT_DOMAINS_PATH = "/jingwei/app/coder/default/orm-domains.xml";
-    String ORM_DEFAULT_ENTITY_PATH = "/jingwei/app/coder/default/orm-entity.xml";
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     String XLIB_APP_MODEL_GEN_PATH = "/jingwei/app/coder/xlib/app-model.xlib";
@@ -64,4 +63,9 @@ public interface AppCoderConstants {
     String APP_FILE_MODEL_DESIGN = "model-design.xml";
     String APP_FILE_UI_DESIGN = "ui-design.xml";
     String APP_FILE_ORM_DSL = "orm/app.orm.xml";
+
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    String ORM_ONE_TO_ONE = "one-to-one";
+    String ORM_ONE_TO_MANY = "one-to-many";
 }

@@ -1,0 +1,126 @@
+<orm ext:registerShortName="true" ext:allowIdAsColName="true" x:schema="/nop/schema/orm/orm.xdef"
+     xmlns:x="/nop/schema/xdsl.xdef">
+    <dicts>
+        <dict label="应用状态" name="app/status" valueType="string">
+            <description>记录应用当前所处的业务状态。</description>
+            <option code="DEVELOPING" description="应用正在开发中，尚未有已激活的版本。" label="开发中" value="010"/>
+        </dict>
+        <dict label="应用版本状态" name="app/version-status" valueType="string">
+            <description>记录应用版本的生命周期状态。</description>
+            <option code="DEVELOPING" description="版本正在开发或修改中。" label="开发中" value="010"/>
+        </dict>
+    </dicts>
+    <domains>
+        <domain name="userFlag" precision="50" stdSqlType="VARCHAR"/>
+        <domain name="deleteFlag" stdDomain="boolFlag" stdSqlType="BOOLEAN"/>
+        <domain name="uuid" precision="32" stdSqlType="CHAR"/>
+        <domain name="datetime" stdSqlType="BIGINT"/>
+        <domain name="url" precision="1024" stdSqlType="VARCHAR"/>
+        <domain name="file" precision="64" stdSqlType="CHAR"/>
+        <domain name="json" stdSqlType="JSON"/>
+        <domain name="text" stdSqlType="CLOB"/>
+    </domains>
+    <entities>
+        <entity className="io.nop.orm.support.DynamicOrmEntity" deleteFlagProp="deleted" displayName="应用" name="App"
+                registerShortName="true" tableName="tbl_app_app" tagSet="">
+            <columns>
+                <column code="col_id" displayName="ID" domain="uuid" mandatory="true" name="id" precision="32"
+                        primary="true" propId="1" stdDataType="string" stdSqlType="CHAR" tagSet="seq,not-sort"
+                        updatable="false"/>
+                <column code="col_deleted" displayName="是否已删除" domain="deleteFlag" name="deleted" propId="6"
+                        stdDataType="boolean" stdDomain="boolFlag" stdSqlType="BOOLEAN" tagSet=""/>
+                <column code="col_code" comment="应用的唯一识别码，在新增时由系统自动生成，全局唯一。"
+                        displayName="唯一标识" domain="uuid"
+                        mandatory="true" name="code" precision="32" propId="20" stdDataType="string" stdSqlType="CHAR"
+                        tagSet="" updatable="false"/>
+                <column code="col_name" comment="应用的名称，长度不超过 200 个字符，不同应用可以重名。" displayName="名字"
+                        mandatory="true"
+                        name="name" precision="200" propId="21" stdDataType="string" stdDomain="string"
+                        stdSqlType="VARCHAR" tagSet="" meta:minLength="1" meta:maxLength="200"/>
+                <column code="col_status"
+                        comment="应用当前的状态，初始为“开发中”。应用在首次激活版本后会自动切换为“已启用”。"
+                        defaultValue="010"
+                        displayName="状态" mandatory="true" name="status" propId="22" stdDataType="string"
+                        stdDomain="string" stdSqlType="VARCHAR" tagSet="" ext:dict="app/status"/>
+                <column code="col_description" comment="对应用的详细描述，支持 Markdown 格式。" displayName="说明"
+                        domain="text"
+                        name="description" notGenCode="true" propId="23" stdDataType="string" stdSqlType="CLOB"
+                        tagSet="del,not-sort"/>
+                <column code="col_active_version_id" displayName="已激活版本" domain="uuid" name="activeVersionId"
+                        precision="32" propId="25" stdDataType="string" stdSqlType="CHAR" tagSet="not-query,not-sort"/>
+            </columns>
+            <comment>用于管理个人或家庭的本地轻量级数字资产应用。</comment>
+            <relations>
+                <to-many cascadeDelete="true" displayName="版本列表" name="versions" refEntityName="AppVersion"
+                         refPropName="app" tagSet="cascade-delete,pub">
+                    <join>
+                        <on leftProp="id" rightProp="appId"/>
+                    </join>
+                </to-many>
+                <to-one displayName="已激活版本" ignoreDepends="true" name="activeVersion" refEntityName="AppVersion"
+                        tagSet="pub">
+                    <join>
+                        <on leftProp="activeVersionId" rightProp="id"/>
+                    </join>
+                </to-one>
+            </relations>
+            <unique-keys>
+                <unique-key columns="code" constraint="uk_code" name="uk_code"/>
+            </unique-keys>
+        </entity>
+        <entity className="io.nop.orm.support.DynamicOrmEntity" createTimeProp="createdAt" createrProp="createdBy"
+                deleteFlagProp="deleted" displayName="应用版本" name="AppVersion" registerShortName="true"
+                tableName="tbl_app_app_version" tagSet="" updateTimeProp="updatedAt" updaterProp="updatedBy">
+            <columns>
+                <column code="col_id" displayName="ID" domain="uuid" mandatory="true" name="id" precision="32"
+                        primary="true" propId="1" stdDataType="string" stdSqlType="CHAR" tagSet="seq,not-sort"
+                        updatable="false"/>
+                <column code="col_created_by" displayName="创建者" domain="userFlag" name="createdBy" precision="50"
+                        propId="2" stdDataType="string" stdSqlType="VARCHAR" tagSet="" updatable="false"/>
+                <column code="col_updated_by" displayName="更新者" domain="userFlag" name="updatedBy" precision="50"
+                        propId="3" stdDataType="string" stdSqlType="VARCHAR" tagSet=""/>
+                <column code="col_created_at" displayName="创建时间" domain="datetime" name="createdAt" propId="4"
+                        stdDataType="long" stdSqlType="BIGINT" tagSet="" updatable="false"/>
+                <column code="col_updated_at" displayName="更新时间" domain="datetime" name="updatedAt" propId="5"
+                        stdDataType="long" stdSqlType="BIGINT" tagSet=""/>
+                <column code="col_deleted" displayName="是否已删除" domain="deleteFlag" name="deleted" propId="6"
+                        stdDataType="boolean" stdDomain="boolFlag" stdSqlType="BOOLEAN" tagSet=""/>
+                <column code="col_name" comment="版本号，遵循 x.y.z 三段式命名规则，每段最多由 3 位数字组成，例如 1.0.0。"
+                        displayName="版本号"
+                        name="name" propId="20" stdDataType="string" stdDomain="string" stdSqlType="VARCHAR" tagSet=""/>
+                <column code="col_status" comment="版本的状态，初始为“开发中”，发布后变为“已发布”。" defaultValue="010"
+                        displayName="状态"
+                        mandatory="true" name="status" propId="21" stdDataType="string" stdDomain="string"
+                        stdSqlType="VARCHAR" tagSet="" ext:dict="app/version-status"/>
+                <column code="col_description" comment="版本发布说明，描述所实现的功能、特色或对衍生版本所做的变更。"
+                        displayName="说明" domain="text"
+                        name="description" notGenCode="true" propId="22" stdDataType="string" stdSqlType="CLOB"
+                        tagSet="del,not-sort"/>
+                <column code="col_app_id" comment="当前版本所属的应用。" displayName="所属应用" domain="uuid"
+                        mandatory="true"
+                        name="appId" precision="32" propId="23" stdDataType="string" stdSqlType="CHAR" tagSet=""
+                        updatable="false"/>
+                <column code="col_derived_from_id" displayName="衍生自" domain="uuid" name="derivedFromId"
+                        precision="32"
+                        propId="24" stdDataType="string" stdSqlType="CHAR" tagSet="not-query,not-sort"/>
+            </columns>
+            <comment>应用的具体版本信息，包含开发需求、生成的模型和 UI 代码等。</comment>
+            <relations>
+                <to-one displayName="所属应用" ignoreDepends="true" name="app" refEntityName="App" tagSet="pub">
+                    <join>
+                        <on leftProp="appId" rightProp="id"/>
+                    </join>
+                </to-one>
+                <to-one displayName="衍生自" ignoreDepends="true" name="derivedFrom" refEntityName="AppVersion"
+                        tagSet="pub">
+                    <join>
+                        <on leftProp="derivedFromId" rightProp="id"/>
+                    </join>
+                </to-one>
+            </relations>
+            <unique-keys>
+                <unique-key columns="appId,name" constraint="uk_app_version" name="uk_app_version"/>
+            </unique-keys>
+        </entity>
+    </entities>
+</orm>

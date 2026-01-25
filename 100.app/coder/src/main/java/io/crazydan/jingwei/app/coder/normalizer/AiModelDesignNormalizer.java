@@ -19,14 +19,8 @@
 
 package io.crazydan.jingwei.app.coder.normalizer;
 
-import io.crazydan.duzhou.framework.commons.DeltaMergerHelper;
+import io.crazydan.jingwei.app.AppConstants;
 import io.nop.core.lang.xml.XNode;
-import io.nop.core.lang.xml.parse.XNodeParser;
-import io.nop.xlang.xdsl.XDslKeys;
-
-import static io.crazydan.jingwei.app.coder.AppCoderConstants.ORM_DEFAULT_DOMAINS_PATH;
-import static io.crazydan.jingwei.app.coder.AppCoderConstants.ORM_DEFAULT_ENTITY_PATH;
-import static io.nop.orm.model.OrmModelConstants.XDSL_SCHEMA_ORM;
 
 /**
  *
@@ -35,33 +29,8 @@ import static io.nop.orm.model.OrmModelConstants.XDSL_SCHEMA_ORM;
  */
 public class AiModelDesignNormalizer {
 
+    /** 处理 {@link AppConstants#XDSL_SCHEMA_CODER_MODEL_DESIGN} 的根节点 */
     public static XNode normalize(XNode node) {
-        XDslKeys keys = XDslKeys.of(node);
-
-        patchDomains(node, keys);
-
-        XNode entitiesNode = node.childByTag("entities");
-        if (entitiesNode != null) {
-            entitiesNode.getChildren().forEach((child) -> patchEntity(child, keys));
-        }
-
-        DeltaMergerHelper.cleanNode(node, keys);
-
         return node;
-    }
-
-    protected static void patchDomains(XNode ormNode, XDslKeys keys) {
-        XNode deltaNode = XNodeParser.instance().parseFromVirtualPath(ORM_DEFAULT_DOMAINS_PATH);
-
-        DeltaMergerHelper.merge(ormNode, deltaNode, XDSL_SCHEMA_ORM);
-    }
-
-    protected static void patchEntity(XNode entityNode, XDslKeys keys) {
-        XNode deltaNode = XNodeParser.instance().parseFromVirtualPath(ORM_DEFAULT_ENTITY_PATH);
-
-        DeltaMergerHelper.merge(entityNode, deltaNode, "/nop/schema/orm/entity.xdef");
-
-        entityNode.removeAttr(keys.SCHEMA);
-        entityNode.removeAttrsWithPrefix("xmlns");
     }
 }

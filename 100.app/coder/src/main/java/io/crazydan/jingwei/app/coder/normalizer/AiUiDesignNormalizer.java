@@ -19,6 +19,7 @@
 
 package io.crazydan.jingwei.app.coder.normalizer;
 
+import io.crazydan.jingwei.app.AppConstants;
 import io.nop.core.lang.xml.XNode;
 
 /**
@@ -28,6 +29,7 @@ import io.nop.core.lang.xml.XNode;
  */
 public class AiUiDesignNormalizer {
 
+    /** 处理 {@link AppConstants#XDSL_SCHEMA_CODER_UI_DESIGN} 的根节点 */
     public static XNode normalize(XNode node) {
         return node;
     }

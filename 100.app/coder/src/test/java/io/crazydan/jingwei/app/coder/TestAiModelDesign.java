@@ -22,69 +22,45 @@ package io.crazydan.jingwei.app.coder;
 import java.util.Map;
 
 import io.crazydan.duzhou.framework.junit.NopJunitTestCase;
-import io.crazydan.jingwei.app.coder.model.AiUiDesign;
-import io.crazydan.jingwei.app.coder.model.AiUiModel;
+import io.crazydan.jingwei.app.coder.model.AiModelDesign;
+import io.crazydan.jingwei.app.coder.model.AiOrmModel;
 import io.nop.api.core.annotations.autotest.NopTestConfig;
+import io.nop.core.lang.xml.XNode;
 import io.nop.core.resource.IResource;
-import io.nop.core.resource.impl.InMemoryTextResource;
+import io.nop.orm.model.OrmModelConstants;
+import io.nop.xlang.xdsl.DslModelHelper;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
- * @date 2026-01-06
+ * @date 2026-01-25
  */
 @NopTestConfig(testConfigFile = "classpath:/application.yaml", localDb = true)
-public class TestAppCodeGenerator extends NopJunitTestCase {
+public class TestAiModelDesign extends NopJunitTestCase {
 
     @Test
-    public void get_genAppModel() {
+    public void test_genOrmModel() {
         String resourcePath = "test-01.ai-model-design.xml";
 
-//        AppCodeGenerator gen = new AppCodeGenerator();
-//        AppCodeGenConfig genConfig = createAppGenConfig();
-//
-//        File targetDir = new File(getTargetDir(), genConfig.getCode());
-//        gen.genModels(createResource(resourcePath), targetDir, genConfig);
-    }
-
-    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-    @Test
-    public void test_genUiModel() {
-        String resourcePath = "test-10.ai-ui-design.xml";
-
         AppCodeGenConfig genConfig = createAppGenConfig();
-        AiUiModel uiModel = genUiModel(resourcePath, genConfig);
-        assertNotNull(uiModel);
+        AiOrmModel ormModel = genOrmModel(resourcePath, genConfig);
+        assertNotNull(ormModel);
+
+        XNode node = DslModelHelper.dslModelToXNode(OrmModelConstants.XDSL_SCHEMA_ORM, ormModel);
+        assertEquals(attachmentXmlText("test-01-result.orm.xml"), node.xml());
     }
 
-    @Test
-    public void get_genAppPage() {
-        String resourcePath = "test-10.ai-ui-design.xml";
-
-//        AppCodeGenerator gen = new AppCodeGenerator();
-//        AppCodeGenConfig genConfig = createAppGenConfig();
-//
-//        File targetDir = new File(getTargetDir(), genConfig.getCode() + "/page");
-//        gen.genPages(createResource(resourcePath), targetDir, genConfig);
-    }
-
-    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-    protected IResource createResource(String path) {
-        return new InMemoryTextResource("/text/" + path, attachmentXmlText(path));
-    }
-
-    protected AiUiModel genUiModel(String path, AppCodeGenConfig genConfig) {
-        IResource resource = createResource(path);
-        AiUiDesign uiDesign = new AiUiDesign(resource, genConfig);
+    protected AiOrmModel genOrmModel(String path, AppCodeGenConfig genConfig) {
+        IResource resource = attachmentResource(path);
+        AiModelDesign modelDesign = new AiModelDesign(resource, genConfig);
 
         Map<String, Object> vars = Map.of();
 
-        return uiDesign.genUiModel(vars);
+        return modelDesign.genOrmModel(vars);
     }
 
     protected AppCodeGenConfig createAppGenConfig() {

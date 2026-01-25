@@ -14,7 +14,7 @@
   insertable（可新增）和 updatable（可更新），但不支持 queryable（可查询）和 sortable（可排序）
 - 对于明确要求需做掩码处理的数据，则通过 maskPattern 配置掩码规则，如
   3*4，表示保留前三位和后四位，其余位均替换为 *。注：仅支持以 * 占位
-- 日期、时间、时间戳类型属性的 stdDomain 均设置为 long，即日期的毫秒值。并同时配置 datePattern
+- 日期、时间、时间戳类型属性的 stdDomain 均设置为 datetime，即日期的毫秒值。并同时配置 datePattern
   用于指定该类属性值的格式化模式，缺省设置为 yyyy-MM-dd HH:mm:ss
 - 对于**虚属性**，其值是动态计算得到的，不对应数据库表字段，需设置 virtual 为 true，并在
   <computed> 内编写计算函数，如 return 'Hello, ' + entity.name;，其中 entity

@@ -1,7 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
+<!--
+  - 精卫（JingWei） - 衔木石填沧海，筑屏障护安全
+  - Copyright (C) 2026 Crazydan Studio <https://studio.crazydan.org>
+  -
+  - This program is free software: you can redistribute it and/or modify
+  - it under the terms of the GNU Lesser General Public License as published by
+  - the Free Software Foundation, either version 3 of the License, or
+  - (at your option) any later version.
+  -
+  - This program is distributed in the hope that it will be useful,
+  - but WITHOUT ANY WARRANTY; without even the implied warranty of
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  - GNU Lesser General Public License for more details.
+  -
+  - You should have received a copy of the GNU Lesser General Public License
+  - along with this program.
+  - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
+  -->
+
+<!-- [业务模型设计结构]
+-->
 <model-design xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="/nop/schema/xdef.xdef"
-              xmlns:db="db" xmlns:orm="orm"
+              xmlns:db="db" xmlns:orm="orm" xmlns:ref="ref"
               x:schema="/nop/schema/xdef.xdef"
 >
 
@@ -18,8 +39,14 @@
     </dicts>
 
     <entities xdef:body-type="list" xdef:key-attr="name">
+        <!-- [实体定义]
+        >
+        -->
         <entity name="!pascal-case" displayName="string"
                 deprecated="boolean" db:estimatedRowCount="int"
+                orm:createrProp="attr-name" orm:createTimeProp="attr-name"
+                orm:updaterProp="attr-name" orm:updateTimeProp="attr-name"
+                orm:deleteFlagProp="attr-name"
         >
             <description>string</description>
 
@@ -28,6 +55,18 @@
             </orm:unique-keys>
 
             <attrs xdef:body-type="list" xdef:key-attr="name">
+                <!-- [属性定义]
+
+                @ref:type [关联的类型]
+                    > 实体间关联关系的类型，其可选值为：
+                    > `one-to-one`（一对一）、`one-to-many`（一对多）
+                @ref:target [关联的目标实体]
+                    > 即，与哪个实体建立关系
+                @ref:targetAttr [关联的目标实体的属性]
+                    > 即，实体间的关联是通过目标实体的哪个属性建立起来的。
+                    > 当关联类型为 `one-to-one` 时，其始终为目标实体的 `id`，因此，无需设置该值，
+                    > 当关联类型为 `one-to-many` 时，其为对端以 `one-to-one` 反向关联回来的属性名
+                -->
                 <attr name="!camel-case" displayName="string"
                       propId="!int" mandatory="!boolean=false"
                       virtual="!boolean=false" published="!boolean=true"
@@ -36,14 +75,16 @@
                       maskPattern="string" datePattern="string"
                       internal="!boolean=false" deprecated="boolean"
 
-                      dict="dict-name"
-                      stdDomain="!std-domain"
+                      dict="dict-name" domain="!domain-name"
                       precision="int" scale="int"
                       defaultValue="any"
                       minValue="double" maxValue="double"
                       minLength="int" maxLength="int"
                       minFileSize="file-size" maxFileSize="file-size"
                       allowedFileTypes="mime-type-csv-string"
+
+                      ref:target="ref-entity-name" ref:type="ref-type"
+                      ref:targetAttr="ref-entity-attr-name" ref:cascadeDelete="boolean"
                 >
                     <description>string</description>
 
@@ -52,17 +93,6 @@
             </attrs>
         </entity>
     </entities>
-
-    <relations xdef:body-type="list" xdef:key-attr="name">
-        <relation name="!snake-case"
-                  source="!source-entity-name"
-                  sourceProp="!source-prop"
-                  sourcePropDisplayName="string"
-                  target="!target-entity-name"
-                  targetProp="target-to-sources-prop"
-                  targetPropDisplayName="string"
-        />
-    </relations>
 
     <services xdef:body-type="list" xdef:key-attr="name">
         <service name="!entity-name" displayName="string">

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<model-design xmlns:x="/nop/schema/xdsl.xdef"
+              xmlns:orm="orm" xmlns:ref="ref"
+              x:schema="/jingwei/app/schema/coder/model-design.xdef"
+>
+    <dicts>
+        <dict name="status" displayName="应用状态">
+            <description>记录应用当前所处的业务状态。</description>
+            <options>
+                <option value="010" code="DEVELOPING" displayName="开发中">
+                    <description>应用正在开发中，尚未有已激活的版本。</description>
+                </option>
+            </options>
+        </dict>
+        <dict name="version-status" displayName="应用版本状态">
+            <description>记录应用版本的生命周期状态。</description>
+            <options>
+                <option value="010" code="DEVELOPING" displayName="开发中">
+                    <description>版本正在开发或修改中。</description>
+                </option>
+            </options>
+        </dict>
+    </dicts>
+    <entities>
+        <entity name="App" displayName="应用"
+                orm:deleteFlagProp="deleted"
+        >
+            <description>用于管理个人或家庭的本地轻量级数字资产应用。</description>
+            <orm:unique-keys>
+                <key name="uk_code">code</key>
+            </orm:unique-keys>
+            <attrs>
+                <attr name="id" propId="1" orm:primary="true"
+                      domain="uuid" displayName="ID"
+                      mandatory="true"
+                      published="true" queryable="true"
+                      insertable="true" updatable="false"
+                />
+                <attr name="deleted" propId="6"
+                      domain="deleteFlag" displayName="是否已删除"
+                      published="true" queryable="true" sortable="true"
+                      insertable="true" updatable="true"
+                />
+
+                <attr name="code" propId="20" displayName="唯一标识" mandatory="true" insertable="true"
+                      updatable="false"
+                      published="true" queryable="true" sortable="true" domain="uuid">
+                    <description>应用的唯一识别码，在新增时由系统自动生成，全局唯一。</description>
+                </attr>
+                <attr name="name" propId="21" displayName="名字" mandatory="true" published="true" insertable="true"
+                      updatable="true" queryable="true" sortable="true" domain="string" minLength="1"
+                      maxLength="200">
+                    <description>应用的名称，长度不超过 200 个字符，不同应用可以重名。</description>
+                </attr>
+                <attr name="status" propId="22" displayName="状态" mandatory="true" published="true" insertable="true"
+                      updatable="true" queryable="true" sortable="true" domain="string" dict="status"
+                      defaultValue="010">
+                    <description>应用当前的状态，初始为“开发中”。应用在首次激活版本后会自动切换为“已启用”。</description>
+                </attr>
+                <attr name="description" propId="23" displayName="说明" deprecated="true"
+                      mandatory="false" published="true" insertable="true"
+                      updatable="true" queryable="true" sortable="false" domain="markdown">
+                    <description>对应用的详细描述，支持 Markdown 格式。</description>
+                </attr>
+
+                <attr name="versions" propId="24" displayName="版本列表"
+                      published="true" insertable="false" updatable="false"
+                      ref:target="AppVersion" ref:targetAttr="app" ref:type="one-to-many"
+                      ref:cascadeDelete="true"
+                >
+                </attr>
+                <attr name="activeVersion" propId="25" displayName="已激活版本" domain="entityRef"
+                      published="true" insertable="true" updatable="true"
+                      ref:target="AppVersion" ref:type="one-to-one"
+                >
+                </attr>
+            </attrs>
+        </entity>
+        <entity name="AppVersion" displayName="应用版本"
+                orm:createrProp="createdBy" orm:createTimeProp="createdAt"
+                orm:updaterProp="updatedBy" orm:updateTimeProp="updatedAt"
+                orm:deleteFlagProp="deleted"
+        >
+            <description>应用的具体版本信息，包含开发需求、生成的模型和 UI 代码等。</description>
+            <orm:unique-keys>
+                <key name="uk_app_version">app,name</key>
+            </orm:unique-keys>
+            <attrs>
+                <attr name="id" propId="1" orm:primary="true"
+                      domain="uuid" displayName="ID"
+                      mandatory="true"
+                      published="true" queryable="true"
+                      insertable="true" updatable="false"
+                />
+
+                <attr name="createdBy" propId="2"
+                      domain="userFlag" displayName="创建者"
+                      published="true" queryable="true" sortable="true"
+                      insertable="true" updatable="false"
+                />
+                <attr name="updatedBy" propId="3"
+                      domain="userFlag" displayName="更新者"
+                      published="true" queryable="true" sortable="true"
+                      insertable="true" updatable="true"
+                />
+                <attr name="createdAt" propId="4"
+                      domain="datetime" displayName="创建时间"
+                      published="true" queryable="true" sortable="true"
+                      insertable="true" updatable="false"
+                />
+                <attr name="updatedAt" propId="5"
+                      domain="datetime" displayName="更新时间"
+                      published="true" queryable="true" sortable="true"
+                      insertable="true" updatable="true"
+                />
+
+                <attr name="deleted" propId="6"
+                      domain="deleteFlag" displayName="是否已删除"
+                      published="true" queryable="true" sortable="true"
+                      insertable="true" updatable="true"
+                />
+
+                <attr name="name" propId="20" displayName="版本号" mandatory="false" published="true" insertable="true"
+                      updatable="true" queryable="true" sortable="true" domain="string">
+                    <description>版本号，遵循 x.y.z 三段式命名规则，每段最多由 3 位数字组成，例如 1.0.0。</description>
+                </attr>
+                <attr name="status" propId="21" displayName="状态" mandatory="true" published="true" insertable="true"
+                      updatable="true" queryable="true" sortable="true" domain="string" dict="version-status"
+                      defaultValue="010">
+                    <description>版本的状态，初始为“开发中”，发布后变为“已发布”。</description>
+                </attr>
+                <attr name="description" propId="22" displayName="说明" deprecated="true"
+                      mandatory="false" published="true" insertable="true"
+                      updatable="true" queryable="true" sortable="false" domain="text">
+                    <description>版本发布说明，描述所实现的功能、特色或对衍生版本所做的变更。</description>
+                </attr>
+
+                <attr name="app" propId="23" displayName="所属应用" domain="entityRef"
+                      mandatory="true" published="true" insertable="true"
+                      updatable="false" queryable="true" sortable="true"
+                      ref:target="App" ref:type="one-to-one"
+                >
+                    <description>当前版本所属的应用。</description>
+                </attr>
+                <attr name="derivedFrom" propId="24" displayName="衍生自" domain="entityRef"
+                      published="true" insertable="true" updatable="true"
+                      ref:target="AppVersion" ref:type="one-to-one"
+                >
+                </attr>
+            </attrs>
+        </entity>
+    </entities>
+</model-design>
