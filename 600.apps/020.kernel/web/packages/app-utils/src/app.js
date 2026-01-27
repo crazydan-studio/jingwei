@@ -4,7 +4,7 @@ import { graphql } from './http';
 const URL_PARAM_APP = 'app';
 
 /** 加载应用页面 */
-export async function loadAppPage({ appCode, el, forPreview, loading }) {
+export async function loadAppPage({ appCode, el, loading }) {
   const appConfig = getAppConfig();
   if (!el) {
     el = document.getElementById(appConfig.containerId);
@@ -13,7 +13,7 @@ export async function loadAppPage({ appCode, el, forPreview, loading }) {
   loading && startAppLoadingAnimation(el);
 
   try {
-    await doLoadAppPage({ appCode, el, forPreview });
+    await doLoadAppPage({ appCode, el });
   } finally {
     loading && endAppLoadingAnimation(el);
   }
@@ -50,26 +50,26 @@ export function endAppLoadingAnimation(el) {
   el.classList.add('done');
 }
 
-async function doLoadAppPage({ appCode, el, forPreview }) {
+async function doLoadAppPage({ appCode, el }) {
   const appConfig = getAppConfig();
   const ctx = appConfig.api.static;
 
-  const { App__loadAppPage } = await graphql(
+  const { App__loadPage } = await graphql(
     `
-      mutation ($app: String, $preview: Boolean) {
-        App__loadAppPage(app: $app, preview: $preview)
+      mutation ($app: String) {
+        App__loadPage(app: $app)
       }
     `,
-    { app: appCode, preview: !!forPreview }
+    { app: appCode }
   );
 
-  const app = await import(ctx + App__loadAppPage.js);
+  const app = await import(ctx + App__loadPage.js);
 
   if (el.__app__) {
     el.__app__.umount();
   }
 
-  App__loadAppPage.css.forEach((css) => addCssLink(ctx + css));
+  App__loadPage.css.forEach((css) => addCssLink(ctx + css));
 
   app.mount(el);
   el.__app__ = app;

@@ -86,12 +86,7 @@ public class AppCoreBizModel {
 
     @Description("加载指定应用的页面")
     @BizMutation
-    public Map<String, Object> loadAppPage(
-            @Optional @Name("app") String appCode,
-            @Optional @Name("preview") Boolean forPreview
-    ) {
-        // TODO 加载应用预览页面 /preview/{appCode}/{version}/index.js
-
+    public Map<String, Object> loadPage(@Optional @Name("app") String appCode) {
         if (StringHelper.isBlank(appCode)) {
             appCode = getPortalAppCode();
         }
