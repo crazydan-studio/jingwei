@@ -32,7 +32,7 @@ import io.nop.xlang.xpl.xlib.XplLibHelper;
 
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.SCOPE_VAR_codeGenConfig;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.TAG_ATTR_node;
-import static io.crazydan.jingwei.app.coder.AppCoderConstants.XLIB_APP_MODEL_GEN_PATH;
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.XLIB_APP_MODEL;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.XLIB_TAG_ModelDesignToOrmModel;
 
 /**
@@ -66,7 +66,7 @@ public class AiModelDesign {
     }
 
     protected <T> T callXlibTag(String tagName, Map<String, Object> vars) {
-        IXplTag tag = XplLibHelper.getTag(XLIB_APP_MODEL_GEN_PATH, tagName);
+        IXplTag tag = XplLibHelper.getTag(XLIB_APP_MODEL, tagName);
 
         IEvalScope scope = XLang.newEvalScope();
         if (vars != null) {

@@ -1,4 +1,4 @@
-<model-design xmlns:x="/nop/schema/xdsl.xdef" x:schema="/jingwei/app/schema/coder/model-design.xdef">
+<model-design xmlns:x="/nop/schema/xdsl.xdef" x:schema="/jingwei/app/coder/schema/model-design.xdef">
     <entities>
         <entity name="App">
             <attrs>

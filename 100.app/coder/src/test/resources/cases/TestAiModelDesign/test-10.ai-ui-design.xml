@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <ui-design xmlns:x="/nop/schema/xdsl.xdef"
-           x:schema="/jingwei/app/schema/coder/ui-design.xdef"
+           x:schema="/jingwei/app/coder/schema/ui-design.xdef"
 >
     <page title="个人数字资产应用开发系统"><![CDATA[
 <template>

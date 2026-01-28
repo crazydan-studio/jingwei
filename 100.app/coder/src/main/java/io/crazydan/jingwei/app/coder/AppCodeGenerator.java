@@ -42,8 +42,8 @@ import static io.crazydan.jingwei.app.coder.AppCoderConstants.BUILD_DIR_HIDDEN_B
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.BUILD_DIR_NODE_MODULES;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.SCOPE_VAR_codeGenConfig;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.SCOPE_VAR_codeGenModel;
-import static io.crazydan.jingwei.app.coder.AppCoderConstants.TEMPLATE_APP_MODEL_PATH;
-import static io.crazydan.jingwei.app.coder.AppCoderConstants.TEMPLATE_APP_PAGE_PATH;
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.CODEGEN_TEMPLATE_APP_MODEL;
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.CODEGEN_TEMPLATE_APP_PAGE;
 import static io.crazydan.jingwei.app.coder.AppCoderErrors.ERR_BUILD_NODE_MODULES_PATH_NOT_SPECIFIED;
 import static io.crazydan.jingwei.app.coder.AppCoderErrors.ERR_BUILD_NPM_PATH_NOT_SPECIFIED;
 import static io.nop.ai.core.AiCoreErrors.ARG_CONFIG_VAR;
@@ -77,7 +77,7 @@ public abstract class AppCodeGenerator {
         String targetDirPath = FileHelper.getAbsolutePath(targetDir);
         FileHelper.assureDirExists(targetDir);
 
-        XCodeGenerator gen = new XCodeGenerator(TEMPLATE_APP_MODEL_PATH, targetDirPath);
+        XCodeGenerator gen = new XCodeGenerator(CODEGEN_TEMPLATE_APP_MODEL, targetDirPath);
         // 保持用户定制的代码不变，仅更新以下划线开头的文件
         gen.forceOverride(false);
 
@@ -98,9 +98,11 @@ public abstract class AppCodeGenerator {
         Map<String, Object> vars = Map.of();
         AiUiModel uiModel = uiDesign.genUiModel(vars);
 
-        XCodeGenerator gen = new XCodeGenerator(TEMPLATE_APP_PAGE_PATH, buildDirPath);
+        XCodeGenerator gen = new XCodeGenerator(CODEGEN_TEMPLATE_APP_PAGE, buildDirPath);
         // 前端代码不支持用户定制，因此，强制更新所有文件
         gen.forceOverride(true);
+        // Note: 禁止格式化，以避免 Vue 等非标准 xml 格式化报错
+        gen.autoFormat(false);
 
         IEvalScope scope = XLang.newEvalScope();
         scope.setLocalValue(SCOPE_VAR_codeGenConfig, genConfig);

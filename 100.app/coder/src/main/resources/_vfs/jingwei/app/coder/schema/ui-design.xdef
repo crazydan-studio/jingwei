@@ -28,10 +28,12 @@
     <page title="!string">page-code</page>
 
     <components xdef:body-type="list" xdef:key-attr="name">
-        <component name="!camel-case">component-code</component>
+        <component name="!pascal-case">component-code</component>
     </components>
 
     <demo-data xdef:body-type="list" xdef:key-attr="name">
-        <api name="!api-name">json</api>
+        <action name="!action-name">
+            <source>xpl-fn:(...actionArgs)=>any</source>
+        </action>
     </demo-data>
 </ui-design>

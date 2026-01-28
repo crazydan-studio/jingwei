@@ -41,7 +41,8 @@ export default defineConfig({
     viteExternalsPlugin({
       vue: 'Vue',
       'naive-ui': 'naive',
-      'highlight.js': 'hljs'
+      'highlight.js': 'hljs',
+      '@app-utils': 'AppUtils',
     }),
     // https://github.com/nonzzz/vite-plugin-compression
     compression({

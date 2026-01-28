@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <model-design xmlns:x="/nop/schema/xdsl.xdef" xmlns:ext="ext"
-              x:schema="/jingwei/app/schema/coder/model-design.xdef"
+              x:schema="/jingwei/app/coder/schema/model-design.xdef"
 >
     <entities>
         <entity name="App">

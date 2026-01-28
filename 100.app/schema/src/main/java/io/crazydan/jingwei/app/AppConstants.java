@@ -33,9 +33,6 @@ public interface AppConstants {
     String VFS_NS_INSTALLATION_APP = "app-install-dir";
     String VFS_NS_STATIC_APP = "app-static-dir";
 
-    String XDSL_SCHEMA_CODER_MODEL_DESIGN = "/jingwei/app/schema/coder/model-design.xdef";
-    String XDSL_SCHEMA_CODER_UI_DESIGN = "/jingwei/app/schema/coder/ui-design.xdef";
-
     String XDSL_SCHEMA_APP_PACKAGE_RESOURCE = "/jingwei/app/schema/manifest/resource.xdef";
     String XDSL_SCHEMA_APP_RELEASING_MANIFEST = "/jingwei/app/schema/manifest/releasing.xdef";
     String XDSL_SCHEMA_APP_LOCAL_STORE_MANIFEST = "/jingwei/app/schema/manifest/local-store.xdef";

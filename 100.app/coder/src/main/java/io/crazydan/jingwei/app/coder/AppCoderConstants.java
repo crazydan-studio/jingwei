@@ -26,19 +26,25 @@ package io.crazydan.jingwei.app.coder;
  */
 public interface AppCoderConstants {
 
-    String ORM_DEFAULT_DOMAINS_PATH = "/jingwei/app/coder/default/orm-domains.xml";
+    String XDSL_ORM_DEFAULT_DOMAINS = "/jingwei/app/coder/default/orm-domains.xml";
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    String XLIB_APP_MODEL_GEN_PATH = "/jingwei/app/coder/xlib/app-model.xlib";
-    String XLIB_APP_PAGE_GEN_PATH = "/jingwei/app/coder/xlib/app-page.xlib";
+
+    String XDSL_SCHEMA_CODER_MODEL_DESIGN = "/jingwei/app/coder/schema/model-design.xdef";
+    String XDSL_SCHEMA_CODER_UI_DESIGN = "/jingwei/app/coder/schema/ui-design.xdef";
+
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    String XLIB_APP_MODEL = "/jingwei/app/coder/xlib/app-model.xlib";
+    String XLIB_APP_PAGE = "/jingwei/app/coder/xlib/app-page.xlib";
 
     String XLIB_TAG_ModelDesignToOrmModel = "ModelDesignToOrmModel";
     String XLIB_TAG_UiDesignToUiModel = "UiDesignToUiModel";
 
     String TAG_ATTR_node = "node";
 
-    String TEMPLATE_APP_MODEL_PATH = "/jingwei/app/templates/app-model";
-    String TEMPLATE_APP_PAGE_PATH = "/jingwei/app/templates/app-page";
+    String CODEGEN_TEMPLATE_APP_MODEL = "/jingwei/app/templates/app-model";
+    String CODEGEN_TEMPLATE_APP_PAGE = "/jingwei/app/templates/app-page";
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

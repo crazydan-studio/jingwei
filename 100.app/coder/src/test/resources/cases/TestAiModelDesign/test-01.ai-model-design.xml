@@ -2,7 +2,7 @@
 
 <model-design xmlns:x="/nop/schema/xdsl.xdef"
               xmlns:orm="orm" xmlns:ref="ref"
-              x:schema="/jingwei/app/schema/coder/model-design.xdef"
+              x:schema="/jingwei/app/coder/schema/model-design.xdef"
 >
     <dicts>
         <dict name="status" displayName="应用状态">

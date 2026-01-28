@@ -33,7 +33,7 @@ import io.nop.xlang.xpl.xlib.XplLibHelper;
 
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.SCOPE_VAR_codeGenConfig;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.TAG_ATTR_node;
-import static io.crazydan.jingwei.app.coder.AppCoderConstants.XLIB_APP_PAGE_GEN_PATH;
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.XLIB_APP_PAGE;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.XLIB_TAG_UiDesignToUiModel;
 
 /**
@@ -68,7 +68,7 @@ public class AiUiDesign {
     }
 
     protected <T> T callXlibTag(String tagName, Map<String, Object> vars) {
-        IXplTag tag = XplLibHelper.getTag(XLIB_APP_PAGE_GEN_PATH, tagName);
+        IXplTag tag = XplLibHelper.getTag(XLIB_APP_PAGE, tagName);
 
         IEvalScope scope = XLang.newEvalScope();
         if (vars != null) {

@@ -19,15 +19,15 @@
   - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
   -->
 
-<lib xmlns:x="/nop/schema/xdsl.xdef" xmlns:c="c" xmlns:xpl="xpl" xmlns:thisLib="thisLib"
+<lib xmlns:x="/nop/schema/xdsl.xdef" xmlns:c="c" xmlns:thisLib="thisLib"
      x:schema="/nop/schema/xlib.xdef"
 >
 
     <tags>
         <UiDesignToUiModel>
             <description>
-                将 xxx.ai-model-design.xml 转换为 OrmModel 对象，
-                以便于后续生成 xxx.orm.xml、xxx.xmeta、xxx.xbiz 等 DSL
+                将 xxx.ai-ui-design.xml 转换为 AiUiModel 对象，
+                以便于后续生成 UI 代码
             </description>
 
             <attr name="codeGenConfig" implicit="true"/>
@@ -38,20 +38,16 @@
                     import io.crazydan.jingwei.app.coder.model.AiUiModel;
 
                     const uiModel = new AiUiModel();
+
+                    for (let childNode of node.getChildren()) {
+                        if (childNode.tagName == 'page') {
+                            uiModel.page = xpl `<thisLib:_GenUiModelPage node="${childNode}"/>`;
+                        } else if (childNode.tagName == 'components') {
+                            uiModel.components = xpl `<thisLib:_GenUiModelComponents node="${childNode}"/>`;
+                        }
+                    }
+                    return uiModel;
                 ]]></c:script>
-
-                <c:for items="${node.getChildren()}" var="childNode">
-                    <c:if test="${childNode.tagName == 'page'}">
-                        <thisLib:_GenUiModelPage node="${childNode}" xpl:return="page"/>
-                        <c:script>uiModel.page = page;</c:script>
-                    </c:if>
-                    <c:if test="${childNode.tagName == 'components'}">
-                        <thisLib:_GenUiModelComponents node="${childNode}" xpl:return="components"/>
-                        <c:script>uiModel.components = components;</c:script>
-                    </c:if>
-                </c:for>
-
-                <c:script>return uiModel;</c:script>
             </source>
         </UiDesignToUiModel>
 
@@ -77,14 +73,15 @@
             <attr name="node" type="io.nop.core.lang.xml.XNode"/>
 
             <source>
-                <c:script>const components = [];</c:script>
+                <c:script><![CDATA[
+                    const components = [];
 
-                <c:for items="${node.getChildren()}" var="childNode">
-                    <thisLib:_GenUiModelComponent node="${childNode}" xpl:return="component"/>
-                    <c:script>components.add(component);</c:script>
-                </c:for>
-
-                <c:script>return components;</c:script>
+                    for (let childNode of node.getChildren()) {
+                        const component = xpl `<thisLib:_GenUiModelComponent node="${childNode}"/>`;
+                        components.add(component);
+                    }
+                    return components;
+                ]]></c:script>
             </source>
         </_GenUiModelComponents>
         <_GenUiModelComponent>

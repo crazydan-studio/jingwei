@@ -19,7 +19,7 @@
   - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
   -->
 
-<lib xmlns:x="/nop/schema/xdsl.xdef" xmlns:c="c" xmlns:xpl="xpl" xmlns:thisLib="thisLib"
+<lib xmlns:x="/nop/schema/xdsl.xdef" xmlns:c="c" xmlns:thisLib="thisLib"
      x:schema="/nop/schema/xlib.xdef"
 >
 
@@ -46,7 +46,7 @@
                     ormModel[OrmModelConstants.EXT_ALLOW_ID_AS_COL_NAME] = true;
 
                     const defaultOrmModel = //
-                        DslModelHelper.loadDslModelFromPath(AppCoderConstants.ORM_DEFAULT_DOMAINS_PATH);
+                        DslModelHelper.loadDslModelFromPath(AppCoderConstants.XDSL_ORM_DEFAULT_DOMAINS);
                     ormModel.domains = defaultOrmModel.domains;
 
                     $scope.setLocalValue(location(), 'ormModel', ormModel);
