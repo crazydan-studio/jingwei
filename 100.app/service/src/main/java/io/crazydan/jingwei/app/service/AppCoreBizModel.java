@@ -44,6 +44,7 @@ import io.nop.api.core.annotations.core.Optional;
 import io.nop.api.core.exceptions.NopException;
 import io.nop.biz.api.IBizObjectManager;
 import io.nop.core.resource.IResource;
+import io.nop.dbtool.core.DataBaseUpgrader;
 import io.nop.graphql.core.reflection.GraphQLBizModel;
 import io.nop.graphql.core.reflection.GraphQLBizModels;
 import io.nop.orm.IOrmTemplate;
@@ -173,6 +174,9 @@ public class AppCoreBizModel {
 
         this.ormModelProvider.setOrmModelResources(ormModelResources);
         this.ormTemplate.reloadModel();
+
+        DataBaseUpgrader upgrader = new DataBaseUpgrader(this.ormTemplate.getSessionFactory());
+        //upgrader.upgrade();
     }
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

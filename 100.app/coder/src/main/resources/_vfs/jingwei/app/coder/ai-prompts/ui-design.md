@@ -48,17 +48,19 @@
 - 数据列表（支持批量删除）。
 - 查看表单。
 - 新增/编辑表单（新增表单支持“保存并继续添加”）。
+- 优先采用通用的实体 CRUD 接口实现相关的数据操作，非必要不为实体的部分数据更新新增业务接口。
 
 ## 演示数据 (`<demo-data>`) 定义规则
 
 - 页面中的动态数据全部调用对应实体的数据操作接口得到，**禁止**放置模拟数据。
-- 根据数据操作接口创建演示数据，并以接口名作为 `<action>` 的 `name`，如 `User__save`、`User__findPage`。
-- 在 `<source>` 中可根据接口参数动态确定所要返回的数据，从而实现对多种情况的演示效果。
+- 根据数据操作接口创建演示数据，并以接口名作为 `<action>` 的 `name`，如 `UserEntity__save`、`UserEntity__findPage`。
+- 在 `<source>` 中可根据接口参数动态确定所要返回的数据，从而实现对多种情况的演示效果
+  - 代码中仅支持 `==` 作为等值判断
 
 示例：
 
 ```xml
-<action name="User__get">
+<action name="UserEntity__get">
   <source><![CDATA[
     if (id == 'c5fd5e8f5ec74d189b3d1023a79508ba') {
       return { id: id, name: 'Lily' };
@@ -68,25 +70,25 @@
   ]]></source>
 </action>
 
-<action name="User__save">
+<action name="UserEntity__save">
   <source><![CDATA[
     return { id: 'c5fd5e8f5ec74d189b3d1023a79508ba', name: 'Lily' };
   ]]></source>
 </action>
 
-<action name="User__findPage">
+<action name="UserEntity__findPage">
   <source><![CDATA[
     return { total: 12, items: [{ id: 'c5fd5e8f5ec74d189b3d1023a79508ba', name: 'Lily' }, ...] };
   ]]></source>
 </action>
 
-<action name="User__findList">
+<action name="UserEntity__findList">
   <source><![CDATA[
     return [{ id: 'c5fd5e8f5ec74d189b3d1023a79508ba', name: 'Lily' }, ...];
   ]]></source>
 </action>
 
-<action name="User__delete">
+<action name="UserEntity__delete">
   <source><![CDATA[
     if (id == 'c5fd5e8f5ec74d189b3d1023a79508ba') {
       return true;

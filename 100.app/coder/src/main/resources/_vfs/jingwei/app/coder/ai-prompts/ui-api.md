@@ -16,20 +16,36 @@ import { message, notification, dialog, loadingBar, modal } from '@app-utils';
 ```
 
 - `message`, `notification`, `dialog`, `loadingBar`, `modal`
-  分别由 Naive UI 的 `useMessage`, `useNotification`, `useDialog`, `useLoadingBar`, `useModal`
-  函数所创建，直接调用其实例的 API 接口即可
+  分别对应 Naive UI 的 `useMessage`, `useNotification`, `useDialog`, `useLoadingBar`, `useModal`
+  函数所创建的实例。
+- **禁止**从 naive-ui 导入 `useMessage`, `useNotification`, `useDialog`, `useLoadingBar`, `useModal`。
+
+### 文件上传与下载
+
+- 对于包含文件上传的保存/更新表单，需要先上传文件并得到文件 hash 值后，
+  再将该值赋值到对应文件属性上，再提交表单数据
+- 始终从依赖 `@app-utils` 中导入文件上传/下载的 URL 获取函数
+
+```js
+import { getFileUploadUrl, getFileDownloadUrl } from '@app-utils';
+```
+
+- `getFileUploadUrl()` 得到文件上传地址
+- `getFileDownloadUrl(fileHash)` 得到文件下载地址
+  - 图片等在浏览器中可直接显示的上传文件也通过该函数获取地址
 
 ### 数据操作接口调用
 
+- **禁止**对数据操作接口的调用逻辑做异常 catch，仅在需要时在 finally 中做收尾工作。
 - 所有的数据操作接口均采用 GraphQL 规范，并按如下形式调用：
 
 ```js
 import { graphql } from '@app-utils';
 
-const { User__save } = await graphql(
+const { UserEntity__save } = await graphql(
   `
     mutation ($data: Map) {
-      User__save(data: $data) {
+      UserEntity__save(data: $data) {
         id, name, age
       }
     }
@@ -39,19 +55,18 @@ const { User__save } = await graphql(
 ```
 
 - `graphql` 函数始终从依赖 `@app-utils` 中导入。
-- **禁止**对 `graphql` 做异常拦截，仅需要在 finally 中做收尾工作。
 
-#### 通用 CRUD 接口
+### 通用实体 CRUD 接口
 
 - `findPage(query: QueryBeanInput)`：分页查询
 
 ```js
 import { graphql } from '@app-utils';
 
-const { User__findPage } = await graphql(
+const { UserEntity__findPage } = await graphql(
   `
     query ($query: QueryBeanInput) {
-      User__findPage(query: $query) {
+      UserEntity__findPage(query: $query) {
         total
         items {
           id, name
@@ -82,10 +97,10 @@ const { User__findPage } = await graphql(
 ```js
 import { graphql } from '@app-utils';
 
-const { User__findList } = await graphql(
+const { UserEntity__findList } = await graphql(
   `
     query ($query: QueryBeanInput) {
-      User__findList(query: $query) {
+      UserEntity__findList(query: $query) {
         id, name
         roles {
           id
@@ -119,10 +134,10 @@ const { User__findList } = await graphql(
 ```js
 import { graphql } from '@app-utils';
 
-const { User__findFirst } = await graphql(
+const { UserEntity__findFirst } = await graphql(
   `
     query ($query: QueryBeanInput) {
-      User__findFirst(query: $query) {
+      UserEntity__findFirst(query: $query) {
         id, name
         roles {
           id
@@ -140,10 +155,10 @@ const { User__findFirst } = await graphql(
 ```js
 import { graphql } from '@app-utils';
 
-const { User__save } = await graphql(
+const { UserEntity__save } = await graphql(
   `
     mutation ($data: Map) {
-      User__save(data: $data) {
+      UserEntity__save(data: $data) {
         id, name, age
       }
     }
@@ -157,10 +172,10 @@ const { User__save } = await graphql(
 ```js
 import { graphql } from '@app-utils';
 
-const { User__update } = await graphql(
+const { UserEntity__update } = await graphql(
   `
     mutation ($id: String, $data: Map) {
-      User__update(id: $id, data: $data) {
+      UserEntity__update(id: $id, data: $data) {
         id
         name
       }
@@ -175,10 +190,10 @@ const { User__update } = await graphql(
 ```js
 import { graphql } from '@app-utils';
 
-const { User__get } = await graphql(
+const { UserEntity__get } = await graphql(
   `
     mutation ($id: String) {
-      User__get(id: $id) {
+      UserEntity__get(id: $id) {
         id
         name
         roles {
@@ -200,7 +215,7 @@ import { graphql } from '@app-utils';
 await graphql(
   `
     mutation ($id: String) {
-      User__delete(id: $id)
+      UserEntity__delete(id: $id)
     }
   `,
   { id: 'c5fd5e8f5ec74d189b3d1023a79508ba' }
@@ -215,7 +230,7 @@ import { graphql } from '@app-utils';
 await graphql(
   `
     mutation ($ids: [String]) {
-      User__batchDelete(ids: $ids)
+      UserEntity__batchDelete(ids: $ids)
     }
   `,
   { ids: ['c5fd5e8f5ec74d189b3d1023a79508ba', 'c5fd5e8f5ec74d189b3d1023a79508bc'] }
@@ -230,7 +245,7 @@ import { graphql } from '@app-utils';
 await graphql(
   `
     mutation ($ids: [String], $data: Map) {
-      Product__batchUpdate(ids: $ids, data: $data)
+      ProductEntity__batchUpdate(ids: $ids, data: $data)
     }
   `,
   { ids: ['c5fd5e8f5ec74d189b3d1023a79508ba', 'c5fd5e8f5ec74d189b3d1023a79508bc'], data: { price: 123, amount: 321 } }

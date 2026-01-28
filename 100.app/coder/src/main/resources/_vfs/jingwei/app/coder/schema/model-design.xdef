@@ -85,7 +85,8 @@
         >
             <description>string</description>
 
-            <arg name="!var-name" displayName="string"
+            <arg xdef:unique-attr="name"
+                 name="!var-name" displayName="string"
                  mandatory="!boolean=false"
                  type="!entity-name-or-data-type"
             >

@@ -3,6 +3,7 @@
 ## 核心原则
 
 - **设计范围**：聚焦于需求中描述的核心业务实体（如 App, AppVersion）。排除通用模型（如 User, Role, Permission 等）。
+- **命名**：所有实体名均以 `Entity` 为后缀，如 UserEntity、AppEntity。
 - **主键**：所有实体均以 id 作为主键，且不使用复合主键。
 - **唯一键** (`orm:unique-keys`)：
   - 仅用于定义需要在数据库层面保证唯一性的、除主键之外的属性或属性组合。
@@ -60,7 +61,7 @@
 
 ```xml
 <attr name="user" domain="entityRef"
-      ref:target="User" ref:type="one-to-one"
+      ref:target="UserEntity" ref:type="one-to-one"
 />
 ```
 
@@ -71,7 +72,7 @@
 
 ```xml
 <attr name="users" domain="entityRef"
-      ref:target="User" ref:targetAttr="group" ref:type="one-to-many"
+      ref:target="UserEntity" ref:targetAttr="group" ref:type="one-to-many"
       ref:cascadeDelete="true"
 />
 ```
@@ -89,6 +90,7 @@
 ## 默认属性定义规范
 
 - 主键是每个实体必须定义的属性。
+- `propId` 从 1 开始递增，最大不超过 20。
 - 对于主要实体，必须定义软删除属性，并在 `<entity>` 上设置 orm:deleteFlagProp="deleted"。
 - 对于需要启用审计支持的实体，则需要定义审计属性，并在 `<entity>` 上配置 orm:createrProp, orm:createTimeProp, orm:updaterProp, orm:updateTimeProp。
 - 除了主键属性名必须为 id 以外，软删除、审计属性可以自由命名，但优先采用下面示例中的名字。
@@ -152,4 +154,4 @@
 
 - 仅定义实体增删改查以外的接口。
 - 对于不涉及实体数据变更的接口需配置 `type="query"`，而影响实体数据变化的接口则配置 `type="mutation"`。
-- 接口名以 `实体__接口名` 形式命名，如 `User__changePassword`。
+- 接口名以 `实体名__接口名` 形式命名，如 `UserEntity__changePassword`。

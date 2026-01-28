@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-
-<c:include xmlns:c="c"
-           src="/nop/templates/orm/{appName}-service/src/main/resources/_vfs/{moduleId}/model/{!entityModel.notGenCode}{entityModel.shortName}/_{entityModel.shortName}.xbiz.xgen"/>

@@ -1,4 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<c:include xmlns:c="c"
-           src="/nop/templates/orm/{appName}-service/src/main/resources/_vfs/{moduleId}/model/{!entityModel.notGenCode}{entityModel.shortName}/{entityModel.shortName}.xbiz.xgen"/>
+<!-- Note: graphql:base="crud" 表示继承 CrudBizModel 模型中的所有方法，适用于动态加载的类型 -->
+<biz xmlns:x="/nop/schema/xdsl.xdef" xmlns:graphql="graphql"
+     xmlns:xpl="xpl" xmlns:biz-gen="biz-gen"
+     x:schema="/nop/schema/biz/xbiz.xdef"
+     graphql:base="crud"
+>
+
+    <x:gen-extends>
+        <biz-gen:DefaultBizGenExtends
+                forEntity="true"
+                entityName="${entityModel.name}"
+                xpl:lib="/nop/core/xlib/biz-gen.xlib"
+                xpl:ignoreTag="true"
+        />
+    </x:gen-extends>
+
+    <x:post-extends>
+        <biz-gen:DefaultBizPostExtends
+                xpl:lib="/nop/core/xlib/biz-gen.xlib"
+                xpl:ignoreTag="true"
+        />
+    </x:post-extends>
+</biz>
