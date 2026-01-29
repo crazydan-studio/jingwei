@@ -108,12 +108,9 @@ public class AppReleasingBuilder extends AppCodeGenerator {
 
     private void copySource(AppReleasing_Manifest manifest, File targetDir) {
         AppPackage_Resource[] pkgResources = new AppPackage_Resource[] {
-                manifest.getRequirementResource().getAppDesign(),
-                manifest.getRequirementResource().getModelDesign(),
-                manifest.getRequirementResource().getUiDesign(),
+                manifest.getRequirementResource().getModelDesign(), manifest.getRequirementResource().getUiDesign(),
                 //
-                manifest.getCoderResource().getModelDesign(),
-                manifest.getCoderResource().getUiDesign(),
+                manifest.getCoderResource().getModelDesign(), manifest.getCoderResource().getUiDesign(),
                 };
 
         for (AppPackage_Resource pkgResource : pkgResources) {
@@ -147,10 +144,6 @@ public class AppReleasingBuilder extends AppCodeGenerator {
         AppPackage_Resource resource;
         // ====================================================
         AppReleasing_RequirementResource requirement = manifest.getRequirementResource();
-
-        resource = requirement.getAppDesign();
-        resource = ifNotNullThenGet(resource, cloneResource);
-        cloned.getRequirementResource().setAppDesign(resource);
 
         resource = requirement.getModelDesign();
         resource = ifNotNullThenGet(resource, cloneResource);

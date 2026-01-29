@@ -62,6 +62,7 @@ public class AiPromptGenerator {
     public String getModelDesignCodeFromResponse(String response) {
         IPromptTemplate promptTemplate = this.promptTemplateManager.loadPromptTemplateFromPath(PROMPT_MODEL_DESIGN);
 
+        response = cleanResponse(response);
         return getCodeFromResponse(promptTemplate, response);
     }
 
@@ -80,6 +81,7 @@ public class AiPromptGenerator {
     public String getUiDesignCodeFromResponse(String response) {
         IPromptTemplate promptTemplate = this.promptTemplateManager.loadPromptTemplateFromPath(PROMPT_UI_DESIGN);
 
+        response = cleanResponse(response);
         return getCodeFromResponse(promptTemplate, response);
     }
 
@@ -99,5 +101,10 @@ public class AiPromptGenerator {
 
         XNode node = (XNode) resp.getOutput("RESULT");
         return node.xml();
+    }
+
+    protected String cleanResponse(String response) {
+        return response.replaceAll("<\\?xml .+\\?>", "") //
+                       .replaceAll("===", "==");
     }
 }

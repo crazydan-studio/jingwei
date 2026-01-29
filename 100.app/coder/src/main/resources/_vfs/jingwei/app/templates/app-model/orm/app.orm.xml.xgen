@@ -16,9 +16,10 @@
 
         ormNode.childByTag('entities')?.children?.forEach(entity => {
             const aliases = new ArrayList();
+            const notGenCols = new ArrayList();
 
             entity.childByTag('columns')?.children?.forEach(col => {
-                let jsonCol = !col.attrCsvSet('tagSet')?.contains('del')
+                const jsonCol = !col.attrCsvSet('tagSet')?.contains('del')
                                 && (col.attrCsvSet('tagSet')?.contains('json')
                                     || col.getAttr('stdDomain') == 'json');
                 if (jsonCol) {
@@ -36,10 +37,18 @@
 
                     aliases.add(alias);
                 }
+
+                const notGen = col.attrCsvSet('tagSet')?.contains('not-gen');
+                if (notGen) {
+                    notGenCols.add(col);
+                }
             });
 
             if (!aliases.isEmpty()) {
                 entity.makeChild('aliases').appendChildren(aliases);
+            }
+            if (!notGenCols.isEmpty()) {
+                entity.childByTag('columns')?.children?.removeAll(notGenCols);
             }
         });
     ]]></c:script>

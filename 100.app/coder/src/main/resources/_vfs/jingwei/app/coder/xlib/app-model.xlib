@@ -282,7 +282,11 @@
                         column.tagSet.add('del');
                     }
                     const virtual = node.attrBoolean('virtual');
-                    column.notGenCode = deprecated || virtual;
+                    const mapTo = node.attrText('mapTo');
+                    const notGen = deprecated || virtual || !$String.isBlank(mapTo);
+                    if (notGen) {
+                        column.tagSet.add('not-gen');
+                    }
 
                     const dict = node.attrText('dict');
                     if (!$String.isBlank(dict)) {
@@ -296,6 +300,8 @@
                     column['meta:minLength'] = node.attrInt('minLength');
                     column['meta:maxLength'] = node.attrInt('maxLength');
                     column['meta:allowedFileTypes'] = node.attrText('allowedFileTypes');
+
+                    column['meta:mapToProp'] = mapTo;
                     if (virtual) {
                         column['meta:computed'] = node.childContentText('computed');
                     }

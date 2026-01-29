@@ -45,8 +45,6 @@
     > 应用功能、模型、UI 设计的需求说明文档。应用功能需求必须指定，而模型和 UI 需求必须至少指定一项。
     -->
     <requirementResource xdef:name="AppReleasing_RequirementResource">
-        <appDesign xdef:ref="resource.xdef"/>
-
         <modelDesign xdef:ref="resource.xdef"/>
         <uiDesign xdef:ref="resource.xdef"/>
     </requirementResource>

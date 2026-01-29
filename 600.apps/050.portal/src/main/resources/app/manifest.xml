@@ -30,7 +30,6 @@
     <author name="Crazydan Studio" url="https://studio.crazydan.org"/>
 
     <requirementResource>
-        <appDesign path="source/app-requirements.md"/>
         <modelDesign path="source/model-requirements.md"/>
         <uiDesign path="source/ui-requirements.md"/>
     </requirementResource>

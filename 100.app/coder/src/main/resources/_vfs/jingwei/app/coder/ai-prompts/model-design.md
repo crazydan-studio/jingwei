@@ -17,11 +17,14 @@
 - **敏感数据**：密码、密钥等敏感属性，需设置 `published="false"`，通常允许 `insertable="true"` 和 `updatable="true"`，但禁止 `queryable="true"` 和 `sortable="true"`。
 - **数据掩码**：需脱敏显示的属性，通过 `maskPattern` 配置规则，例如 `3*4` 表示保留前 3位和后 4 位，中间用 `*` 填充。
 - **日期时间**：所有日期、时间、时间戳属性，`domain` 均设为 `date` 或 `datetime`，并通过 `datePattern` 指定显示格式，默认值为 `yyyy-MM-dd HH:mm:ss`。
-- **虚属性** (`virtual="true"`)：值由计算得到，无对应数据库字段。计算逻辑写在 `<computed>` 标签内，可使用 `entity` 引用当前实例的其他属性，或调用内置 XPL 标签函数。
+- **虚属性** (`virtual="true"`)：值由计算得到，无对应数据库字段。计算逻辑写在 `<computed>` 标签内，可使用 `entity` 引用当前实例的其他属性，或调用内置 XPL 标签函数
+  - 对于简单的对关联对象属性的取值，优先采用**属性映射**机制
 - **描述说明** (`<description>`)：用于指导用户输入，需用**简洁易懂的业务语言**描述该属性的作用、格式、示例等，**避免使用技术术语**，且**不要重复属性名**。
 - **中英文排版**：在描述、显示名称等文本中，在中文与英文、数字之间**必须添加空格**，但中文标点与英文、数字之间**不能加空格**。
   > 示例：`这是一个示例 example 123。`
 - **文件类型**：`domain` 为 `file` 或 `fileList` 的属性，其必须通过 `allowedFileTypes` 指定允许的 MIME 类型。
+- **属性映射** (`mapTo`)：可以将属性映射到关联对象的属性上。不是虚属性。支持对其做插入、修改、查询和排序。
+  > `<attr name="userName" mapTo="user.nam"/>` 表示定义的 `userName` 将被映射到 `user.name` 上
 
 ### 数据字典 (`<dict>`) 定义规则
 
@@ -55,6 +58,7 @@
 
 ### 关联关系定义规则
 
+- **只有**一对一、一对多两种关联类型
 - **一对一（`ref:type="one-to-one"`）**：从父实体（源端）关联子实体（目标端）。
   **禁止**在父实体上显式定义外键属性（如 `managerId`），关联属性名应体现业务含义
 
@@ -141,6 +145,7 @@
       domain="deleteFlag" displayName="是否已删除"
       published="true" queryable="true" sortable="true"
       insertable="true" updatable="true"
+      defaultValue="false"
 />
 ```
 

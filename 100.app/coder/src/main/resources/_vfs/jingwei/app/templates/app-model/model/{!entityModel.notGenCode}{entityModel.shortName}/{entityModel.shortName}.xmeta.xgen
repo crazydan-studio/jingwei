@@ -19,8 +19,8 @@
     >
         <meta>
             <props>
-                <!-- json 字段不暴露给前端（直接移除），采用 alias 方式屏蔽内部结构 -->
                 <c:for var="col" items="${entityModel.columns}">
+                    <!-- json 字段不暴露给前端（直接移除），采用 alias 方式屏蔽内部结构 -->
                     <c:script><![CDATA[
                         let colComp = entityModel.getComponent(col.name + "Component");
                         let jsonCol = colComp != null && colComp.className.$simpleClassName() == 'JsonOrmComponent'
@@ -28,6 +28,8 @@
                     <c:if test="${jsonCol}">
                         <prop name="${col.name}" x:override="remove"/>
                     </c:if>
+
+                    <prop name="${col.name}" mapToProp="${col['meta:mapToProp']}"/>
                 </c:for>
                 <!-- JsonOrmComponent 不暴露给前端（直接移除），采用 alias 方式屏蔽内部结构 -->
                 <c:for var="comp" items="${entityModel.components}">

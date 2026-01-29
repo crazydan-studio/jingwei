@@ -21,6 +21,7 @@ package io.crazydan.jingwei.app;
 
 import java.io.File;
 
+import io.crazydan.duzhou.framework.commons.FileHelper;
 import io.crazydan.duzhou.framework.commons.StringHelper;
 import io.crazydan.duzhou.framework.junit.NopJunitTestCase;
 import io.crazydan.jingwei.app.coder.prompt.AiPromptGenerator;
@@ -46,7 +47,8 @@ public class TestAiCoder extends NopJunitTestCase {
 
         AiPromptGenerator promptGenerator = new AiPromptGenerator(this.promptTemplateManager);
 
-        String requirements = attachmentText("model-requirements.md");
+        File source = new File(projectDir, "src/main/resources/app/source/model-requirements.md");
+        String requirements = FileHelper.readText(source, StringHelper.ENCODING_UTF8);
         String prompt = promptGenerator.genModelDesignPrompt(requirements);
 
         File target = new File(projectDir, "src/test/resources/cases/TestAiCoder/prompt-model-design.md");
@@ -54,7 +56,8 @@ public class TestAiCoder extends NopJunitTestCase {
         resource.writeText(prompt, StringHelper.ENCODING_UTF8);
 
         //
-        requirements = attachmentText("ui-requirements.md");
+        source = new File(projectDir, "src/main/resources/app/source/ui-requirements.md");
+        requirements = FileHelper.readText(source, StringHelper.ENCODING_UTF8);
         prompt = promptGenerator.genUiDesignPrompt(requirements);
 
         target = new File(projectDir, "src/test/resources/cases/TestAiCoder/prompt-ui-design.md");

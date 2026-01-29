@@ -68,6 +68,8 @@
                       minFileSize="file-size" maxFileSize="file-size"
                       allowedFileTypes="mime-type-csv-string"
 
+                      mapTo="attr-path"
+
                       ref:target="ref-entity-name" ref:type="ref-type"
                       ref:targetAttr="ref-entity-attr-name" ref:cascadeDelete="boolean"
                 >

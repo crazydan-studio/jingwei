@@ -90,6 +90,8 @@ const { UserEntity__findPage } = await graphql(
     orderBy: [{ name: 'name', desc: true }, { name: 'age', desc: false }]
   } }
 );
+
+const { total, items } = UserEntity__findPage;
 ```
 
 - `findList(query: QueryBeanInput)`：查询并返回所有数据
@@ -127,6 +129,8 @@ const { UserEntity__findList } = await graphql(
     }
   } }
 );
+
+const [ user1, user2, ... ] = UserEntity__findList;
 ```
 
 - `findFirst(query: QueryBeanInput)`：条件查询首条
@@ -148,6 +152,8 @@ const { UserEntity__findFirst } = await graphql(
   `，
   { query: { filter: {...} } }
 );
+
+const { id, name, roles } = UserEntity__findFirst;
 ```
 
 - `save(data: Map)`：新建数据
@@ -165,6 +171,8 @@ const { UserEntity__save } = await graphql(
   `,
   { data: { name: 'Lily', age: 18, ... } }
 );
+
+const { id, name, age } = UserEntity__save;
 ```
 
 - `update(id: String, data: Map)`：更新数据
@@ -183,6 +191,8 @@ const { UserEntity__update } = await graphql(
   `,
   { id: 'c5fd5e8f5ec74d189b3d1023a79508ba', data: { name: 'Tom' } }
 );
+
+const { id, name } = UserEntity__update;
 ```
 
 - `get(id: String)`：获取数据
@@ -205,6 +215,8 @@ const { UserEntity__get } = await graphql(
   `,
   { id: 'c5fd5e8f5ec74d189b3d1023a79508ba' }
 );
+
+const { id, name, roles } = UserEntity__get;
 ```
 
 - `delete(id: String)`：删除数据

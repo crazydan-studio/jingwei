@@ -18,13 +18,6 @@ public abstract class _AppReleasing_RequirementResource extends io.nop.core.reso
     
     /**
      *  应用打包资源
-     * xml name: appDesign
-     * 
-     */
-    private io.crazydan.jingwei.app.model.AppPackage_Resource _appDesign ;
-    
-    /**
-     *  应用打包资源
      * xml name: modelDesign
      * 
      */
@@ -36,25 +29,6 @@ public abstract class _AppReleasing_RequirementResource extends io.nop.core.reso
      * 
      */
     private io.crazydan.jingwei.app.model.AppPackage_Resource _uiDesign ;
-    
-    /**
-     * 应用打包资源
-     * xml name: appDesign
-     *  
-     */
-    
-    public io.crazydan.jingwei.app.model.AppPackage_Resource getAppDesign(){
-      return _appDesign;
-    }
-
-    
-    public void setAppDesign(io.crazydan.jingwei.app.model.AppPackage_Resource value){
-        checkAllowChange();
-        
-        this._appDesign = value;
-           
-    }
-
     
     /**
      * 应用打包资源
@@ -102,8 +76,6 @@ public abstract class _AppReleasing_RequirementResource extends io.nop.core.reso
 
         if(cascade){ //NOPMD - suppressed EmptyControlStatement - Auto Gen Code
         
-           this._appDesign = io.nop.api.core.util.FreezeHelper.deepFreeze(this._appDesign);
-            
            this._modelDesign = io.nop.api.core.util.FreezeHelper.deepFreeze(this._modelDesign);
             
            this._uiDesign = io.nop.api.core.util.FreezeHelper.deepFreeze(this._uiDesign);
@@ -115,7 +87,6 @@ public abstract class _AppReleasing_RequirementResource extends io.nop.core.reso
     protected void outputJson(IJsonHandler out){
         super.outputJson(out);
         
-        out.putNotNull("appDesign",this.getAppDesign());
         out.putNotNull("modelDesign",this.getModelDesign());
         out.putNotNull("uiDesign",this.getUiDesign());
     }
@@ -129,7 +100,6 @@ public abstract class _AppReleasing_RequirementResource extends io.nop.core.reso
     protected void copyTo(AppReleasing_RequirementResource instance){
         super.copyTo(instance);
         
-        instance.setAppDesign(this.getAppDesign());
         instance.setModelDesign(this.getModelDesign());
         instance.setUiDesign(this.getUiDesign());
     }
