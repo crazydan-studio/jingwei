@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.crazydan.duzhou.framework.junit.NopJunitAutoTestCase;
+import io.crazydan.jingwei.app.coder.prompt.AiPromptGenerator;
 import io.nop.ai.core.api.chat.AiChatOptions;
 import io.nop.ai.core.api.messages.AiChatExchange;
 import io.nop.ai.core.command.AiCommand;
@@ -32,7 +33,6 @@ import io.nop.ai.core.prompt.IPromptTemplateManager;
 import io.nop.ai.core.xdef.AiXDefHelper;
 import io.nop.api.core.annotations.autotest.EnableSnapshot;
 import io.nop.api.core.annotations.autotest.NopTestConfig;
-import io.nop.core.lang.eval.IEvalScope;
 import io.nop.core.lang.xml.XNode;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
@@ -46,49 +46,23 @@ import static io.crazydan.jingwei.app.coder.AppCoderConstants.XDSL_SCHEMA_CODER_
  * @date 2026-01-01
  */
 @NopTestConfig(testConfigFile = "classpath:/application.yaml", localDb = true)
-public class TestAiPrompt extends NopJunitAutoTestCase {
+public class TestAiPromptGenerator extends NopJunitAutoTestCase {
     @Inject
     IPromptTemplateManager promptTemplateManager;
 
     @EnableSnapshot
     @Test
     public void test_app_design() {
-        IPromptTemplate promptTemplate = loadPrompt("/jingwei/app/coder/ai-prompts/model-design.prompt.yaml");
+        AiPromptGenerator promptGenerator = new AiPromptGenerator(this.promptTemplateManager);
 
-        Map<String, Object> vars = new HashMap<>();
-        vars.put("modelDesignXdef", loadXNode(XDSL_SCHEMA_CODER_MODEL_DESIGN).xml());
-        vars.put("modelRequirements", inputText("model-requirements.md"));
-
-        IEvalScope scope = promptTemplate.prepareInputs(vars);
-        String prompt = promptTemplate.generatePrompt(scope);
-//        outputText("prompt-model-design.md", prompt);
-
-        AiChatExchange response = new AiChatExchange();
-        String content = inputText("response-model-design.md");
-        response.setContent(content);
-        promptTemplate.processChatResponse(response, scope);
-
-        XNode node = (XNode) response.getOutput("RESULT");
-        node.dump();
+        String requirements = inputText("model-requirements.md");
+        String prompt = promptGenerator.genModelDesignPrompt(requirements);
+        outputText("prompt-model-design.md", prompt);
 
         //
-        promptTemplate = loadPrompt("/jingwei/app/coder/ai-prompts/ui-design.prompt.yaml");
-
-        vars = new HashMap<>();
-        vars.put("uiDesignXdef", loadXNode(XDSL_SCHEMA_CODER_UI_DESIGN).xml());
-        vars.put("uiRequirements", inputText("ui-requirements.md"));
-
-        scope = promptTemplate.prepareInputs(vars);
-        prompt = promptTemplate.generatePrompt(scope);
-//        outputText("prompt-ui-design.md", prompt);
-
-        response = new AiChatExchange();
-        content = inputText("response-ui-design.md");
-        response.setContent(content);
-        promptTemplate.processChatResponse(response, scope);
-
-        node = (XNode) response.getOutput("RESULT");
-        node.dump();
+        requirements = inputText("ui-requirements.md");
+        prompt = promptGenerator.genUiDesignPrompt(requirements);
+        outputText("prompt-ui-design.md", prompt);
     }
 
     @EnableSnapshot

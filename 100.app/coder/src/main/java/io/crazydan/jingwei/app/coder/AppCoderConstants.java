@@ -74,4 +74,9 @@ public interface AppCoderConstants {
 
     String ORM_ONE_TO_ONE = "one-to-one";
     String ORM_ONE_TO_MANY = "one-to-many";
+
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    String PROMPT_MODEL_DESIGN = "/jingwei/app/coder/ai-prompts/model-design.prompt.yaml";
+    String PROMPT_UI_DESIGN = "/jingwei/app/coder/ai-prompts/ui-design.prompt.yaml";
 }

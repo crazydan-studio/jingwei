@@ -25,7 +25,7 @@
   - **必填**。`domain="string"`, `maxLength="200"`。
   - 不要求唯一，可重复。
 - `bizDomain` (**所属业务域**)：
-  - **必填**。`domain="string"`。作为应用内部业务模型的命名空间标识，如 `user`、`org` 等。
+  - **必填**。`domain="string"`。限定最大长度 20。作为应用内部业务模型的命名空间标识，如 `user`、`org` 等。
 - `icon` (**图标**)：
   - `domain="file"`。
   - **文件限制**：`allowedFileTypes` 为 `image/jpeg,image/png,image/svg+xml,image/webp`。

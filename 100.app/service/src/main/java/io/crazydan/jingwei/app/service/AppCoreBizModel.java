@@ -176,7 +176,7 @@ public class AppCoreBizModel {
         this.ormTemplate.reloadModel();
 
         DataBaseUpgrader upgrader = new DataBaseUpgrader(this.ormTemplate.getSessionFactory());
-        //upgrader.upgrade();
+        upgrader.upgrade();
     }
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
