@@ -25,11 +25,9 @@
     import io.crazydan.jingwei.app.AppConstants;
     import io.nop.core.resource.ResourceConstants;
 
+    const builder = new AppReleasingBuilder('pnpm');
+
     const rootDir = FileHelper.getMavenProjectRoot(codeGenerator);
-    const sharedNodeModulesDir = FileHelper.getAbsoluteFile(rootDir, '../../900.builder/node_modules');
-
-    const builder = new AppReleasingBuilder('npm', sharedNodeModulesDir.getAbsolutePath());
-
     const sourceDir = new File(rootDir, 'src/main/resources/app');
     const targetDir = new File(rootDir, 'target/classes/app');
     const buildDir = new File(rootDir, 'target/app-builder');

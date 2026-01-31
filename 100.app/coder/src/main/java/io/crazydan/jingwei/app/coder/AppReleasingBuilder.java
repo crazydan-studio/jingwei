@@ -54,8 +54,8 @@ public class AppReleasingBuilder extends AppCodeGenerator {
         super();
     }
 
-    public AppReleasingBuilder(String npmPath, String nodeModulesPath) {
-        super(npmPath, nodeModulesPath);
+    public AppReleasingBuilder(String pnpmPath) {
+        super(pnpmPath);
     }
 
     public AppReleasing_Manifest build(String manifestVPath, File targetDir) {

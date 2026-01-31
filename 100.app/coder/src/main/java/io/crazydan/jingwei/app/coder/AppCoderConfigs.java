@@ -35,10 +35,8 @@ import static io.nop.api.core.config.AppConfig.varRef;
 public interface AppCoderConfigs {
     SourceLocation s_loc = SourceLocation.fromClass(AppCoderConfigs.class);
 
-    @Description("npm 可执行文件路径。缺省为 npm，即在环境变量 PATH 中搜索名为 npm 的可执行文件")
-    IConfigReference<String> CFG_APP_BUILD_NPM_PATH = //
-            varRef(s_loc, "jingwei.app.build.npm.path", String.class, "npm");
-    @Description("共享的 node_modules 目录路径。必须提前在该目录中安装构建所需的依赖包，构建过程中不会尝试更新")
-    IConfigReference<String> CFG_APP_BUILD_NODE_MODULES_PATH = //
-            varRef(s_loc, "jingwei.app.build.node_modules.path", String.class, null);
+    /** 通过 {@code pnpm store path} 可查看 pnpm 的包存储位置 */
+    @Description("pnpm 可执行文件路径。缺省为 pnpm，即在环境变量 PATH 中搜索名为 pnpm 的可执行文件")
+    IConfigReference<String> CFG_APP_BUILD_PNPM_PATH = //
+            varRef(s_loc, "jingwei.app.build.pnpm.path", String.class, "pnpm");
 }

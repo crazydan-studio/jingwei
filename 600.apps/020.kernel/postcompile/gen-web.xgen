@@ -24,18 +24,12 @@
     import io.crazydan.duzhou.framework.commons.FileHelper;
 
     const rootDir = FileHelper.getMavenProjectRoot(codeGenerator);
-    const sharedNodeModulesDir = FileHelper.getAbsoluteFile(rootDir, '../../900.builder/node_modules');
-
     const webSrcDir = new File(rootDir, 'web');
     const webDistDir = new File(webSrcDir, 'dist');
     const webTargetDir = new File(rootDir, 'target/classes/META-INF/resources');
-    const webNodeModulesLink = new File(webSrcDir, 'node_modules');
 
-    FileHelper.deleteDir(webNodeModulesLink);
-    FileHelper.createSymbolLink(webNodeModulesLink, sharedNodeModulesDir);
-
-    ShellHelper.runExecutable('npm', ['run', 'build' ], webSrcDir, true);
-    ShellHelper.runExecutable('npm', ['run', 'build', '--workspaces' ], webSrcDir, true);
+    ShellHelper.runExecutable('pnpm', ['install' ], webSrcDir, true);
+    ShellHelper.runExecutable('pnpm', ['run', '-r', 'build' ], webSrcDir, true);
 
     // 直接将构建产物复制到 target 中，避免污染源码
     FileHelper.deleteDir(webTargetDir);

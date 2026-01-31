@@ -4,9 +4,17 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
     "build": "vite build"
   },
-  "dependencies": {},
-  "devDependencies": {}
+  "dependencies": {
+    "lucide-vue-next": "^0.562.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.1",
+    "svgo": "^4.0.0",
+    "terser": "^5.44.1",
+    "vite": "^7.2.4",
+    "vite-plugin-compression2": "^2.4.0",
+    "vite-plugin-externals": "^0.6.2"
+  }
 }

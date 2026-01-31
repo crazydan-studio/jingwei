@@ -21,7 +21,6 @@ package io.crazydan.jingwei.app.coder;
 
 import io.nop.api.core.exceptions.ErrorCode;
 
-import static io.crazydan.jingwei.app.coder.AppCoderConstants.BUILD_DIR_NODE_MODULES;
 import static io.nop.ai.core.AiCoreErrors.ARG_CONFIG_VAR;
 import static io.nop.api.core.exceptions.ErrorCode.define;
 
@@ -30,15 +29,6 @@ import static io.nop.api.core.exceptions.ErrorCode.define;
  * @date 2026-01-08
  */
 public interface AppCoderErrors {
-
-    ErrorCode ERR_BUILD_NODE_MODULES_PATH_NOT_SPECIFIED = //
-            define("jingwei.err.app.build.node-modules-path-not-specified",
-                   "未通过配置项 {"
-                   + ARG_CONFIG_VAR
-                   + "} 指定应用页面代码构建时的共享 "
-                   + BUILD_DIR_NODE_MODULES
-                   + " 的路径",
-                   ARG_CONFIG_VAR);
 
     ErrorCode ERR_BUILD_NPM_PATH_NOT_SPECIFIED = //
             define("jingwei.err.app.build.npm-path-not-specified",

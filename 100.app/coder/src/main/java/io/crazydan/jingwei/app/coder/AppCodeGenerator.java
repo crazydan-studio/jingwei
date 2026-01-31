@@ -35,16 +35,13 @@ import io.nop.core.lang.eval.IEvalScope;
 import io.nop.core.resource.IResource;
 import io.nop.xlang.api.XLang;
 
-import static io.crazydan.jingwei.app.coder.AppCoderConfigs.CFG_APP_BUILD_NODE_MODULES_PATH;
-import static io.crazydan.jingwei.app.coder.AppCoderConfigs.CFG_APP_BUILD_NPM_PATH;
+import static io.crazydan.jingwei.app.coder.AppCoderConfigs.CFG_APP_BUILD_PNPM_PATH;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.BUILD_DIR_DIST;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.BUILD_DIR_HIDDEN_BUILD;
-import static io.crazydan.jingwei.app.coder.AppCoderConstants.BUILD_DIR_NODE_MODULES;
-import static io.crazydan.jingwei.app.coder.AppCoderConstants.SCOPE_VAR_codeGenConfig;
-import static io.crazydan.jingwei.app.coder.AppCoderConstants.SCOPE_VAR_codeGenModel;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.CODEGEN_TEMPLATE_APP_MODEL;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.CODEGEN_TEMPLATE_APP_PAGE;
-import static io.crazydan.jingwei.app.coder.AppCoderErrors.ERR_BUILD_NODE_MODULES_PATH_NOT_SPECIFIED;
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.SCOPE_VAR_codeGenConfig;
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.SCOPE_VAR_codeGenModel;
 import static io.crazydan.jingwei.app.coder.AppCoderErrors.ERR_BUILD_NPM_PATH_NOT_SPECIFIED;
 import static io.nop.ai.core.AiCoreErrors.ARG_CONFIG_VAR;
 
@@ -55,16 +52,14 @@ import static io.nop.ai.core.AiCoreErrors.ARG_CONFIG_VAR;
  * @date 2026-01-08
  */
 public abstract class AppCodeGenerator {
-    private final String npmPath;
-    private final String nodeModulesPath;
+    private final String pnpmPath;
 
     public AppCodeGenerator() {
-        this(CFG_APP_BUILD_NPM_PATH.get(), CFG_APP_BUILD_NODE_MODULES_PATH.get());
+        this(CFG_APP_BUILD_PNPM_PATH.get());
     }
 
-    public AppCodeGenerator(String npmPath, String nodeModulesPath) {
-        this.npmPath = StringHelper.normalizePath(npmPath);
-        this.nodeModulesPath = StringHelper.normalizePath(nodeModulesPath);
+    public AppCodeGenerator(String pnpmPath) {
+        this.pnpmPath = StringHelper.normalizePath(pnpmPath);
     }
 
     /** 构建应用模型资源，主要为 {@code app.orm.xml}、{@code *.xmeta}、{@code *.xbiz} */
@@ -120,34 +115,21 @@ public abstract class AppCodeGenerator {
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     private String preparePageBuildDir(File targetDir) {
-        if (StringHelper.isBlank(this.npmPath)) {
+        if (StringHelper.isBlank(this.pnpmPath)) {
             throw new NopException(ERR_BUILD_NPM_PATH_NOT_SPECIFIED).param(ARG_CONFIG_VAR,
-                                                                           CFG_APP_BUILD_NPM_PATH.getName());
+                                                                           CFG_APP_BUILD_PNPM_PATH.getName());
         }
-
-        if (StringHelper.isBlank(this.nodeModulesPath)) {
-            throw new NopException(ERR_BUILD_NODE_MODULES_PATH_NOT_SPECIFIED).param(ARG_CONFIG_VAR,
-                                                                                    CFG_APP_BUILD_NODE_MODULES_PATH.getName());
-        }
-
-        File nodeModulesDir = new File(this.nodeModulesPath);
-        FileHelper.assureDirExists(nodeModulesDir);
 
         File buildDir = new File(targetDir, BUILD_DIR_HIDDEN_BUILD);
         FileHelper.deleteDir(buildDir);
         FileHelper.assureDirExists(buildDir);
 
-        File nodeModulesInBuildDir = new File(buildDir, BUILD_DIR_NODE_MODULES);
-        FileHelper.createSymbolLink(nodeModulesInBuildDir, nodeModulesDir);
-
         return FileHelper.getAbsolutePath(buildDir);
     }
 
     private void buildPageSourceCode(File buildDir) {
-        // 不做依赖安装，其会删除软链接，造成 node_modules 无法被共享。
-        // 该过程也涉及外网访问，可能需要代理加速
-        //ShellHelper.runExecutable(npmPath, new String[] { "install" }, buildDir, true);
+        ShellHelper.runExecutable(this.pnpmPath, new String[] { "install" }, buildDir, true);
 
-        ShellHelper.runExecutable(this.npmPath, new String[] { "run", "build" }, buildDir, true);
+        ShellHelper.runExecutable(this.pnpmPath, new String[] { "run", "build" }, buildDir, true);
     }
 }

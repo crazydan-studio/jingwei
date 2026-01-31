@@ -58,8 +58,8 @@ public class AppInstallationBuilder extends AppCodeGenerator {
         super();
     }
 
-    public AppInstallationBuilder(String npmPath, String nodeModulesPath) {
-        super(npmPath, nodeModulesPath);
+    public AppInstallationBuilder(String pnpmPath) {
+        super(pnpmPath);
     }
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

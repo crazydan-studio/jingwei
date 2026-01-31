@@ -6,8 +6,8 @@ import App from './App.vue';
 const app = createApp(App);
 app.use(naive);
 
-export function mount(selector) {
-  app.mount(selector);
+export function mount(el) {
+  app.mount(el);
 }
 
 export function umount() {
