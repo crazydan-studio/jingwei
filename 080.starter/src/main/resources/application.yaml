@@ -1,7 +1,9 @@
-# Nop平台自身会加载application.yaml配置文件，与Spring和Quarkus框架可以共享配置文件
-
 nop:
-  debug: true
+  # Note: 正式环境需禁用调试
+  debug: false
+  graphql:
+    schema-introspection:
+      enabled: false
 
   orm:
     init-database-schema: true

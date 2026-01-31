@@ -2,6 +2,7 @@ import { getAppConfig } from './config';
 import { graphql } from './http';
 
 const URL_PARAM_APP = 'app';
+const APP_CODE_GRAPHIQL = 'graphiql';
 
 /** 加载应用页面 */
 export async function loadAppPage({ appCode, el, loading }) {
@@ -19,6 +20,13 @@ export async function loadAppPage({ appCode, el, loading }) {
   }
 }
 
+/** 打开 GraphQL IDE */
+export function openGraphiQL() {
+  const url = getAppUrl(APP_CODE_GRAPHIQL);
+
+  window.open(url, '_blank');
+}
+
 export function getAppCodeFromLocation() {
   const urlParams = new URLSearchParams(window.location.search);
 
@@ -30,10 +38,16 @@ export function updateAppCodeInLocation(appCode) {
     return;
   }
 
+  const url = getAppUrl(appCode);
+
+  window.history.pushState({}, '', url);
+}
+
+export function getAppUrl(appCode) {
   const url = new URL(window.location.href);
   url.searchParams.set(URL_PARAM_APP, appCode);
 
-  window.history.pushState({}, '', url);
+  return url;
 }
 
 export function startAppLoadingAnimation(el) {
@@ -54,28 +68,43 @@ async function doLoadAppPage({ appCode, el }) {
   const appConfig = getAppConfig();
   const ctx = appConfig.api.static;
 
-  const { App__loadPage } = await graphql(
-    `
-      mutation ($app: String) {
-        App__loadPage(app: $app)
-      }
-    `,
-    { app: appCode }
-  );
+  const appPage = await getAppPage(appCode);
 
-  const app = await import(ctx + App__loadPage.js);
-
+  const app = await import(ctx + appPage.js);
   if (el.__app__) {
     el.__app__.umount();
   }
 
-  App__loadPage.css.forEach((css) => addCssLink(ctx + css));
+  (appPage.css || []).forEach((css) => addCssLink(ctx + css));
 
   app.mount(el);
   el.__app__ = app;
 
   // 修改地址栏，从而支持后退
   updateAppCodeInLocation(appCode);
+}
+
+async function getAppPage(appCode) {
+  switch (appCode) {
+    case APP_CODE_GRAPHIQL: {
+      return {
+        js: '/graphiql.js',
+        css: ['/graphiql.css']
+      };
+    }
+    default: {
+      const { App__loadPage } = await graphql(
+        `
+          mutation ($app: String) {
+            App__loadPage(app: $app)
+          }
+        `,
+        { app: appCode }
+      );
+
+      return App__loadPage;
+    }
+  }
 }
 
 function addCssLink(url) {

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  - 精卫（JingWei） - 衔木石填沧海，筑屏障护安全
+  - Copyright (C) 2026 Crazydan Studio <https://studio.crazydan.org>
+  -
+  - This program is free software: you can redistribute it and/or modify
+  - it under the terms of the GNU Lesser General Public License as published by
+  - the Free Software Foundation, either version 3 of the License, or
+  - (at your option) any later version.
+  -
+  - This program is distributed in the hope that it will be useful,
+  - but WITHOUT ANY WARRANTY; without even the implied warranty of
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  - GNU Lesser General Public License for more details.
+  -
+  - You should have received a copy of the GNU Lesser General Public License
+  - along with this program.
+  - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
+  -->
+
+<c:script xmlns:c="c"><![CDATA[
+    import java.io.File;
+    import io.crazydan.duzhou.framework.commons.ShellHelper;
+    import io.crazydan.duzhou.framework.commons.FileHelper;
+
+    const rootDir = FileHelper.getMavenProjectRoot(codeGenerator);
+    const webSrcDir = new File(rootDir, 'web');
+    const webDistDir = new File(webSrcDir, 'dist');
+    const webTargetDir = new File(rootDir, 'target/classes/META-INF/resources');
+
+    const artifactFile = new File(webTargetDir, 'graphiql.js');
+    if (artifactFile.exists()) {
+        logInfo("jingwei.app.build.artifact.exist: {} already exists in {}, ignore this building",
+                artifactFile.getName(), webTargetDir
+        );
+        return;
+    }
+
+    ShellHelper.runExecutable('pnpm', ['install' ], webSrcDir, true);
+    ShellHelper.runExecutable('pnpm', ['run', 'build' ], webSrcDir, true);
+
+    // 直接将构建产物复制到 target 中，避免污染源码
+    FileHelper.deleteDir(webTargetDir);
+    FileHelper.copyWithFilter(webDistDir, webTargetDir, null);
+]]></c:script>

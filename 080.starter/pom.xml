@@ -27,6 +27,10 @@
 
         <dependency>
             <groupId>io.crazydan.jingwei</groupId>
+            <artifactId>jingwei-apps-graphiql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.crazydan.jingwei</groupId>
             <artifactId>jingwei-apps-kernel</artifactId>
         </dependency>
         <dependency>
