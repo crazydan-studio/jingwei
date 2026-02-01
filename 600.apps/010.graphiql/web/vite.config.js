@@ -5,6 +5,10 @@ import { compression } from 'vite-plugin-compression2';
 
 // https://vite.dev/config/
 export default defineConfig({
+  worker: {
+    // Fix 'Invalid value "iife" for option "worker.format" - UMD and IIFE output formats are not supported for code-splitting builds'
+    format: 'es'
+  },
   build: {
     outDir: 'dist',
     // Note: 只有 terser 才支持压缩 es 模块代码

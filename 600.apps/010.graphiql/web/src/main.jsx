@@ -2,6 +2,9 @@ import { createRoot } from 'react-dom/client';
 // https://github.com/graphql/graphiql/blob/main/packages/graphiql/README.md
 import { GraphiQL, HISTORY_PLUGIN } from 'graphiql';
 import { explorerPlugin } from '@graphiql/plugin-explorer';
+// Fix "Cannot read properties of undefined (reading 'toUrl')"
+// https://github.com/suren-atoyan/monaco-react/issues/652#issuecomment-3693013952
+import 'graphiql/setup-workers/vite';
 
 import { getAppConfig } from '@app-utils';
 
