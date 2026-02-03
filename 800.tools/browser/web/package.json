@@ -1,0 +1,14 @@
+{
+  "name": "browser-cli",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "vite build"
+  },
+  "dependencies": {
+    "cac": "^6.7.14",
+    "playwright-core": "^1.58.1"
+  },
+  "devDependencies": {
+    "vite": "^7.3.1"
+  }
+}
