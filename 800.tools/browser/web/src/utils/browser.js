@@ -1,6 +1,5 @@
 import { chromium } from 'playwright-core';
 
-const AUTH_FILE = 'auth.json';
 const AUTH_TIMEOUT = 5 * 60 * 1000;
 
 export async function lanuchBrowser({ headless }) {
@@ -11,9 +10,9 @@ export async function lanuchBrowser({ headless }) {
   });
 }
 
-export async function createPage(browser) {
+export async function createPage(browser, { authFile }) {
   const context = await browser.newContext({
-    storageState: AUTH_FILE,
+    storageState: authFile,
     // 确保页面上的文本为英文的
     locale: 'en-US'
   });
@@ -21,7 +20,7 @@ export async function createPage(browser) {
   return await context.newPage();
 }
 
-export async function startAuth(authUrl, successUrl) {
+export async function startAuth(authUrl, successUrl, { authFile }) {
   const browser = await lanuchBrowser({ headless: false });
 
   const context = await browser.newContext({ storageState: undefined });
@@ -31,6 +30,6 @@ export async function startAuth(authUrl, successUrl) {
 
   await page.waitForURL(successUrl, { timeout: AUTH_TIMEOUT });
 
-  await context.storageState({ path: AUTH_FILE });
+  await context.storageState({ path: authFile });
   await browser.close();
 }
