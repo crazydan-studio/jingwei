@@ -5,7 +5,7 @@
     "build": "vite build"
   },
   "dependencies": {
-    "cac": "^6.7.14",
+    "fastify": "^5.7.4",
     "playwright-core": "^1.58.1"
   },
   "devDependencies": {

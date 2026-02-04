@@ -4,8 +4,19 @@ import { chat } from './chat';
 
 const AUTH_FILE = 'auth-deepseek.json';
 
-export function createCommand(cli) {
-  return cli.command('deepseek', 'Chat with DeepSeek').action(startChat);
+export default function createRoutes(fastify, prefix) {
+  //
+  routeChat(fastify, prefix);
+
+  // other apis ...
+}
+
+function routeChat(fastify, prefix) {
+  fastify.post(`${prefix}/chat`, async (request, reply) => {
+    await startChat();
+
+    reply.send({ hello: 'world' });
+  });
 }
 
 async function startChat() {
