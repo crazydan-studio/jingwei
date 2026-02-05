@@ -1,8 +1,12 @@
 import { chromium } from 'playwright-core';
 
-const AUTH_TIMEOUT = 5 * 60 * 1000;
+import { initJsonFile } from '@/utils/fs';
+
+export const AUTH_TIMEOUT = 5 * 60 * 1000;
 
 export async function createContext({ authFile }) {
+  await initJsonFile(authFile);
+
   const browser = await lanuchBrowser();
 
   return await browser.newContext({
@@ -26,10 +30,18 @@ export async function startAuth(authUrl, successUrl, { authFile }) {
   await browser.close();
 }
 
+export async function closeContext(context) {
+  try {
+    await context.close();
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 let browser = null;
 async function lanuchBrowser() {
-  if (!!browser && await browser.isConnected()) {
+  if (!!browser && (await browser.isConnected())) {
     return browser;
   }
 

@@ -1,3 +1,5 @@
+import { AUTH_TIMEOUT } from '@/browser';
+
 const BASE_URL = 'https://chat.deepseek.com';
 
 const CHAT_URL = BASE_URL;
@@ -17,7 +19,7 @@ export async function chat(page, content) {
       extensions: {
         'nop-error-code': 'unauthorized',
         'nop-status': 401,
-        'auth-form': []
+        'auth-form': await createAuthForm(page)
       }
     };
   }
@@ -37,6 +39,37 @@ export async function chat(page, content) {
 
   return { data: session.answer };
 }
+
+/** 等待认证结束 */
+export async function waitAuth(page, { authFile, complete }) {
+  const context = await page.context();
+
+  await page.waitForURL(CHAT_URL, { timeout: AUTH_TIMEOUT });
+
+  await context.storageState({ path: authFile });
+
+  await complete();
+}
+
+/** 点击认证页面中的验证码发送按钮 */
+export async function clickAuthSendCodeButton(page, phoneNumber) {
+  const locator = await page.locator('.ds-sign-in-form__main');
+
+  await locator.getByPlaceholder('Phone number').fill(phoneNumber);
+
+  await locator.getByText('Send code').click();
+}
+
+/** 点击认证页面中的登录按钮 */
+export async function clickAuthLoginButton(page, verifyCode) {
+  const locator = await page.locator('.ds-sign-in-form__main');
+
+  await locator.getByPlaceholder('Code').fill(verifyCode);
+
+  await locator.getByText('Log in').click();
+}
+
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 async function startChatSession(page, content) {
   const responsePromise = page.waitForResponse(
@@ -165,4 +198,65 @@ function parseChatAnswer(text) {
   }
 
   return messages.join('');
+}
+
+async function createAuthForm(page) {
+  const iframe = page.locator('#wxLogin > iframe');
+  const wxBaseUrl = (await iframe.getAttribute('src')).replace(
+    /^(https:\/\/[^\/]+).+/,
+    '$1'
+  );
+
+  const qrcode = iframe.contentFrame().locator('img').first();
+  const qrcodeUrl = wxBaseUrl + (await qrcode.getAttribute('src'));
+
+  return {
+    children: {
+      type: 'row',
+      children: [
+        {
+          type: 'column',
+          children: [
+            {
+              type: 'input',
+              label: '手机号',
+              name: 'phoneNumber',
+              prefix: {
+                type: 'text',
+                value: '+86'
+              }
+            },
+            {
+              type: 'input',
+              label: '验证码',
+              name: 'verifyCode',
+              suffix: {
+                type: 'button',
+                label: 'Send code',
+                action: 'send-code'
+              }
+            },
+            {
+              type: 'button',
+              label: '登录',
+              action: 'login'
+            }
+          ]
+        },
+        {
+          type: 'column',
+          children: [
+            {
+              type: 'text',
+              value: '微信扫码登录'
+            },
+            {
+              type: 'image',
+              src: qrcodeUrl
+            }
+          ]
+        }
+      ]
+    }
+  };
 }

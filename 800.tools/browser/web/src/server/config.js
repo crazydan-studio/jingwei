@@ -1,5 +1,6 @@
-import { readFile } from 'node:fs/promises';
 import { parseArgs } from 'node:util';
+
+import { readJsonFile } from '@/utils/fs';
 
 export async function parseConfigFromArgs(args) {
   // https://nodejs.org/api/util.html#utilparseargsconfig
@@ -21,8 +22,7 @@ export async function parseConfigFromArgs(args) {
 
   const authDir = values['auth-dir'];
 
-  const data = await readFile(values.config, 'utf8');
-  const config = JSON.parse(data);
+  const config = await readJsonFile(values.config);
 
   return { ...config, authDir };
 }
