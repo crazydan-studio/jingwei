@@ -1,16 +1,22 @@
+import { fileURLToPath, URL } from 'node:url';
+
 import { defineConfig } from 'vite';
 
 // https://vite.dev/config/
 export default defineConfig({
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url))
+    }
+  },
   build: {
     outDir: 'dist',
     ssr: true,
     minify: true,
     target: 'node20',
     lib: {
-      entry: 'src/server.js',
-      formats: ['es'],
-      fileName: 'browser'
+      entry: 'src/main.js',
+      formats: ['es']
     },
     rollupOptions: {
       external: [
