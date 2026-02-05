@@ -19,7 +19,7 @@ export async function chat(page, content) {
       extensions: {
         'nop-error-code': 'unauthorized',
         'nop-status': 401,
-        'auth-form': await createAuthForm(page)
+        form: await createAuthForm(page)
       }
     };
   }
@@ -44,11 +44,15 @@ export async function chat(page, content) {
 export async function waitAuth(page, { authFile, complete }) {
   const context = await page.context();
 
-  await page.waitForURL(CHAT_URL, { timeout: AUTH_TIMEOUT });
+  try {
+    await page.waitForURL(CHAT_URL, { timeout: AUTH_TIMEOUT });
 
-  await context.storageState({ path: authFile });
-
-  await complete();
+    await context.storageState({ path: authFile });
+  } catch (e) {
+    console.error(e);
+  } finally {
+    await complete();
+  }
 }
 
 /** 点击认证页面中的验证码发送按钮 */
@@ -58,6 +62,40 @@ export async function clickAuthSendCodeButton(page, phoneNumber) {
   await locator.getByPlaceholder('Phone number').fill(phoneNumber);
 
   await locator.getByText('Send code').click();
+
+  // 二次验证
+  const captchaLocator = page.locator('#sm-captcha');
+  const captchaTips = await captchaLocator
+    .locator('.shumei_captcha_slide_tips')
+    .innerText();
+
+  const captcha = await captchaLocator.locator('img');
+  await captcha.waitFor({ state: 'visible' });
+
+  const captchaSize = await captcha.boundingBox();
+  const captchaUrl = await captcha.getAttribute('src');
+
+  return {
+    extensions: {
+      'nop-error-code': 'unauthorized',
+      'nop-status': 401,
+      form: {
+        children: [
+          {
+            type: 'text',
+            value: captchaTips
+          },
+          {
+            type: 'image',
+            src: captchaUrl,
+            width: captchaSize.width,
+            height: captchaSize.height,
+            action: 'captcha'
+          }
+        ]
+      }
+    }
+  };
 }
 
 /** 点击认证页面中的登录按钮 */
@@ -67,6 +105,13 @@ export async function clickAuthLoginButton(page, verifyCode) {
   await locator.getByPlaceholder('Code').fill(verifyCode);
 
   await locator.getByText('Log in').click();
+}
+
+/** 点击认证页面中的验证码图片 */
+export async function clickAuthCaptchaImage(page, position) {
+  const captcha = await page.locator('#sm-captcha').locator('img');
+
+  await captcha.click({ position });
 }
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

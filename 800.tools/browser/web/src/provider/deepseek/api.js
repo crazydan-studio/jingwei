@@ -4,7 +4,8 @@ import {
   chat,
   waitAuth,
   clickAuthSendCodeButton,
-  clickAuthLoginButton
+  clickAuthLoginButton,
+  clickAuthCaptchaImage
 } from './chat';
 
 const AUTH_FILE = 'deepseek.json';
@@ -33,7 +34,7 @@ export default function createRoutes(fastify, { prefix, authDir }) {
 let globalAuthPage;
 let globalAuthPromise;
 async function resetGlobalAuth() {
-  if (globalAuthPage) {
+  if (globalAuthPage && !(await globalAuthPage.isClosed())) {
     const context = await globalAuthPage.context();
     await closeContext(context);
   }
@@ -64,8 +65,6 @@ async function startChat(content, { authDir }) {
     }
 
     return result;
-  } catch (e) {
-    return createErrorResponse(e);
   } finally {
     if (!globalAuthPage) {
       await closeContext(context);
@@ -73,31 +72,25 @@ async function startChat(content, { authDir }) {
   }
 }
 
-async function startAuth(action, { phoneNumber, verifyCode }) {
+async function startAuth(action, { phoneNumber, verifyCode, captchaPos }) {
   const page = globalAuthPage;
 
-  try {
-    if (!!page) {
-      switch (action) {
-        case 'send-code': {
-          await clickAuthSendCodeButton(page, phoneNumber);
-          break;
-        }
-        case 'login': {
-          await clickAuthLoginButton(page, verifyCode);
-          await globalAuthPromise;
-          break;
-        }
+  if (!!page) {
+    switch (action) {
+      case 'send-code': {
+        return await clickAuthSendCodeButton(page, phoneNumber);
+      }
+      case 'login': {
+        await clickAuthLoginButton(page, verifyCode);
+        await globalAuthPromise;
+        break;
+      }
+      case 'captcha': {
+        await clickAuthCaptchaImage(page, captchaPos);
+        break;
       }
     }
-
-    return { data: true };
-  } catch (e) {
-    return createErrorResponse(e);
   }
-}
 
-function createErrorResponse(e) {
-  console.error(e);
-  return { errors: [{ message: e.message }] };
+  return { data: true };
 }

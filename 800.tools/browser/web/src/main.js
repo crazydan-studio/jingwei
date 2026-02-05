@@ -14,12 +14,23 @@ const fastify = Fastify({
   logger: true
 });
 
-//
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+fastify.setErrorHandler((e, request, reply) => {
+  fastify.log.error(e);
+
+  // 返回结构为 GraphQLResponseBean
+  reply.send({ errors: [{ message: e.message }] });
+});
+
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
 auth(fastify, { token: config.token });
-//
+
 deepseek(fastify, { prefix: '/deepseek', authDir: config.authDir });
 
-//
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
 fastify.listen(
   { port: config.port, host: config.host },
   function (err, address) {
