@@ -2,26 +2,18 @@ import { chromium } from 'playwright-core';
 
 const AUTH_TIMEOUT = 5 * 60 * 1000;
 
-export async function lanuchBrowser({ headless }) {
-  return await chromium.launch({
-    // Using 'channel' to drive the user's local Chrome
-    channel: 'chrome',
-    headless
-  });
-}
+export async function createContext({ authFile }) {
+  const browser = await lanuchBrowser();
 
-export async function createPage(browser, { authFile }) {
-  const context = await browser.newContext({
+  return await browser.newContext({
     storageState: authFile,
     // 确保页面上的文本为英文的
     locale: 'en-US'
   });
-
-  return await context.newPage();
 }
 
 export async function startAuth(authUrl, successUrl, { authFile }) {
-  const browser = await lanuchBrowser({ headless: false });
+  const browser = await lanuchBrowser();
 
   const context = await browser.newContext({ storageState: undefined });
   const page = await context.newPage();
@@ -32,4 +24,22 @@ export async function startAuth(authUrl, successUrl, { authFile }) {
 
   await context.storageState({ path: authFile });
   await browser.close();
+}
+
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+let browser = null;
+async function lanuchBrowser() {
+  if (!!browser && await browser.isConnected()) {
+    return browser;
+  }
+
+  // Note: 开启的浏览器示例会在主进程退出后自动关闭
+  browser = await chromium.launch({
+    // Using 'channel' to drive the user's local Chrome
+    channel: 'chrome',
+    headless: true,
+    args: ['--disable-dev-shm-usage', '--no-sandbox']
+  });
+
+  return browser;
 }

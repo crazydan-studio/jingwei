@@ -1,28 +1,13 @@
-import { parseArgs } from 'node:util';
 import Fastify from 'fastify';
 
-import { readConfig } from '@/server/config';
+import { parseConfigFromArgs } from '@/server/config';
 import { auth } from '@/server/plugin';
 
 import deepseek from '@/provider/deepseek/api';
 
-// https://nodejs.org/api/util.html#utilparseargsconfig
-const { values } = parseArgs({
-  options: {
-    config: { type: 'string' },
-    'auth-dir': { type: 'string' }
-  },
-  allowPositionals: false
-});
-if (!values.config || !values['auth-dir']) {
-  console.error(
-    `Usage: ${process.argv[0]} ${process.argv[1]} --config=/path/to/config.json --auth-dir=/path/to/auth/dir`
-  );
-  process.exit(1);
-}
-
-const authDir = values['auth-dir'];
-const config = await readConfig(values.config);
+//
+const args = process.argv.slice(2);
+const config = await parseConfigFromArgs(args);
 
 //
 const fastify = Fastify({
@@ -32,7 +17,7 @@ const fastify = Fastify({
 //
 auth(fastify, { token: config.token });
 //
-deepseek(fastify, { prefix: '/deepseek', authDir });
+deepseek(fastify, { prefix: '/deepseek', authDir: config.authDir });
 
 //
 fastify.listen(

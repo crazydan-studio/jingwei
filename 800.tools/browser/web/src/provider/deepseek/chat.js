@@ -6,34 +6,36 @@ const CHAT_API_COMPLETION = '/api/v0/chat/completion';
 const CHAT_API_DELETE_SESSION = '/api/v0/chat_session/delete';
 const CHAT_TIMEOUT = 20 * 60 * 1000;
 
-export async function chat(content, { open, auth, exit }) {
-  console.log(`[DeepSeek] Opening ${CHAT_URL} ...`);
-  const page = await open(CHAT_URL);
+/** @return 返回结果类型为 GraphQLResponseBean */
+export async function chat(page, content) {
+  //console.log(`[DeepSeek] Opening ${CHAT_URL} ...`);
+  await page.goto(CHAT_URL);
 
   if ((await page.url()) == AUTH_URL) {
-    console.log('[DeepSeek] Not authorized, starting authorization ...');
-    await auth.before();
-    await auth.start(AUTH_URL, CHAT_URL);
-    await auth.after();
-
-    return;
+    return {
+      errors: [{ message: 'Unauthorized' }],
+      extensions: {
+        'nop-error-code': 'unauthorized',
+        'nop-status': 401,
+        'auth-form': []
+      }
+    };
   }
 
   //
   await enableDeepSeek(page, true);
 
-  console.log('[DeepSeek] Starting chat session ...');
+  //console.log('[DeepSeek] Starting chat session ...');
   const session = await startChatSession(page, content);
 
-  console.log('[DeepSeek] Got chat answer!');
-  console.log(session.answer);
+  try {
+    //console.log('[DeepSeek] Deleting chat session ...');
+    await deleteChatSession(page, session.id);
+  } catch (e) {
+    console.error(e);
+  }
 
-  console.log('[DeepSeek] Deleting chat session ...');
-  await deleteChatSession(page, session.id);
-
-  //
-  await exit();
-  console.log('[DeepSeek] Done!');
+  return { data: session.answer };
 }
 
 async function startChatSession(page, content) {
@@ -43,17 +45,17 @@ async function startChatSession(page, content) {
     { timeout: CHAT_TIMEOUT }
   );
 
-  console.log('[DeepSeek] Filling chat content ...');
+  //console.log('[DeepSeek] Filling chat content ...');
   await fillChatContent(page, content);
 
-  console.log('[DeepSeek] Clicking chat submit button ...');
+  //console.log('[DeepSeek] Clicking chat submit button ...');
   await clickChatSubmitButton(page);
 
   // https://chat.deepseek.com/a/chat/s/xx-xx-xx-xx
   await page.waitForURL(`${CHAT_URL}/a/chat/s/*`);
   const url = await page.url();
 
-  console.log('[DeepSeek] Fetching chat answer ...');
+  //console.log('[DeepSeek] Fetching chat answer ...');
   const response = await responsePromise;
   const responseText = await response.text();
 
