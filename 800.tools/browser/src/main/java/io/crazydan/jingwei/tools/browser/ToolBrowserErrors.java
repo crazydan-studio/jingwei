@@ -19,23 +19,19 @@
 
 package io.crazydan.jingwei.tools.browser;
 
-import io.nop.boot.NopApplication;
+import io.nop.api.core.exceptions.ErrorCode;
+
+import static io.nop.api.core.exceptions.ErrorCode.define;
+import static io.nop.xlang.XLangErrors.ARG_NAME;
 
 /**
- *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
  * @date 2026-02-06
  */
-public class ToolBrowserStarter {
+public interface ToolBrowserErrors {
 
-    public static void main(String[] args) {
-        NopApplication app = new NopApplication();
-
-        app.run(args, () -> {
-            ToolBrowserRunner runner = new ToolBrowserRunner();
-            runner.run();
-
-            return 0;
-        });
-    }
+    ErrorCode ERR_CFG_VALUE_NOT_SPECIFIED = //
+            define("jingwei.err.tools.browser.cfg.value-not-specified",
+                   "配置项 {" + ARG_NAME + "} 未指定有效值",
+                   ARG_NAME);
 }

@@ -18,10 +18,15 @@
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
 
-        <exec-main-class>io.crazydan.jingwei.JingWeiStarter</exec-main-class>
+        <exec-main-class>io.crazydan.jingwei.tools.browser.ToolBrowserStarter</exec-main-class>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>io.github.entropy-cloud</groupId>
+            <artifactId>nop-boot</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>io.github.entropy-cloud</groupId>
             <artifactId>nop-shell</artifactId>

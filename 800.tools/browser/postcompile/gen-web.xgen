@@ -28,7 +28,7 @@
     const rootDir = FileHelper.getMavenProjectRoot(codeGenerator);
     const webSrcDir = new File(rootDir, 'web');
     const webDistDir = new File(webSrcDir, 'dist');
-    const webTargetDir = new File(rootDir, 'target/classes/node');
+    const webTargetDir = new File(rootDir, 'target/classes/exec');
     const webTargetDistDir = new File(webTargetDir, 'lib');
 
     const artifactFile = new File(webTargetDistDir, 'main.mjs');
@@ -62,4 +62,9 @@
     pkgJson.remove('devDependencies');
     pkgJson['scripts'] = {start: 'node lib/main.mjs'};
     FileHelper.writeJson(pkgJsonFile, pkgJson, StringHelper.ENCODING_UTF8);
+
+    // 记录有效文件
+    const manifestFile = new File(webTargetDir, 'manifest.json');
+    const paths = FileHelper.findFilePaths(webTargetDir,"**/*", true, true);
+    FileHelper.writeJson(manifestFile, paths, StringHelper.ENCODING_UTF8);
 ]]></c:script>
