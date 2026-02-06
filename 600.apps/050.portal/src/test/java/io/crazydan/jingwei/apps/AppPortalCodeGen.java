@@ -17,7 +17,7 @@
  * If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
  */
 
-package io.crazydan.jingwei.app;
+package io.crazydan.jingwei.apps;
 
 import io.crazydan.duzhou.framework.codegen.MavenProjectCodeGen;
 

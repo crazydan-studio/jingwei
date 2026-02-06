@@ -22,14 +22,19 @@ export default defineConfig({
     },
     lib: {
       entry: 'src/main.jsx',
-      name: 'App',
       formats: ['es'],
-      fileName: 'graphiql',
-      cssFileName: 'graphiql'
+      fileName: 'index'
     },
     rollupOptions: {
       output: {
-        chunkFileNames: 'graphiql/[name]-[hash].js'
+        entryFileNames: () => 'graphiql/index.js',
+        chunkFileNames: 'graphiql/[name]-[hash].js',
+        assetFileNames: ({ name }) => {
+          if (name === 'main.css') {
+            name = 'index.css';
+          }
+          return 'graphiql/' + name;
+        }
       }
     }
   },

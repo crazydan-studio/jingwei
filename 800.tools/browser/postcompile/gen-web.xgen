@@ -23,6 +23,7 @@
     import io.crazydan.duzhou.framework.commons.StringHelper;
     import io.crazydan.duzhou.framework.commons.ShellHelper;
     import io.crazydan.duzhou.framework.commons.FileHelper;
+    import io.crazydan.duzhou.framework.commons.PnpmRunner;
 
     const rootDir = FileHelper.getMavenProjectRoot(codeGenerator);
     const webSrcDir = new File(rootDir, 'web');
@@ -38,32 +39,27 @@
         return;
     }
 
-    ShellHelper.runExecutable('pnpm', ['install'], webSrcDir, true);
-    ShellHelper.runExecutable('pnpm', ['run', 'build'], webSrcDir, true);
+    const srcPnpm = new PnpmRunner(webSrcDir);
+    srcPnpm.runScript('build')
+            // 直接将构建产物复制到 target 中，避免污染源码
+            .copyDistTo(webTargetDistDir);
 
-    // 直接将构建产物复制到 target 中，避免污染源码
-    FileHelper.deleteDir(webTargetDistDir);
-    FileHelper.copyWithFilter(webDistDir, webTargetDistDir, null);
-
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     // 保留依赖包信息
     const pnpmLockSrcFile = new File(webSrcDir, 'pnpm-lock.yaml');
     const packageSrcFile = new File(webSrcDir, 'package.json');
-    const pnpmLockTargetFile = new File(webTargetDir, pnpmLockSrcFile.getName());
-    const packageTargetFile = new File(webTargetDir, packageSrcFile.getName());
-    FileHelper.copyFile(pnpmLockSrcFile, pnpmLockTargetFile);
-    FileHelper.copyFile(packageSrcFile, packageTargetFile);
+    FileHelper.copyFiles(webTargetDir, pnpmLockSrcFile, packageSrcFile);
+
     // 移除构建相关的包
-    const pkgJson = FileHelper.readJson(packageTargetFile, StringHelper.ENCODING_UTF8);
+    const pkgJsonFile = new File(webTargetDir, packageSrcFile.getName());
+    const pkgJson = FileHelper.readJson(pkgJsonFile, StringHelper.ENCODING_UTF8);
+
     const devDependencies = pkgJson['devDependencies'].keySet();
-    if (!devDependencies.isEmpty()) {
-        const deps = devDependencies.join(' ');
-        ShellHelper.runExecutable('pnpm', ['remove', deps], webTargetDir, true);
-    }
+    const targetPnpm = new PnpmRunner(webTargetDir);
+    targetPnpm.uninstallPackages(devDependencies, true);
+
     // 修改执行入口
     pkgJson.remove('devDependencies');
     pkgJson['scripts'] = {start: 'node lib/main.mjs'};
-    FileHelper.writeJson(packageTargetFile, pkgJson, StringHelper.ENCODING_UTF8);
-    //
-    const nodeModulesTargetDir = new File(webTargetDir, 'node_modules');
-    FileHelper.deleteDir(nodeModulesTargetDir);
+    FileHelper.writeJson(pkgJsonFile, pkgJson, StringHelper.ENCODING_UTF8);
 ]]></c:script>

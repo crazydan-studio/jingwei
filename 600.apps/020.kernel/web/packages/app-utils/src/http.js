@@ -7,6 +7,7 @@ export async function graphql(query, variables) {
   const appConfig = getAppConfig();
 
   const url = appConfig.api.graphql;
+  // Note: 响应结果类型为 GraphQLResponseBean
   const data = await fetch(url, {
     method: 'POST',
     headers: {

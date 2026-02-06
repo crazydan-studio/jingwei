@@ -17,12 +17,15 @@
  * If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
  */
 
-package io.crazydan.jingwei.app.coder;
+package io.crazydan.jingwei.tools.browser;
 
 /**
+ *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
- * @date 2026-01-08
+ * @date 2026-02-06
  */
-public interface AppCoderErrors {
+public class ToolBrowserStarter {
 
+    public static void main(String[] args) {
+    }
 }

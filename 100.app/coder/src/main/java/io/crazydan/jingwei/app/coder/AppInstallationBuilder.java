@@ -54,16 +54,6 @@ import static io.crazydan.jingwei.app.coder.AppCoderConstants.APP_FILE_UI_DESIGN
  */
 public class AppInstallationBuilder extends AppCodeGenerator {
 
-    public AppInstallationBuilder() {
-        super();
-    }
-
-    public AppInstallationBuilder(String pnpmPath) {
-        super(pnpmPath);
-    }
-
-    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
     public AppInstallation_Manifest install(
             AppReleasing_Manifest releasingManifest, File appModelDir, File appPageDir) {
 

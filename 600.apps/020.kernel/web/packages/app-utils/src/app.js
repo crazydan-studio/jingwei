@@ -88,8 +88,8 @@ async function getAppPage(appCode) {
   switch (appCode) {
     case APP_CODE_GRAPHIQL: {
       return {
-        js: '/graphiql.js',
-        css: ['/graphiql.css']
+        js: '/graphiql/index.js',
+        css: ['/graphiql/index.css']
       };
     }
     default: {

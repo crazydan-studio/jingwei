@@ -50,14 +50,6 @@ import static io.crazydan.jingwei.app.coder.AppCoderConstants.APP_DIR_SOURCE;
  */
 public class AppReleasingBuilder extends AppCodeGenerator {
 
-    public AppReleasingBuilder() {
-        super();
-    }
-
-    public AppReleasingBuilder(String pnpmPath) {
-        super(pnpmPath);
-    }
-
     public AppReleasing_Manifest build(String manifestVPath, File targetDir) {
         IResource manifestResource = AppModelHelper.getVfsResource(manifestVPath);
 

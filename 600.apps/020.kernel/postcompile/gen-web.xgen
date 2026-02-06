@@ -20,18 +20,16 @@
 
 <c:script xmlns:c="c"><![CDATA[
     import java.io.File;
-    import io.crazydan.duzhou.framework.commons.ShellHelper;
     import io.crazydan.duzhou.framework.commons.FileHelper;
+    import io.crazydan.duzhou.framework.commons.PnpmRunner;
 
     const rootDir = FileHelper.getMavenProjectRoot(codeGenerator);
     const webSrcDir = new File(rootDir, 'web');
     const webDistDir = new File(webSrcDir, 'dist');
     const webTargetDir = new File(rootDir, 'target/classes/META-INF/resources');
 
-    ShellHelper.runExecutable('pnpm', ['install' ], webSrcDir, true);
-    ShellHelper.runExecutable('pnpm', ['run', '-r', 'build' ], webSrcDir, true);
-
-    // 直接将构建产物复制到 target 中，避免污染源码
-    FileHelper.deleteDir(webTargetDir);
-    FileHelper.copyWithFilter(webDistDir, webTargetDir, null);
+    const pnpm = new PnpmRunner(webSrcDir);
+    pnpm.runScript('build', true)
+        // 直接将构建产物复制到 target 中，避免污染源码
+        .copyDistTo(webTargetDir);
 ]]></c:script>

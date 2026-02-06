@@ -19,12 +19,8 @@
 
 package io.crazydan.jingwei.app.coder;
 
-import io.nop.api.core.annotations.core.Description;
 import io.nop.api.core.annotations.core.Locale;
-import io.nop.api.core.config.IConfigReference;
 import io.nop.api.core.util.SourceLocation;
-
-import static io.nop.api.core.config.AppConfig.varRef;
 
 /**
  *
@@ -34,9 +30,4 @@ import static io.nop.api.core.config.AppConfig.varRef;
 @Locale("zh-CN")
 public interface AppCoderConfigs {
     SourceLocation s_loc = SourceLocation.fromClass(AppCoderConfigs.class);
-
-    /** 通过 {@code pnpm store path} 可查看 pnpm 的包存储位置 */
-    @Description("pnpm 可执行文件路径。缺省为 pnpm，即在环境变量 PATH 中搜索名为 pnpm 的可执行文件")
-    IConfigReference<String> CFG_APP_BUILD_PNPM_PATH = //
-            varRef(s_loc, "jingwei.app.build.pnpm.path", String.class, "pnpm");
 }

@@ -55,11 +55,13 @@ nop:
       # 是否启用系统提示词
       enable-work-mode-system-prompt: true
 
+duzhou:
+  cli:
+    pnpm:
+      path: /usr/bin/pnpm
+
 jingwei:
   app:
     portal-code: ae9c6b146f93436abba7761593058f38
     static-dir: ${project.basedir}/_data/app-pages
     install-dir: ${project.basedir}/_data/app-installed
-    build:
-      pnpm:
-        path: /usr/bin/pnpm

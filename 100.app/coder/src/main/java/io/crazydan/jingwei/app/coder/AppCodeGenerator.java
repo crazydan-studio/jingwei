@@ -23,27 +23,21 @@ import java.io.File;
 import java.util.Map;
 
 import io.crazydan.duzhou.framework.commons.FileHelper;
-import io.crazydan.duzhou.framework.commons.ShellHelper;
-import io.crazydan.duzhou.framework.commons.StringHelper;
+import io.crazydan.duzhou.framework.commons.PnpmRunner;
 import io.crazydan.jingwei.app.coder.model.AiModelDesign;
 import io.crazydan.jingwei.app.coder.model.AiOrmModel;
 import io.crazydan.jingwei.app.coder.model.AiUiDesign;
 import io.crazydan.jingwei.app.coder.model.AiUiModel;
-import io.nop.api.core.exceptions.NopException;
 import io.nop.codegen.XCodeGenerator;
 import io.nop.core.lang.eval.IEvalScope;
 import io.nop.core.resource.IResource;
 import io.nop.xlang.api.XLang;
 
-import static io.crazydan.jingwei.app.coder.AppCoderConfigs.CFG_APP_BUILD_PNPM_PATH;
-import static io.crazydan.jingwei.app.coder.AppCoderConstants.BUILD_DIR_DIST;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.BUILD_DIR_HIDDEN_BUILD;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.CODEGEN_TEMPLATE_APP_MODEL;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.CODEGEN_TEMPLATE_APP_PAGE;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.SCOPE_VAR_codeGenConfig;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.SCOPE_VAR_codeGenModel;
-import static io.crazydan.jingwei.app.coder.AppCoderErrors.ERR_BUILD_NPM_PATH_NOT_SPECIFIED;
-import static io.nop.ai.core.AiCoreErrors.ARG_CONFIG_VAR;
 
 /**
  * 应用构建器
@@ -52,15 +46,6 @@ import static io.nop.ai.core.AiCoreErrors.ARG_CONFIG_VAR;
  * @date 2026-01-08
  */
 public abstract class AppCodeGenerator {
-    private final String pnpmPath;
-
-    public AppCodeGenerator() {
-        this(CFG_APP_BUILD_PNPM_PATH.get());
-    }
-
-    public AppCodeGenerator(String pnpmPath) {
-        this.pnpmPath = StringHelper.normalizePath(pnpmPath);
-    }
 
     /** 构建应用模型资源，主要为 {@code app.orm.xml}、{@code *.xmeta}、{@code *.xbiz} */
     protected void genModels(IResource modelDesignResource, File targetDir, AppCodeGenConfig genConfig) {
@@ -105,31 +90,20 @@ public abstract class AppCodeGenerator {
 
         gen.execute("", scope);
 
-        buildPageSourceCode(buildDir);
+        PnpmRunner pnpm = new PnpmRunner(buildDir);
+        pnpm.runScript("build");
+        pnpm.copyDistTo(targetDir, false);
 
-        File buildDistDir = new File(buildDir, BUILD_DIR_DIST);
-        FileHelper.copyWithFilter(buildDistDir, targetDir, null);
         FileHelper.deleteDir(buildDir);
     }
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     private String preparePageBuildDir(File targetDir) {
-        if (StringHelper.isBlank(this.pnpmPath)) {
-            throw new NopException(ERR_BUILD_NPM_PATH_NOT_SPECIFIED).param(ARG_CONFIG_VAR,
-                                                                           CFG_APP_BUILD_PNPM_PATH.getName());
-        }
-
         File buildDir = new File(targetDir, BUILD_DIR_HIDDEN_BUILD);
         FileHelper.deleteDir(buildDir);
         FileHelper.assureDirExists(buildDir);
 
         return FileHelper.getAbsolutePath(buildDir);
-    }
-
-    private void buildPageSourceCode(File buildDir) {
-        ShellHelper.runExecutable(this.pnpmPath, new String[] { "install" }, buildDir, true);
-
-        ShellHelper.runExecutable(this.pnpmPath, new String[] { "run", "build" }, buildDir, true);
     }
 }
