@@ -24,6 +24,8 @@
         <module>600.apps</module>
 
         <module>080.starter</module>
+
+        <module>800.tools</module>
     </modules>
 
     <dependencies>

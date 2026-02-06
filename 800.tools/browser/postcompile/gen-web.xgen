@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  - 精卫（JingWei） - 衔木石填沧海，筑屏障护安全
+  - Copyright (C) 2026 Crazydan Studio <https://studio.crazydan.org>
+  -
+  - This program is free software: you can redistribute it and/or modify
+  - it under the terms of the GNU Lesser General Public License as published by
+  - the Free Software Foundation, either version 3 of the License, or
+  - (at your option) any later version.
+  -
+  - This program is distributed in the hope that it will be useful,
+  - but WITHOUT ANY WARRANTY; without even the implied warranty of
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  - GNU Lesser General Public License for more details.
+  -
+  - You should have received a copy of the GNU Lesser General Public License
+  - along with this program.
+  - If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
+  -->
+
+<c:script xmlns:c="c"><![CDATA[
+    import java.io.File;
+    import io.crazydan.duzhou.framework.commons.StringHelper;
+    import io.crazydan.duzhou.framework.commons.ShellHelper;
+    import io.crazydan.duzhou.framework.commons.FileHelper;
+
+    const rootDir = FileHelper.getMavenProjectRoot(codeGenerator);
+    const webSrcDir = new File(rootDir, 'web');
+    const webDistDir = new File(webSrcDir, 'dist');
+    const webTargetDir = new File(rootDir, 'target/classes/node');
+    const webTargetDistDir = new File(webTargetDir, 'lib');
+
+    const artifactFile = new File(webTargetDistDir, 'main.mjs');
+    if (artifactFile.exists()) {
+        logInfo("jingwei.app.build.artifact.exist: {} already exists in {}, ignore this building",
+                artifactFile.getName(), webTargetDir
+        );
+        return;
+    }
+
+    ShellHelper.runExecutable('pnpm', ['install'], webSrcDir, true);
+    ShellHelper.runExecutable('pnpm', ['run', 'build'], webSrcDir, true);
+
+    // 直接将构建产物复制到 target 中，避免污染源码
+    FileHelper.deleteDir(webTargetDistDir);
+    FileHelper.copyWithFilter(webDistDir, webTargetDistDir, null);
+
+    // 保留依赖包信息
+    const pnpmLockSrcFile = new File(webSrcDir, 'pnpm-lock.yaml');
+    const packageSrcFile = new File(webSrcDir, 'package.json');
+    const pnpmLockTargetFile = new File(webTargetDir, pnpmLockSrcFile.getName());
+    const packageTargetFile = new File(webTargetDir, packageSrcFile.getName());
+    FileHelper.copyFile(pnpmLockSrcFile, pnpmLockTargetFile);
+    FileHelper.copyFile(packageSrcFile, packageTargetFile);
+    // 移除构建相关的包
+    const pkgJson = FileHelper.readJson(packageTargetFile, StringHelper.ENCODING_UTF8);
+    const devDependencies = pkgJson['devDependencies'].keySet();
+    if (!devDependencies.isEmpty()) {
+        const deps = devDependencies.join(' ');
+        ShellHelper.runExecutable('pnpm', ['remove', deps], webTargetDir, true);
+    }
+    // 修改执行入口
+    pkgJson.remove('devDependencies');
+    pkgJson['scripts'] = {start: 'node lib/main.mjs'};
+    FileHelper.writeJson(packageTargetFile, pkgJson, StringHelper.ENCODING_UTF8);
+    //
+    const nodeModulesTargetDir = new File(webTargetDir, 'node_modules');
+    FileHelper.deleteDir(nodeModulesTargetDir);
+]]></c:script>

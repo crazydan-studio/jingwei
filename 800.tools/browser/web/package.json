@@ -1,5 +1,5 @@
 {
-  "name": "browser-cli",
+  "name": "jingwei-browser",
   "version": "0.1.0",
   "scripts": {
     "build": "vite build",
