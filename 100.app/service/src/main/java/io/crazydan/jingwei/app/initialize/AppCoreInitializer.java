@@ -29,9 +29,9 @@ import io.nop.api.core.ioc.BeanContainer;
 import io.nop.commons.lang.impl.Cancellable;
 import io.nop.core.initialize.ICoreInitializer;
 
+import static io.crazydan.duzhou.framework.CommonErrors.ERR_CFG_VALUE_NOT_SPECIFIED;
 import static io.crazydan.jingwei.app.AppCoreConfigs.CFG_APP_INSTALL_DIR;
 import static io.crazydan.jingwei.app.AppCoreConfigs.CFG_APP_STATIC_DIR;
-import static io.crazydan.jingwei.app.AppCoreErrors.ERR_CFG_VALUE_NOT_SPECIFIED;
 import static io.nop.ai.core.AiCoreErrors.ARG_CONFIG_VAR;
 
 /**

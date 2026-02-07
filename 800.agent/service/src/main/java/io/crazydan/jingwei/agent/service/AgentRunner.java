@@ -32,11 +32,11 @@ import io.nop.core.lang.json.JsonTool;
 import io.nop.core.resource.IResource;
 import io.nop.core.resource.impl.ClassPathResource;
 
+import static io.crazydan.duzhou.framework.CommonErrors.ERR_CFG_VALUE_NOT_SPECIFIED;
 import static io.crazydan.jingwei.agent.AgentServiceConfigs.CFG_AGENT_API_TOKEN;
 import static io.crazydan.jingwei.agent.AgentServiceConfigs.CFG_AGENT_DATA_DIR;
 import static io.crazydan.jingwei.agent.AgentServiceConfigs.CFG_AGENT_SERVER_HOST;
 import static io.crazydan.jingwei.agent.AgentServiceConfigs.CFG_AGENT_SERVER_PORT;
-import static io.crazydan.jingwei.agent.AgentServiceErrors.ERR_CFG_VALUE_NOT_SPECIFIED;
 import static io.nop.xlang.XLangErrors.ARG_NAME;
 
 /**

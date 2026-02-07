@@ -50,6 +50,7 @@ import io.nop.graphql.core.reflection.GraphQLBizModels;
 import io.nop.orm.IOrmTemplate;
 import jakarta.inject.Inject;
 
+import static io.crazydan.duzhou.framework.CommonErrors.ERR_CFG_VALUE_NOT_SPECIFIED;
 import static io.crazydan.jingwei.app.AppConstants.APP_MANIFEST_FILE;
 import static io.crazydan.jingwei.app.AppConstants.TEMPLATE_APP_CLASSPATH_VPATH;
 import static io.crazydan.jingwei.app.AppConstants.TEMPLATE_APP_INSTALLATION_ROOT_VPATH;
@@ -62,7 +63,6 @@ import static io.crazydan.jingwei.app.AppConstants.VAR_PATH;
 import static io.crazydan.jingwei.app.AppCoreConfigs.CFG_APP_PORTAL_CODE;
 import static io.crazydan.jingwei.app.AppCoreErrors.ERR_BIZ_APP_NOT_EXIST;
 import static io.crazydan.jingwei.app.AppCoreErrors.ERR_BIZ_APP_NO_PAGE;
-import static io.crazydan.jingwei.app.AppCoreErrors.ERR_CFG_VALUE_NOT_SPECIFIED;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.APP_FILE_ORM_DSL;
 import static io.nop.ai.core.AiCoreErrors.ARG_CONFIG_VAR;
 import static io.nop.xlang.XLangErrors.ARG_CODE;
@@ -176,7 +176,7 @@ public class AppCoreBizModel {
         this.ormTemplate.reloadModel();
 
         DataBaseUpgrader upgrader = new DataBaseUpgrader(this.ormTemplate.getSessionFactory());
-        //upgrader.upgrade();
+        upgrader.upgrade();
     }
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

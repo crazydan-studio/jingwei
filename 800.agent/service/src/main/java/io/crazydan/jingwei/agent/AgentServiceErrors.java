@@ -19,18 +19,10 @@
 
 package io.crazydan.jingwei.agent;
 
-import io.nop.api.core.exceptions.ErrorCode;
-
-import static io.nop.api.core.exceptions.ErrorCode.define;
-import static io.nop.xlang.XLangErrors.ARG_NAME;
-
 /**
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
  * @date 2026-02-06
  */
 public interface AgentServiceErrors {
 
-    ErrorCode ERR_CFG_VALUE_NOT_SPECIFIED = //
-            define("jingwei.err.agent.cfg.value-not-specified", //
-                   "配置项 {" + ARG_NAME + "} 未指定有效值", ARG_NAME);
 }

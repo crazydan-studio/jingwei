@@ -21,7 +21,6 @@ package io.crazydan.jingwei.app;
 
 import io.nop.api.core.exceptions.ErrorCode;
 
-import static io.nop.ai.core.AiCoreErrors.ARG_CONFIG_VAR;
 import static io.nop.api.core.exceptions.ErrorCode.define;
 import static io.nop.xlang.XLangErrors.ARG_CODE;
 
@@ -30,11 +29,6 @@ import static io.nop.xlang.XLangErrors.ARG_CODE;
  * @date 2026-01-08
  */
 public interface AppCoreErrors {
-
-    ErrorCode ERR_CFG_VALUE_NOT_SPECIFIED = //
-            define("jingwei.err.app.cfg.value-not-specified",
-                   "配置项 {" + ARG_CONFIG_VAR + "} 未指定有效值",
-                   ARG_CONFIG_VAR);
 
     ErrorCode ERR_BIZ_APP_NOT_EXIST = //
             define("jingwei.err.app.biz.app-not-exist", //
