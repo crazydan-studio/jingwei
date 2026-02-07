@@ -17,7 +17,7 @@ nop:
     # password: nop-test
     metrics-enabled: true
     driver-class-name: org.h2.Driver
-    jdbc-url: jdbc:h2:${project.basedir}/_data/local
+    jdbc-url: jdbc:h2:${jingwei.data-dir}/local
     username: sa
     password:
 
@@ -27,7 +27,7 @@ nop:
 
   file:
     #store-impl: oss
-    store-dir: ${project.basedir}/_data/files
+    store-dir: ${jingwei.data-dir}/files
 
   extension:
     undertow:
@@ -44,16 +44,6 @@ nop:
       ns-mappings: |
         app-install-dir:${jingwei.app.install-dir},
         app-static-dir:${jingwei.app.static-dir}
-  ai:
-    # 在该目录中以 `{llmName}.txt` 形式按模型名创建文本文件并在其中放置 API Key
-    secret-dir: ${project.basedir}/_data/ai/secret
-    service:
-      # LLM 引擎执行时是否自动打印所有请求和响应消息
-      log-message: true
-      # LLM 引擎采用 mock 方式执行时所使用的输入输出目录
-      mock-dir: ${project.basedir}/_data/ai/mock
-      # 是否启用系统提示词
-      enable-work-mode-system-prompt: true
 
 duzhou:
   cli:
@@ -61,7 +51,8 @@ duzhou:
       path: /usr/bin/pnpm
 
 jingwei:
+  data-dir: ./_data
   app:
     portal-code: ae9c6b146f93436abba7761593058f38
-    static-dir: ${project.basedir}/_data/app-pages
-    install-dir: ${project.basedir}/_data/app-installed
+    static-dir: ${jingwei.data-dir}/app-pages
+    install-dir: ${jingwei.data-dir}/app-installed

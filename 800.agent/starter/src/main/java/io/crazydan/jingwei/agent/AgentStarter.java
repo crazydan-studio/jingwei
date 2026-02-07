@@ -19,8 +19,10 @@
 
 package io.crazydan.jingwei.agent;
 
+import io.crazydan.duzhou.framework.config.PlaceholderConfigStarter;
 import io.crazydan.jingwei.agent.service.AgentRunner;
 import io.nop.boot.NopApplication;
+import io.nop.config.starter.ConfigStarter;
 
 /**
  *
@@ -30,8 +32,9 @@ import io.nop.boot.NopApplication;
 public class AgentStarter {
 
     public static void main(String[] args) {
-        NopApplication app = new NopApplication();
+        ConfigStarter.registerInstance(new PlaceholderConfigStarter());
 
+        NopApplication app = new NopApplication();
         app.run(args, () -> {
             AgentRunner runner = new AgentRunner();
             runner.run();

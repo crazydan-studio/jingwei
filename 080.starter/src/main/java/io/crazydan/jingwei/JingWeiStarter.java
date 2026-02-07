@@ -19,6 +19,8 @@
 
 package io.crazydan.jingwei;
 
+import io.crazydan.duzhou.framework.config.PlaceholderConfigStarter;
+import io.nop.config.starter.ConfigStarter;
 import io.nop.undertow.UndertowServer;
 
 /**
@@ -28,6 +30,8 @@ import io.nop.undertow.UndertowServer;
 public class JingWeiStarter extends UndertowServer {
 
     public static void main(String[] args) {
+        ConfigStarter.registerInstance(new PlaceholderConfigStarter());
+
         start(args);
     }
 }

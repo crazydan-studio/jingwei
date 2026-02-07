@@ -11,5 +11,6 @@ duzhou:
 
 jingwei:
   agent:
+    data-dir: ./_data
     server:
       host: localhost
