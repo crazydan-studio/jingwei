@@ -25,7 +25,7 @@
 
         <module>080.starter</module>
 
-        <module>800.tools</module>
+        <module>800.agent</module>
     </modules>
 
     <dependencies>
@@ -120,6 +120,12 @@
             <dependency>
                 <groupId>io.crazydan.jingwei</groupId>
                 <artifactId>jingwei-apps-portal</artifactId>
+                <version>${jingwei.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.crazydan.jingwei</groupId>
+                <artifactId>jingwei-agent-service</artifactId>
                 <version>${jingwei.version}</version>
             </dependency>
             <!-- End -->

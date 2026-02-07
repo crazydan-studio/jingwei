@@ -47,6 +47,14 @@
     <file url="file://$PROJECT_DIR$/600.store/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/600.store/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/600.store/src/test/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/800.agent/core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/800.agent/core/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/800.agent/service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/800.agent/service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/800.agent/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/800.agent/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/800.agent/starter/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/800.agent/starter/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/800.common/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/800.common/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/800.common/src/test/resources" charset="UTF-8" />

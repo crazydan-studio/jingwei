@@ -1,0 +1,15 @@
+nop:
+  # Note: 正式环境需禁用调试
+  debug: false
+  banner:
+    enabled: false
+
+duzhou:
+  cli:
+    pnpm:
+      path: /usr/bin/pnpm
+
+jingwei:
+  agent:
+    server:
+      host: localhost
