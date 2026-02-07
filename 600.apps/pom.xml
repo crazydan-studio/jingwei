@@ -19,8 +19,9 @@
     </properties>
 
     <modules>
-        <module>010.graphiql</module>
-        <module>020.kernel</module>
+        <module>010.base</module>
+
+        <module>020.graphiql</module>
         <module>050.portal</module>
     </modules>
 

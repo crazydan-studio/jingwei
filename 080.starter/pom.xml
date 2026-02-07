@@ -29,11 +29,11 @@
 
         <dependency>
             <groupId>io.crazydan.jingwei</groupId>
-            <artifactId>jingwei-apps-graphiql</artifactId>
+            <artifactId>jingwei-apps-base</artifactId>
         </dependency>
         <dependency>
             <groupId>io.crazydan.jingwei</groupId>
-            <artifactId>jingwei-apps-kernel</artifactId>
+            <artifactId>jingwei-apps-graphiql</artifactId>
         </dependency>
         <dependency>
             <groupId>io.crazydan.jingwei</groupId>
