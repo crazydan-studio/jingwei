@@ -32,4 +32,9 @@
     pnpm.runScript('build', true)
         // 直接将构建产物复制到 target 中，避免污染源码
         .copyDistTo(webTargetDir);
+
+    //
+    const targetIndexFile = new File(webTargetDir, 'index.html');
+    const targetIndexTplFile = new File(webTargetDir, '../../template/index.html');
+    FileHelper.moveFile(targetIndexFile, targetIndexTplFile);
 ]]></c:script>

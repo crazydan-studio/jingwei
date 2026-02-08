@@ -66,7 +66,7 @@ public class AgentRunner {
         prepareExec(execDir);
 
         PnpmRunner pnpm = new PnpmRunner(execDir);
-        pnpm.runScript("start", new String[] { "--config=../" + FILE_CONFIG, "--auth-dir=../" + DIR_AUTH });
+        pnpm.runScript("start", "--config=../" + FILE_CONFIG, "--auth-dir=../" + DIR_AUTH);
     }
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

@@ -88,6 +88,11 @@
             <!-- 本项目子模块，便于其他项目引入 -->
             <dependency>
                 <groupId>io.crazydan.jingwei</groupId>
+                <artifactId>jingwei-app-core</artifactId>
+                <version>${jingwei.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.crazydan.jingwei</groupId>
                 <artifactId>jingwei-app-schema</artifactId>
                 <version>${jingwei.version}</version>
             </dependency>
