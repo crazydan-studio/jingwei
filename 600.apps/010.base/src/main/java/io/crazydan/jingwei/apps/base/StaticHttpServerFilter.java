@@ -26,11 +26,10 @@ import java.util.concurrent.CompletionStage;
 import java.util.function.Supplier;
 
 import io.crazydan.duzhou.framework.commons.EvalExecutor;
-import io.crazydan.duzhou.framework.commons.ResourceHelper;
+import io.crazydan.duzhou.framework.commons.StringHelper;
 import io.crazydan.duzhou.framework.commons.ZipHelper;
+import io.nop.commons.util.IoHelper;
 import io.nop.core.lang.eval.IEvalAction;
-import io.nop.core.resource.IResource;
-import io.nop.core.resource.impl.ClassPathResource;
 import io.nop.http.api.HttpApiConstants;
 import io.nop.http.api.HttpStatus;
 import io.nop.http.api.server.IHttpServerContext;
@@ -40,7 +39,6 @@ import io.nop.xlang.api.XLang;
 import io.nop.xlang.expr.ExprPhase;
 
 import static io.crazydan.jingwei.app.AppCoreConfigs.CFG_APP_PORTAL_CODE;
-import static io.nop.core.resource.ResourceConstants.RESOURCE_NS_CLASSPATH;
 
 /**
  * HTTP 请求过滤器
@@ -85,8 +83,8 @@ public class StaticHttpServerFilter implements IHttpServerFilter {
 
     private synchronized InputStream genIndexHtml() throws IOException {
         if (this.indexHtml == null) {
-            IResource resource = new ClassPathResource(RESOURCE_NS_CLASSPATH + ":template/index.html");
-            String tpl = ResourceHelper.readText(resource);
+            InputStream input = getClass().getResourceAsStream("/template/index.html");
+            String tpl = IoHelper.readText(input, StringHelper.ENCODING_UTF8);
 
             ExprEvalAction eval = XLang.newCompileTool()
                                        .allowUnregisteredScopeVar(true)

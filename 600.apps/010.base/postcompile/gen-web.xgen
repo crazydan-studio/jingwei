@@ -35,6 +35,7 @@
 
     //
     const targetIndexFile = new File(webTargetDir, 'index.html');
-    const targetIndexTplFile = new File(webTargetDir, '../../template/index.html');
+    const targetIndexTplFile = FileHelper.getAbsoluteFile(webTargetDir, '../../template/index.html');
+    FileHelper.assureParent(targetIndexTplFile);
     FileHelper.moveFile(targetIndexFile, targetIndexTplFile);
 ]]></c:script>
