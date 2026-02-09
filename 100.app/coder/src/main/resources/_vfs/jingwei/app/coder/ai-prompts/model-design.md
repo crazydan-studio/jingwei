@@ -1,6 +1,6 @@
 ### 核心原则
 
-- **设计范围**：聚焦于需求中描述的核心业务实体（如 App, AppVersion）。排除通用模型（如 User, Role, Permission 等）。
+- **设计范围**：聚焦于需求中描述的核心业务实体 (如 App, AppVersion)。排除通用模型 (如 User, Role, Permission 等)。
 - **命名**：所有实体名均以 `Entity` 为后缀，如 UserEntity、AppEntity。
 - **主键**：所有实体均以 id 作为主键，且不使用复合主键。
 - **唯一键** (`orm:unique-keys`)：
@@ -28,10 +28,10 @@
 
 ### 数据字典 (`<dict>`) 定义规则
 
-- **何时定义**：状态（如 status, state）、有限枚举（选项 ≤ 20，如支付方式）等属性应定义为字典。
+- **何时定义**：状态 (如 status, state)、有限枚举 (选项 ≤ 20，如支付方式) 等属性应定义为字典。
 - **类型**：关联字典的属性必须是 `string` 类型。
 - **命名**：字典 `name` 采用 `kebab-case`，格式为 `相关模型-用途`，例如 `app-status`。
-- **字典项**：每个选项 (`<option>`) 的 `value` 为 3 位数字代码（如 `010`），`code` 为 `MACRO_CASE` 格式的常量名。
+- **字典项**：每个选项 (`<option>`) 的 `value` 为 3 位数字代码 (如 `010`)，`code` 为 `MACRO_CASE` 格式的常量名。
 - **布尔值**：`boolean` 类型属性不关联字典。
 
 ### **属性类型**
@@ -59,8 +59,8 @@
 ### 关联关系定义规则
 
 - **只有**一对一、一对多两种关联类型
-- **一对一（`ref:type="one-to-one"`）**：从父实体（源端）关联子实体（目标端）。
-  **禁止**在父实体上显式定义外键属性（如 `managerId`），关联属性名应体现业务含义
+- **一对一 (`ref:type="one-to-one"`) **：从父实体 (源端) 关联子实体 (目标端)。
+  **禁止**在父实体上显式定义外键属性 (如 `managerId`)，关联属性名应体现业务含义
 
 ```xml
 <attr name="user" domain="entityRef"
@@ -68,9 +68,9 @@
 />
 ```
 
-- **一对多（`ref:type="one-to-many"`）**：从父实体（源端）关联子实体（目标端）。
-  在父实体上的关联属性名为集合形式（如 `users`），并通过 `ref:targetAttr`
-  指向子实体中以 `one-to-one` 反向关联回来的属性（如 `group`）。
+- **一对多 (`ref:type="one-to-many"`) **：从父实体 (源端) 关联子实体 (目标端)。
+  在父实体上的关联属性名为集合形式 (如 `users`)，并通过 `ref:targetAttr`
+  指向子实体中以 `one-to-one` 反向关联回来的属性 (如 `group`)。
   对于需要在父实体被删除时级联删除子实体的情况，需要配置 `ref:cascadeDelete="true"`
 
 ```xml
@@ -87,8 +87,8 @@
 
 关联关系中的**隐性属性**：
 
-- 在一对一关系中，存在以**关联属性名 + Id** 形式命名的隐性属性（如 `userId`），
-  用于 UI 端保存数据时建立父实体与子实体的关联
+- 在一对一关系中，存在以**关联属性名 + Id** 形式命名的隐性属性 (如 `userId`)，
+  用于 UI 端保存数据时建立父实体与子实体的关联。其为 `published="true" queryable="true" sortable="true"`
 
 ### 默认属性定义规范
 
@@ -100,7 +100,7 @@
 
 定义示例：
 
-- **主键（`id`）属性**：`orm:primary` 必须设置为 `true`
+- **主键 (`id`) 属性**：`orm:primary` 必须设置为 `true`
 
 ```xml
 <attr name="id" propId="1" orm:primary="true"

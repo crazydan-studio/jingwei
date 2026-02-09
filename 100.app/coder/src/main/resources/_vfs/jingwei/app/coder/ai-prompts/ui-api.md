@@ -156,7 +156,7 @@ const { UserEntity__findFirst } = await graphql(
 const { id, name, roles } = UserEntity__findFirst;
 ```
 
-- `save(data: Map)`：新建数据
+- `save(data: Map)`：新建数据。必须指定返回数据的选择字段
 
 ```js
 import { graphql } from '@app-utils';
@@ -169,27 +169,27 @@ const { UserEntity__save } = await graphql(
       }
     }
   `,
-  { data: { name: 'Lily', age: 18, ... } }
+  { data: { name: 'Lily', age: 18, orgId: 'c5fd5e8f5ec74d189b3d1023a79508be', ... } }
 );
 
 const { id, name, age } = UserEntity__save;
 ```
 
-- `update(id: String, data: Map)`：更新数据
+- `update(data: Map)`：更新数据。在参数 data 中必须包含实体主键 id。必须指定返回数据的选择字段
 
 ```js
 import { graphql } from '@app-utils';
 
 const { UserEntity__update } = await graphql(
   `
-    mutation ($id: String, $data: Map) {
-      UserEntity__update(id: $id, data: $data) {
+    mutation ($data: Map) {
+      UserEntity__update(data: $data) {
         id
         name
       }
     }
   `,
-  { id: 'c5fd5e8f5ec74d189b3d1023a79508ba', data: { name: 'Tom' } }
+  { data: { id: 'c5fd5e8f5ec74d189b3d1023a79508ba', name: 'Tom', orgId: 'c5fd5e8f5ec74d189b3d1023a79508be' } }
 );
 
 const { id, name } = UserEntity__update;
