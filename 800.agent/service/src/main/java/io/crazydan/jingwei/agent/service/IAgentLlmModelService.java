@@ -17,11 +17,18 @@
  * If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
  */
 
-package io.crazydan.jingwei.agent;
+package io.crazydan.jingwei.agent.service;
+
+import java.util.List;
+
+import io.nop.ai.core.model.LlmModel;
 
 /**
  *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
  * @date 2026-02-09
  */
-public interface AgentServiceErrors {}
+public interface IAgentLlmModelService {
+
+    List<LlmModel> getLlmModels();
+}

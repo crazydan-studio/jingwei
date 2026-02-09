@@ -19,9 +19,26 @@
 
 package io.crazydan.jingwei.agent;
 
+import io.crazydan.duzhou.framework.config.PlaceholderConfigStarter;
+import io.nop.boot.NopApplication;
+import io.nop.config.starter.ConfigStarter;
+
 /**
  *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
- * @date 2026-02-09
+ * @date 2026-02-06
  */
-public interface AgentServiceErrors {}
+public class AgentServerStarter {
+
+    public static void main(String[] args) {
+        ConfigStarter.registerInstance(new PlaceholderConfigStarter());
+
+        NopApplication app = new NopApplication();
+        app.run(args, () -> {
+            AgentServer server = new AgentServer();
+            server.start();
+
+            return 0;
+        });
+    }
+}

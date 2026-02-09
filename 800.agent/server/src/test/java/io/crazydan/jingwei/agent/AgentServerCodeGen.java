@@ -19,9 +19,15 @@
 
 package io.crazydan.jingwei.agent;
 
+import io.crazydan.duzhou.framework.codegen.MavenProjectCodeGen;
+
 /**
- *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
- * @date 2026-02-09
+ * @date 2026-02-06
  */
-public interface AgentServiceErrors {}
+public class AgentServerCodeGen extends MavenProjectCodeGen {
+
+    public static void main(String[] args) {
+        run(AgentServerCodeGen.class);
+    }
+}

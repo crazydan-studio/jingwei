@@ -20,8 +20,9 @@
 package io.crazydan.jingwei.agent;
 
 /**
- *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
- * @date 2026-02-09
+ * @date 2026-02-06
  */
-public interface AgentServiceErrors {}
+public interface AgentServerErrors {
+
+}

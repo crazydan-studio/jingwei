@@ -19,34 +19,9 @@
 
 package io.crazydan.jingwei.agent;
 
-import io.crazydan.duzhou.framework.commons.StringHelper;
-import io.nop.api.core.annotations.core.Description;
-import io.nop.api.core.annotations.core.Locale;
-import io.nop.api.core.config.IConfigReference;
-import io.nop.api.core.util.SourceLocation;
-
-import static io.nop.api.core.config.AppConfig.varRef;
-
 /**
  *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
- * @date 2026-02-06
+ * @date 2026-02-09
  */
-@Locale("zh-CN")
-public interface AgentServiceConfigs {
-    SourceLocation s_loc = SourceLocation.fromClass(AgentServiceConfigs.class);
-
-    @Description("代理服务绑定的地址")
-    IConfigReference<String> CFG_AGENT_SERVER_HOST = //
-            varRef(s_loc, "jingwei.agent.server.host", String.class, "localhost");
-    @Description("代理服务监听的端口号")
-    IConfigReference<Integer> CFG_AGENT_SERVER_PORT = //
-            varRef(s_loc, "jingwei.agent.server.port", Integer.class, null);
-
-    @Description("代理服务的数据目录，用于存放配置、运行时等数据")
-    IConfigReference<String> CFG_AGENT_DATA_DIR = //
-            varRef(s_loc, "jingwei.agent.data-dir", String.class, null);
-    @Description("代理服务的 API Token")
-    IConfigReference<String> CFG_AGENT_API_TOKEN = //
-            varRef(s_loc, "jingwei.agent.api-token", String.class, StringHelper.generateUUID());
-}
+public interface AgentServiceConfigs {}
