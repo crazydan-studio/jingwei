@@ -11,10 +11,11 @@ import {
 } from './web-chat';
 
 const AUTH_FILE = 'deepseek-web.json';
+const CHAT_URL = '/chat';
 
 export function routes(fastify, { prefix, authDir }) {
   //
-  fastify.post(`${prefix}/chat`, async (request, reply) => {
+  fastify.post(`${prefix}${CHAT_URL}`, async (request, reply) => {
     const { content } = request.body;
 
     const result = await startChat(content, { authDir });
@@ -29,6 +30,22 @@ export function routes(fastify, { prefix, authDir }) {
     const result = await startAuth(action, body);
     reply.send(result);
   });
+}
+
+/** @return 模型定义 AgentLlmModel (_vfs/nop/schema/ai/llm.xdef) */
+export function model() {
+  return {
+    name: 'deepseek-web',
+    displayName: 'DeepSeek 网页版',
+    defaultModel: 'deepseek-chat',
+    chatUrl: CHAT_URL,
+    models: [
+      {
+        name: 'deepseek-chat',
+        maxTokensLimit: 8192
+      }
+    ]
+  };
 }
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

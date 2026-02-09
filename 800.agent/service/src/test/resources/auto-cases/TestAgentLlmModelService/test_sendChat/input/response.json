@@ -1,0 +1,24 @@
+{
+  "choices": [
+    {
+      "message": {
+        "role": "assistant",
+        "content": "Hello!",
+        "reasoning_content": "I'm thinking ..."
+      },
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null
+    }
+  ],
+  "object": "chat.completion",
+  "usage": {
+    "prompt_tokens": 3106,
+    "completion_tokens": 2363,
+    "total_tokens": 5469
+  },
+  "created": 1770623436,
+  "system_fingerprint": null,
+  "model": "qwen-coder-plus",
+  "id": "chatcmpl-3127fcb8-1458-9652-8ebf-26fc1b086706"
+}

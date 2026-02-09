@@ -19,9 +19,25 @@
 
 package io.crazydan.jingwei.agent;
 
+import io.nop.api.core.annotations.core.Description;
+import io.nop.api.core.config.IConfigReference;
+import io.nop.api.core.util.SourceLocation;
+
+import static io.nop.api.core.config.AppConfig.varRef;
+
 /**
  *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
  * @date 2026-02-09
  */
-public interface AgentServiceConfigs {}
+public interface AgentServiceConfigs {
+    SourceLocation s_loc = SourceLocation.fromClass(AgentServiceConfigs.class);
+
+    @Description("代理服务的 base URL")
+    IConfigReference<String> CFG_AGENT_SERVER_BASE_URL = //
+            varRef(s_loc, "jingwei.agent.server.base-url", String.class, null);
+
+    @Description("代理服务的 API Token")
+    IConfigReference<String> CFG_AGENT_API_TOKEN = //
+            varRef(s_loc, "jingwei.agent.api-token", String.class, null);
+}

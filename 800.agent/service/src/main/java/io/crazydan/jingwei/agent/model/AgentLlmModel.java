@@ -17,25 +17,43 @@
  * If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
  */
 
-package io.crazydan.jingwei.agent;
+package io.crazydan.jingwei.agent.model;
 
-import io.nop.api.core.exceptions.ErrorCode;
-
-import static io.nop.ai.core.AiCoreErrors.ARG_LLM_NAME;
-import static io.nop.api.core.exceptions.ErrorCode.define;
+import io.nop.ai.core.model.LlmModel;
+import io.nop.core.lang.json.IJsonHandler;
 
 /**
  *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
  * @date 2026-02-09
  */
-public interface AgentServiceErrors {
+public class AgentLlmModel extends LlmModel {
+    private String name;
+    private String displayName;
 
-    ErrorCode ERR_AGENT_SERVICE_NO_LLM_FOUND = //
-            define("jingwei.err.agent.service.no-llm-found",
-                   "指定的大语言模型 '{" + ARG_LLM_NAME + "}' 不存在",
-                   ARG_LLM_NAME);
-    ErrorCode ERR_AGENT_SERVICE_NO_LLM_SPECIFIED = //
-            define("jingwei.err.agent.service.no-llm-specified",
-                   "未指定大语言模型，请通过 AiChatOptions#setProvider 设置所要使用的大语言模型名");
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        checkAllowChange();
+        this.name = name;
+    }
+
+    public String getDisplayName() {
+        return this.displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        checkAllowChange();
+        this.displayName = displayName;
+    }
+
+    @Override
+    protected void outputJson(IJsonHandler out) {
+        super.outputJson(out);
+
+        out.putNotNull("name", getName());
+        out.putNotNull("displayName", getDisplayName());
+    }
 }

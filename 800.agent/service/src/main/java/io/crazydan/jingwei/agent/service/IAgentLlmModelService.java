@@ -21,7 +21,7 @@ package io.crazydan.jingwei.agent.service;
 
 import java.util.List;
 
-import io.nop.ai.core.model.LlmModel;
+import io.crazydan.jingwei.agent.model.AgentLlmModel;
 
 /**
  *
@@ -30,5 +30,5 @@ import io.nop.ai.core.model.LlmModel;
  */
 public interface IAgentLlmModelService {
 
-    List<LlmModel> getLlmModels();
+    List<AgentLlmModel> getLlmModels();
 }

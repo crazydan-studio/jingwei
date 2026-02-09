@@ -3,7 +3,7 @@ import Fastify from 'fastify';
 import { parseConfigFromArgs } from '@/server/config';
 import { auth } from '@/server/plugin';
 
-import { webDeepseek } from '@/provider/llm';
+import * as llm from '@/provider/llm';
 
 //
 const args = process.argv.slice(2);
@@ -27,8 +27,11 @@ fastify.setErrorHandler((e, request, reply) => {
 
 auth(fastify, { token: config.token });
 
-webDeepseek.routes(fastify, {
-  prefix: '/llm/deepseek-web',
+//
+const llmRoutePrefix = '/llm';
+llm.routes(fastify, { prefix: llmRoutePrefix });
+llm.webDeepseek.routes(fastify, {
+  prefix: `${llmRoutePrefix}/deepseek-web`,
   authDir: config.authDir
 });
 

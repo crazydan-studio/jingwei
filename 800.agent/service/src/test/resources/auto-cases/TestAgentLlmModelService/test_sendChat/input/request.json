@@ -1,0 +1,1 @@
+{"top_p":12.0,"response_format":{"type":"text"},"stop":["a","b"],"stream":false,"max_tokens":10000,"options":{"seed":"abc"},"temperature":0.4,"messages":[{"role":"system","content":"System Prompt"},{"role":"user","content":"User Prompt"}],"model":"deepseek-chat"}
