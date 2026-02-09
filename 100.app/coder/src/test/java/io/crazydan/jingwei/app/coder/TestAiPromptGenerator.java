@@ -92,7 +92,7 @@ public class TestAiPromptGenerator extends NopJunitAutoTestCase {
         command.promptTemplate(promptTemplate);
 
         AiChatExchange exchange = command.execute(vars, null);
-        XNode node = (XNode) command.execute(vars, null).getOutput("RESULT");
+        XNode node = (XNode) exchange.getOutput("RESULT");
         node.dump();
 
         //
