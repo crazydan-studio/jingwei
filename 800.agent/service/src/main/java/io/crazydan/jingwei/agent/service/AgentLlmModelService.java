@@ -42,6 +42,7 @@ import jakarta.inject.Inject;
 
 import static io.crazydan.jingwei.agent.AgentServiceConfigs.CFG_AGENT_API_TOKEN;
 import static io.crazydan.jingwei.agent.AgentServiceConfigs.CFG_AGENT_SERVER_BASE_URL;
+import static io.crazydan.jingwei.agent.AgentServiceErrors.ERR_AGENT_SERVICE_CALLING_FAILED;
 import static io.crazydan.jingwei.agent.AgentServiceErrors.ERR_AGENT_SERVICE_LLM_CHAT_FAILED;
 import static io.crazydan.jingwei.agent.AgentServiceErrors.ERR_AGENT_SERVICE_NO_LLM_FOUND;
 import static io.crazydan.jingwei.agent.AgentServiceErrors.ERR_AGENT_SERVICE_NO_LLM_SPECIFIED;
@@ -67,15 +68,20 @@ public class AgentLlmModelService extends DefaultAiChatService implements IAgent
     public List<AgentLlmModel> getLlmModels() {
         String url = getBaseUrl() + "/models";
         HttpRequest request = HttpRequest.get(url);
+        request.bearerToken(getApiKey(null));
 
         IHttpResponse response = this.httpClient.fetch(request, null);
         if (response.getHttpStatus() != 200) {
-            return List.of();
+            throw new NopException(ERR_AGENT_SERVICE_CALLING_FAILED).param(ARG_ERROR, response.getHttpStatus());
         }
 
-        List<?> results = response.getBodyAsBean(List.class);
+        Map results = response.getBodyAsBean(Map.class);
+        String error = (String) results.get("error");
+        if (StringHelper.isNotBlank(error)) {
+            throw new NopException(ERR_AGENT_SERVICE_CALLING_FAILED).param(ARG_ERROR, error);
+        }
 
-        return BeanTool.castListItemToType(results, AgentLlmModel.class);
+        return BeanTool.castListItemToType((List<?>) results.get("data"), AgentLlmModel.class);
     }
 
     @Override

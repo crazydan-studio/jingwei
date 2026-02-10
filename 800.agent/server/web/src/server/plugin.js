@@ -7,7 +7,7 @@ export function auth(fastify, { token }) {
     const t = request.headers.authorization?.replace('Bearer ', '');
 
     if (t !== token) {
-      reply.code(401).send({ error: 'Unauthorized' });
+      reply.send({ error: '访问未授权' });
     } else {
       done();
     }

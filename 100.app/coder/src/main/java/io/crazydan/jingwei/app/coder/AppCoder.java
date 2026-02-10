@@ -39,6 +39,8 @@ public class AppCoder {
 
     public static AppCoder create(String provider, String model) {
         AiCommand command = AiCommand.create();
+        // Note: 直接抛出异常，由最上层统一处理异常，避免将异常包装为 response
+        command.setReturnExceptionAsResponse(false);
 
         AiChatOptions options = command.makeChatOptions();
         options.setRequestTimeout(TimeUnit.MINUTES.toMillis(10));

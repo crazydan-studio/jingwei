@@ -67,7 +67,7 @@
     FileHelper.writeJson(pkgJsonFile, pkgJson, StringHelper.ENCODING_UTF8);
 
     // 记录有效文件
-    const manifestFile = new File(webTargetDir, AgentRunner.FILE_MANIFEST);
+    const manifestFile = new File(webTargetDir, AgentServer.FILE_MANIFEST);
     const paths = FileHelper.findFilePaths(webTargetDir,"**/*", true, true);
     FileHelper.writeJson(manifestFile, paths, StringHelper.ENCODING_UTF8);
 ]]></c:script>

@@ -19,7 +19,7 @@ export async function chat(page, content) {
   await page.goto(CHAT_URL);
 
   if ((await page.url()) == AUTH_URL) {
-    const form = await createAuthForm(page);
+    const form = await createLoginForm(page);
 
     return createNeedMoreActionResponse(NEED_MORE_ACTION_REASON, form);
   }
@@ -77,19 +77,23 @@ export async function clickAuthSendCodeButton(page, phoneNumber) {
 
   return createNeedMoreActionResponse(NEED_MORE_ACTION_REASON, {
     title: '请按提示选择正确的图形',
-    body: [
-      {
-        type: 'text',
-        value: captchaTips
-      },
-      {
-        type: 'image',
-        src: captchaUrl,
-        width: captchaSize.width,
-        height: captchaSize.height,
-        action: 'captcha'
-      }
-    ]
+    body: {
+      type: 'column',
+      align: { row: 'center' },
+      body: [
+        {
+          type: 'text',
+          value: captchaTips
+        },
+        {
+          type: 'image',
+          src: captchaUrl,
+          width: captchaSize.width,
+          height: captchaSize.height,
+          action: 'captcha'
+        }
+      ]
+    }
   });
 }
 
@@ -240,7 +244,7 @@ function parseChatAnswer(text) {
   return messages.join('');
 }
 
-async function createAuthForm(page) {
+async function createLoginForm(page) {
   const iframe = page.locator('#wxLogin > iframe');
   const wxBaseUrl = (await iframe.getAttribute('src')).replace(
     /^(https:\/\/[^\/]+).+/,
@@ -254,6 +258,7 @@ async function createAuthForm(page) {
     title: '登录 DeepSeek 网页版',
     body: {
       type: 'row',
+      align: { column: 'center' },
       body: [
         {
           type: 'column',
@@ -280,12 +285,14 @@ async function createAuthForm(page) {
             {
               type: 'button',
               label: '登录',
+              color: 'primary',
               action: 'login'
             }
           ]
         },
         {
           type: 'column',
+          align: { row: 'center' },
           body: [
             {
               type: 'text',
@@ -293,7 +300,8 @@ async function createAuthForm(page) {
             },
             {
               type: 'image',
-              src: qrcodeUrl
+              src: qrcodeUrl,
+              width: 320
             }
           ]
         }
