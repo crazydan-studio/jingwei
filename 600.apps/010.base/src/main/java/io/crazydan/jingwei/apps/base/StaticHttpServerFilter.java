@@ -28,6 +28,7 @@ import java.util.function.Supplier;
 import io.crazydan.duzhou.framework.commons.EvalExecutor;
 import io.crazydan.duzhou.framework.commons.StringHelper;
 import io.crazydan.duzhou.framework.commons.ZipHelper;
+import io.crazydan.duzhou.framework.exception.NopNeedMoreActionException;
 import io.nop.commons.util.IoHelper;
 import io.nop.core.lang.eval.IEvalAction;
 import io.nop.http.api.HttpApiConstants;
@@ -90,10 +91,14 @@ public class StaticHttpServerFilter implements IHttpServerFilter {
                                        .allowUnregisteredScopeVar(true)
                                        .compileTemplateExpr(null, tpl, false, ExprPhase.eval);
 
-            String html = EvalExecutor.exec((IEvalAction) eval,
-                                            new Object[] { "apiContextRoot", "" },
-                                            new Object[] { "staticContextRoot", "" },
-                                            new Object[] { "portalCode", CFG_APP_PORTAL_CODE.get() });
+            String html = //
+                    EvalExecutor.exec((IEvalAction) eval,
+                                      new Object[] { "apiContextRoot", "" },
+                                      new Object[] { "staticContextRoot", "" },
+                                      new Object[] { "portalCode", CFG_APP_PORTAL_CODE.get() },
+                                      new Object[] {
+                                              "needMoreActionCode", NopNeedMoreActionException.ERROR_CODE
+                                      });
 
             this.indexHtml = ZipHelper.gzip(html);
         }

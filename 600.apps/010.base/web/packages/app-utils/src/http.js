@@ -41,15 +41,16 @@ export async function graphql(query, variables) {
 
   let msg = data.errors.map((e) => e.message).join('\n');
   const errorCode = data.extensions && data.extensions['nop-error-code'];
-  if (errorCode == 'nop.err.data.need-more-action') {
+  if (errorCode == appConfig.vars.needMoreActionCode) {
     popupNeedMoreActionForm(JSON.parse(msg));
 
     msg = errorCode;
   } else {
     notification.error({
+      title: 'GraphQL 数据处理存在错误',
       duration: MSG_TIMEOUT,
       keepAliveOnHover: true,
-      content: 'GraphQL 数据处理存在错误：\n' + msg
+      content: msg
     });
   }
 

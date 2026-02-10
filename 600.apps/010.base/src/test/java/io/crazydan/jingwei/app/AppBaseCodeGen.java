@@ -25,9 +25,9 @@ import io.crazydan.duzhou.framework.codegen.MavenProjectCodeGen;
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
  * @date 2025-11-14
  */
-public class AppKernelCodeGen extends MavenProjectCodeGen {
+public class AppBaseCodeGen extends MavenProjectCodeGen {
 
     public static void main(String[] args) {
-        run(AppKernelCodeGen.class);
+        run(AppBaseCodeGen.class);
     }
 }
