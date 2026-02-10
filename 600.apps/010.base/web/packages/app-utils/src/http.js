@@ -26,11 +26,7 @@ export async function graphql(query, variables) {
       return resp.json();
     })
     .catch((e) => {
-      notification.error({
-        duration: MSG_TIMEOUT,
-        keepAliveOnHover: true,
-        content: 'GraphQL 请求出现异常：\n' + e.message
-      });
+      showGraphQLError('GraphQL 请求出现异常', e.message);
 
       throw e;
     });
@@ -41,19 +37,14 @@ export async function graphql(query, variables) {
 
   let msg = data.errors.map((e) => e.message).join('\n');
   const errorCode = data.extensions && data.extensions['nop-error-code'];
+
   if (errorCode == appConfig.vars.needMoreActionCode) {
     popupNeedMoreActionForm(JSON.parse(msg));
 
     msg = errorCode;
   } else {
-    notification.error({
-      title: 'GraphQL 数据处理存在错误',
-      duration: MSG_TIMEOUT,
-      keepAliveOnHover: true,
-      content: msg
-    });
+    showGraphQLError('GraphQL 数据处理发生错误', msg);
   }
-
   throw new Error(msg);
 }
 
@@ -67,4 +58,13 @@ export function getFileDownloadUrl(fileHash) {
   const appConfig = getAppConfig();
 
   return appConfig.api.fileDownload + '/' + fileHash;
+}
+
+function showGraphQLError(title, msg) {
+  notification.error({
+    title,
+    duration: MSG_TIMEOUT,
+    keepAliveOnHover: true,
+    content: msg
+  });
 }
