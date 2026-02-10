@@ -1,4 +1,8 @@
 import { AUTH_TIMEOUT } from '@/utils/browser';
+import {
+  createChatResponse,
+  createNeedMoreActionResponse
+} from '@/utils/openai';
 
 const BASE_URL = 'https://chat.deepseek.com';
 
@@ -8,20 +12,16 @@ const CHAT_API_COMPLETION = '/api/v0/chat/completion';
 const CHAT_API_DELETE_SESSION = '/api/v0/chat_session/delete';
 const CHAT_TIMEOUT = 20 * 60 * 1000;
 
-/** @return 返回结果类型为 GraphQLResponseBean */
+export const NEED_MORE_ACTION_REASON = 'unauthorized';
+
 export async function chat(page, content) {
   //console.log(`[DeepSeek] Opening ${CHAT_URL} ...`);
   await page.goto(CHAT_URL);
 
   if ((await page.url()) == AUTH_URL) {
-    return {
-      errors: [{ message: 'Unauthorized' }],
-      extensions: {
-        'nop-error-code': 'unauthorized',
-        'nop-status': 401,
-        form: await createAuthForm(page)
-      }
-    };
+    const form = await createAuthForm(page);
+
+    return createNeedMoreActionResponse(NEED_MORE_ACTION_REASON, form);
   }
 
   //
@@ -37,7 +37,7 @@ export async function chat(page, content) {
     console.error(e);
   }
 
-  return { data: session.answer };
+  return createChatResponse(session.answer);
 }
 
 /** 等待认证结束 */
@@ -75,27 +75,22 @@ export async function clickAuthSendCodeButton(page, phoneNumber) {
   const captchaSize = await captcha.boundingBox();
   const captchaUrl = await captcha.getAttribute('src');
 
-  return {
-    extensions: {
-      'nop-error-code': 'unauthorized',
-      'nop-status': 401,
-      form: {
-        children: [
-          {
-            type: 'text',
-            value: captchaTips
-          },
-          {
-            type: 'image',
-            src: captchaUrl,
-            width: captchaSize.width,
-            height: captchaSize.height,
-            action: 'captcha'
-          }
-        ]
+  return createNeedMoreActionResponse(NEED_MORE_ACTION_REASON, {
+    title: '请按提示选择正确的图形',
+    body: [
+      {
+        type: 'text',
+        value: captchaTips
+      },
+      {
+        type: 'image',
+        src: captchaUrl,
+        width: captchaSize.width,
+        height: captchaSize.height,
+        action: 'captcha'
       }
-    }
-  };
+    ]
+  });
 }
 
 /** 点击认证页面中的登录按钮 */
@@ -256,12 +251,13 @@ async function createAuthForm(page) {
   const qrcodeUrl = wxBaseUrl + (await qrcode.getAttribute('src'));
 
   return {
-    children: {
+    title: '登录 DeepSeek 网页版',
+    body: {
       type: 'row',
-      children: [
+      body: [
         {
           type: 'column',
-          children: [
+          body: [
             {
               type: 'input',
               label: '手机号',
@@ -290,7 +286,7 @@ async function createAuthForm(page) {
         },
         {
           type: 'column',
-          children: [
+          body: [
             {
               type: 'text',
               value: '微信扫码登录'

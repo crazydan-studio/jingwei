@@ -1,3 +1,4 @@
+// https://fastify.dev/docs/latest/Reference/
 import Fastify from 'fastify';
 
 import { parseConfigFromArgs } from '@/server/config';
@@ -19,8 +20,7 @@ const fastify = Fastify({
 fastify.setErrorHandler((e, request, reply) => {
   fastify.log.error(e);
 
-  // 返回结构为 GraphQLResponseBean
-  reply.send({ errors: [{ message: e.message }] });
+  reply.send({ error: e.message });
 });
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

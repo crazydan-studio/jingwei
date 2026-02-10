@@ -23,6 +23,7 @@ import io.nop.api.core.exceptions.ErrorCode;
 
 import static io.nop.ai.core.AiCoreErrors.ARG_LLM_NAME;
 import static io.nop.api.core.exceptions.ErrorCode.define;
+import static io.nop.xlang.XLangErrors.ARG_ERROR;
 
 /**
  *
@@ -38,4 +39,10 @@ public interface AgentServiceErrors {
     ErrorCode ERR_AGENT_SERVICE_NO_LLM_SPECIFIED = //
             define("jingwei.err.agent.service.no-llm-specified",
                    "未指定大语言模型，请通过 AiChatOptions#setProvider 设置所要使用的大语言模型名");
+
+    ErrorCode ERR_AGENT_SERVICE_LLM_CHAT_FAILED = //
+            define("jingwei.err.agent.service.llm-chat-failed",
+                   "大语言模型 '{" + ARG_LLM_NAME + "}' 调用异常：{" + ARG_ERROR + "}",
+                   ARG_LLM_NAME,
+                   ARG_ERROR);
 }

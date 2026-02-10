@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.concurrent.CompletionStage;
 
 import io.crazydan.duzhou.framework.commons.StringHelper;
+import io.crazydan.duzhou.framework.exception.NopNeedMoreActionException;
 import io.crazydan.jingwei.agent.model.AgentLlmModel;
 import io.nop.ai.core.api.chat.AiChatOptions;
 import io.nop.ai.core.api.messages.AiChatExchange;
@@ -41,10 +42,12 @@ import jakarta.inject.Inject;
 
 import static io.crazydan.jingwei.agent.AgentServiceConfigs.CFG_AGENT_API_TOKEN;
 import static io.crazydan.jingwei.agent.AgentServiceConfigs.CFG_AGENT_SERVER_BASE_URL;
+import static io.crazydan.jingwei.agent.AgentServiceErrors.ERR_AGENT_SERVICE_LLM_CHAT_FAILED;
 import static io.crazydan.jingwei.agent.AgentServiceErrors.ERR_AGENT_SERVICE_NO_LLM_FOUND;
 import static io.crazydan.jingwei.agent.AgentServiceErrors.ERR_AGENT_SERVICE_NO_LLM_SPECIFIED;
 import static io.nop.ai.core.AiCoreConfigs.CFG_AI_SERVICE_LOG_MESSAGE;
 import static io.nop.ai.core.AiCoreErrors.ARG_LLM_NAME;
+import static io.nop.xlang.XLangErrors.ARG_ERROR;
 
 /**
  *
@@ -134,5 +137,25 @@ public class AgentLlmModelService extends DefaultAiChatService implements IAgent
             AiChatOptions options
     ) {
         super.initBody(llmName, llmModel, model, body, prompt, options);
+    }
+
+    @Override
+    protected void parseHttpResponse(
+            String llmName, LlmModel llmModel, Map<String, Object> response,
+            AiChatExchange chatResponse
+    ) {
+        Object form = response.get("form");
+        String error = (String) response.get("error");
+        if (Boolean.TRUE.equals(response.get("need_more_action")) //
+            && form instanceof Map //
+        ) {
+            throw new NopNeedMoreActionException((Map) form);
+        } //
+        else if (StringHelper.isNotBlank(error)) {
+            throw new NopException(ERR_AGENT_SERVICE_LLM_CHAT_FAILED).param(ARG_LLM_NAME, llmName)
+                                                                     .param(ARG_ERROR, error);
+        }
+
+        super.parseHttpResponse(llmName, llmModel, response, chatResponse);
     }
 }

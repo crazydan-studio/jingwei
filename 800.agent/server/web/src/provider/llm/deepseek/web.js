@@ -7,7 +7,8 @@ import {
   waitAuth,
   clickAuthSendCodeButton,
   clickAuthLoginButton,
-  clickAuthCaptchaImage
+  clickAuthCaptchaImage,
+  NEED_MORE_ACTION_REASON
 } from './web-chat';
 
 const AUTH_FILE = 'deepseek-web.json';
@@ -16,7 +17,8 @@ const CHAT_URL = '/chat';
 export function routes(fastify, { prefix, authDir }) {
   //
   fastify.post(`${prefix}${CHAT_URL}`, async (request, reply) => {
-    const { content } = request.body;
+    const { messages } = request.body;
+    const content = messages.map((msg) => msg.content).join('\n\n---\n\n');
 
     const result = await startChat(content, { authDir });
     reply.send(result);
@@ -62,7 +64,6 @@ async function resetGlobalAuth() {
   globalAuthPromise = null;
 }
 
-/** @return 返回结果类型为 GraphQLResponseBean */
 async function startChat(content, { authDir }) {
   await resetGlobalAuth();
 
@@ -74,7 +75,7 @@ async function startChat(content, { authDir }) {
   try {
     const result = await chat(page, content);
 
-    if (!result.data) {
+    if (result.reason == NEED_MORE_ACTION_REASON) {
       globalAuthPage = page;
       // 异步等待认证完成
       globalAuthPromise = waitAuth(page, {

@@ -1,3 +1,4 @@
+// https://playwright.dev/docs/api/class-playwright
 import { chromium } from 'playwright-core';
 
 import { initJsonFile } from '@/utils/fs';
