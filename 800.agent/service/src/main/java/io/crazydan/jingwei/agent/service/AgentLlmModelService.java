@@ -31,6 +31,11 @@ import io.nop.ai.core.api.messages.AiChatExchange;
 import io.nop.ai.core.api.messages.Prompt;
 import io.nop.ai.core.model.LlmModel;
 import io.nop.ai.core.service.DefaultAiChatService;
+import io.nop.api.core.annotations.biz.BizModel;
+import io.nop.api.core.annotations.biz.BizMutation;
+import io.nop.api.core.annotations.core.Description;
+import io.nop.api.core.annotations.core.Name;
+import io.nop.api.core.annotations.core.Optional;
 import io.nop.api.core.config.AppConfig;
 import io.nop.api.core.exceptions.NopException;
 import io.nop.api.core.util.ICancelToken;
@@ -55,7 +60,13 @@ import static io.nop.xlang.XLangErrors.ARG_ERROR;
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
  * @date 2026-02-09
  */
+@BizModel(AgentLlmModelService.BIZ_NAME)
 public class AgentLlmModelService extends DefaultAiChatService implements IAgentLlmModelService {
+    public static final String BIZ_NAME = "LlmAgent";
+    public static final String URL_LLM = "/llm";
+    public static final String URL_MODELS = "/models";
+    public static final String URL_ACTION = "/action";
+
     private IHttpClient httpClient;
 
     @Inject
@@ -64,24 +75,42 @@ public class AgentLlmModelService extends DefaultAiChatService implements IAgent
         this.httpClient = httpClient;
     }
 
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    @Description("提交「需更多处理」的数据")
+    @BizMutation
+    public void needMoreAction(
+            @Name("action") String action, @Name("provider") String provider,
+            @Optional @Name("data") String data
+    ) {
+        String url = getBaseUrl(provider, null, null) + URL_ACTION + '/' + action;
+        HttpRequest request = HttpRequest.post(url);
+        // Note: 缺省设置的 header 为 HttpApiConstants#CONTENT_TYPE_JSON
+        request.setBody(StringHelper.isNotBlank(data) ? data : "{}");
+
+        doSendRequest(request, provider);
+    }
+
+    @Description("与大模型对话")
+    @BizMutation
+    public void chat(
+            @Description("大模型的提供商") @Name("provider") String provider,
+            @Description("大模型的模型名") @Optional @Name("model") String model,
+            @Description("会话标识") @Optional @Name("sessionId") String sessionId,
+            @Description("对话内容") @Name("content") String content
+    ) {
+    }
+
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
     @Override
     public List<AgentLlmModel> getLlmModels() {
-        String url = getBaseUrl() + "/models";
+        String url = getBaseUrl() + URL_MODELS;
         HttpRequest request = HttpRequest.get(url);
-        request.bearerToken(getApiKey(null));
 
-        IHttpResponse response = this.httpClient.fetch(request, null);
-        if (response.getHttpStatus() != 200) {
-            throw new NopException(ERR_AGENT_SERVICE_CALLING_FAILED).param(ARG_ERROR, response.getHttpStatus());
-        }
+        Map<String, Object> response = doSendRequest(request, null);
 
-        Map results = response.getBodyAsBean(Map.class);
-        String error = (String) results.get("error");
-        if (StringHelper.isNotBlank(error)) {
-            throw new NopException(ERR_AGENT_SERVICE_CALLING_FAILED).param(ARG_ERROR, error);
-        }
-
-        return BeanTool.castListItemToType((List<?>) results.get("data"), AgentLlmModel.class);
+        return BeanTool.castListItemToType((List<?>) response.get("data"), AgentLlmModel.class);
     }
 
     @Override
@@ -132,7 +161,7 @@ public class AgentLlmModelService extends DefaultAiChatService implements IAgent
     protected String getBaseUrl() {
         String baseUrl = CFG_AGENT_SERVER_BASE_URL.get();
 
-        return StringHelper.appendPath(baseUrl, "/llm");
+        return StringHelper.appendPath(baseUrl, URL_LLM);
     }
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -150,18 +179,51 @@ public class AgentLlmModelService extends DefaultAiChatService implements IAgent
             String llmName, LlmModel llmModel, Map<String, Object> response,
             AiChatExchange chatResponse
     ) {
-        Object form = response.get("form");
-        String error = (String) response.get("error");
-        if (Boolean.TRUE.equals(response.get("need_more_action")) //
-            && form instanceof Map //
-        ) {
-            throw new NopNeedMoreActionException((Map) form);
-        } //
-        else if (StringHelper.isNotBlank(error)) {
-            throw new NopException(ERR_AGENT_SERVICE_LLM_CHAT_FAILED).param(ARG_LLM_NAME, llmName)
-                                                                     .param(ARG_ERROR, error);
-        }
+        processResponse(response, llmName);
 
         super.parseHttpResponse(llmName, llmModel, response, chatResponse);
+    }
+
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    protected Map<String, Object> doSendRequest(HttpRequest request, String llmName) {
+        request.bearerToken(getApiKey(null));
+
+        IHttpResponse resp = this.httpClient.fetch(request, null);
+        if (resp.getHttpStatus() != 200) {
+            throw new NopException(ERR_AGENT_SERVICE_CALLING_FAILED).param(ARG_ERROR, resp.getHttpStatus());
+        }
+
+        Map<String, Object> response = resp.getBodyAsBean(Map.class);
+        processResponse(response, llmName);
+
+        return response;
+    }
+
+    protected void processResponse(Map<String, Object> response, String llmName) {
+        Object form = response.get("form");
+        String error = (String) response.get("error");
+        boolean needMoreAction = Boolean.TRUE.equals(response.get("need_more_action"));
+
+        if (needMoreAction && form instanceof Map) {
+            Map<String, Object> map = (Map) form;
+            map.put("graphql", //
+                    "mutation($action:String,$data:String){" //
+                    + BIZ_NAME + "__needMoreAction(" //
+                    + "action:$action" //
+                    + ",provider:\"" + llmName + '"' //
+                    + ",data:$data)" //
+                    + "}");
+
+            throw new NopNeedMoreActionException(map);
+        } //
+        else if (StringHelper.isNotBlank(error)) {
+            if (llmName != null) {
+                throw new NopException(ERR_AGENT_SERVICE_LLM_CHAT_FAILED).param(ARG_LLM_NAME, llmName)
+                                                                         .param(ARG_ERROR, error);
+            } else {
+                throw new NopException(ERR_AGENT_SERVICE_CALLING_FAILED).param(ARG_ERROR, error);
+            }
+        }
     }
 }

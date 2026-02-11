@@ -39,11 +39,11 @@ export async function graphql(query, variables) {
   const errorCode = data.extensions && data.extensions['nop-error-code'];
 
   if (errorCode == appConfig.vars.needMoreActionCode) {
-    popupNeedMoreActionForm(JSON.parse(msg));
+    popupNeedMoreActionForm(JSON.parse(msg), { graphql });
 
     msg = errorCode;
   } else {
-    showGraphQLError('GraphQL 数据处理发生错误', msg);
+    showGraphQLError('GraphQL 数据处理出现异常', msg);
   }
   throw new Error(msg);
 }

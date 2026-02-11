@@ -29,7 +29,7 @@
     const webTargetDir = new File(rootDir, 'target/classes/META-INF/resources');
 
     const pnpm = new PnpmRunner(webSrcDir);
-    pnpm.runScript('build', true)
+    pnpm.runScriptRecursive('build')
         // 直接将构建产物复制到 target 中，避免污染源码
         .copyDistTo(webTargetDir);
 

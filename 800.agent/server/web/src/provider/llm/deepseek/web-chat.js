@@ -12,6 +12,7 @@ const CHAT_API_COMPLETION = '/api/v0/chat/completion';
 const CHAT_API_DELETE_SESSION = '/api/v0/chat_session/delete';
 const CHAT_TIMEOUT = 20 * 60 * 1000;
 
+export const ACTION_AUTH_PREFIX = 'auth:';
 export const NEED_MORE_ACTION_REASON = 'unauthorized';
 
 export async function chat(page, content) {
@@ -57,6 +58,10 @@ export async function waitAuth(page, { authFile, complete }) {
 
 /** 点击认证页面中的验证码发送按钮 */
 export async function clickAuthSendCodeButton(page, phoneNumber) {
+  if (!/^1[3-9]\d{9}$/.test(phoneNumber || '')) {
+    throw new Error('输入的手机号无效');
+  }
+
   const locator = await page.locator('.ds-sign-in-form__main');
 
   await locator.getByPlaceholder('Phone number').fill(phoneNumber);
@@ -88,9 +93,16 @@ export async function clickAuthSendCodeButton(page, phoneNumber) {
         {
           type: 'image',
           src: captchaUrl,
+          preview: false,
           width: captchaSize.width,
           height: captchaSize.height,
-          action: 'captcha'
+          action: {
+            on: 'click',
+            name: ACTION_AUTH_PREFIX + 'captcha',
+            data: JSON.stringify({
+              captchaPos: { x: '${event.offsetX}', y: '${event.offsetY}' }
+            })
+          }
         }
       ]
     }
@@ -99,6 +111,10 @@ export async function clickAuthSendCodeButton(page, phoneNumber) {
 
 /** 点击认证页面中的登录按钮 */
 export async function clickAuthLoginButton(page, verifyCode) {
+  if (!/^\d{3,9}$/.test(verifyCode || '')) {
+    throw new Error('输入的验证码无效');
+  }
+
   const locator = await page.locator('.ds-sign-in-form__main');
 
   await locator.getByPlaceholder('Code').fill(verifyCode);
@@ -108,9 +124,17 @@ export async function clickAuthLoginButton(page, verifyCode) {
 
 /** 点击认证页面中的验证码图片 */
 export async function clickAuthCaptchaImage(page, position) {
+  let { x, y } = position || {};
+  try {
+    x = parseFloat(x);
+    y = parseFloat(y);
+  } catch (e) {
+    throw new Error(`无效的坐标值 [${x}, ${y}]：${e.message}`);
+  }
+
   const captcha = await page.locator('#sm-captcha').locator('img');
 
-  await captcha.click({ position });
+  await captcha.click({ x, y });
 }
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -278,15 +302,23 @@ async function createLoginForm(page) {
               name: 'verifyCode',
               suffix: {
                 type: 'button',
-                label: 'Send code',
-                action: 'send-code'
+                label: '获取验证码',
+                action: {
+                  on: 'click',
+                  name: ACTION_AUTH_PREFIX + 'send-code',
+                  data: JSON.stringify({ phoneNumber: '${phoneNumber}' })
+                }
               }
             },
             {
               type: 'button',
               label: '登录',
               color: 'primary',
-              action: 'login'
+              action: {
+                on: 'click',
+                name: ACTION_AUTH_PREFIX + 'login',
+                data: JSON.stringify({ verifyCode: '${verifyCode}' })
+              }
             }
           ]
         },
@@ -302,6 +334,15 @@ async function createLoginForm(page) {
               type: 'image',
               src: qrcodeUrl,
               width: 320
+            },
+            {
+              type: 'button',
+              label: '确认微信已登录',
+              color: 'info',
+              action: {
+                on: 'click',
+                name: ACTION_AUTH_PREFIX + 'wechat-login'
+              }
             }
           ]
         }

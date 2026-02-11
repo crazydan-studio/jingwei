@@ -21,3 +21,30 @@ export function createNeedMoreActionResponse(reason, form) {
     form
   };
 }
+
+export function createLlmModel(opts) {
+  // _vfs/nop/ai/llm/default.llm.xml
+  return {
+    ...opts,
+    request: {
+      seedPath: 'options.seed',
+      topPPath: 'top_p',
+      temperaturePath: 'temperature',
+      stopPath: 'stop',
+      maxTokensPath: 'max_tokens',
+      ...(opts.request || {})
+    },
+    response: {
+      contentPath: 'choices.0.message.content',
+      rolePath: 'choices.0.message.role',
+      reasoningContentPath: 'choices.0.message.reasoning_content',
+      promptTokensPath: 'usage.prompt_tokens',
+      completionTokensPath: 'usage.completion_tokens',
+      totalTokensPath: 'usage.total_tokens',
+      statusPath: 'done',
+      errorPath: 'error',
+      toolCallsPath: 'choices.0.message.tool_calls',
+      ...(opts.response || {})
+    }
+  };
+}

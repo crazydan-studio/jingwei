@@ -1,6 +1,7 @@
 /* 通过操作浏览器实现与 DeepSeek 网页端交互的接口 */
 
 import { createContext, closeContext } from '@/utils/browser';
+import { createLlmModel } from '@/utils/openai';
 
 import {
   chat,
@@ -8,7 +9,8 @@ import {
   clickAuthSendCodeButton,
   clickAuthLoginButton,
   clickAuthCaptchaImage,
-  NEED_MORE_ACTION_REASON
+  NEED_MORE_ACTION_REASON,
+  ACTION_AUTH_PREFIX
 } from './web-chat';
 
 const AUTH_FILE = 'deepseek-web.json';
@@ -25,18 +27,22 @@ export function routes(fastify, { prefix, authDir }) {
   });
 
   //
-  fastify.post(`${prefix}/auth/action/:action`, async (request, reply) => {
+  fastify.post(`${prefix}/action/:action`, async (request, reply) => {
     const { action } = request.params;
     const body = request.body;
 
-    const result = await startAuth(action, body);
-    reply.send(result);
+    let result;
+    if (action.startsWith(ACTION_AUTH_PREFIX)) {
+      result = await startAuth(action, body);
+    }
+
+    reply.send(result || { success: true });
   });
 }
 
 /** @return 模型定义 AgentLlmModel (_vfs/nop/schema/ai/llm.xdef) */
 export function model() {
-  return {
+  return createLlmModel({
     name: 'deepseek-web',
     displayName: 'DeepSeek 网页版',
     defaultModel: 'deepseek-chat',
@@ -47,7 +53,7 @@ export function model() {
         maxTokensLimit: 8192
       }
     ]
-  };
+  });
 }
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -95,22 +101,28 @@ async function startChat(content, { authDir }) {
 async function startAuth(action, { phoneNumber, verifyCode, captchaPos }) {
   const page = globalAuthPage;
 
-  if (!!page) {
-    switch (action) {
-      case 'send-code': {
-        return await clickAuthSendCodeButton(page, phoneNumber);
-      }
-      case 'login': {
-        await clickAuthLoginButton(page, verifyCode);
-        await globalAuthPromise;
-        break;
-      }
-      case 'captcha': {
-        await clickAuthCaptchaImage(page, captchaPos);
-        break;
-      }
+  if (!page) {
+    if (action == ACTION_AUTH_PREFIX + 'wechat-login') {
+      return;
     }
+    throw new Error('还未触发登录认证，请重试');
   }
 
-  return { data: true };
+  switch (action) {
+    case ACTION_AUTH_PREFIX + 'send-code': {
+      return await clickAuthSendCodeButton(page, phoneNumber);
+    }
+    case ACTION_AUTH_PREFIX + 'login': {
+      await clickAuthLoginButton(page, verifyCode);
+      await globalAuthPromise;
+      break;
+    }
+    case ACTION_AUTH_PREFIX + 'captcha': {
+      await clickAuthCaptchaImage(page, captchaPos);
+      break;
+    }
+    case ACTION_AUTH_PREFIX + 'wechat-login': {
+      throw new Error('微信登录还未完成或者登录失败，请稍后重试');
+    }
+  }
 }
