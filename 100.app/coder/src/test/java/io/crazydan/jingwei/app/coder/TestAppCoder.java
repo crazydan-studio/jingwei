@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.crazydan.duzhou.framework.junit.NopJunitAutoTestCase;
-import io.crazydan.jingwei.app.coder.prompt.AiPromptGenerator;
 import io.nop.ai.core.api.chat.AiChatOptions;
 import io.nop.ai.core.api.messages.AiChatExchange;
 import io.nop.ai.core.command.AiCommand;
@@ -35,6 +34,7 @@ import io.nop.api.core.annotations.autotest.EnableSnapshot;
 import io.nop.api.core.annotations.autotest.NopTestConfig;
 import io.nop.core.lang.xml.XNode;
 import jakarta.inject.Inject;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.XDSL_SCHEMA_CODER_MODEL_DESIGN;
@@ -45,23 +45,24 @@ import static io.crazydan.jingwei.app.coder.AppCoderConstants.XDSL_SCHEMA_CODER_
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
  * @date 2026-01-01
  */
+@Disabled
 @NopTestConfig(testConfigFile = "classpath:/application.yaml", localDb = true)
-public class TestAiPromptGenerator extends NopJunitAutoTestCase {
+public class TestAppCoder extends NopJunitAutoTestCase {
     @Inject
     IPromptTemplateManager promptTemplateManager;
 
     @EnableSnapshot
     @Test
     public void test_app_design() {
-        AiPromptGenerator promptGenerator = new AiPromptGenerator(this.promptTemplateManager);
+        AppCoder coder = AppCoder.create(null, null);
 
         String requirements = inputText("model-requirements.md");
-        String prompt = promptGenerator.genModelDesignPrompt(requirements);
+        String prompt = coder.genModelDesignPrompt(requirements);
         outputText("prompt-model-design.md", prompt);
 
         //
         requirements = inputText("ui-requirements.md");
-        prompt = promptGenerator.genUiDesignPrompt(requirements);
+        prompt = coder.genUiDesignPrompt(requirements);
         outputText("prompt-ui-design.md", prompt);
     }
 

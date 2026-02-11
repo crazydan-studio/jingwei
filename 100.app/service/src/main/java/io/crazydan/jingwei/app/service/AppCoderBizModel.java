@@ -25,7 +25,6 @@ import io.crazydan.duzhou.framework.commons.StringHelper;
 import io.crazydan.jingwei.agent.model.AgentLlmModel;
 import io.crazydan.jingwei.agent.service.IAgentLlmModelService;
 import io.crazydan.jingwei.app.coder.AppCoder;
-import io.nop.ai.core.api.messages.AiChatExchange;
 import io.nop.api.core.annotations.biz.BizModel;
 import io.nop.api.core.annotations.biz.BizQuery;
 import io.nop.api.core.annotations.core.Description;
@@ -51,7 +50,7 @@ public class AppCoderBizModel {
 
     @Description("生成模型设计代码")
     @BizQuery
-    public AiChatExchange genModelDesign(
+    public AppCoder.DesignCode genModelDesignCode(
             @Name("provider") String provider, @Name("model") String model,
             @Name("requirements") String requirements
     ) {
@@ -59,12 +58,12 @@ public class AppCoderBizModel {
 
         AppCoder appCoder = AppCoder.create(provider, model);
 
-        return appCoder.genModelDesign(requirements);
+        return appCoder.genModelDesignCode(requirements);
     }
 
     @Description("生成 UI 设计代码")
     @BizQuery
-    public AiChatExchange genUiDesign(
+    public AppCoder.DesignCode genUiDesignCode(
             @Name("provider") String provider, @Name("model") String model,
             @Name("requirements") String requirements
     ) {
@@ -72,6 +71,34 @@ public class AppCoderBizModel {
 
         AppCoder appCoder = AppCoder.create(provider, model);
 
-        return appCoder.genUiDesign(requirements);
+        return appCoder.genUiDesignCode(requirements);
+    }
+
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    @Description("生成模型设计提示词")
+    @BizQuery
+    public String genModelDesignPrompt(
+            @Name("provider") String provider, @Name("model") String model,
+            @Name("requirements") String requirements
+    ) {
+        Guard.checkState(StringHelper.isNotBlank(requirements), "the parameter 'requirements' is null or blank");
+
+        AppCoder appCoder = AppCoder.create(provider, model);
+
+        return appCoder.genModelDesignPrompt(requirements);
+    }
+
+    @Description("生成 UI 设计提示词")
+    @BizQuery
+    public String genUiDesignPrompt(
+            @Name("provider") String provider, @Name("model") String model,
+            @Name("requirements") String requirements
+    ) {
+        Guard.checkState(StringHelper.isNotBlank(requirements), "the parameter 'requirements' is null or blank");
+
+        AppCoder appCoder = AppCoder.create(provider, model);
+
+        return appCoder.genUiDesignPrompt(requirements);
     }
 }

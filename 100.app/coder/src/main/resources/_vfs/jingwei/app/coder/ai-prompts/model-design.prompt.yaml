@@ -43,8 +43,13 @@ inputs:
     type: String
     mandatory: true
 
+postProcess: |
+  import io.crazydan.jingwei.app.coder.normalizer.AiChatExchangeNormalizer;
+  AiChatExchangeNormalizer.normalize(chatExchange);
+
 outputs:
   - name: RESULT
+    parseAfterPostProcess: true
     xdefPath: /jingwei/app/coder/schema/model-design.xdef
     format: xml
     valueNormalizer: |

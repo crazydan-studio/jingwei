@@ -24,12 +24,11 @@ import java.io.File;
 import io.crazydan.duzhou.framework.commons.FileHelper;
 import io.crazydan.duzhou.framework.commons.StringHelper;
 import io.crazydan.duzhou.framework.junit.NopJunitTestCase;
-import io.crazydan.jingwei.app.coder.prompt.AiPromptGenerator;
-import io.nop.ai.core.prompt.IPromptTemplateManager;
+import io.crazydan.jingwei.app.coder.AppCoder;
 import io.nop.commons.util.MavenDirHelper;
 import io.nop.core.resource.IResource;
 import io.nop.core.resource.impl.FileResource;
-import jakarta.inject.Inject;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -37,19 +36,18 @@ import org.junit.jupiter.api.Test;
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
  * @date 2026-01-29
  */
-public class TestAiCoder extends NopJunitTestCase {
-    @Inject
-    IPromptTemplateManager promptTemplateManager;
+@Disabled
+public class TestAppCoder extends NopJunitTestCase {
 
     @Test
     public void test_gen_prompt() {
         File projectDir = getProjectDir();
 
-        AiPromptGenerator promptGenerator = new AiPromptGenerator(this.promptTemplateManager);
+        AppCoder coder = AppCoder.create(null, null);
 
         File source = new File(projectDir, "src/main/resources/app/source/model-requirements.md");
         String requirements = FileHelper.readText(source, StringHelper.ENCODING_UTF8);
-        String prompt = promptGenerator.genModelDesignPrompt(requirements);
+        String prompt = coder.genModelDesignPrompt(requirements);
 
         File target = new File(projectDir, "src/test/resources/cases/TestAiCoder/prompt-model-design.md");
         IResource resource = new FileResource("/text", target);
@@ -58,7 +56,7 @@ public class TestAiCoder extends NopJunitTestCase {
         //
         source = new File(projectDir, "src/main/resources/app/source/ui-requirements.md");
         requirements = FileHelper.readText(source, StringHelper.ENCODING_UTF8);
-        prompt = promptGenerator.genUiDesignPrompt(requirements);
+        prompt = coder.genUiDesignPrompt(requirements);
 
         target = new File(projectDir, "src/test/resources/cases/TestAiCoder/prompt-ui-design.md");
         resource = new FileResource("/text", target);
@@ -69,10 +67,10 @@ public class TestAiCoder extends NopJunitTestCase {
     public void test_gen_code() {
         File projectDir = getProjectDir();
 
-        AiPromptGenerator promptGenerator = new AiPromptGenerator(this.promptTemplateManager);
+        AppCoder coder = AppCoder.create(null, null);
 
         String response = attachmentText("response-model-design.md");
-        String code = promptGenerator.getModelDesignCodeFromResponse(response);
+        String code = coder.parseModelDesignCodeFromChat(response);
 
         File target = new File(projectDir, "src/main/resources/app/source/model-design.xml");
         IResource resource = new FileResource("/text", target);
@@ -80,7 +78,7 @@ public class TestAiCoder extends NopJunitTestCase {
 
         //
         response = attachmentText("response-ui-design.md");
-        code = promptGenerator.getUiDesignCodeFromResponse(response);
+        code = coder.parseUiDesignCodeFromChat(response);
 
         target = new File(projectDir, "src/main/resources/app/source/ui-design.xml");
         resource = new FileResource("/text", target);

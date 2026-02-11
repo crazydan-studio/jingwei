@@ -22,12 +22,22 @@ package io.crazydan.jingwei.app.coder;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import io.crazydan.jingwei.app.coder.prompt.AiPromptGenerator;
 import io.nop.ai.core.api.chat.AiChatOptions;
 import io.nop.ai.core.api.messages.AiChatExchange;
 import io.nop.ai.core.command.AiCommand;
+import io.nop.ai.core.prompt.IPromptTemplate;
 import io.nop.ai.core.prompt.IPromptTemplateManager;
+import io.nop.ai.core.xdef.AiXDefHelper;
+import io.nop.api.core.annotations.data.DataBean;
 import io.nop.api.core.ioc.BeanContainer;
+import io.nop.core.lang.eval.IEvalScope;
+import io.nop.core.lang.xml.XNode;
+import io.nop.xlang.api.XLang;
+
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.PROMPT_MODEL_DESIGN;
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.PROMPT_UI_DESIGN;
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.XDSL_SCHEMA_CODER_MODEL_DESIGN;
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.XDSL_SCHEMA_CODER_UI_DESIGN;
 
 /**
  *
@@ -35,63 +45,154 @@ import io.nop.api.core.ioc.BeanContainer;
  * @date 2026-02-09
  */
 public class AppCoder {
-    private final AiCommand command;
+    private final String provider;
+    private final String model;
+
+    private IPromptTemplateManager promptTemplateManager;
 
     public static AppCoder create(String provider, String model) {
-        AiCommand command = AiCommand.create();
-        // Note: 直接抛出异常，由最上层统一处理异常，避免将异常包装为 response
-        command.setReturnExceptionAsResponse(false);
-
-        AiChatOptions options = command.makeChatOptions();
-        options.setRequestTimeout(TimeUnit.MINUTES.toMillis(10));
-        options.setProvider(provider);
-        options.setModel(model);
-
-        return new AppCoder(command);
+        return new AppCoder(provider, model);
     }
 
-    AppCoder(AiCommand command) {
-        this.command = command;
+    private AppCoder(String provider, String model) {
+        this.provider = provider;
+        this.model = model;
+    }
+
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    /** 根据模型设计需求生成模型设计提示词 */
+    public String genModelDesignPrompt(String requirements) {
+        DesignPrompt prompt = createModelDesignPrompt(requirements);
+
+        return prompt.generate();
     }
 
     /** 根据模型设计需求生成模型设计代码 */
-    public AiChatExchange genModelDesign(String requirements) {
-        AiPromptGenerator promptGenerator = createPromptGenerator();
+    public DesignCode genModelDesignCode(String requirements) {
+        DesignPrompt prompt = createModelDesignPrompt(requirements);
 
-        String prompt = promptGenerator.genModelDesignPrompt(requirements);
-        this.command.prompt(prompt);
+        return genCode(prompt);
+    }
 
-        AiChatExchange exchange = this.command.execute(Map.of(), null);
+    /** 从 AI 聊天内容中解析出模型设计代码 */
+    public String parseModelDesignCodeFromChat(String content) {
+        IPromptTemplate template = loadPromptTemplate(PROMPT_MODEL_DESIGN);
 
-        String code = promptGenerator.getModelDesignCodeFromResponse(exchange.getContent());
+        return parseCodeFromChat(content, template);
+    }
 
-        return createChatResponse(code, exchange);
+    /** 根据 UI 设计需求生成 UI 设计提示词 */
+    public String genUiDesignPrompt(String requirements) {
+        DesignPrompt prompt = createUiDesignPrompt(requirements);
+
+        return prompt.generate();
     }
 
     /** 根据 UI 设计需求生成 UI 设计代码 */
-    public AiChatExchange genUiDesign(String requirements) {
-        AiPromptGenerator promptGenerator = createPromptGenerator();
+    public DesignCode genUiDesignCode(String requirements) {
+        DesignPrompt prompt = createUiDesignPrompt(requirements);
 
-        String prompt = promptGenerator.genUiDesignPrompt(requirements);
-        this.command.prompt(prompt);
-
-        AiChatExchange exchange = this.command.execute(Map.of(), null);
-
-        String code = promptGenerator.getUiDesignCodeFromResponse(exchange.getContent());
-
-        return createChatResponse(code, exchange);
+        return genCode(prompt);
     }
 
-    private AiPromptGenerator createPromptGenerator() {
-        IPromptTemplateManager promptTemplateManager = BeanContainer.getBeanByType(IPromptTemplateManager.class);
+    /** 从 AI 聊天内容中解析出 UI 设计代码 */
+    public String parseUiDesignCodeFromChat(String content) {
+        IPromptTemplate template = loadPromptTemplate(PROMPT_UI_DESIGN);
 
-        return new AiPromptGenerator(promptTemplateManager);
+        return parseCodeFromChat(content, template);
     }
 
-    private AiChatExchange createChatResponse(String content, AiChatExchange exchange) {
-        AiChatExchange response = new AiChatExchange();
-        response.setContent(content);
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-        return response;
+    protected DesignPrompt createModelDesignPrompt(String requirements) {
+        IPromptTemplate template = loadPromptTemplate(PROMPT_MODEL_DESIGN);
+        Map<String, Object> vars = Map.of("modelDesignXdef",
+                                          loadXDefNode(XDSL_SCHEMA_CODER_MODEL_DESIGN).xml(),
+                                          "modelRequirements",
+                                          requirements);
+
+        return new DesignPrompt(template, vars);
+    }
+
+    protected DesignPrompt createUiDesignPrompt(String requirements) {
+        IPromptTemplate template = loadPromptTemplate(PROMPT_UI_DESIGN);
+        Map<String, Object> vars = Map.of("uiDesignXdef",
+                                          loadXDefNode(XDSL_SCHEMA_CODER_UI_DESIGN).xml(),
+                                          "uiRequirements",
+                                          requirements);
+
+        return new DesignPrompt(template, vars);
+    }
+
+    protected DesignCode genCode(DesignPrompt prompt) {
+        AiCommand command = AiCommand.create();
+        // Note: 直接抛出异常，由最上层统一处理异常，避免将异常包装为 response
+        command.setReturnExceptionAsResponse(false);
+        command.setPromptTemplate(prompt.template);
+
+        AiChatOptions options = command.makeChatOptions();
+        options.setRequestTimeout(TimeUnit.MINUTES.toMillis(10));
+        options.setProvider(this.provider);
+        options.setModel(this.model);
+
+        AiChatExchange exchange = command.execute(prompt.vars, null);
+
+        XNode node = (XNode) exchange.getOutput("RESULT");
+        return new DesignCode(node.xml());
+    }
+
+    protected String parseCodeFromChat(String content, IPromptTemplate template) {
+        AiChatExchange exchange = new AiChatExchange();
+        exchange.setContent(content);
+
+        IEvalScope scope = XLang.newEvalScope();
+        template.processChatResponse(exchange, scope);
+
+        XNode node = (XNode) exchange.getOutput("RESULT");
+        return node.xml();
+    }
+
+    protected IPromptTemplate loadPromptTemplate(String path) {
+        if (this.promptTemplateManager == null) {
+            this.promptTemplateManager = BeanContainer.getBeanByType(IPromptTemplateManager.class);
+        }
+        return this.promptTemplateManager.loadPromptTemplateFromPath(path);
+    }
+
+    protected XNode loadXDefNode(String path) {
+        XNode node = AiXDefHelper.loadXDefForAi(path);
+        node.clearComment();
+
+        return node;
+    }
+
+    protected static class DesignPrompt {
+        final IPromptTemplate template;
+        final Map<String, Object> vars;
+
+        DesignPrompt(IPromptTemplate template, Map<String, Object> vars) {
+            this.template = template;
+            this.vars = vars;
+        }
+
+        public String generate() {
+            IEvalScope scope = this.template.prepareInputs(this.vars);
+
+            return this.template.generatePrompt(scope);
+        }
+    }
+
+    @DataBean
+    public static class DesignCode {
+        private final String content;
+
+        public DesignCode(String content) {
+            this.content = content;
+        }
+
+        public String getContent() {
+            return this.content;
+        }
     }
 }
