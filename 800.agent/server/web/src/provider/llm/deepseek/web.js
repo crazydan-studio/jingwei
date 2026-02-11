@@ -27,13 +27,13 @@ export function routes(fastify, { prefix, authDir }) {
   });
 
   //
-  fastify.post(`${prefix}/action/:action`, async (request, reply) => {
-    const { action } = request.params;
+  fastify.post(`${prefix}/action`, async (request, reply) => {
+    const { name } = request.query;
     const body = request.body;
 
     let result;
-    if (action.startsWith(ACTION_AUTH_PREFIX)) {
-      result = await startAuth(action, body);
+    if (name.startsWith(ACTION_AUTH_PREFIX)) {
+      result = await startAuth(name, body);
     }
 
     reply.send(result || { success: true });

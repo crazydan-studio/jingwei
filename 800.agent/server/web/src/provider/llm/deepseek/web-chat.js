@@ -62,6 +62,8 @@ export async function clickAuthSendCodeButton(page, phoneNumber) {
     throw new Error('输入的手机号无效');
   }
 
+  await clickCloseButtonIfExist(page);
+
   const locator = await page.locator('.ds-sign-in-form__main');
 
   await locator.getByPlaceholder('Phone number').fill(phoneNumber);
@@ -134,7 +136,7 @@ export async function clickAuthCaptchaImage(page, position) {
 
   const captcha = await page.locator('#sm-captcha').locator('img');
 
-  await captcha.click({ x, y });
+  await captcha.click({ position: { x, y } });
 }
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -227,6 +229,16 @@ async function enableDeepSeek(page, enabled) {
     .getByText('DeepThink');
 
   await clickIfVisible(locator);
+}
+
+async function clickCloseButtonIfExist(page) {
+  const locator = page.locator(
+    'svg path[d="M14.1167 13.197L13.1969 14.1168L1.88324 2.80309L2.80303 1.8833L14.1167 13.197Z"]'
+  );
+
+  await clickIfVisible(locator);
+
+  await locator.waitFor({ state: 'hidden' });
 }
 
 async function clickIfVisible(locator) {

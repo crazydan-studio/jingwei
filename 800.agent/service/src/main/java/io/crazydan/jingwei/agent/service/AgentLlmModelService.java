@@ -22,6 +22,7 @@ package io.crazydan.jingwei.agent.service;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.TimeUnit;
 
 import io.crazydan.duzhou.framework.commons.StringHelper;
 import io.crazydan.duzhou.framework.exception.NopNeedMoreActionException;
@@ -38,7 +39,9 @@ import io.nop.api.core.annotations.core.Name;
 import io.nop.api.core.annotations.core.Optional;
 import io.nop.api.core.config.AppConfig;
 import io.nop.api.core.exceptions.NopException;
+import io.nop.api.core.util.Guard;
 import io.nop.api.core.util.ICancelToken;
+import io.nop.commons.cache.LocalCache;
 import io.nop.core.reflect.bean.BeanTool;
 import io.nop.http.api.client.HttpRequest;
 import io.nop.http.api.client.IHttpClient;
@@ -53,6 +56,7 @@ import static io.crazydan.jingwei.agent.AgentServiceErrors.ERR_AGENT_SERVICE_NO_
 import static io.crazydan.jingwei.agent.AgentServiceErrors.ERR_AGENT_SERVICE_NO_LLM_SPECIFIED;
 import static io.nop.ai.core.AiCoreConfigs.CFG_AI_SERVICE_LOG_MESSAGE;
 import static io.nop.ai.core.AiCoreErrors.ARG_LLM_NAME;
+import static io.nop.commons.cache.CacheConfig.newConfig;
 import static io.nop.xlang.XLangErrors.ARG_ERROR;
 
 /**
@@ -63,11 +67,14 @@ import static io.nop.xlang.XLangErrors.ARG_ERROR;
 @BizModel(AgentLlmModelService.BIZ_NAME)
 public class AgentLlmModelService extends DefaultAiChatService implements IAgentLlmModelService {
     public static final String BIZ_NAME = "LlmAgent";
+
     public static final String URL_LLM = "/llm";
     public static final String URL_MODELS = "/models";
     public static final String URL_ACTION = "/action";
 
     private IHttpClient httpClient;
+    private LocalCache<String, List<AgentLlmModel>> modelsCache = //
+            LocalCache.newCache("llm-models-cache", newConfig(1, 5 * 60 * 1000), (key) -> doGetLlmModels());
 
     @Inject
     public void setHttpClient(IHttpClient httpClient) {
@@ -83,8 +90,9 @@ public class AgentLlmModelService extends DefaultAiChatService implements IAgent
             @Name("action") String action, @Name("provider") String provider,
             @Optional @Name("data") String data
     ) {
-        String url = getBaseUrl(provider, null, null) + URL_ACTION + '/' + action;
+        String url = getBaseUrl(provider, null, null) + URL_ACTION;
         HttpRequest request = HttpRequest.post(url);
+        request.param("name", action);
         // Note: 缺省设置的 header 为 HttpApiConstants#CONTENT_TYPE_JSON
         request.setBody(StringHelper.isNotBlank(data) ? data : "{}");
 
@@ -93,24 +101,32 @@ public class AgentLlmModelService extends DefaultAiChatService implements IAgent
 
     @Description("与大模型对话")
     @BizMutation
-    public void chat(
+    public CompletionStage<AiChatExchange> chat(
             @Description("大模型的提供商") @Name("provider") String provider,
-            @Description("大模型的模型名") @Optional @Name("model") String model,
+            @Description("大模型的模型名") @Name("model") String model,
             @Description("会话标识") @Optional @Name("sessionId") String sessionId,
             @Description("对话内容") @Name("content") String content
     ) {
+        Guard.checkState(StringHelper.isNotBlank(content), "the parameter 'content' is null or blank");
+
+        AiChatOptions options = new AiChatOptions();
+        options.setRequestTimeout(TimeUnit.MINUTES.toMillis(10));
+        options.setProvider(provider);
+        options.setModel(model);
+        options.setSessionId(sessionId);
+
+        Prompt prompt = new Prompt();
+        prompt.setVariable("keep_session", true);
+        prompt.addUserMessage(content);
+
+        return sendChatAsync(prompt, options, null);
     }
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     @Override
     public List<AgentLlmModel> getLlmModels() {
-        String url = getBaseUrl() + URL_MODELS;
-        HttpRequest request = HttpRequest.get(url);
-
-        Map<String, Object> response = doSendRequest(request, null);
-
-        return BeanTool.castListItemToType((List<?>) response.get("data"), AgentLlmModel.class);
+        return this.modelsCache.get("llm-models");
     }
 
     @Override
@@ -171,6 +187,9 @@ public class AgentLlmModelService extends DefaultAiChatService implements IAgent
             String llmName, LlmModel llmModel, String model, Map<String, Object> body, Prompt prompt,
             AiChatOptions options
     ) {
+        setIfNotNull(body, "session_id", options.getSessionId());
+        setIfNotNull(body, "keep_session", prompt.getVariable("keep_session"));
+
         super.initBody(llmName, llmModel, model, body, prompt, options);
     }
 
@@ -185,6 +204,15 @@ public class AgentLlmModelService extends DefaultAiChatService implements IAgent
     }
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    protected List<AgentLlmModel> doGetLlmModels() {
+        String url = getBaseUrl() + URL_MODELS;
+        HttpRequest request = HttpRequest.get(url);
+
+        Map<String, Object> response = doSendRequest(request, null);
+
+        return BeanTool.castListItemToType((List<?>) response.get("data"), AgentLlmModel.class);
+    }
 
     protected Map<String, Object> doSendRequest(HttpRequest request, String llmName) {
         request.bearerToken(getApiKey(null));

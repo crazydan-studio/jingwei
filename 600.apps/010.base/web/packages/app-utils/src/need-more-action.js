@@ -9,30 +9,41 @@ import {
   NSpin
 } from 'naive-ui';
 
-import { modal } from './msg';
+import { modal, notification } from './msg';
 
-export function popupNeedMoreActionForm({ title, body, graphql }, options) {
-  modal.create({
-    title: title || '',
+export function popupNeedMoreActionForm({ title, body, graphql }, opts) {
+  const formVars = {};
+  const loading = ref(false);
+
+  const win = modal.create({
+    title,
     preset: 'dialog',
     draggable: true,
+    autoFocus: false,
     closeOnEsc: false,
     maskClosable: false,
     // 设置自动宽度
     style: { width: 'unset' },
     content: () => {
-      const show = ref(false);
       return h(
         NSpin,
-        { style: 'padding-top:1em', show: show.value },
+        { style: 'padding-top:1em', show: loading.value },
         render(body, {
-          vars: {},
+          vars: formVars,
           graphql: async (vars) => {
+            loading.value = true;
             try {
-              show.value = true;
-              await options.graphql(graphql, vars);
+              await opts.graphql(graphql, vars);
+
+              win.destroy();
+              notification.success({
+                title,
+                content: '操作成功',
+                duration: 5000,
+                keepAliveOnHover: true
+              });
             } finally {
-              show.value = false;
+              loading.value = false;
             }
           }
         })

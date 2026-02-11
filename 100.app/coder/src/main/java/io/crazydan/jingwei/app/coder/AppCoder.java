@@ -55,7 +55,7 @@ public class AppCoder {
     }
 
     /** 根据模型设计需求生成模型设计代码 */
-    public String genModelDesign(String requirements) {
+    public AiChatExchange genModelDesign(String requirements) {
         AiPromptGenerator promptGenerator = createPromptGenerator();
 
         String prompt = promptGenerator.genModelDesignPrompt(requirements);
@@ -63,11 +63,13 @@ public class AppCoder {
 
         AiChatExchange exchange = this.command.execute(Map.of(), null);
 
-        return promptGenerator.getModelDesignCodeFromResponse(exchange.getContent());
+        String code = promptGenerator.getModelDesignCodeFromResponse(exchange.getContent());
+
+        return createChatResponse(code, exchange);
     }
 
     /** 根据 UI 设计需求生成 UI 设计代码 */
-    public String genUiDesign(String requirements) {
+    public AiChatExchange genUiDesign(String requirements) {
         AiPromptGenerator promptGenerator = createPromptGenerator();
 
         String prompt = promptGenerator.genUiDesignPrompt(requirements);
@@ -75,12 +77,21 @@ public class AppCoder {
 
         AiChatExchange exchange = this.command.execute(Map.of(), null);
 
-        return promptGenerator.getUiDesignCodeFromResponse(exchange.getContent());
+        String code = promptGenerator.getUiDesignCodeFromResponse(exchange.getContent());
+
+        return createChatResponse(code, exchange);
     }
 
     private AiPromptGenerator createPromptGenerator() {
         IPromptTemplateManager promptTemplateManager = BeanContainer.getBeanByType(IPromptTemplateManager.class);
 
         return new AiPromptGenerator(promptTemplateManager);
+    }
+
+    private AiChatExchange createChatResponse(String content, AiChatExchange exchange) {
+        AiChatExchange response = new AiChatExchange();
+        response.setContent(content);
+
+        return response;
     }
 }
