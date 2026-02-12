@@ -19,26 +19,11 @@
 
 package io.crazydan.jingwei.app.coder;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
 import io.crazydan.duzhou.framework.junit.NopJunitAutoTestCase;
-import io.nop.ai.core.api.chat.AiChatOptions;
-import io.nop.ai.core.api.messages.AiChatExchange;
-import io.nop.ai.core.command.AiCommand;
-import io.nop.ai.core.prompt.IPromptTemplate;
-import io.nop.ai.core.prompt.IPromptTemplateManager;
-import io.nop.ai.core.xdef.AiXDefHelper;
 import io.nop.api.core.annotations.autotest.EnableSnapshot;
 import io.nop.api.core.annotations.autotest.NopTestConfig;
-import io.nop.core.lang.xml.XNode;
-import jakarta.inject.Inject;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
-import static io.crazydan.jingwei.app.coder.AppCoderConstants.XDSL_SCHEMA_CODER_MODEL_DESIGN;
-import static io.crazydan.jingwei.app.coder.AppCoderConstants.XDSL_SCHEMA_CODER_UI_DESIGN;
 
 /**
  *
@@ -48,8 +33,6 @@ import static io.crazydan.jingwei.app.coder.AppCoderConstants.XDSL_SCHEMA_CODER_
 @Disabled
 @NopTestConfig(testConfigFile = "classpath:/application.yaml", localDb = true)
 public class TestAppCoder extends NopJunitAutoTestCase {
-    @Inject
-    IPromptTemplateManager promptTemplateManager;
 
     @EnableSnapshot
     @Test
@@ -69,55 +52,14 @@ public class TestAppCoder extends NopJunitAutoTestCase {
     @EnableSnapshot
     @Test
     public void test_ai_coder() {
-        AiCommand command = AiCommand.create();
+        AppCoder coder = AppCoder.create("bailian", "qwen-coder-plus");
 
-        AiChatOptions options = command.makeChatOptions();
-        options.setMaxTokens(8192);
-        options.setRequestTimeout(TimeUnit.MINUTES.toMillis(10));
-//        options.setProvider("deepseek");
-//        options.setModel("deepseek-chat");
-        options.setProvider("bailian");
-        options.setModel("qwen-coder-plus");
+        String requirements = inputText("model-requirements.md");
+        AppCoder.DesignCode code = coder.genModelDesignCode(requirements);
+        System.out.println(code.getContent());
 
-//        // 对应系统提示词 /nop/ai/prompts/system/programming
-//        options.setWorkMode("programming");
-//        options.setEnableCognitivePrompt(true);
-//        options.setEnableMetaPrompt(true);
-//        options.setEnableSystemPrompt(true);
-
-        Map<String, Object> vars = new HashMap<>();
-        vars.put("modelDesignXdef", loadXNode(XDSL_SCHEMA_CODER_MODEL_DESIGN).xml());
-        vars.put("modelRequirements", inputText("model-requirements.md"));
-
-        IPromptTemplate promptTemplate = loadPrompt("/jingwei/app/coder/ai-prompts/model-design.prompt.yaml");
-        command.promptTemplate(promptTemplate);
-
-        AiChatExchange exchange = command.execute(vars, null);
-        XNode node = (XNode) exchange.getOutput("RESULT");
-        node.dump();
-
-        //
-        command.setPrevMessages(exchange.getAllMessages(true));
-
-        promptTemplate = loadPrompt("/jingwei/app/coder/ai-prompts/ui-design.prompt.yaml");
-        command.promptTemplate(promptTemplate);
-
-        vars = new HashMap<>();
-        vars.put("uiDesignXdef", loadXNode(XDSL_SCHEMA_CODER_UI_DESIGN).xml());
-        vars.put("uiRequirements", inputText("ui-requirements.md"));
-
-        node = (XNode) command.execute(vars, null).getOutput("RESULT");
-        node.dump();
-    }
-
-    protected IPromptTemplate loadPrompt(String promptPath) {
-        return this.promptTemplateManager.loadPromptTemplateFromPath(promptPath);
-    }
-
-    protected XNode loadXNode(String path) {
-        XNode node = AiXDefHelper.loadXDefForAi(path);
-        node.clearComment();
-
-        return node;
+        requirements = inputText("ui-requirements.md");
+        code = coder.genUiDesignCode(requirements);
+        System.out.println(code.getContent());
     }
 }

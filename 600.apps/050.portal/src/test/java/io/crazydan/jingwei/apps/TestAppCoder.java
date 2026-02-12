@@ -41,6 +41,7 @@ public class TestAppCoder extends NopJunitTestCase {
 
     @Test
     public void test_gen_prompt() {
+        String name = getClass().getSimpleName();
         File projectDir = getProjectDir();
 
         AppCoder coder = AppCoder.create(null, null);
@@ -49,7 +50,7 @@ public class TestAppCoder extends NopJunitTestCase {
         String requirements = FileHelper.readText(source, StringHelper.ENCODING_UTF8);
         String prompt = coder.genModelDesignPrompt(requirements);
 
-        File target = new File(projectDir, "src/test/resources/cases/TestAiCoder/prompt-model-design.md");
+        File target = new File(projectDir, "src/test/resources/cases/" + name + "/prompt-model-design.md");
         IResource resource = new FileResource("/text", target);
         resource.writeText(prompt, StringHelper.ENCODING_UTF8);
 
@@ -58,7 +59,7 @@ public class TestAppCoder extends NopJunitTestCase {
         requirements = FileHelper.readText(source, StringHelper.ENCODING_UTF8);
         prompt = coder.genUiDesignPrompt(requirements);
 
-        target = new File(projectDir, "src/test/resources/cases/TestAiCoder/prompt-ui-design.md");
+        target = new File(projectDir, "src/test/resources/cases/" + name + "/prompt-ui-design.md");
         resource = new FileResource("/text", target);
         resource.writeText(prompt, StringHelper.ENCODING_UTF8);
     }

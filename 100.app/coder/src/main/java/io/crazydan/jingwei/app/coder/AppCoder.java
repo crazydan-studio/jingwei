@@ -19,6 +19,7 @@
 
 package io.crazydan.jingwei.app.coder;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -34,6 +35,7 @@ import io.nop.core.lang.eval.IEvalScope;
 import io.nop.core.lang.xml.XNode;
 import io.nop.xlang.api.XLang;
 
+import static io.crazydan.jingwei.app.coder.AppCoderConfigs.CFG_APP_CODER_CHAT_TIMEOUT;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.PROMPT_MODEL_DESIGN;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.PROMPT_UI_DESIGN;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.XDSL_SCHEMA_CODER_MODEL_DESIGN;
@@ -107,20 +109,18 @@ public class AppCoder {
 
     protected DesignPrompt createModelDesignPrompt(String requirements) {
         IPromptTemplate template = loadPromptTemplate(PROMPT_MODEL_DESIGN);
-        Map<String, Object> vars = Map.of("modelDesignXdef",
-                                          loadXDefNode(XDSL_SCHEMA_CODER_MODEL_DESIGN).xml(),
-                                          "modelRequirements",
-                                          requirements);
+        Map<String, Object> vars = new HashMap<>();
+        vars.put("modelDesignXdef", loadXDefNode(XDSL_SCHEMA_CODER_MODEL_DESIGN).xml());
+        vars.put("modelRequirements", requirements);
 
         return new DesignPrompt(template, vars);
     }
 
     protected DesignPrompt createUiDesignPrompt(String requirements) {
         IPromptTemplate template = loadPromptTemplate(PROMPT_UI_DESIGN);
-        Map<String, Object> vars = Map.of("uiDesignXdef",
-                                          loadXDefNode(XDSL_SCHEMA_CODER_UI_DESIGN).xml(),
-                                          "uiRequirements",
-                                          requirements);
+        Map<String, Object> vars = new HashMap<>();
+        vars.put("uiDesignXdef", loadXDefNode(XDSL_SCHEMA_CODER_UI_DESIGN).xml());
+        vars.put("uiRequirements", requirements);
 
         return new DesignPrompt(template, vars);
     }
@@ -132,9 +132,15 @@ public class AppCoder {
         command.setPromptTemplate(prompt.template);
 
         AiChatOptions options = command.makeChatOptions();
-        options.setRequestTimeout(TimeUnit.MINUTES.toMillis(10));
+        options.setRequestTimeout(TimeUnit.MINUTES.toMillis(CFG_APP_CODER_CHAT_TIMEOUT.get()));
         options.setProvider(this.provider);
         options.setModel(this.model);
+
+//        // 对应系统提示词 /nop/ai/prompts/system/programming
+//        options.setWorkMode("programming");
+//        options.setEnableCognitivePrompt(true);
+//        options.setEnableMetaPrompt(true);
+//        options.setEnableSystemPrompt(true);
 
         AiChatExchange exchange = command.execute(prompt.vars, null);
 

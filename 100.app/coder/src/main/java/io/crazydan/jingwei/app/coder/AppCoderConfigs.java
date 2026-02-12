@@ -19,8 +19,12 @@
 
 package io.crazydan.jingwei.app.coder;
 
+import io.nop.api.core.annotations.core.Description;
 import io.nop.api.core.annotations.core.Locale;
+import io.nop.api.core.config.IConfigReference;
 import io.nop.api.core.util.SourceLocation;
+
+import static io.nop.api.core.config.AppConfig.varRef;
 
 /**
  *
@@ -30,4 +34,8 @@ import io.nop.api.core.util.SourceLocation;
 @Locale("zh-CN")
 public interface AppCoderConfigs {
     SourceLocation s_loc = SourceLocation.fromClass(AppCoderConfigs.class);
+
+    @Description("AI 聊天获取响应的超时时间。单位为分钟")
+    IConfigReference<Integer> CFG_APP_CODER_CHAT_TIMEOUT = //
+            varRef(s_loc, "jingwei.app.coder.chat-timeout", Integer.class, 15);
 }

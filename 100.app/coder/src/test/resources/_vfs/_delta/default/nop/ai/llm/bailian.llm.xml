@@ -1,0 +1,3 @@
+<llm x:schema="/nop/schema/ai/llm.xdef" xmlns:x="/nop/schema/xdsl.xdef"
+     x:extends="super" supportToolCalls="false">
+</llm>
