@@ -28,6 +28,7 @@ import io.crazydan.duzhou.framework.commons.StringHelper;
 import io.crazydan.duzhou.framework.exception.NopNeedMoreActionException;
 import io.crazydan.jingwei.agent.model.AgentLlmModel;
 import io.nop.ai.core.api.chat.AiChatOptions;
+import io.nop.ai.core.api.messages.AiAssistantMessage;
 import io.nop.ai.core.api.messages.AiChatExchange;
 import io.nop.ai.core.api.messages.Prompt;
 import io.nop.ai.core.model.LlmModel;
@@ -72,6 +73,8 @@ public class AgentLlmModelService extends DefaultAiChatService implements IAgent
     public static final String URL_MODELS = "/models";
     public static final String URL_ACTION = "/action";
 
+    public static final String KEY_SESSION_ID = "session_id";
+
     private IHttpClient httpClient;
     private LocalCache<String, List<AgentLlmModel>> modelsCache = //
             LocalCache.newCache("llm-models-cache", newConfig(1, 5 * 60 * 1000), (key) -> doGetLlmModels());
@@ -101,7 +104,7 @@ public class AgentLlmModelService extends DefaultAiChatService implements IAgent
 
     @Description("与大模型对话")
     @BizMutation
-    public CompletionStage<AiChatExchange> chat(
+    public CompletionStage<AiAssistantMessage> chat(
             @Description("大模型的提供商") @Name("provider") String provider,
             @Description("大模型的模型名") @Name("model") String model,
             @Description("会话标识") @Optional @Name("sessionId") String sessionId,
@@ -113,14 +116,22 @@ public class AgentLlmModelService extends DefaultAiChatService implements IAgent
         options.setRequestTimeout(TimeUnit.MINUTES.toMillis(10));
         options.setProvider(provider);
         options.setModel(model);
-        options.setSessionId(sessionId);
+        // Note: 在 Agent 侧根据 session id 记录历史对话，若无会话 id，则不记录对话历史
+        options.setSessionId(StringHelper.isNotBlank(sessionId) ? sessionId : StringHelper.generateUUID());
 
         Prompt prompt = new Prompt();
-        prompt.setVariable("keep_session", true);
         prompt.addUserMessage(content);
 
-        return sendChatAsync(prompt, options, null);
+        return sendChatAsync(prompt, options, null).thenApply((exchange) -> {
+            AiAssistantMessage msg = new AiAssistantMessage();
+            msg.addMetadata(KEY_SESSION_ID, options.getSessionId());
+            msg.setContent(exchange.getContent());
+
+            return msg;
+        });
     }
+
+    // TODO 补充根据 session id 获取历史对话的接口
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -187,8 +198,7 @@ public class AgentLlmModelService extends DefaultAiChatService implements IAgent
             String llmName, LlmModel llmModel, String model, Map<String, Object> body, Prompt prompt,
             AiChatOptions options
     ) {
-        setIfNotNull(body, "session_id", options.getSessionId());
-        setIfNotNull(body, "keep_session", prompt.getVariable("keep_session"));
+        setIfNotNull(body, KEY_SESSION_ID, options.getSessionId());
 
         super.initBody(llmName, llmModel, model, body, prompt, options);
     }
