@@ -6,7 +6,8 @@ import {
   NInputGroup,
   NInputGroupLabel,
   NFlex,
-  NSpin
+  NSpin,
+  NAlert
 } from 'naive-ui';
 
 import { modal, notification } from './msg';
@@ -57,6 +58,8 @@ function render(component, opts = {}) {
     return [];
   } else if (Array.isArray(component)) {
     return component.map((cmp) => render(cmp, opts));
+  } else if (typeof component == 'string') {
+    return component;
   }
 
   let { type } = component;
@@ -66,7 +69,7 @@ function render(component, opts = {}) {
     case 'row':
     case 'column': {
       const vertical = type == 'column';
-      let { align } = component;
+      let { align, body } = component;
       align ||= {};
 
       type = NFlex;
@@ -75,7 +78,7 @@ function render(component, opts = {}) {
         align: vertical ? align.row : align.column,
         justify: vertical ? align.column : align.row
       };
-      children = render(component.body, opts);
+      children = render(body, opts);
       break;
     }
     case 'input': {
@@ -108,9 +111,10 @@ function render(component, opts = {}) {
     }
     case 'button': {
       const { label, color } = component;
+
       type = NButton;
       props = { type: color };
-      children = [label];
+      children = render(label, opts);
       break;
     }
     case 'text': {
@@ -121,13 +125,22 @@ function render(component, opts = {}) {
       } else {
         type = 'span';
       }
-      children = [value];
+      children = render(value, opts);
       break;
     }
     case 'image': {
       const { src, width, height, preview } = component;
+
       type = NImage;
       props = { src, width, height, previewDisabled: preview == false };
+      break;
+    }
+    case 'alert': {
+      const { color, body } = component;
+
+      type = NAlert;
+      props = { type: color };
+      children = render(body, opts);
       break;
     }
   }
