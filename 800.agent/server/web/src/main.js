@@ -30,8 +30,16 @@ auth(fastify, { token: config.token });
 //
 const llmRoutePrefix = '/llm';
 llm.routes(fastify, { prefix: llmRoutePrefix });
+llm.deepseek.routes(fastify, {
+  prefix: `${llmRoutePrefix}/deepseek`,
+  authDir: config.authDir
+});
 llm.webDeepseek.routes(fastify, {
   prefix: `${llmRoutePrefix}/deepseek-web`,
+  authDir: config.authDir
+});
+llm.bailian.routes(fastify, {
+  prefix: `${llmRoutePrefix}/bailian`,
   authDir: config.authDir
 });
 

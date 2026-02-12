@@ -1,3 +1,39 @@
+import { readJsonFile } from '@/utils/fs';
+import {
+  createNeedAuthApiKeyResponse,
+  ACTION_FORM_INPUT_API_KEY
+} from '@/utils/need-more-action';
+
+export const CHAT_URL = '/chat';
+
+export async function sendChat({ url, data, authFile, unauthActionTitle }) {
+  const auth = await readJsonFile(authFile);
+  let apiKey = auth[ACTION_FORM_INPUT_API_KEY];
+
+  if (apiKey) {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`
+      },
+      body: JSON.stringify(data)
+    });
+
+    if (response.ok) {
+      return await response.json();
+    } else if (response.status == 401) {
+      apiKey = null;
+    } else {
+      throw new Error(`HTTP - ${response.status}: ${await response.text()}`);
+    }
+  }
+
+  if (!apiKey) {
+    return createNeedAuthApiKeyResponse(unauthActionTitle);
+  }
+}
+
 export function createChatResponse(content) {
   return {
     object: 'chat.completion',
@@ -14,17 +50,10 @@ export function createChatResponse(content) {
   };
 }
 
-export function createNeedMoreActionResponse(reason, form) {
-  return {
-    need_more_action: true,
-    reason,
-    form
-  };
-}
-
 export function createLlmModel(opts) {
   // _vfs/nop/ai/llm/default.llm.xml
   return {
+    chatUrl: CHAT_URL,
     ...opts,
     request: {
       seedPath: 'options.seed',

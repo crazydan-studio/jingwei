@@ -1,28 +1,30 @@
 import { AUTH_TIMEOUT } from '@/utils/browser';
+import { createChatResponse } from '@/utils/openai';
+
 import {
-  createChatResponse,
+  ACTION_AUTH_PREFIX,
+  ACTION_REASON_UNAUTHORIZED,
   createNeedMoreActionResponse
-} from '@/utils/openai';
+} from '@/utils/need-more-action';
 
-const BASE_URL = 'https://chat.deepseek.com';
+const WEB_BASE_URL = 'https://chat.deepseek.com';
 
-const CHAT_URL = BASE_URL;
-const AUTH_URL = `${BASE_URL}/sign_in`;
+const WEB_CHAT_URL = WEB_BASE_URL;
+const WEB_AUTH_URL = `${WEB_BASE_URL}/sign_in`;
+
 const CHAT_API_COMPLETION = '/api/v0/chat/completion';
 const CHAT_API_DELETE_SESSION = '/api/v0/chat_session/delete';
+
 const CHAT_TIMEOUT = 20 * 60 * 1000;
 
-export const ACTION_AUTH_PREFIX = 'auth:';
-export const NEED_MORE_ACTION_REASON = 'unauthorized';
-
 export async function chat(page, content) {
-  //console.log(`[DeepSeek] Opening ${CHAT_URL} ...`);
-  await page.goto(CHAT_URL);
+  //console.log(`[DeepSeek] Opening ${WEB_CHAT_URL} ...`);
+  await page.goto(WEB_CHAT_URL);
 
-  if ((await page.url()) == AUTH_URL) {
+  if ((await page.url()) == WEB_AUTH_URL) {
     const form = await createLoginForm(page);
 
-    return createNeedMoreActionResponse(NEED_MORE_ACTION_REASON, form);
+    return createNeedMoreActionResponse(ACTION_REASON_UNAUTHORIZED, form);
   }
 
   //
@@ -46,7 +48,7 @@ export async function waitAuth(page, { authFile, complete }) {
   const context = await page.context();
 
   try {
-    await page.waitForURL(CHAT_URL, { timeout: AUTH_TIMEOUT });
+    await page.waitForURL(WEB_CHAT_URL, { timeout: AUTH_TIMEOUT });
 
     await context.storageState({ path: authFile });
   } catch (e) {
@@ -82,15 +84,16 @@ export async function clickAuthSendCodeButton(page, phoneNumber) {
   const captchaSize = await captcha.boundingBox();
   const captchaUrl = await captcha.getAttribute('src');
 
-  return createNeedMoreActionResponse(NEED_MORE_ACTION_REASON, {
+  return createNeedMoreActionResponse(ACTION_REASON_UNAUTHORIZED, {
     title: '请按提示选择正确的图形',
     body: {
       type: 'column',
       align: { row: 'center' },
       body: [
         {
-          type: 'text',
-          value: captchaTips
+          type: 'alert',
+          color: 'info',
+          body: captchaTips
         },
         {
           type: 'image',
@@ -155,7 +158,7 @@ async function startChatSession(page, content) {
   await clickChatSubmitButton(page);
 
   // https://chat.deepseek.com/a/chat/s/xx-xx-xx-xx
-  await page.waitForURL(`${CHAT_URL}/a/chat/s/*`);
+  await page.waitForURL(`${WEB_CHAT_URL}/a/chat/s/*`);
   const url = await page.url();
 
   //console.log('[DeepSeek] Fetching chat answer ...');
@@ -195,7 +198,7 @@ async function deleteChatSession(page, sessionId) {
   await clickIfVisible(locator);
 
   //
-  await page.waitForURL(CHAT_URL);
+  await page.waitForURL(WEB_CHAT_URL);
 
   await responsePromise;
 }

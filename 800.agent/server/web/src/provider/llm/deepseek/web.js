@@ -1,20 +1,22 @@
 /* 通过操作浏览器实现与 DeepSeek 网页端交互的接口 */
 
 import { createContext, closeContext } from '@/utils/browser';
-import { createLlmModel } from '@/utils/openai';
+import { createLlmModel, CHAT_URL } from '@/utils/openai';
+import {
+  ACTION_URL,
+  ACTION_AUTH_PREFIX,
+  ACTION_REASON_UNAUTHORIZED
+} from '@/utils/need-more-action';
 
 import {
   chat,
   waitAuth,
   clickAuthSendCodeButton,
   clickAuthLoginButton,
-  clickAuthCaptchaImage,
-  NEED_MORE_ACTION_REASON,
-  ACTION_AUTH_PREFIX
+  clickAuthCaptchaImage
 } from './web-chat';
 
 const AUTH_FILE = 'deepseek-web.json';
-const CHAT_URL = '/chat';
 
 export function routes(fastify, { prefix, authDir }) {
   //
@@ -27,7 +29,7 @@ export function routes(fastify, { prefix, authDir }) {
   });
 
   //
-  fastify.post(`${prefix}/action`, async (request, reply) => {
+  fastify.post(`${prefix}${ACTION_URL}`, async (request, reply) => {
     const { name } = request.query;
     const body = request.body;
 
@@ -46,7 +48,6 @@ export function model() {
     name: 'deepseek-web',
     displayName: 'DeepSeek 网页版',
     defaultModel: 'deepseek-chat',
-    chatUrl: CHAT_URL,
     models: [
       {
         name: 'deepseek-chat',
@@ -81,7 +82,7 @@ async function startChat(content, { authDir }) {
   try {
     const result = await chat(page, content);
 
-    if (result.reason == NEED_MORE_ACTION_REASON) {
+    if (result.reason == ACTION_REASON_UNAUTHORIZED) {
       globalAuthPage = page;
       // 异步等待认证完成
       globalAuthPromise = waitAuth(page, {

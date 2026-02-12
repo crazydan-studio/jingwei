@@ -3,17 +3,24 @@ import { dirname } from 'node:path';
 
 /** 读取 json 文件 */
 export async function readJsonFile(file) {
+  if (!(await checkExists(file))) {
+    return {};
+  }
+
   const json = await readFile(file, 'utf8');
 
-  return JSON.parse(json);
+  return json ? JSON.parse(json) : {};
 }
 
 /** 初始化 json 文件：若文件不存在，则创建并初始化执行值，否则不做处理 */
 export async function initJsonFile(file, json) {
-  if (await checkExists(file)) {
-    return;
+  if (!(await checkExists(file))) {
+    await writeJsonFile(file, json);
   }
+}
 
+/** 写入 json 文件 */
+export async function writeJsonFile(file, json) {
   const dir = dirname(file);
 
   await mkdir(dir, { recursive: true });
