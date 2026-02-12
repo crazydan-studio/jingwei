@@ -55,7 +55,7 @@ public class TestAppCoder extends NopJunitAutoTestCase {
         AppCoder coder = AppCoder.create("bailian", "qwen-coder-plus");
 
         String requirements = inputText("model-requirements.md");
-        AppCoder.DesignCode code = coder.genModelDesignCode(requirements);
+        AppCoderCode code = coder.genModelDesignCode(requirements);
         System.out.println(code.getContent());
 
         requirements = inputText("ui-requirements.md");

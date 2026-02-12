@@ -25,6 +25,7 @@ import io.crazydan.duzhou.framework.commons.StringHelper;
 import io.crazydan.jingwei.agent.model.AgentLlmModel;
 import io.crazydan.jingwei.agent.service.IAgentLlmModelService;
 import io.crazydan.jingwei.app.coder.AppCoder;
+import io.crazydan.jingwei.app.coder.AppCoderCode;
 import io.nop.api.core.annotations.biz.BizModel;
 import io.nop.api.core.annotations.biz.BizQuery;
 import io.nop.api.core.annotations.core.Description;
@@ -50,7 +51,7 @@ public class AppCoderBizModel {
 
     @Description("生成模型设计代码")
     @BizQuery
-    public AppCoder.DesignCode genModelDesignCode(
+    public AppCoderCode genModelDesignCode(
             @Name("provider") String provider, @Name("model") String model,
             @Name("requirements") String requirements
     ) {
@@ -63,7 +64,7 @@ public class AppCoderBizModel {
 
     @Description("生成 UI 设计代码")
     @BizQuery
-    public AppCoder.DesignCode genUiDesignCode(
+    public AppCoderCode genUiDesignCode(
             @Name("provider") String provider, @Name("model") String model,
             @Name("requirements") String requirements
     ) {

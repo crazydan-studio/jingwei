@@ -29,7 +29,6 @@ import io.nop.ai.core.command.AiCommand;
 import io.nop.ai.core.prompt.IPromptTemplate;
 import io.nop.ai.core.prompt.IPromptTemplateManager;
 import io.nop.ai.core.xdef.AiXDefHelper;
-import io.nop.api.core.annotations.data.DataBean;
 import io.nop.api.core.ioc.BeanContainer;
 import io.nop.core.lang.eval.IEvalScope;
 import io.nop.core.lang.xml.XNode;
@@ -71,7 +70,7 @@ public class AppCoder {
     }
 
     /** 根据模型设计需求生成模型设计代码 */
-    public DesignCode genModelDesignCode(String requirements) {
+    public AppCoderCode genModelDesignCode(String requirements) {
         DesignPrompt prompt = createModelDesignPrompt(requirements);
 
         return genCode(prompt);
@@ -92,7 +91,7 @@ public class AppCoder {
     }
 
     /** 根据 UI 设计需求生成 UI 设计代码 */
-    public DesignCode genUiDesignCode(String requirements) {
+    public AppCoderCode genUiDesignCode(String requirements) {
         DesignPrompt prompt = createUiDesignPrompt(requirements);
 
         return genCode(prompt);
@@ -125,7 +124,7 @@ public class AppCoder {
         return new DesignPrompt(template, vars);
     }
 
-    protected DesignCode genCode(DesignPrompt prompt) {
+    protected AppCoderCode genCode(DesignPrompt prompt) {
         AiCommand command = AiCommand.create();
         // Note: 直接抛出异常，由最上层统一处理异常，避免将异常包装为 response
         command.setReturnExceptionAsResponse(false);
@@ -145,7 +144,7 @@ public class AppCoder {
         AiChatExchange exchange = command.execute(prompt.vars, null);
 
         XNode node = (XNode) exchange.getOutput("RESULT");
-        return new DesignCode(node.xml());
+        return new AppCoderCode(node.xml());
     }
 
     protected String parseCodeFromChat(String content, IPromptTemplate template) {
@@ -186,19 +185,6 @@ public class AppCoder {
             IEvalScope scope = this.template.prepareInputs(this.vars);
 
             return this.template.generatePrompt(scope);
-        }
-    }
-
-    @DataBean
-    public static class DesignCode {
-        private final String content;
-
-        public DesignCode(String content) {
-            this.content = content;
-        }
-
-        public String getContent() {
-            return this.content;
         }
     }
 }
