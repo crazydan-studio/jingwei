@@ -49,7 +49,7 @@ public class AppCoderBizModel {
         return this.llmModelService.getLlmModels();
     }
 
-    @Description("生成模型设计代码")
+    @Description("根据需求生成模型设计代码")
     @BizQuery
     public AppCoderCode genModelDesignCode(
             @Name("provider") String provider, @Name("model") String model,
@@ -62,7 +62,7 @@ public class AppCoderBizModel {
         return appCoder.genModelDesignCode(requirements);
     }
 
-    @Description("生成 UI 设计代码")
+    @Description("根据需求生成 UI 设计代码")
     @BizQuery
     public AppCoderCode genUiDesignCode(
             @Name("provider") String provider, @Name("model") String model,
@@ -79,26 +79,20 @@ public class AppCoderBizModel {
 
     @Description("生成模型设计提示词")
     @BizQuery
-    public String genModelDesignPrompt(
-            @Name("provider") String provider, @Name("model") String model,
-            @Name("requirements") String requirements
-    ) {
+    public String genModelDesignPrompt(@Name("requirements") String requirements) {
         Guard.checkState(StringHelper.isNotBlank(requirements), "the parameter 'requirements' is null or blank");
 
-        AppCoder appCoder = AppCoder.create(provider, model);
+        AppCoder appCoder = AppCoder.create(null, null);
 
         return appCoder.genModelDesignPrompt(requirements);
     }
 
     @Description("生成 UI 设计提示词")
     @BizQuery
-    public String genUiDesignPrompt(
-            @Name("provider") String provider, @Name("model") String model,
-            @Name("requirements") String requirements
-    ) {
+    public String genUiDesignPrompt(@Name("requirements") String requirements) {
         Guard.checkState(StringHelper.isNotBlank(requirements), "the parameter 'requirements' is null or blank");
 
-        AppCoder appCoder = AppCoder.create(provider, model);
+        AppCoder appCoder = AppCoder.create(null, null);
 
         return appCoder.genUiDesignPrompt(requirements);
     }

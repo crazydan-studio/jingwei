@@ -102,6 +102,7 @@ public class AppCoreBizModel {
             throw new NopException(ERR_BIZ_APP_NO_PAGE).param(ARG_CODE, appCode);
         }
 
+        // TODO 返回应用 title
         return getAppPageStaticPath(manifest);
     }
 
