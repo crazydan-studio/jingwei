@@ -73,6 +73,7 @@ public class AgentLlmModelService extends DefaultAiChatService implements IAgent
     public static final String URL_MODELS = "/models";
     public static final String URL_ACTION = "/action";
 
+    public static final String KEY_KEEP_SESSION = "keep_session";
     public static final String KEY_SESSION_ID = "session_id";
 
     private IHttpClient httpClient;
@@ -116,15 +117,18 @@ public class AgentLlmModelService extends DefaultAiChatService implements IAgent
         options.setRequestTimeout(TimeUnit.MINUTES.toMillis(10));
         options.setProvider(provider);
         options.setModel(model);
-        // Note: 在 Agent 侧根据 session id 记录历史对话，若无会话 id，则不记录对话历史
-        options.setSessionId(StringHelper.isNotBlank(sessionId) ? sessionId : StringHelper.generateUUID());
+        // Note: 在 Agent 侧根据 session id 记录历史对话
+        options.setSessionId(sessionId);
 
         Prompt prompt = new Prompt();
+        prompt.addMetadata(KEY_KEEP_SESSION, true);
         prompt.addUserMessage(content);
 
         return sendChatAsync(prompt, options, null).thenApply((exchange) -> {
+            String sid = (String) exchange.getResponse().getMetadata(KEY_SESSION_ID);
+
             AiAssistantMessage msg = new AiAssistantMessage();
-            msg.addMetadata(KEY_SESSION_ID, options.getSessionId());
+            msg.addMetadata(KEY_SESSION_ID, sid);
             msg.setContent(exchange.getContent());
 
             return msg;
@@ -198,6 +202,7 @@ public class AgentLlmModelService extends DefaultAiChatService implements IAgent
             String llmName, LlmModel llmModel, String model, Map<String, Object> body, Prompt prompt,
             AiChatOptions options
     ) {
+        setIfNotNull(body, KEY_KEEP_SESSION, prompt.getMetadata(KEY_KEEP_SESSION));
         setIfNotNull(body, KEY_SESSION_ID, options.getSessionId());
 
         super.initBody(llmName, llmModel, model, body, prompt, options);
@@ -211,6 +216,9 @@ public class AgentLlmModelService extends DefaultAiChatService implements IAgent
         processResponse(response, llmName);
 
         super.parseHttpResponse(llmName, llmModel, response, chatResponse);
+
+        String sessionId = (String) response.get(KEY_SESSION_ID);
+        chatResponse.getResponse().addMetadata(KEY_SESSION_ID, sessionId);
     }
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
