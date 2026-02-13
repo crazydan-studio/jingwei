@@ -1,64 +1,4 @@
-### 应用页面加载
-
-直接修改 URL 地址，在其中添加或修改参数 `app` 为应用的 `code`，再刷新页面即可。
-
-### 应用页面预览
-
-预览页面在 iframe 中显示，其 URL 地址与系统访问地址相同，只是需附加参数
-`app=app-code&version=app-version-name&preview=true`。
-
-### 消息提醒
-
-- 始终从依赖 `@app-utils` 中导入
-
-```js
-import { message, notification, dialog, loadingBar, modal } from '@app-utils';
-```
-
-- `message`, `notification`, `dialog`, `loadingBar`, `modal`
-  分别对应 Naive UI 的 `useMessage`, `useNotification`, `useDialog`, `useLoadingBar`, `useModal`
-  函数所创建的实例。
-- **禁止**从 naive-ui 导入 `useMessage`, `useNotification`, `useDialog`, `useLoadingBar`, `useModal`。
-
-### 文件上传与下载
-
-- 对于包含文件上传的保存/更新表单，需要先上传文件并得到文件 hash 值后，
-  再将该值赋值到对应文件属性上，再提交表单数据
-- 始终从依赖 `@app-utils` 中导入文件上传/下载的 URL 获取函数
-
-```js
-import { getFileUploadUrl, getFileDownloadUrl } from '@app-utils';
-```
-
-- `getFileUploadUrl()` 得到文件上传地址
-- `getFileDownloadUrl(fileHash)` 得到文件下载地址
-  - 图片等在浏览器中可直接显示的上传文件也通过该函数获取地址
-
-### 数据操作接口调用
-
-- **禁止**对数据操作接口的调用逻辑做异常 catch，仅在需要时在 finally 中做收尾工作。
-- 所有的数据操作接口均采用 GraphQL 规范，并按如下形式调用：
-
-```js
-import { graphql } from '@app-utils';
-
-const { UserEntity__save } = await graphql(
-  `
-    mutation ($data: Map) {
-      UserEntity__save(data: $data) {
-        id, name, age
-      }
-    }
-  `,
-  { data: { name: 'Lily', age: 18, ... } }
-);
-```
-
-- `graphql` 函数始终从依赖 `@app-utils` 中导入。
-
-### 通用实体 CRUD 接口
-
-- `findPage(query: QueryBeanInput)`：分页查询
+## 查询并返回分页数据：`findPage(query: QueryBeanInput)`
 
 ```js
 import { graphql } from '@app-utils';
@@ -79,7 +19,7 @@ const { UserEntity__findPage } = await graphql(
         }
       }
     }
-  `，
+  `,
   { query: {
     offset: 0, limit: 20,
     filter: {
@@ -94,7 +34,7 @@ const { UserEntity__findPage } = await graphql(
 const { total, items } = UserEntity__findPage;
 ```
 
-- `findList(query: QueryBeanInput)`：查询并返回所有数据
+## 查询并返回所有数据：`findList(query: QueryBeanInput)`
 
 ```js
 import { graphql } from '@app-utils';
@@ -110,7 +50,7 @@ const { UserEntity__findList } = await graphql(
         }
       }
     }
-  `，
+  `,
   { query: {
     filter: {
       "$type": "and",
@@ -133,7 +73,7 @@ const { UserEntity__findList } = await graphql(
 const [ user1, user2, ... ] = UserEntity__findList;
 ```
 
-- `findFirst(query: QueryBeanInput)`：条件查询首条
+## 查询并得到第一条符合条件的数据：`findFirst(query: QueryBeanInput)`
 
 ```js
 import { graphql } from '@app-utils';
@@ -149,14 +89,14 @@ const { UserEntity__findFirst } = await graphql(
         }
       }
     }
-  `，
+  `,
   { query: { filter: {...} } }
 );
 
 const { id, name, roles } = UserEntity__findFirst;
 ```
 
-- `save(data: Map)`：新建数据。必须指定返回数据的选择字段
+## 新增数据：`save(data: Map)`
 
 ```js
 import { graphql } from '@app-utils';
@@ -175,7 +115,9 @@ const { UserEntity__save } = await graphql(
 const { id, name, age } = UserEntity__save;
 ```
 
-- `update(data: Map)`：更新数据。在参数 data 中必须包含实体主键 id。必须指定返回数据的选择字段
+注意,必须指定返回数据的选择字段。
+
+## 更新数据：`update(data: Map)`
 
 ```js
 import { graphql } from '@app-utils';
@@ -184,18 +126,25 @@ const { UserEntity__update } = await graphql(
   `
     mutation ($data: Map) {
       UserEntity__update(data: $data) {
-        id
-        name
+        id, name
       }
     }
   `,
-  { data: { id: 'c5fd5e8f5ec74d189b3d1023a79508ba', name: 'Tom', orgId: 'c5fd5e8f5ec74d189b3d1023a79508be' } }
+  {
+    data: {
+      id: 'c5fd5e8f5ec74d189b3d1023a79508ba',
+      name: 'Tom',
+      orgId: 'c5fd5e8f5ec74d189b3d1023a79508be'
+    }
+  }
 );
 
 const { id, name } = UserEntity__update;
 ```
 
-- `get(id: String)`：获取数据
+注意,必须指定返回数据的选择字段,且在参数 `data` 中必须包含实体主键 `id`。
+
+## 获取某条数据：`get(id: String)`
 
 ```js
 import { graphql } from '@app-utils';
@@ -219,7 +168,7 @@ const { UserEntity__get } = await graphql(
 const { id, name, roles } = UserEntity__get;
 ```
 
-- `delete(id: String)`：删除数据
+## 删除某条数据：`delete(id: String)`
 
 ```js
 import { graphql } from '@app-utils';
@@ -234,7 +183,7 @@ await graphql(
 );
 ```
 
-- `batchDelete(ids: [String])` 批量删除
+## 批量删除多条数据：`batchDelete(ids: [String])`
 
 ```js
 import { graphql } from '@app-utils';
@@ -245,11 +194,16 @@ await graphql(
       UserEntity__batchDelete(ids: $ids)
     }
   `,
-  { ids: ['c5fd5e8f5ec74d189b3d1023a79508ba', 'c5fd5e8f5ec74d189b3d1023a79508bc'] }
+  {
+    ids: [
+      'c5fd5e8f5ec74d189b3d1023a79508ba',
+      'c5fd5e8f5ec74d189b3d1023a79508bc'
+    ]
+  }
 );
 ```
 
-- `batchUpdate(ids: [String], data: Map)` 批量更新
+## 批量更新多条数据：`batchUpdate(ids: [String], data: Map)`
 
 ```js
 import { graphql } from '@app-utils';
@@ -260,6 +214,14 @@ await graphql(
       ProductEntity__batchUpdate(ids: $ids, data: $data)
     }
   `,
-  { ids: ['c5fd5e8f5ec74d189b3d1023a79508ba', 'c5fd5e8f5ec74d189b3d1023a79508bc'], data: { price: 123, amount: 321 } }
+  {
+    ids: [
+      'c5fd5e8f5ec74d189b3d1023a79508ba',
+      'c5fd5e8f5ec74d189b3d1023a79508bc'
+    ],
+    data: { price: 123, amount: 321 }
+  }
 );
 ```
+
+注意,仅适用于需要同时修改某类数据的相同属性的情况。

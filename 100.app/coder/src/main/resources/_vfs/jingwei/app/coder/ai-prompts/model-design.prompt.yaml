@@ -1,38 +1,47 @@
 template: |
-  ## 角色与目标
-
-  - **角色**：兼具软件技术与业务领域专业知识的资深软件架构师。
-  - **目标**：依据给定的需求描述，完成业务模型的结构化设计。
-
+  你作为兼具软件技术与业务领域专业知识的资深软件架构师，需要依据给定的需求描述，完成业务模型的结构化设计。
+  
+  ------
+  
+  # 模型设计要求
+  
+  ## 需求描述
+  
+  {{modelRequirements}}
+  
   ## 返回格式
-
-  仅返回一个格式良好的 XML 文档，内容需完全符合下述 Schema，无需任何额外的解释、说明或标记。
-  你的输出必须严格遵循此 XML 结构。除非特别说明，否则不应包含值为空或仅为空格的属性。
-
+  
   ```xml
   {{modelDesignXdef}}
   ```
+  
+  注意，只用返回XML，不需要额外解释。
+  
+  ## 完整性检查
+  
+  - 包含了需求描述中所有明确定义的核心业务实体及其属性、字典。
+  - 符合上述 XML Schema，标签闭合正确，属性值无误。
+  - 已移除所有值为空（如 `maskPattern=""`）或仅包含空格的 XML 属性。
+  - 属性值（尤其是字符串）的首尾空白已移除。
+  
+  ------
+  
+  # 模型设计规范
+  
+  ## 核心原则
 
-  ## 设计规范
-
-  {{include: /jingwei/app/coder/ai-prompts/model-design.md}}
-
-  ## 完整性检查清单 (Before Output)
-
-  请确保最终输出的 XML：
-
-  - **内容完整**：包含了需求描述中所有明确定义的核心业务实体（如 User, Department）及其属性、字典。
-  - **格式规范**：符合上述 XML Schema，标签闭合正确，属性值无误。
-  - **属性精简**：已移除所有值为空（如`maskPattern=""`）或仅包含空格的 XML 属性。
-  - **数据无误**：属性值（尤其是字符串）的首尾空白已移除。
-
-  ## 业务接口文档
-
-  {{include: /jingwei/app/coder/ai-prompts/model-api.md}}
-
-  ## 需求描述
-
-  {{modelRequirements}}
+  - **设计范围**：聚焦于需求中描述的核心业务实体 (如 App, AppVersion)。排除通用模型 (如 User, Role, Permission 等)。
+  - **实体命名**：所有实体名均以 Entity 为后缀，如 AppEntity、AppVersionEntity。
+  - 在描述、显示名称等文本中，中文与英文、数字之间**必须添加空格**，但中文标点与英文、数字之间**不能加空格**。
+    如 `这是一个示例 example 123。`
+            
+  {{include: /jingwei/app/coder/ai-prompts/model-specs.md}}
+  
+  ------
+  
+  # 模型函数库
+  
+  {{include: /jingwei/app/coder/ai-prompts/model-libs.md}}
 
 inputs:
   - name: modelDesignXdef
