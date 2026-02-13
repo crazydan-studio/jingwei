@@ -20,27 +20,28 @@ export async function loadAppPage({ appCode, el, loading }) {
   }
 }
 
-/** 打开 GraphQL IDE */
+/** 打开 GraphQL IDE - GraphiQL */
 export function openGraphiQL() {
   const url = getAppUrl(APP_CODE_GRAPHIQL);
 
   window.open(url, '_blank');
 }
 
-export function getAppCodeFromLocation() {
-  const urlParams = new URLSearchParams(window.location.search);
-
-  return urlParams.get(URL_PARAM_APP);
-}
-
-export function updateAppCodeInLocation(appCode) {
+/** 打开指定应用 */
+export function openApp(appCode) {
   if (!appCode) {
     return;
   }
 
   const url = getAppUrl(appCode);
 
-  window.history.pushState({}, '', url);
+  window.location.href = url;
+}
+
+export function getAppCodeFromLocation() {
+  const urlParams = new URLSearchParams(window.location.search);
+
+  return urlParams.get(URL_PARAM_APP);
 }
 
 export function getAppUrl(appCode) {
@@ -79,9 +80,6 @@ async function doLoadAppPage({ appCode, el }) {
 
   app.mount(el);
   el.__app__ = app;
-
-  // 修改地址栏，从而支持后退
-  updateAppCodeInLocation(appCode);
 }
 
 async function getAppPage(appCode) {
