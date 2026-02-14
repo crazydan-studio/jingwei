@@ -33,7 +33,7 @@
 
     <demo-data xdef:body-type="list" xdef:key-attr="name">
         <action name="!action-name">
-            <source>xpl-fn:(...actionArgs)=>any</source>
+            <source>js-es6-code</source>
         </action>
     </demo-data>
 </ui-design>

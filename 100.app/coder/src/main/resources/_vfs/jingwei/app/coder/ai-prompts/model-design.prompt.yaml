@@ -3,7 +3,13 @@ template: |
   
   ------
   
-  # 模型设计要求
+  # 业务需求
+  
+  {{bizRequirements}}
+
+  ------
+  
+  # 模型设计需求
   
   ## 需求描述
   
@@ -32,9 +38,9 @@ template: |
 
   - **设计范围**：聚焦于需求中描述的核心业务实体 (如 App, AppVersion)。排除通用模型 (如 User, Role, Permission 等)。
   - **实体命名**：所有实体名均以 Entity 为后缀，如 AppEntity、AppVersionEntity。
-  - 在描述、显示名称等文本中，中文与英文、数字之间**必须添加空格**，但中文标点与英文、数字之间**不能加空格**。
+  - 在各类文本（包括 XML 属性值、XML 标签内容）中，中文与英文、数字之间**必须添加空格**，但中文标点与英文、数字之间**不能加空格**。
     如 `这是一个示例 example 123。`
-            
+  
   {{include: /jingwei/app/coder/ai-prompts/model-specs.md}}
   
   ------
@@ -45,6 +51,10 @@ template: |
 
 inputs:
   - name: modelDesignXdef
+    type: String
+    mandatory: true
+
+  - name: bizRequirements
     type: String
     mandatory: true
 

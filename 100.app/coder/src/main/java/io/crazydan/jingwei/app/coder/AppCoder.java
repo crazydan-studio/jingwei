@@ -63,15 +63,15 @@ public class AppCoder {
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     /** 根据模型设计需求生成模型设计提示词 */
-    public String genModelDesignPrompt(String requirements) {
-        DesignPrompt prompt = createModelDesignPrompt(requirements);
+    public String genModelDesignPrompt(String bizRequirements, String modelRequirements) {
+        DesignPrompt prompt = createModelDesignPrompt(bizRequirements, modelRequirements);
 
         return prompt.generate();
     }
 
     /** 根据模型设计需求生成模型设计代码 */
-    public AppCoderCode genModelDesignCode(String requirements) {
-        DesignPrompt prompt = createModelDesignPrompt(requirements);
+    public AppCoderCode genModelDesignCode(String bizRequirements, String modelRequirements) {
+        DesignPrompt prompt = createModelDesignPrompt(bizRequirements, modelRequirements);
 
         return genCode(prompt);
     }
@@ -84,15 +84,15 @@ public class AppCoder {
     }
 
     /** 根据 UI 设计需求生成 UI 设计提示词 */
-    public String genUiDesignPrompt(String requirements) {
-        DesignPrompt prompt = createUiDesignPrompt(requirements);
+    public String genUiDesignPrompt(String bizRequirements, String uiRequirements) {
+        DesignPrompt prompt = createUiDesignPrompt(bizRequirements, uiRequirements);
 
         return prompt.generate();
     }
 
     /** 根据 UI 设计需求生成 UI 设计代码 */
-    public AppCoderCode genUiDesignCode(String requirements) {
-        DesignPrompt prompt = createUiDesignPrompt(requirements);
+    public AppCoderCode genUiDesignCode(String bizRequirements, String uiRequirements) {
+        DesignPrompt prompt = createUiDesignPrompt(bizRequirements, uiRequirements);
 
         return genCode(prompt);
     }
@@ -106,20 +106,22 @@ public class AppCoder {
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-    protected DesignPrompt createModelDesignPrompt(String requirements) {
+    protected DesignPrompt createModelDesignPrompt(String bizRequirements, String modelRequirements) {
         IPromptTemplate template = loadPromptTemplate(PROMPT_MODEL_DESIGN);
         Map<String, Object> vars = new HashMap<>();
         vars.put("modelDesignXdef", loadXDefNode(XDSL_SCHEMA_CODER_MODEL_DESIGN).xml());
-        vars.put("modelRequirements", requirements);
+        vars.put("bizRequirements", bizRequirements);
+        vars.put("modelRequirements", modelRequirements);
 
         return new DesignPrompt(template, vars);
     }
 
-    protected DesignPrompt createUiDesignPrompt(String requirements) {
+    protected DesignPrompt createUiDesignPrompt(String bizRequirements, String uiRequirements) {
         IPromptTemplate template = loadPromptTemplate(PROMPT_UI_DESIGN);
         Map<String, Object> vars = new HashMap<>();
         vars.put("uiDesignXdef", loadXDefNode(XDSL_SCHEMA_CODER_UI_DESIGN).xml());
-        vars.put("uiRequirements", requirements);
+        vars.put("bizRequirements", bizRequirements);
+        vars.put("uiRequirements", uiRequirements);
 
         return new DesignPrompt(template, vars);
     }

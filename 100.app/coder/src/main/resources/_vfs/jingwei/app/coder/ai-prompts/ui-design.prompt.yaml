@@ -3,7 +3,13 @@ template: |
 
   ------
   
-  # UI 设计要求
+  # 业务需求
+  
+  {{bizRequirements}}
+
+  ------
+  
+  # UI 设计需求
   
   ## 需求描述
   
@@ -40,6 +46,17 @@ template: |
   
   # 业务模型结构
   
+  ```xml
+  {{bizModelDefs}}
+  ```
+  
+  ------
+  
+  # 相关业务模型结构
+  
+  ```xml
+  {{relatedBizModelDefs}}
+  ```
   
   ------
   
@@ -55,7 +72,7 @@ template: |
   
   ------
   
-  # 业务功能接口
+  # 相关业务功能接口
   
   {{include: /jingwei/app/coder/ai-prompts/ui-biz-api.md}}
 
@@ -64,9 +81,21 @@ inputs:
     type: String
     mandatory: true
 
+  - name: bizRequirements
+    type: String
+    mandatory: true
+
   - name: uiRequirements
     type: String
     mandatory: true
+
+  - name: bizModelDefs
+    type: String
+    mandatory: false
+
+  - name: relatedBizModelDefs
+    type: String
+    mandatory: false
 
 postProcess: |
   import io.crazydan.jingwei.app.coder.normalizer.AiChatExchangeNormalizer;

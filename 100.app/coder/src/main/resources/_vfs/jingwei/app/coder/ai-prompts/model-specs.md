@@ -1,225 +1,410 @@
-## 实体 (`<entity>`) 定义
+## 2. 实体定义 `<entity>`
 
-- **name**：实体名，如 `AppEntity`。
-- **displayName**：实体显示名称，如 `应用`。
-- **db:estimatedRowCount**：数据量预估。基于 **10 个活跃用户，持续使用 50 年** 所产生的业务数据量进行估算。
-- **orm:createrProp**：表示创建者的实体属性名，如 `createdBy`。
-- **orm:createTimeProp**：表示创建时间的实体属性名，如 `createdAt`。
-- **orm:updaterProp**：表示更新者的实体属性名，如 `updatedBy`。
-- **orm:updateTimeProp**：表示更新时间的实体属性名，如 `updatedAt`。
-- **orm:deleteFlagProp**：表示软删除的实体属性名，如 `deleted`。
+每个实体对应一个 `<entity>` 节点，包含实体的基本信息和子元素（属性、唯一键等）。
 
-### 实体唯一键 (`<orm:unique-keys>`) 定义
+### 2.1 `<entity>` 属性
 
-- 仅用于定义除主键以外需要在数据库层面保证唯一性的属性或属性组合，且不同的组合定义不同的唯一键。
-- 每个 `<key>` 的 `name` 属性值必须以 `uk_` 为前缀。
+<!-- prettier-ignore -->
+| 属性名 | 说明 | 是否必需 | 示例 |
+|--------|------|----------|------|
+| `name` | 实体名，采用帕斯卡命名法，如 `UserEntity`。 | 是 | `name="UserEntity"` |
+| `displayName` | 实体显示名称，如 `用户`。 | 是 | `displayName="用户"` |
+| `db:estimatedRowCount` | 数据量预估。基于 **10 个活跃用户，持续使用 50 年** 产生的业务数据量估算。用于分库分表策略、查询优化器提示等。 | 否，但推荐 | `db:estimatedRowCount="10000"` |
+| `orm:createrProp` | 表示创建者的实体属性名，通常为 `createdBy`。启用审计时必须填写。 | 条件必需 | `orm:createrProp="createdBy"` |
+| `orm:createTimeProp` | 表示创建时间的实体属性名，通常为 `createdAt`。启用审计时必须填写。 | 条件必需 | `orm:createTimeProp="createdAt"` |
+| `orm:updaterProp` | 表示更新者的实体属性名，通常为 `updatedBy`。启用审计时必须填写。 | 条件必需 | `orm:updaterProp="updatedBy"` |
+| `orm:updateTimeProp` | 表示更新时间的实体属性名，通常为 `updatedAt`。启用审计时必须填写。 | 条件必需 | `orm:updateTimeProp="updatedAt"` |
+| `orm:deleteFlagProp` | 表示逻辑删除的实体属性名，通常为 `deleted`。启用逻辑删除时必须填写。 | 条件必需 | `orm:deleteFlagProp="deleted"` |
+
+**示例**：
 
 ```xml
-<orm:unique-keys>
-  <key name="uk_name">name</key>
-  <key name="uk_version">appCode,versionCode</key>
-</orm:unique-keys>
+<entity name="UserEntity" displayName="用户"
+        db:estimatedRowCount="50000"
+        orm:createrProp="createdBy" orm:createTimeProp="createdAt"
+        orm:updaterProp="updatedBy" orm:updateTimeProp="updatedAt"
+        orm:deleteFlagProp="deleted">
+    <!-- 属性定义 -->
+</entity>
 ```
 
-### 实体属性 (`<attr>`) 定义
+**注意**：
 
-#### 定义规范
+- 逻辑删除仅更新实体的 `orm:deleteFlagProp` 指定的字段，不影响其关联子实体（子实体仍可见）。物理删除时若配置了级联删除，则子实体数据会被彻底删除。
+- 审计属性、逻辑删除属性本身也需要在实体中定义，参见第 3 节。
 
-- **结构展开**：不使用 JSON 等复杂类型属性，所有业务字段必须平铺展开定义。
-- **长度限定**：字符串、文本等类型的属性**必须**根据业务需要或关联字典项显式约束其最小、最大长度。
-- **敏感数据**：密码、密钥等敏感属性，需设置 `ui:showable="false"`，通常允许 `orm/ui:insertable="true"` 和 `orm/ui:updatable="true"`，
-  但禁止 `queryable="true"` 和 `sortable="true"`。
-- **日期时间**：所有日期、时间、时间戳属性的 `domain` 均设置为 `date` 或 `datetime`，并通过 `ui:datePattern` 指定显示格式。
-- **描述说明** (`<description>`)：用于指导用户输入，需用**简洁易懂的业务语言**描述该属性的作用、格式、示例等，**避免使用技术术语**，且**不要重复属性名**。
+## 3. 固定属性
 
-#### 结构说明
+每个实体必须包含主键 `id`，可选包含审计属性和逻辑删除属性。固定属性的 `index` 必须使用 1~19 之间的序号，与业务属性（20~2000）区分开。
 
-- **name**：属性名，如 `age`。
-- **propId**：属性 ID。业务属性的 `propId` 从 20 开始，在同模型内连续递增分配，最大不超过 2000。
-- **displayName**：属性显示名称，如 `年龄`。
-- **mandatory**：是否为必填属性。
-- **virtual**：是否为虚拟属性。此类属性的值通过计算得到，不生成对应的数据库字段。
-  其计算逻辑写在 `<computed>` 标签内，可使用 `entity` 引用当前实体的其他属性，或调用相应的 **XPL 标签函数**
-  - 对于简单的对关联对象属性的取值，优先采用**属性映射**机制，如 `<attr name="parentName" mapTo="parent.name"/>`
-- **internal**：是否为内部属性。此类属性仅参与后台逻辑，前端不可直接新增或更新。
-- **queryable**：是否可参与过滤查询。`queryable="false"` 的属性不能出现在过滤条件中。
-- **sortable**：是否可参与查询结果排序。`sortable="false"` 的属性不能出现在排序条件中。
-- **allowFilterOp**：可对属性应用的过滤运算符，如 `eq,gt,lt`。
-- **orm:primary**：是否为主键属性。主键属性始终为 `id`。
-- **orm:insertable**：属性值是否可插入到数据库中。只有 `orm:insertable="true"` 的属性的值才能在实体新增时保存到数据库中。
-- **orm:updatable**：属性值是否可更新到数据库中。只有 `orm:updatable="true"` 的属性的值才能在实体更新时保存到数据库中。
-- **orm:precision**：属性值在数据库中的长度限定。
-- **orm:scale**：属性值在数据库中的浮点数精度。
-- **domain**：属性对应的数据域，也即业务层面的属性类型，如 `file`、`date` 等。
-- **mapTo**：属性映射，如 `<attr name="userName" mapTo="user.name"/>`
-  表示将实体的 `userName` 属性映射到当前实体关联属性 `user` 的 `name` 属性上。
-  此类属性不是虚拟属性，可以对此类属性根据业务需求做插入、修改、查询和排序。
-- **dict**：属性所引用的数据字典名，如 `user-status`。引用字典的属性，其必须配置 `domain="string"`。
-- **biz:codeRule**：业务编码的生成规则，如 `biz:codeRule="D{@year}{@month}{@seq:5}"`
-  对应生成的是 `D20250812345` 形式的唯一编码；`biz:codeRule="{@uuid}"` 对应生成的则是 UUID 值
-  - `{@year}`：年份，固定 4 位数字
-  - `{@month}`：月份，固定 2 位数字
-  - `{@dayOfMonth}`：月内的日期，1 到 31
-  - `{@hour}`：小时，固定 2 位数字
-  - `{@minute}`：分钟，固定 2 位数字
-  - `{@second}`：秒，固定 2 位数字
-  - `{@randNumber:N}`：随机数，生成 N 位随机数字
-  - `{@seq:N}`：根据顺序号递增，取固定 N 位数字
-- **defaultValue**：属性的缺省值。
-- **ui:showable**：是否可以在新增、编辑实体以外的 UI 中显示该属性。
-- **ui:insertable**：属性是否可在 UI 侧做新增，若 `ui:insertable="false"` 则在新增表单中不显示，并且不向后台回传该属性值。
-- **ui:updatable**：属性是否可在 UI 侧做更新，若 `ui:updatable="false"` 则在编辑表单中为只读的，并且不向后台回传该属性值。
-- **ui:maskPattern**：对于手机号等需脱敏显示的属性，可通过该配置控制其值的显示形式，例如
-  `ui:maskPattern="3*4"` 表示保留前 3 位和后 4 位，中间用 `*` 填充。
-- **ui:datePattern**：日期/时间属性值的显示形式，如 `ui:datePattern="yyyy-MM-dd HH:mm:ss"`
-  对应的日期显示内容为 `2026-02-13 16:29:24`。
-
-#### 值约束 (`<constraint>`)
-
-- **pattern**：通过正则表达式限定文本内容。
-- **minValue**：最小值。
-- **maxValue**：最大值。
-- **minLength**：最小长度。
-- **maxLength**：最大长度。
-- **minFileSize**：最小文件尺寸。
-- **maxFileSize**：最大文件尺寸。
-- **allowedFileTypes**：允许的文件类型。对于 `domain="file/fileList"` 的属性，必须配置该项。
-
-#### 配置类型
-
-- **domain-name** 可选值：
-  - entityRef：建立实体关联
-  - userFlag：人员标识
-  - deleteFlag：软删除标识
-  - uuid：UUID，不含短横线
-  - file：文件类型
-  - fileList：文件列表类型
-  - string：字符串
-  - long
-  - int
-  - double
-  - float
-  - boolean
-  - date
-  - datetime
-  - url
-  - text：纯文本
-  - json
-  - xml
-  - html
-  - markdown
-- **file-size**：文件尺寸。支持纯数字或带单位的数字，如 1024、2K、1.2G 等，不带单位的数字表示字节数
-
-### 实体关联
-
-#### 定义规范
-
-- 实体关联**只有**一对一（`one-to-one`）和一对多（`one-to-many`）两种类型。
-- **禁止**建立多对多关系，必须通过中间模型，将其转换为一对一和一对多关系。
-- 对于任意关联类型，都必须为对应属性配置 `domain="entityRef"`。
-- `ref:targetAttr` 仅在一对多关系属性上指向目标端的一对一属性。
-- 在一对一关系中，存在以**关联属性名 + Id** 形式命名的隐性属性 (如 `userId`)，
-  用于 UI 侧在保存数据时建立父实体与子实体的关联。该属性的默认配置为 `queryable="true" sortable="true"`。
-
-#### 一对一 (`ref:type="one-to-one"`)
-
-从父实体 (源端) 关联子实体 (目标端)。
-**禁止**在父实体上显式定义外键属性 (如 `managerId`)，关联属性名应体现业务含义：
+### 3.1 主键 `id`
 
 ```xml
-<attr name="user" domain="entityRef"
-      ref:target="UserEntity" ref:type="one-to-one"
-/>
-```
-
-#### 一对多 (`ref:type="one-to-many"`)
-
-从父实体 (源端) 关联子实体 (目标端)。
-在父实体上的关联属性名为集合形式 (如 `users`)，并通过 `ref:targetAttr`
-指向子实体中以 `one-to-one` 反向关联回来的属性 (如 `group`)。
-对于需要在父实体被删除时级联删除子实体的情况，需要配置 `ref:cascadeDelete="true"`：
-
-```xml
-<attr name="users" domain="entityRef"
-      ref:target="UserEntity" ref:targetAttr="group" ref:type="one-to-many"
-      ref:cascadeDelete="true"
-/>
-```
-
-### 实体固定属性定义
-
-#### 定义规范
-
-- 主键 `id` 是每个实体必须定义的属性，**禁止定义复合主键**。
-- 实体固定属性的 `propId` 从 1 开始递增，最大不超过 20。其排在实体业务属性之前。
-- 对于主要实体，必须定义软删除属性 `deleted`。
-- 对于需要启用审计支持的实体，则需要定义审计属性。
-
-#### 主键 (`id`) 属性
-
-```xml
-<attr name="id" propId="1" orm:primary="true"
+<attr name="id" index="1" orm:primary="true"
       domain="uuid" displayName="ID"
       mandatory="true"
-      queryable="true"
-      insertable="true" updatable="false"
-/>
+      queryable="true" sortable="false"
+      orm:insertable="true" orm:updatable="false"
+      ui:insertable="false" ui:updatable="false">
+    <description>全局唯一标识，由系统自动生成</description>
+</attr>
 ```
 
-注意，主键属性的 `orm:primary` 必须配置为 `true`。
+- **domain** 必须为 `uuid`，系统自动生成 32 位不带短横线的 UUID。
+- **禁止使用复合主键**，所有实体均使用单列 UUID 主键。
+- `orm:updatable="false"` 确保主键创建后不可修改。
 
-#### 审计属性
+### 3.2 审计属性（可选）
+
+如需记录创建人、创建时间、最后修改人、最后修改时间，添加以下四个属性：
 
 ```xml
-<attr name="createdBy" propId="2"
+<attr name="createdBy" index="2"
       domain="userFlag" displayName="创建者"
       queryable="true" sortable="true"
       orm:insertable="true" orm:updatable="false"
-      ui:insertable="false" ui:updatable="false"
-/>
-<attr name="updatedBy" propId="3"
+      ui:insertable="false" ui:updatable="false">
+    <description>记录创建该数据的用户标识</description>
+</attr>
+<attr name="updatedBy" index="3"
       domain="userFlag" displayName="更新者"
       queryable="true" sortable="true"
       orm:insertable="true" orm:updatable="true"
-      ui:insertable="false" ui:updatable="false"
-/>
-<attr name="createdAt" propId="4"
+      ui:insertable="false" ui:updatable="false">
+    <description>最后一次更新该数据的用户标识</description>
+</attr>
+<attr name="createdAt" index="4"
       domain="datetime" displayName="创建时间"
       queryable="true" sortable="true"
       orm:insertable="true" orm:updatable="false"
       ui:insertable="false" ui:updatable="false"
-      datePattern="yyyy-MM-dd HH:mm:ss"
-/>
-<attr name="updatedAt" propId="5"
+      ui:datePattern="yyyy-MM-dd HH:mm:ss">
+    <description>数据创建时间，自动填充</description>
+</attr>
+<attr name="updatedAt" index="5"
       domain="datetime" displayName="更新时间"
       queryable="true" sortable="true"
       orm:insertable="true" orm:updatable="true"
       ui:insertable="false" ui:updatable="false"
-      datePattern="yyyy-MM-dd HH:mm:ss"
-/>
+      ui:datePattern="yyyy-MM-dd HH:mm:ss">
+    <description>数据最后一次更新时间，自动更新</description>
+</attr>
 ```
 
-#### 软删除 (`deleted`) 属性
+### 3.3 逻辑删除属性（可选）
+
+启用逻辑删除时添加：
 
 ```xml
-<attr name="deleted" propId="6"
+<attr name="deleted" index="6"
       domain="deleteFlag" displayName="是否已删除"
       queryable="true" sortable="true"
       orm:insertable="true" orm:updatable="true"
       ui:insertable="false" ui:updatable="false"
-      defaultValue="false"
-/>
+      defaultValue="false">
+    <description>标记数据是否被逻辑删除，true 表示已删除，查询时默认过滤</description>
+</attr>
 ```
 
-## 数据字典 (`<dict>`) 定义
+## 4. 普通属性 `<attr>`
 
-- 状态 (如 status, state)、有限枚举 (选项 ≤ 20，如支付方式) 等属性应定义为字典。
-- 字典 `name` 格式为 `相关模型-用途`，例如 `user-status`。
-- 每个选项 (`<option>`) 的 `value` 为 3 位数字代码 (如 `010`)，`code` 为具备业务含义的常量名。
-- `boolean` 类型不定义为字典。
+每个 `<attr>` 定义一个业务字段。定义时必须遵循以下规范。
 
-## 业务操作 (`<action>`) 定义
+### 4.1 通用规范
 
-- 仅定义除增删改查以外的实体数据操作。
-- 对于不涉及实体数据变更的接口需配置 `type="query"`，而影响实体数据变化的接口则配置 `type="mutation"`。
-- `name` 以 `实体名__操作名` 形式命名，如 `UserEntity__changePassword`。
+- **结构展开**：所有业务字段必须平铺，禁止使用 JSON 等复杂类型存储结构化数据。如有复杂结构应拆分为子实体并通过关联引用。
+- **长度限定**：字符串、文本等类型必须显式约束最小/最大长度（通过 `<constraint>` 中的 `minLength` / `maxLength`）。
+- **敏感数据**：密码、密钥等属性需设置 `ui:showable="false"`，同时必须禁止查询和排序（`queryable="false"`, `sortable="false"`）。通常允许插入/更新。
+- **日期时间**：所有日期、时间、时间戳属性的 `domain` 应设为 `date`, `time` 或 `datetime`，并通过 `ui:datePattern` 指定显示格式。
+- **描述说明**：每个属性必须包含 `<description>`，用简洁的业务语言描述作用、格式、示例，避免技术术语，不要重复属性名。
+- **序号分配**：`index` 在单个实体内必须唯一，业务属性从 20 开始连续递增，方便未来插入新属性时不必整体重排。
+
+### 4.2 `<attr>` 属性列表
+
+<!-- prettier-ignore -->
+| 属性名 | 说明 | 可选值/格式 | 是否必需 | 示例 |
+|--------|------|-------------|----------|------|
+| `name` | 属性名，小驼峰命名。 |  | 是 | `name="userName"` |
+| `index` | 属性序号。业务属性取值范围 20-2000；固定属性（id、审计等）取值范围 1-19。需连续分配，不允许重复。 | 整数 | 是 | `index="20"` |
+| `displayName` | 属性显示名称。 |  | 是 | `displayName="用户名"` |
+| `mandatory` | 是否必填。 | `true`/`false` | 否，默认 `false` | `mandatory="true"` |
+| `virtual` | 是否为虚拟属性（不生成数据库字段）。值通过计算得到，计算逻辑写在 `<computed>` 中。 | `true`/`false` | 否，默认 `false` | `virtual="true"` |
+| `internal` | 是否为内部属性（仅后台逻辑使用，前端不可直接增改）。若为 `true`，前端不会展示该属性，且 API 默认不接收/返回该属性。 | `true`/`false` | 否，默认 `false` | `internal="true"` |
+| `queryable` | 是否可参与过滤查询。若为 `false`，则任何查询条件都不能使用该属性。 | `true`/`false` | 否，默认 `true`（但建议显式指定） | `queryable="true"` |
+| `sortable` | 是否可参与排序。若为 `false`，则排序字段不能包含该属性。 | `true`/`false` | 否，默认 `true`（但建议显式指定） | `sortable="false"` |
+| `allowFilterOp` | 可用的过滤运算符，多个用逗号分隔。若 `queryable="true"` **必须**配置该属性，以明确接口支持的操作。 | 见下方运算符列表 | 推荐必需 | `allowFilterOp="eq,like"` |
+| `orm:primary` | 是否为主键。只有 `id` 属性可设为 `true`。 | `true`/`false` | 仅主键需要 | `orm:primary="true"` |
+| `orm:insertable` | 是否可插入数据库。若为 `false`，插入时忽略该属性（由数据库默认或触发器填充）。 | `true`/`false` | 否，默认 `true` | `orm:insertable="true"` |
+| `orm:updatable` | 是否可更新数据库。若为 `false`，更新时忽略该属性。 | `true`/`false` | 否，默认 `true` | `orm:updatable="false"` |
+| `domain` | 数据域，即业务层面的属性类型。 | 见 4.3 节 | 是 | `domain="string"` |
+| `mapTo` | 属性映射，如 `mapTo="user.name"` 表示该属性映射到关联实体 `user` 的 `name` 属性。常用于将关联实体的字段展平到当前实体上。 | 路径表达式 | 否 | `mapTo="category.name"` |
+| `dict` | 引用的数据字典名，如 `user-status`。此时 `domain` 必须为 `string`。 | 字典名 | 否 | `dict="user-status"` |
+| `biz:codeRule` | 业务编码生成规则，如 `INV{@year}{@month}{@seq:5}`。 | 见 4.4 节 | 否 | `biz:codeRule="ORD{@year}{@seq:6}"` |
+| `defaultValue` | 默认值。新建记录时若未提供该属性，则使用此默认值。 | 与属性类型匹配的字符串 | 否 | `defaultValue="active"` |
+| `ui:showable` | 是否在列表/详情等 UI 中显示。 | `true`/`false` | 否，默认 `true` | `ui:showable="false"` |
+| `ui:insertable` | 是否可在新增表单中显示并提交。 | `true`/`false` | 否，默认 `true` | `ui:insertable="false"` |
+| `ui:updatable` | 是否可在编辑表单中显示并提交。 | `true`/`false` | 否，默认 `true` | `ui:updatable="false"` |
+| `ui:maskPattern` | 脱敏显示模式，如 `3*4` 表示保留前 3 位和后 4 位，中间用 `*` 填充。常用于手机号、身份证等敏感信息。 | 模式字符串，格式为 `前保留位数 * 后保留位数` | 否 | `ui:maskPattern="3*4"` |
+| `ui:datePattern` | 日期/时间显示格式，如 `yyyy-MM-dd HH:mm:ss`。 | Java 日期格式 | 日期/时间类型需要 | `ui:datePattern="yyyy-MM-dd"` |
+
+### 4.3 `domain` 可选值及说明
+
+<!-- prettier-ignore -->
+| 值 | 说明 | 约束要求 |
+|----|------|----------|
+| `entityRef` | 实体关联（一对一或一对多），用于指向另一个实体。 | 必须同时使用 `ref:*` 属性 |
+| `userFlag` | 人员标识（通常用于创建者、更新者）。存储用户 ID。 | 无 |
+| `deleteFlag` | 逻辑删除标识，值为布尔类型。 | 无 |
+| `uuid` | UUID，不含短横线。 | 无 |
+| `file` | 单个文件，存储文件 HASH。 | 必须配置 `<constraint>` 文件相关限制 |
+| `fileList` | 文件列表，存储多个文件 HASH 的 JSON 数组。 | 必须配置文件限制 |
+| `string` | 字符串。 | 必须指定 `maxLength` |
+| `long` | 长整数。 | 可指定 `minValue`/`maxValue` |
+| `int` | 整数。 | 可指定 `minValue`/`maxValue` |
+| `double` | 双精度浮点数。 | 可指定 `scale`、`minValue`/`maxValue` |
+| `float` | 单精度浮点数。 | 可指定 `scale`、`minValue`/`maxValue` |
+| `boolean` | 布尔值。 | 无 |
+| `date` | 日期（年月日）。 | 需指定 `ui:datePattern` |
+| `time` | 时间（时分秒）。 | 需指定 `ui:datePattern` |
+| `datetime` | 日期时间。 | 需指定 `ui:datePattern` |
+| `url` | URL 地址。 | 必须指定 `maxLength`，可附加 `pattern` 验证格式 |
+| `text` | 纯文本（大字段）。 | 必须指定 `maxLength`（字符数） |
+| `svg` | SVG 内容。 | 同 `text` |
+| `json` | JSON 内容。 | 可指定 `maxLength` |
+| `xml` | XML 内容。 | 可指定 `maxLength` |
+| `html` | HTML 内容。 | 可指定 `maxLength` |
+| `markdown` | Markdown 内容。 | 可指定 `maxLength` |
+
+### 4.4 `biz:codeRule` 占位符
+
+业务编码生成规则支持以下占位符，系统将在插入记录时自动替换为实际值：
+
+<!-- prettier-ignore -->
+| 占位符 | 说明 | 示例 |
+|--------|------|------|
+| `{@uuid}` | UUID（无横线） | `a1b2c3d4e5f6...` |
+| `{@year}` | 4 位年份 | `2026` |
+| `{@month}` | 2 位月份（01-12） | `02` |
+| `{@dayOfMonth}` | 月内日期（01-31） | `14` |
+| `{@hour}` | 2 位小时（00-23） | `15` |
+| `{@minute}` | 2 位分钟 | `30` |
+| `{@second}` | 2 位秒 | `45` |
+| `{@randNumber:N}` | N 位随机数字（0-9） | `{@randNumber:4}` → `8372` |
+| `{@seq:N}` | N 位递增序列（需数据库支持，如自增序列或发号器） | `{@seq:5}` → `00012` |
+
+规则示例：`ORD-{@year}{@month}{@seq:6}` 可能生成 `ORD-202602000123`。
+
+### 4.5 值约束 `<constraint>`
+
+在 `<attr>` 内部可添加 `<constraint>` 子元素，定义更具体的校验规则。这些约束会在服务端和数据库端（如可能）进行验证。
+
+<!-- prettier-ignore -->
+| 属性名 | 说明 | 适用类型 | 是否必需 | 示例 |
+|--------|------|----------|----------|------|
+| `pattern` | 正则表达式验证文本格式。 | 字符串 | 否 | `pattern="^[A-Z][a-z]+$"` |
+| `scale` | 浮点数精度（小数点后位数）。 | 浮点数 | 否 | `scale="2"` |
+| `minValue` | 最小值（包含）。 | 数字 | 否 | `minValue="0"` |
+| `maxValue` | 最大值（包含）。 | 数字 | 否 | `maxValue="100"` |
+| `minLength` | 最小长度（字符数）。 | 字符串 | 否 | `minLength="2"` |
+| `maxLength` | 最大长度（字符数）。 | 字符串、文本、JSON 等 | **所有 string/text 类型属性必须** | `maxLength="50"` |
+| `minFileSize` | 最小文件尺寸（支持单位如 `1K`、`2M`）。 | 文件 | 否 | `minFileSize="1K"` |
+| `maxFileSize` | 最大文件尺寸。 | 文件 | **file/fileList 类型属性必须** | `maxFileSize="10M"` |
+| `allowedFileTypes` | 允许的 MIME 文件类型，逗号分隔。 | 文件 | **file/fileList 类型属性必须** | `allowedFileTypes="image/jpeg,image/png"` |
+
+**文件尺寸单位**：支持纯数字（字节）或带单位（K、M、G，不区分大小写），如 `1024`、`2K`、`1.5M`。
+
+### 4.6 虚拟属性与计算 `<computed>`
+
+若 `virtual="true"`，则必须提供 `<computed>` 子元素，定义计算逻辑。计算逻辑可使用 XPL 模板语言（支持 Java 方法调用、上下文变量 `entity` 引用当前实体其他属性）。
+
+**示例**：
+
+```xml
+<attr name="fullName" virtual="true" displayName="全名" queryable="false" sortable="false">
+    <computed><![CDATA[
+        return entity.firstName + ' ' + entity.lastName;
+    ]]></computed>
+    <description>由 firstName 和 lastName 拼接而成</description>
+</attr>
+```
+
+**注意事项**：
+
+- 虚拟属性不生成数据库列，因此不能作为查询条件 `queryable` 和 `sortable` 设为 `false`。
+- 计算逻辑中可调用预定义的 XPL 标签库函数，例如处理日期、格式化等。
+
+### 4.7 属性映射 `mapTo`
+
+对于简单的关联对象属性取值，优先使用属性映射机制，而不是虚拟属性。映射属性可以像普通属性一样进行增删改查和排序，其值来自于关联实体的某个字段。
+
+**示例**：
+
+```xml
+<attr name="categoryName" mapTo="category.name" displayName="分类名称"
+      queryable="true" sortable="true" allowFilterOp="eq,like" />
+```
+
+- `mapTo` 的值是一个路径表达式，从当前实体出发，通过关联属性导航到目标属性。例如 `category` 是当前实体中指向 `CategoryEntity` 的一对一关联属性，`name` 是目标实体的属性。
+- 映射属性在数据库中 **不存储冗余数据**，查询时会自动 JOIN 获取。因此 `queryable` 和 `sortable` 是可行的，但性能取决于 JOIN。
+- 映射属性通常是只读的（`orm:insertable="false" orm:updatable="false"`），因为修改它应直接修改源实体的字段。如有必要，可以配置为可写，但需确保一致性逻辑。
+
+### 4.8 过滤运算符 `allowFilterOp`
+
+可选值及含义：
+
+| 运算符 | 说明 |
+|--------|------|
+| `eq` | 等于 |
+| `ne` | 不等于 |
+| `gt` | 大于 |
+| `ge` | 大于等于 |
+| `lt` | 小于 |
+| `le` | 小于等于 |
+| `in` | 在集合中 |
+| `notIn` | 不在集合中 |
+| `startsWith` | 以...开头 |
+| `endsWith` | 以...结尾 |
+| `contains` | 包含 |
+| `notContains` | 不包含 |
+| `like` | 模糊匹配（需手动拼接 `%`） |
+| `length` | 长度等于 |
+| `regex` | 正则匹配 |
+| `between` | 区间（数值） |
+| `notBetween` | 不在区间（数值） |
+| `dateBetween` | 日期区间 |
+| `dateTimeBetween` | 日期时间区间 |
+| `lengthBetween` | 长度区间 |
+
+缺省值为 `eq,in,dateBetween,dateTimeBetween`。
+
+## 5. 唯一键 `<orm:unique-keys>`
+
+用于定义除主键外需要在数据库层面保证唯一性的属性或属性组合。每个 `<key>` 的 `name` 属性必须以 `uk_` 为前缀，以便识别。
+
+**规则**：
+
+- 多个属性用逗号分隔。
+- 每个组合定义一个独立的唯一键。
+- 唯一键中的属性必须已存在于实体中。
+
+**示例**：
+
+```xml
+<orm:unique-keys>
+    <key name="uk_user_name">userName</key> <!-- 单属性唯一 -->
+    <key name="uk_node_name">parent,name</key> <!-- 组合唯一 -->
+</orm:unique-keys>
+```
+
+**注意**：唯一键仅对物理列有效，虚拟属性、映射属性不能用于唯一键。
+
+## 7. 实体关联
+
+### 7.1 通用规则
+
+- 关联类型仅支持 **一对一（one-to-one）** 和 **一对多（one-to-many）**。
+- **禁止**直接建立多对多关系，必须引入中间实体转换为一对多和一对一。
+- 关联属性必须设置 `domain="entityRef"`，且 `virtual="false" internal="false"`。
+- 关联属性名应体现业务含义：一对一用单数（如 `user`），一对多用复数（如 `users`）。
+- **禁止额外添加“关联属性名 + Id”的冗余字段**，如 `userId`，因为关联属性本身已包含目标实体的 ID。唯一键应直接引用关联属性（如 `user`）。
+
+### 7.2 一对一 (`ref:type="one-to-one"`)
+
+从源实体指向目标实体，表示“拥有一个”的关系。
+
+**示例**：用户（UserEntity）拥有一个头像（AvatarEntity）
+
+```xml
+<attr name="avatar" domain="entityRef"
+      ref:target="AvatarEntity" ref:type="one-to-one"
+      description="用户头像"/>
+```
+
+**注意**：
+- 禁止创建形如 `avatarId` 的额外属性，关联本身即代表外键。
+- 唯一键可直接引用关联属性名：`<key name="uk_avatar">avatar</key>`。
+
+### 7.3 一对多 (`ref:type="one-to-many"`)
+
+从源实体（一方）关联到目标实体（多方）的集合。源实体中 **不存储外键**，而是由目标实体中的反向关联属性指向源实体。
+
+**属性**：
+
+- `ref:target`：目标实体名。
+- `ref:targetAttr`：目标实体中指向当前实体的属性名（必须是 `one-to-one` 类型）。
+- `ref:cascadeDelete`：是否在 **物理删除** 源实体的同时物理级联删除目标实体，默认为 `false`。逻辑删除不受此属性影响。
+
+**示例**：
+
+```xml
+<attr name="users" domain="entityRef" displayName="用户列表"
+      ref:target="UserEntity" ref:targetAttr="group" ref:type="one-to-many"
+      ref:cascadeDelete="true">
+    <description>该用户组下的所有用户</description>
+</attr>
+```
+
+对应的目标实体 `UserEntity` 中必须有一个一对一属性指向源实体：
+
+```xml
+<attr name="group" domain="entityRef" ref:target="GroupEntity" ref:type="one-to-one">
+    <description>用户所属的组</description>
+</attr>
+```
+
+**注意**：一对多关联本身不生成数据库列，仅用于对象关系映射和 API 查询。在查询时可通过 `users` 获取子实体列表。
+
+## 8. 数据字典 `<dict>`
+
+用于定义状态、有限枚举（选项 ≤ 20）等。
+
+**规则**：
+
+- 字典 `name` 格式：`相关模型-用途`，如 `user-status`，全局唯一。
+- 每个 `<option>` 的 `value` 为 3 位数字代码（如 `010`），`code` 为业务含义的常量名（大写字母+下划线），`displayName` 为界面显示文本。
+- `boolean` 类型不定义为字典（直接使用布尔属性）。
+- 字典项数量应 ≤ 20，超过则应考虑改为独立实体（如标签、分类）。
+
+**示例**：
+
+```xml
+<dict name="user-status" displayName="用户状态">
+    <option value="010" code="ACTIVE" displayName="正常" />
+    <option value="020" code="LOCKED" displayName="锁定" />
+    <option value="030" code="INACTIVE" displayName="未激活" />
+</dict>
+```
+
+在实体属性中引用：
+
+```xml
+<attr name="status" dict="user-status" domain="string" displayName="用户状态"
+      queryable="true" sortable="true" mandatory="true"
+      allowFilterOp="eq,in">
+    <description>用户当前状态，可选值：正常、锁定、未激活</description>
+</attr>
+```
+
+**注意**：引用字典的属性，其值存储为 `value`（如 `"010"`），系统自动为该属性生成 `属性名_label` 形式的代表字典显示文本的属性，如 `status_label`。
+
+## 9. 业务操作 `<action>`
+
+仅定义除标准增删改查、实体衍生、实体复制以外的实体数据操作。如果业务逻辑只是简单的属性更新，不涉及转换或外部服务，则无需定义操作，由通用 CRUD 接口处理。
+
+**规则**：
+
+- `name` 格式：`实体名__操作名`，如 `UserEntity__changePassword`，确保全局唯一。
+- `type`：`query`（不修改数据）或 `mutation`（修改数据）。
+- 操作内部可定义输入参数、校验规则、返回值类型等。
+
+**示例**：
+
+```xml
+<action name="UserEntity__changePassword" type="mutation" displayName="修改密码">
+    <arg name="oldPassword" mandatory="true" type="string" />
+    <arg name="newPassword" mandatory="true" type="string" />
+    <return type="boolean" />
+    <description>验证旧密码并更新为新密码</description>
+    <!-- 内部逻辑由平台实现，可通过 XPL 编写 -->
+</action>
+```

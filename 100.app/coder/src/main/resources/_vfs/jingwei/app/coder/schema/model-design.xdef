@@ -52,7 +52,7 @@
             </orm:unique-keys>
 
             <attrs xdef:body-type="list" xdef:key-attr="name">
-                <attr name="!camel-case" propId="!int" displayName="string"
+                <attr name="!camel-case" index="!int" displayName="string"
                       mandatory="!boolean=false" deprecated="boolean"
 
                       virtual="!boolean=false" internal="!boolean=false"
@@ -61,7 +61,6 @@
 
                       orm:primary="!boolean=false"
                       orm:insertable="!boolean=false" orm:updatable="!boolean=false"
-                      orm:precision="int" orm:scale="int"
 
                       ref:target="ref-entity-name" ref:type="ref-type"
                       ref:targetAttr="ref-entity-attr-name" ref:cascadeDelete="boolean"
@@ -76,7 +75,7 @@
                 >
                     <description>string</description>
 
-                    <constraint pattern="regex"
+                    <constraint pattern="regex" scale="int"
                                 minValue="double" maxValue="double"
                                 minLength="int" maxLength="int"
                                 minFileSize="file-size" maxFileSize="file-size"
