@@ -76,4 +76,5 @@ public interface AppCoderConstants {
 
     String PROMPT_MODEL_DESIGN = "/jingwei/app/coder/ai-prompts/model-design.prompt.yaml";
     String PROMPT_UI_DESIGN = "/jingwei/app/coder/ai-prompts/ui-design.prompt.yaml";
+    String PROMPT_LOGO_DESIGN = "/jingwei/app/coder/ai-prompts/logo-design.prompt.yaml";
 }

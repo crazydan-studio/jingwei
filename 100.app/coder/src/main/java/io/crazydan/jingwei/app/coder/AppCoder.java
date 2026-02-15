@@ -35,6 +35,7 @@ import io.nop.core.lang.xml.XNode;
 import io.nop.xlang.api.XLang;
 
 import static io.crazydan.jingwei.app.coder.AppCoderConfigs.CFG_APP_CODER_CHAT_TIMEOUT;
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.PROMPT_LOGO_DESIGN;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.PROMPT_MODEL_DESIGN;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.PROMPT_UI_DESIGN;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.XDSL_SCHEMA_CODER_MODEL_DESIGN;
@@ -84,15 +85,15 @@ public class AppCoder {
     }
 
     /** 根据 UI 设计需求生成 UI 设计提示词 */
-    public String genUiDesignPrompt(String bizRequirements, String uiRequirements) {
-        DesignPrompt prompt = createUiDesignPrompt(bizRequirements, uiRequirements);
+    public String genUiDesignPrompt(String bizRequirements, String uiRequirements, String bizModelDefs) {
+        DesignPrompt prompt = createUiDesignPrompt(bizRequirements, uiRequirements, bizModelDefs);
 
         return prompt.generate();
     }
 
     /** 根据 UI 设计需求生成 UI 设计代码 */
-    public AppCoderCode genUiDesignCode(String bizRequirements, String uiRequirements) {
-        DesignPrompt prompt = createUiDesignPrompt(bizRequirements, uiRequirements);
+    public AppCoderCode genUiDesignCode(String bizRequirements, String uiRequirements, String bizModelDefs) {
+        DesignPrompt prompt = createUiDesignPrompt(bizRequirements, uiRequirements, bizModelDefs);
 
         return genCode(prompt);
     }
@@ -102,6 +103,13 @@ public class AppCoder {
         IPromptTemplate template = loadPromptTemplate(PROMPT_UI_DESIGN);
 
         return parseCodeFromChat(content, template);
+    }
+
+    /** 根据 Logo 设计需求生成 Logo 设计代码 */
+    public AppCoderCode genLogoDesignCode(String bizRequirements, String logoRequirements) {
+        DesignPrompt prompt = createLogoDesignPrompt(bizRequirements, logoRequirements);
+
+        return genCode(prompt);
     }
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -116,12 +124,22 @@ public class AppCoder {
         return new DesignPrompt(template, vars);
     }
 
-    protected DesignPrompt createUiDesignPrompt(String bizRequirements, String uiRequirements) {
+    protected DesignPrompt createUiDesignPrompt(String bizRequirements, String uiRequirements, String bizModelDefs) {
         IPromptTemplate template = loadPromptTemplate(PROMPT_UI_DESIGN);
         Map<String, Object> vars = new HashMap<>();
         vars.put("uiDesignXdef", loadXDefNode(XDSL_SCHEMA_CODER_UI_DESIGN).xml());
         vars.put("bizRequirements", bizRequirements);
         vars.put("uiRequirements", uiRequirements);
+        vars.put("bizModelDefs", bizModelDefs);
+
+        return new DesignPrompt(template, vars);
+    }
+
+    protected DesignPrompt createLogoDesignPrompt(String bizRequirements, String logoRequirements) {
+        IPromptTemplate template = loadPromptTemplate(PROMPT_LOGO_DESIGN);
+        Map<String, Object> vars = new HashMap<>();
+        vars.put("bizRequirements", bizRequirements);
+        vars.put("logoRequirements", logoRequirements);
 
         return new DesignPrompt(template, vars);
     }

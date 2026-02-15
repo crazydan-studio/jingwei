@@ -31,6 +31,7 @@ public class AiModelDesignNormalizer {
 
     /** 处理 {@link AppCoderConstants#XDSL_SCHEMA_CODER_MODEL_DESIGN} 的根节点 */
     public static XNode normalize(XNode node) {
+        // TODO 补充 xxxId, xxx_label 等隐式属性
         return node;
     }
 }

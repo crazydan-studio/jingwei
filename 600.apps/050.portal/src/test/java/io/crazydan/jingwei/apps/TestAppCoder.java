@@ -40,32 +40,26 @@ import org.junit.jupiter.api.Test;
 public class TestAppCoder extends NopJunitTestCase {
 
     @Test
-    public void test_gen_prompt() {
+    public void test_gen_model_prompt() {
         String name = getClass().getSimpleName();
         File projectDir = getProjectDir();
 
         AppCoder coder = AppCoder.create(null, null);
 
-        File source = new File(projectDir, "src/main/resources/app/source/model-requirements.md");
-        String requirements = FileHelper.readText(source, StringHelper.ENCODING_UTF8);
-        String prompt = coder.genModelDesignPrompt(requirements);
+        File source = new File(projectDir, "src/main/resources/app/source/biz-requirements.md");
+        String bizRequirements = FileHelper.readText(source, StringHelper.ENCODING_UTF8);
+
+        source = new File(projectDir, "src/main/resources/app/source/model-requirements.md");
+        String modelRequirements = FileHelper.readText(source, StringHelper.ENCODING_UTF8);
+        String prompt = coder.genModelDesignPrompt(bizRequirements, modelRequirements);
 
         File target = new File(projectDir, "src/test/resources/cases/" + name + "/prompt-model-design.md");
         IResource resource = new FileResource("/text", target);
         resource.writeText(prompt, StringHelper.ENCODING_UTF8);
-
-        //
-        source = new File(projectDir, "src/main/resources/app/source/ui-requirements.md");
-        requirements = FileHelper.readText(source, StringHelper.ENCODING_UTF8);
-        prompt = coder.genUiDesignPrompt(requirements);
-
-        target = new File(projectDir, "src/test/resources/cases/" + name + "/prompt-ui-design.md");
-        resource = new FileResource("/text", target);
-        resource.writeText(prompt, StringHelper.ENCODING_UTF8);
     }
 
     @Test
-    public void test_gen_code() {
+    public void test_gen_model_code() {
         File projectDir = getProjectDir();
 
         AppCoder coder = AppCoder.create(null, null);
@@ -76,13 +70,43 @@ public class TestAppCoder extends NopJunitTestCase {
         File target = new File(projectDir, "src/main/resources/app/source/model-design.xml");
         IResource resource = new FileResource("/text", target);
         resource.writeText(code, StringHelper.ENCODING_UTF8);
+    }
 
-        //
-        response = attachmentText("response-ui-design.md");
-        code = coder.parseUiDesignCodeFromChat(response);
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-        target = new File(projectDir, "src/main/resources/app/source/ui-design.xml");
-        resource = new FileResource("/text", target);
+    @Test
+    public void test_gen_ui_prompt() {
+        String name = getClass().getSimpleName();
+        File projectDir = getProjectDir();
+
+        AppCoder coder = AppCoder.create(null, null);
+
+        File source = new File(projectDir, "src/main/resources/app/source/biz-requirements.md");
+        String bizRequirements = FileHelper.readText(source, StringHelper.ENCODING_UTF8);
+
+        source = new File(projectDir, "src/main/resources/app/source/model-design.xml");
+        String bizModelDefs = FileHelper.readText(source, StringHelper.ENCODING_UTF8);
+
+        source = new File(projectDir, "src/main/resources/app/source/ui-requirements.md");
+        String uiRequirements = FileHelper.readText(source, StringHelper.ENCODING_UTF8);
+        String prompt = coder.genUiDesignPrompt(bizRequirements, uiRequirements, bizModelDefs);
+
+        File target = new File(projectDir, "src/test/resources/cases/" + name + "/prompt-ui-design.md");
+        IResource resource = new FileResource("/text", target);
+        resource.writeText(prompt, StringHelper.ENCODING_UTF8);
+    }
+
+    @Test
+    public void test_gen_ui_code() {
+        File projectDir = getProjectDir();
+
+        AppCoder coder = AppCoder.create(null, null);
+
+        String response = attachmentText("response-ui-design.md");
+        String code = coder.parseUiDesignCodeFromChat(response);
+
+        File target = new File(projectDir, "src/main/resources/app/source/ui-design.xml");
+        IResource resource = new FileResource("/text", target);
         resource.writeText(code, StringHelper.ENCODING_UTF8);
     }
 

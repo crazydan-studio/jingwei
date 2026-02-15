@@ -40,12 +40,12 @@ public class TestAppCoder extends NopJunitAutoTestCase {
         AppCoder coder = AppCoder.create(null, null);
 
         String requirements = inputText("model-requirements.md");
-        String prompt = coder.genModelDesignPrompt(requirements);
+        String prompt = coder.genModelDesignPrompt(null, requirements);
         outputText("prompt-model-design.md", prompt);
 
         //
         requirements = inputText("ui-requirements.md");
-        prompt = coder.genUiDesignPrompt(requirements);
+        prompt = coder.genUiDesignPrompt(null, requirements, null);
         outputText("prompt-ui-design.md", prompt);
     }
 
@@ -55,11 +55,11 @@ public class TestAppCoder extends NopJunitAutoTestCase {
         AppCoder coder = AppCoder.create("bailian", "qwen-coder-plus");
 
         String requirements = inputText("model-requirements.md");
-        AppCoderCode code = coder.genModelDesignCode(requirements);
+        AppCoderCode code = coder.genModelDesignCode(null, requirements);
         System.out.println(code.getContent());
 
         requirements = inputText("ui-requirements.md");
-        code = coder.genUiDesignCode(requirements);
+        code = coder.genUiDesignCode(null, requirements, null);
         System.out.println(code.getContent());
     }
 }
