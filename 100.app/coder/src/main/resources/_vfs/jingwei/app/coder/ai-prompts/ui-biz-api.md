@@ -142,11 +142,12 @@ console.log(firstProvider.models.map((m) => m.name)); // 例如 ["gpt-4o", "gpt-
 ### 语法
 
 ```graphql
-query ($provider: String, $model: String, $requirements: String) {
+query ($provider: !String, $model: !String, $bizRequirements: !String, $modelRequirements: !String) {
   AppCoder__genModelDesignCode(
     provider: $provider
     model: $model
-    requirements: $requirements
+    bizRequirements: $bizRequirements
+    modelRequirements: $modelRequirements
   ) {
     content
   }
@@ -160,7 +161,8 @@ query ($provider: String, $model: String, $requirements: String) {
 |--------|------|------|------|
 | `provider` | `String` | 是 | 模型提供商标识，如 `"openai"` |
 | `model` | `String` | 是 | 具体模型名称，如 `"gpt-4o"` |
-| `requirements` | `String` | 是 | 模型设计需求的自然语言描述 |
+| `bizRequirements` | `String` | 是 | 业务需求的自然语言描述 |
+| `modelRequirements` | `String` | 是 | 模型设计需求的自然语言描述 |
 
 ### 返回值
 
@@ -176,11 +178,12 @@ import { graphql } from '@app-utils';
 
 const { AppCoder__genModelDesignCode } = await graphql(
   `
-    query ($provider: String, $model: String, $requirements: String) {
+    query ($provider: !String, $model: !String, $bizRequirements: !String, $modelRequirements: !String) {
       AppCoder__genModelDesignCode(
         provider: $provider
         model: $model
-        requirements: $requirements
+        bizRequirements: $bizRequirements
+        modelRequirements: $modelRequirements
       ) {
         content
       }
@@ -189,7 +192,8 @@ const { AppCoder__genModelDesignCode } = await graphql(
   {
     provider: 'openai',
     model: 'gpt-4o',
-    requirements: '设计一个电商系统的用户模型，包含姓名、邮箱、地址列表'
+    bizRequirements: '设计一个电商系统',
+    modelRequirements: '用户模型包含姓名、邮箱、地址列表'
   }
 );
 
@@ -211,11 +215,13 @@ console.log(content);
 ### 语法
 
 ```graphql
-query ($provider: String, $model: String, $requirements: String) {
+query ($provider: !String, $model: !String, $bizRequirements: !String, $uiRequirements: !String, $bizModelDefs: !String) {
   AppCoder__genUiDesignCode(
     provider: $provider
     model: $model
-    requirements: $requirements
+    bizRequirements: $bizRequirements
+    uiRequirements: $uiRequirements
+    bizModelDefs: $bizModelDefs
   ) {
     content
   }
@@ -229,7 +235,9 @@ query ($provider: String, $model: String, $requirements: String) {
 |--------|------|------|------|
 | `provider` | `String` | 是 | 模型提供商标识 |
 | `model` | `String` | 是 | 具体模型名称 |
-| `requirements` | `String` | 是 | UI 设计需求的自然语言描述 |
+| `bizRequirements` | `String` | 是 | 业务需求的自然语言描述 |
+| `uiRequirements` | `String` | 是 | UI 设计需求的自然语言描述 |
+| `bizModelDefs` | `String` | 是 | 业务模型定义 |
 
 ### 返回值
 
@@ -245,11 +253,13 @@ import { graphql } from '@app-utils';
 
 const { AppCoder__genUiDesignCode } = await graphql(
   `
-    query ($provider: String, $model: String, $requirements: String) {
+    query ($provider: !String, $model: !String, $bizRequirements: !String, $uiRequirements: !String, $bizModelDefs: !String) {
       AppCoder__genUiDesignCode(
         provider: $provider
         model: $model
-        requirements: $requirements
+        bizRequirements: $bizRequirements
+        uiRequirements: $uiRequirements
+        bizModelDefs: $bizModelDefs
       ) {
         content
       }
@@ -258,7 +268,9 @@ const { AppCoder__genUiDesignCode } = await graphql(
   {
     provider: 'openai',
     model: 'gpt-4o',
-    requirements: '一个登录表单，包含用户名、密码输入框和提交按钮'
+    bizRequirements: '用户管理系统',
+    uiRequirements: '登录表单包含用户名、密码输入框和提交按钮',
+    bizModelDefs: '<model-design><dicts>...</dicts><entities>...</entities></model-design>'
   }
 );
 
@@ -270,6 +282,74 @@ console.log(content);
 
 - 同模型设计代码接口，参数必填，建议先获取可用模型列表。
 
+## 根据需求生成 Logo 设计代码：`AppCoder__genLogoDesignCode`
+
+### 描述
+
+根据指定的 AI 提供商、模型和需求描述，生成 svg 格式的 Logo 设计代码。
+
+### 语法
+
+```graphql
+query ($provider: !String, $model: !String, $bizRequirements: !String, $logoRequirements: !String) {
+  AppCoder__genLogoDesignCode(
+    provider: $provider
+    model: $model
+    bizRequirements: $bizRequirements
+    logoRequirements: $logoRequirements
+  ) {
+    content
+  }
+}
+```
+
+### 参数
+
+<!-- prettier-ignore -->
+| 参数名 | 类型 | 必填 | 描述 |
+|--------|------|------|------|
+| `provider` | `String` | 是 | 模型提供商标识 |
+| `model` | `String` | 是 | 具体模型名称 |
+| `bizRequirements` | `String` | 是 | 业务需求的自然语言描述 |
+| `logoRequirements` | `String` | 是 | Logo 设计需求的自然语言描述 |
+
+### 返回值
+
+<!-- prettier-ignore -->
+| 字段 | 类型 | 描述 |
+|------|------|------|
+| `content` | `String` | 生成的 Logo 的 svg 代码 |
+
+### 示例代码
+
+```javascript
+import { graphql } from '@app-utils';
+
+const { AppCoder__genLogoDesignCode } = await graphql(
+  `
+    query ($provider: !String, $model: !String, $bizRequirements: !String, $logoRequirements: !String) {
+      AppCoder__genLogoDesignCode(
+        provider: $provider
+        model: $model
+        bizRequirements: $bizRequirements
+        logoRequirements: $logoRequirements
+      ) {
+        content
+      }
+    }
+  `,
+  {
+    provider: 'openai',
+    model: 'gpt-4o',
+    bizRequirements: '记录个人/家庭收支的账本',
+    logoRequirements: '中国传统账簿图标'
+  }
+);
+
+const { content } = AppCoder__genLogoDesignCode;
+console.log(content);
+```
+
 ## 生成模型设计提示词：`AppCoder__genModelDesignPrompt`
 
 ### 描述
@@ -279,8 +359,8 @@ console.log(content);
 ### 语法
 
 ```graphql
-query ($requirements: String) {
-  AppCoder__genModelDesignPrompt(requirements: $requirements)
+query ($bizRequirements: !String, $modelRequirements: !String) {
+  AppCoder__genModelDesignPrompt(bizRequirements: $bizRequirements, modelRequirements: $modelRequirements)
 }
 ```
 
@@ -289,7 +369,8 @@ query ($requirements: String) {
 <!-- prettier-ignore -->
 | 参数名 | 类型 | 必填 | 描述 |
 |--------|------|------|------|
-| `requirements` | `String` | 是 | 模型设计需求的自然语言描述 |
+| `bizRequirements` | `String` | 是 | 业务需求的自然语言描述 |
+| `modelRequirements` | `String` | 是 | 模型设计需求的自然语言描述 |
 
 ### 返回值
 
@@ -302,12 +383,13 @@ import { graphql } from '@app-utils';
 
 const { AppCoder__genModelDesignPrompt } = await graphql(
   `
-    query ($requirements: String) {
-      AppCoder__genModelDesignPrompt(requirements: $requirements)
+    query ($bizRequirements: !String, $modelRequirements: !String) {
+      AppCoder__genModelDesignPrompt(bizRequirements: $bizRequirements, modelRequirements: $modelRequirements)
     }
   `,
   {
-    requirements: '设计一个电商系统的用户模型，包含姓名、邮箱、地址列表'
+    bizRequirements: '设计一个电商系统',
+    modelRequirements: '用户模型包含姓名、邮箱、地址列表'
   }
 );
 
@@ -318,7 +400,6 @@ console.log(prompt); // 输出优化后的提示词文本
 ### 注意事项
 
 - 该接口只生成提示词，不调用 AI 模型生成代码。
-- 生成的提示词可以作为 `AppCoder__genModelDesignCode` 的输入，或用于其他 AI 工具。
 
 ## 生成 UI 设计提示词：`AppCoder__genUiDesignPrompt`
 
@@ -329,8 +410,12 @@ console.log(prompt); // 输出优化后的提示词文本
 ### 语法
 
 ```graphql
-query ($requirements: String) {
-  AppCoder__genUiDesignPrompt(requirements: $requirements)
+query ($bizRequirements: !String, $uiRequirements: !String, $bizModelDefs: !String) {
+  AppCoder__genUiDesignPrompt(
+    bizRequirements: $bizRequirements
+    uiRequirements: $uiRequirements
+    bizModelDefs: $bizModelDefs
+  )
 }
 ```
 
@@ -339,7 +424,9 @@ query ($requirements: String) {
 <!-- prettier-ignore -->
 | 参数名 | 类型 | 必填 | 描述 |
 |--------|------|------|------|
-| `requirements` | `String` | 是 | UI 设计需求的自然语言描述 |
+| `bizRequirements` | `String` | 是 | 业务需求的自然语言描述 |
+| `uiRequirements` | `String` | 是 | UI 设计需求的自然语言描述 |
+| `bizModelDefs` | `String` | 是 | 业务模型定义 |
 
 ### 返回值
 
@@ -352,12 +439,18 @@ import { graphql } from '@app-utils';
 
 const { AppCoder__genUiDesignPrompt } = await graphql(
   `
-    query ($requirements: String) {
-      AppCoder__genUiDesignPrompt(requirements: $requirements)
+    query ($bizRequirements: !String, $uiRequirements: !String, $bizModelDefs: !String) {
+      AppCoder__genUiDesignPrompt(
+        bizRequirements: $bizRequirements
+        uiRequirements: $uiRequirements
+        bizModelDefs: $bizModelDefs
+      )
     }
   `,
   {
-    requirements: '一个登录表单，包含用户名、密码输入框和提交按钮'
+    bizRequirements: '用户管理系统',
+    uiRequirements: '登录表单包含用户名、密码输入框和提交按钮',
+    bizModelDefs: '<model-design><dicts>...</dicts><entities>...</entities></model-design>'
   }
 );
 
@@ -368,4 +461,3 @@ console.log(prompt);
 ### 注意事项
 
 - 该接口只生成提示词，不调用 AI 模型生成代码。
-- 生成的提示词可以直接用于 `AppCoder__genUiDesignCode` 的 `requirements` 参数，或用于其他 AI 工具。

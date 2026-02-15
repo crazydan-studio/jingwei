@@ -33,79 +33,6 @@
 - 逻辑删除仅更新实体的 `orm:deleteFlagProp` 指定的字段，不影响其关联子实体（子实体仍可见）。物理删除时若配置了级联删除，则子实体数据会被彻底删除。
 - 审计属性、逻辑删除属性本身也需要在实体中定义，参见固定属性部分。
 
-## 固定属性
-
-每个实体必须包含主键 `id`，可选包含审计属性和逻辑删除属性。固定属性的 `index` 必须使用 1~19 之间的序号，与业务属性（20~2000）区分开。
-
-### 主键 `id`
-
-```xml
-<attr name="id" index="1" orm:primary="true"
-      domain="uuid" displayName="ID"
-      mandatory="true"
-      queryable="true" sortable="false"
-      orm:insertable="true" orm:updatable="false"
-      ui:insertable="false" ui:updatable="false">
-    <description>全局唯一标识，由系统自动生成</description>
-</attr>
-```
-
-- **domain** 必须为 `uuid`，系统自动生成 32 位不带短横线的 UUID。
-- **禁止使用复合主键**，所有实体均使用单列 UUID 主键。
-- `orm:updatable="false"` 确保主键创建后不可修改。
-
-### 审计属性（可选）
-
-如需记录创建人、创建时间、最后修改人、最后修改时间，添加以下四个属性：
-
-```xml
-<attr name="createdBy" index="2"
-      domain="userFlag" displayName="创建者"
-      queryable="true" sortable="true"
-      orm:insertable="true" orm:updatable="false"
-      ui:insertable="false" ui:updatable="false">
-    <description>记录创建该数据的用户标识</description>
-</attr>
-<attr name="updatedBy" index="3"
-      domain="userFlag" displayName="更新者"
-      queryable="true" sortable="true"
-      orm:insertable="true" orm:updatable="true"
-      ui:insertable="false" ui:updatable="false">
-    <description>最后一次更新该数据的用户标识</description>
-</attr>
-<attr name="createdAt" index="4"
-      domain="datetime" displayName="创建时间"
-      queryable="true" sortable="true"
-      orm:insertable="true" orm:updatable="false"
-      ui:insertable="false" ui:updatable="false"
-      ui:datePattern="yyyy-MM-dd HH:mm:ss">
-    <description>数据创建时间，自动填充</description>
-</attr>
-<attr name="updatedAt" index="5"
-      domain="datetime" displayName="更新时间"
-      queryable="true" sortable="true"
-      orm:insertable="true" orm:updatable="true"
-      ui:insertable="false" ui:updatable="false"
-      ui:datePattern="yyyy-MM-dd HH:mm:ss">
-    <description>数据最后一次更新时间，自动更新</description>
-</attr>
-```
-
-### 逻辑删除属性（可选）
-
-启用逻辑删除时添加：
-
-```xml
-<attr name="deleted" index="6"
-      domain="deleteFlag" displayName="是否已删除"
-      queryable="true" sortable="true"
-      orm:insertable="true" orm:updatable="true"
-      ui:insertable="false" ui:updatable="false"
-      defaultValue="false">
-    <description>标记数据是否被逻辑删除，true 表示已删除，查询时默认过滤</description>
-</attr>
-```
-
 ## 普通属性 `<attr>`
 
 每个 `<attr>` 定义一个业务字段。定义时必须遵循以下规范。
@@ -134,16 +61,16 @@
 | `sortable` | 是否可参与排序。若为 `false`，则排序字段不能包含该属性。 | `true`/`false` | 否，默认 `true`（但建议显式指定） | `sortable="false"` |
 | `allowFilterOp` | 可用的过滤运算符，多个用逗号分隔。若 `queryable="true"` **必须**配置该属性，以明确接口支持的操作。 | 见下方运算符列表 | 推荐必需 | `allowFilterOp="eq,like"` |
 | `orm:primary` | 是否为主键。只有 `id` 属性可设为 `true`。 | `true`/`false` | 仅主键需要 | `orm:primary="true"` |
-| `orm:insertable` | 是否可插入数据库。若为 `false`，插入时忽略该属性（由数据库默认或触发器填充）。 | `true`/`false` | 否，默认 `true` | `orm:insertable="true"` |
-| `orm:updatable` | 是否可更新数据库。若为 `false`，更新时忽略该属性。 | `true`/`false` | 否，默认 `true` | `orm:updatable="false"` |
+| `orm:insertable` | 是否可插入数据库。若为 `false`，插入时将忽略该属性。 | `true`/`false` | 否，默认 `true` | `orm:insertable="true"` |
+| `orm:updatable` | 是否可更新数据库。若为 `false`，更新时将忽略该属性。 | `true`/`false` | 否，默认 `true` | `orm:updatable="false"` |
 | `domain` | 数据域，即业务层面的属性类型。 | 见 domain 可选值及说明 | 是 | `domain="string"` |
 | `mapTo` | 属性映射，如 `mapTo="user.name"` 表示该属性映射到关联实体 `user` 的 `name` 属性。常用于将关联实体的字段展平到当前实体上。 | 路径表达式 | 否 | `mapTo="category.name"` |
 | `dict` | 引用的数据字典名，如 `user-status`。此时 `domain` 必须为 `string`。 | 字典名 | 否 | `dict="user-status"` |
 | `biz:codeRule` | 业务编码生成规则，如 `INV{@year}{@month}{@seq:5}`。 | 见 biz:codeRule 占位符 | 否 | `biz:codeRule="ORD{@year}{@seq:6}"` |
 | `defaultValue` | 默认值。新建记录时若未提供该属性，则使用此默认值。 | 与属性类型匹配的字符串 | 否 | `defaultValue="active"` |
-| `ui:showable` | 是否在列表/详情等 UI 中显示。 | `true`/`false` | 否，默认 `true` | `ui:showable="false"` |
-| `ui:insertable` | 是否可在新增表单中显示并提交。 | `true`/`false` | 否，默认 `true` | `ui:insertable="false"` |
-| `ui:updatable` | 是否可在编辑表单中显示并提交。 | `true`/`false` | 否，默认 `true` | `ui:updatable="false"` |
+| `ui:showable` | 是否在列表/详情等查看界面中显示。 | `true`/`false` | 否，默认 `true` | `ui:showable="false"` |
+| `ui:insertable` | 是否可在新增表单中输入并提交。若为 `false` 则不显示。 | `true`/`false` | 否，默认 `true` | `ui:insertable="false"` |
+| `ui:updatable` | 是否可在编辑表单中输入并提交。若为 `false` 则其为只读。 | `true`/`false` | 否，默认 `true` | `ui:updatable="false"` |
 | `ui:maskPattern` | 脱敏显示模式，如 `3*4` 表示保留前 3 位和后 4 位，中间用 `*` 填充。常用于手机号、身份证等敏感信息。 | 模式字符串，格式为 `前保留位数 * 后保留位数` | 否 | `ui:maskPattern="3*4"` |
 | `ui:datePattern` | 日期/时间显示格式，如 `yyyy-MM-dd HH:mm:ss`。 | Java 日期格式 | 日期/时间类型需要 | `ui:datePattern="yyyy-MM-dd"` |
 
@@ -277,6 +204,80 @@
 | `lengthBetween` | 长度区间 |
 
 缺省值为 `eq,in,dateBetween,dateTimeBetween`。
+
+## 固定属性
+
+每个实体必须包含主键 `id`，可选包含审计属性和逻辑删除属性。固定属性的 `index` 必须使用 1~19 之间的序号，与业务属性（20~2000）区分开。
+
+### 主键 `id`
+
+```xml
+<attr name="id" index="1" orm:primary="true"
+      domain="uuid" displayName="ID"
+      mandatory="true"
+      queryable="true" sortable="false"
+      orm:insertable="true" orm:updatable="false"
+      ui:showable="false"
+      ui:insertable="false" ui:updatable="false">
+    <description>全局唯一标识，由系统自动生成</description>
+</attr>
+```
+
+- **domain** 必须为 `uuid`，系统自动生成 32 位不带短横线的 UUID。
+- **禁止使用复合主键**，所有实体均使用单列 UUID 主键。
+- `orm:updatable="false"` 确保主键创建后不可修改。
+
+### 审计属性（可选）
+
+如需记录创建人、创建时间、最后修改人、最后修改时间，添加以下四个属性：
+
+```xml
+<attr name="createdBy" index="2"
+      domain="userFlag" displayName="创建者"
+      queryable="true" sortable="true"
+      orm:insertable="true" orm:updatable="false"
+      ui:insertable="false" ui:updatable="false">
+    <description>记录创建该数据的用户标识</description>
+</attr>
+<attr name="updatedBy" index="3"
+      domain="userFlag" displayName="更新者"
+      queryable="true" sortable="true"
+      orm:insertable="true" orm:updatable="true"
+      ui:insertable="false" ui:updatable="false">
+    <description>最后一次更新该数据的用户标识</description>
+</attr>
+<attr name="createdAt" index="4"
+      domain="datetime" displayName="创建时间"
+      queryable="true" sortable="true"
+      orm:insertable="true" orm:updatable="false"
+      ui:insertable="false" ui:updatable="false"
+      ui:datePattern="yyyy-MM-dd HH:mm:ss">
+    <description>数据创建时间，自动填充</description>
+</attr>
+<attr name="updatedAt" index="5"
+      domain="datetime" displayName="更新时间"
+      queryable="true" sortable="true"
+      orm:insertable="true" orm:updatable="true"
+      ui:insertable="false" ui:updatable="false"
+      ui:datePattern="yyyy-MM-dd HH:mm:ss">
+    <description>数据最后一次更新时间，自动更新</description>
+</attr>
+```
+
+### 逻辑删除属性（可选）
+
+启用逻辑删除时添加：
+
+```xml
+<attr name="deleted" index="6"
+      domain="deleteFlag" displayName="是否已删除"
+      queryable="true" sortable="true"
+      orm:insertable="true" orm:updatable="true"
+      ui:insertable="false" ui:updatable="false"
+      defaultValue="false">
+    <description>标记数据是否被逻辑删除，true 表示已删除，查询时默认过滤</description>
+</attr>
+```
 
 ## 唯一键 `<orm:unique-keys>`
 

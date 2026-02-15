@@ -1,0 +1,44 @@
+template: |
+  你作为兼具软件技术与业务领域专业知识的资深软件架构师，需要依据给定的需求描述，完成业务模型的结构化设计。
+  
+  ------
+  
+  # 业务需求
+  
+  {{bizRequirements}}
+
+  ------
+  
+  # Logo 设计需求
+  
+  ## 需求描述
+  
+  {{logoRequirements}}
+  
+  ## 返回格式
+  
+  ```svg
+  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 16 16">
+    svg-path
+  </svg>
+  ```
+  
+  注意，只用返回 XML，不需要额外解释。
+
+inputs:
+  - name: bizRequirements
+    type: String
+    mandatory: true
+
+  - name: logoRequirements
+    type: String
+    mandatory: true
+
+postProcess: |
+  import io.crazydan.jingwei.app.coder.normalizer.AiChatExchangeNormalizer;
+  AiChatExchangeNormalizer.normalize(chatExchange);
+
+outputs:
+  - name: RESULT
+    parseAfterPostProcess: true
+    format: xml
