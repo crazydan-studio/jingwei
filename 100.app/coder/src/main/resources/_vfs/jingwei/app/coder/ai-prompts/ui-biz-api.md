@@ -1,4 +1,78 @@
-## 1. 获取 AI 大模型列表：`AppCoder__findLlmModels`
+## 获取字典项列表：`DictProvider__getDict`
+
+### 描述
+
+获取指定 `name` 的 `<dict>` 字典项。返回的列表可用于字典项下拉列表的数据源。
+
+### 语法
+
+```graphql
+query($name: !String) {
+  DictProvider__getDict(dictName: $name) {
+    label
+    name
+    options {
+      label
+      code
+      description
+      value
+    }
+    description
+  }
+}
+```
+
+### 参数
+
+<!-- prettier-ignore -->
+| 参数名 | 类型 | 必填 | 描述 |
+|--------|------|------|------|
+| `name` | `String` | 是 | `<dict>` 字典名，如 `"user/status"` |
+
+### 返回值
+
+<!-- prettier-ignore -->
+| 字段 | 类型 | 描述 |
+|------|------|------|
+| `name` | `String` | 字典名（如 `"user/status"`） |
+| `label` | `String` | 字典显示名（如 `"用户状态"`） |
+| `description` | `String` | 字典描述 |
+| `options` | `[Option]` | 字典项列表 |
+| `options.code` | `String` | 字典项编码（如 `"DISABLED"`） |
+| `options.value` | `String` | 字典项的值（如 `"020"`） |
+| `options.label` | `String` | 字典项显示名（如 `"已禁用"`） |
+| `options.description` | `String` | 字典项描述 |
+
+### 示例代码
+
+```javascript
+import { graphql } from '@app-utils';
+
+const { DictProvider__getDict } = await graphql(
+  `
+    query($name: !String) {
+      DictProvider__getDict(dictName: $name) {
+        label
+        name
+        options {
+          label
+          code
+          description
+          value
+        }
+        description
+      }
+    }
+  `,
+  { name: 'user/status' }
+);
+
+// 使用示例
+const { options } = DictProvider__getDict;
+const { code, value, label } = options;
+```
+
+## 获取 AI 大模型列表：`AppCoder__findLlmModels`
 
 ### 描述
 
@@ -23,10 +97,10 @@ query {
 <!-- prettier-ignore -->
 | 字段 | 类型 | 描述 |
 |------|------|------|
-| `name` | `String!` | 提供商的唯一标识（如 `"openai"`） |
-| `displayName` | `String!` | 提供商的显示名称（如 `"OpenAI"`） |
-| `models` | `[Model!]!` | 该提供商支持的模型列表 |
-| `models.name` | `String!` | 模型名称（如 `"gpt-4o"`） |
+| `name` | `String` | 提供商的唯一标识（如 `"openai"`） |
+| `displayName` | `String` | 提供商的显示名称（如 `"OpenAI"`） |
+| `models` | `[Model]` | 该提供商支持的模型列表 |
+| `models.name` | `String` | 模型名称（如 `"gpt-4o"`） |
 
 ### 示例代码
 
@@ -49,7 +123,7 @@ const { AppCoder__findLlmModels } = await graphql(
 );
 
 // 使用示例
-const firstProvider = AppCoder__findLlmModels[0];
+const [firstProvider] = AppCoder__findLlmModels;
 console.log(firstProvider.displayName); // 例如 "OpenAI"
 console.log(firstProvider.models.map((m) => m.name)); // 例如 ["gpt-4o", "gpt-3.5-turbo"]
 ```
@@ -59,7 +133,7 @@ console.log(firstProvider.models.map((m) => m.name)); // 例如 ["gpt-4o", "gpt-
 - 该查询不需要任何参数。
 - 返回的模型列表可能随后端配置变化，建议在使用代码生成接口前实时获取。
 
-## 2. 根据需求生成模型设计代码：`AppCoder__genModelDesignCode`
+## 根据需求生成模型设计代码：`AppCoder__genModelDesignCode`
 
 ### 描述
 
@@ -68,7 +142,7 @@ console.log(firstProvider.models.map((m) => m.name)); // 例如 ["gpt-4o", "gpt-
 ### 语法
 
 ```graphql
-query ($provider: String!, $model: String!, $requirements: String!) {
+query ($provider: String, $model: String, $requirements: String) {
   AppCoder__genModelDesignCode(
     provider: $provider
     model: $model
@@ -84,16 +158,16 @@ query ($provider: String!, $model: String!, $requirements: String!) {
 <!-- prettier-ignore -->
 | 参数名 | 类型 | 必填 | 描述 |
 |--------|------|------|------|
-| `provider` | `String!` | 是 | 模型提供商标识，如 `"openai"` |
-| `model` | `String!` | 是 | 具体模型名称，如 `"gpt-4o"` |
-| `requirements` | `String!` | 是 | 模型设计需求的自然语言描述 |
+| `provider` | `String` | 是 | 模型提供商标识，如 `"openai"` |
+| `model` | `String` | 是 | 具体模型名称，如 `"gpt-4o"` |
+| `requirements` | `String` | 是 | 模型设计需求的自然语言描述 |
 
 ### 返回值
 
 <!-- prettier-ignore -->
 | 字段 | 类型 | 描述 |
 |------|------|------|
-| `content` | `String!` | 生成的模型设计代码（通常包含注释和代码块） |
+| `content` | `String` | 生成的模型设计代码（通常包含注释和代码块） |
 
 ### 示例代码
 
@@ -102,7 +176,7 @@ import { graphql } from '@app-utils';
 
 const { AppCoder__genModelDesignCode } = await graphql(
   `
-    query ($provider: String!, $model: String!, $requirements: String!) {
+    query ($provider: String, $model: String, $requirements: String) {
       AppCoder__genModelDesignCode(
         provider: $provider
         model: $model
@@ -119,8 +193,8 @@ const { AppCoder__genModelDesignCode } = await graphql(
   }
 );
 
-const modelCode = AppCoder__genModelDesignCode.content;
-console.log(modelCode);
+const { content } = AppCoder__genModelDesignCode;
+console.log(content);
 ```
 
 ### 注意事项
@@ -128,7 +202,7 @@ console.log(modelCode);
 - 所有参数均为必填，空字符串可能导致生成结果不理想。
 - 建议先通过 `AppCoder__findLlmModels` 获取可用的 `provider` 和 `model` 组合。
 
-## 3. 根据需求生成 UI 设计代码：`AppCoder__genUiDesignCode`
+## 根据需求生成 UI 设计代码：`AppCoder__genUiDesignCode`
 
 ### 描述
 
@@ -137,7 +211,7 @@ console.log(modelCode);
 ### 语法
 
 ```graphql
-query ($provider: String!, $model: String!, $requirements: String!) {
+query ($provider: String, $model: String, $requirements: String) {
   AppCoder__genUiDesignCode(
     provider: $provider
     model: $model
@@ -153,16 +227,16 @@ query ($provider: String!, $model: String!, $requirements: String!) {
 <!-- prettier-ignore -->
 | 参数名 | 类型 | 必填 | 描述 |
 |--------|------|------|------|
-| `provider` | `String!` | 是 | 模型提供商标识 |
-| `model` | `String!` | 是 | 具体模型名称 |
-| `requirements` | `String!` | 是 | UI 设计需求的自然语言描述 |
+| `provider` | `String` | 是 | 模型提供商标识 |
+| `model` | `String` | 是 | 具体模型名称 |
+| `requirements` | `String` | 是 | UI 设计需求的自然语言描述 |
 
 ### 返回值
 
 <!-- prettier-ignore -->
 | 字段 | 类型 | 描述 |
 |------|------|------|
-| `content` | `String!` | 生成的 UI 设计代码 |
+| `content` | `String` | 生成的 UI 设计代码 |
 
 ### 示例代码
 
@@ -171,7 +245,7 @@ import { graphql } from '@app-utils';
 
 const { AppCoder__genUiDesignCode } = await graphql(
   `
-    query ($provider: String!, $model: String!, $requirements: String!) {
+    query ($provider: String, $model: String, $requirements: String) {
       AppCoder__genUiDesignCode(
         provider: $provider
         model: $model
@@ -188,15 +262,15 @@ const { AppCoder__genUiDesignCode } = await graphql(
   }
 );
 
-const uiCode = AppCoder__genUiDesignCode.content;
-console.log(uiCode);
+const { content } = AppCoder__genUiDesignCode;
+console.log(content);
 ```
 
 ### 注意事项
 
 - 同模型设计代码接口，参数必填，建议先获取可用模型列表。
 
-## 4. 生成模型设计提示词：`AppCoder__genModelDesignPrompt`
+## 生成模型设计提示词：`AppCoder__genModelDesignPrompt`
 
 ### 描述
 
@@ -205,7 +279,7 @@ console.log(uiCode);
 ### 语法
 
 ```graphql
-query ($requirements: String!) {
+query ($requirements: String) {
   AppCoder__genModelDesignPrompt(requirements: $requirements)
 }
 ```
@@ -215,7 +289,7 @@ query ($requirements: String!) {
 <!-- prettier-ignore -->
 | 参数名 | 类型 | 必填 | 描述 |
 |--------|------|------|------|
-| `requirements` | `String!` | 是 | 模型设计需求的自然语言描述 |
+| `requirements` | `String` | 是 | 模型设计需求的自然语言描述 |
 
 ### 返回值
 
@@ -228,7 +302,7 @@ import { graphql } from '@app-utils';
 
 const { AppCoder__genModelDesignPrompt } = await graphql(
   `
-    query ($requirements: String!) {
+    query ($requirements: String) {
       AppCoder__genModelDesignPrompt(requirements: $requirements)
     }
   `,
@@ -246,7 +320,7 @@ console.log(prompt); // 输出优化后的提示词文本
 - 该接口只生成提示词，不调用 AI 模型生成代码。
 - 生成的提示词可以作为 `AppCoder__genModelDesignCode` 的输入，或用于其他 AI 工具。
 
-## 5. 生成 UI 设计提示词：`AppCoder__genUiDesignPrompt`
+## 生成 UI 设计提示词：`AppCoder__genUiDesignPrompt`
 
 ### 描述
 
@@ -255,7 +329,7 @@ console.log(prompt); // 输出优化后的提示词文本
 ### 语法
 
 ```graphql
-query ($requirements: String!) {
+query ($requirements: String) {
   AppCoder__genUiDesignPrompt(requirements: $requirements)
 }
 ```
@@ -265,7 +339,7 @@ query ($requirements: String!) {
 <!-- prettier-ignore -->
 | 参数名 | 类型 | 必填 | 描述 |
 |--------|------|------|------|
-| `requirements` | `String!` | 是 | UI 设计需求的自然语言描述 |
+| `requirements` | `String` | 是 | UI 设计需求的自然语言描述 |
 
 ### 返回值
 
@@ -278,7 +352,7 @@ import { graphql } from '@app-utils';
 
 const { AppCoder__genUiDesignPrompt } = await graphql(
   `
-    query ($requirements: String!) {
+    query ($requirements: String) {
       AppCoder__genUiDesignPrompt(requirements: $requirements)
     }
   `,

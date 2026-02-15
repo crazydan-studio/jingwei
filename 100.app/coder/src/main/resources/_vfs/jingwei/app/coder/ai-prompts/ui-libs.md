@@ -1,3 +1,20 @@
+## 获取字典项
+
+### `getDictOptions(dictName: string): [DictOption]`
+
+通过 `@app-utils` 提供的 `getDictOptions` 函数可以获取指定名字的字典项列表。
+
+```js
+import { getDictOptions } from '@app-utils';
+
+const options = await getDictOptions('user/status');
+const { code, value, label, description } = options[0];
+```
+
+**参数说明**
+
+- `dictName: string` – 字典名，如 `user/status`。
+
 ## 打开应用
 
 ### `openApp(code: string): void`
@@ -38,8 +55,7 @@ openGraphiQL(); // 在新标签页或内嵌视图中打开 GraphiQL
 
 ## 页面消息
 
-从 `@app-utils` 中可导入四种消息组件：**dialog**、**message**、**modal** 和 **notification**。
-它们均基于 Naive UI 对应组件封装，配置选项与 Naive UI 原生选项一致。
+从 `@app-utils` 中可导入四种消息组件：**dialog**、**message**、**modal** 和 **notification**。它们均基于 Naive UI 对应组件封装，配置选项与 Naive UI 原生选项一致。
 
 ```js
 import { message, notification, dialog, modal } from '@app-utils';
@@ -47,8 +63,7 @@ import { message, notification, dialog, modal } from '@app-utils';
 
 ### 对话框（dialog）
 
-提供四种预设类型：`error`、`info`、`success`、`warning`。
-配置选项 `DialogOptions` 与 Naive UI [Dialog 组件](https://www.naiveui.com/zh-CN/os-theme/components/dialog#API) 的选项相同。
+提供四种预设类型：`error`、`info`、`success`、`warning`。配置选项 `DialogOptions` 与 Naive UI [Dialog 组件](https://www.naiveui.com/zh-CN/os-theme/components/dialog#API) 的选项相同。
 
 **方法签名**
 
@@ -78,8 +93,7 @@ dialog.success({
 
 ### 信息（message）
 
-`message` 提供五种类型：`error`、`info`、`loading`、`success`、`warning`。
-调用时需传入内容（字符串或渲染函数）及可选的 `MessageOption` 配置（与 Naive UI [Message 组件选项](https://www.naiveui.com/zh-CN/os-theme/components/message#API) 一致）。
+`message` 提供五种类型：`error`、`info`、`loading`、`success`、`warning`。调用时需传入内容（字符串或渲染函数）及可选的 `MessageOption` 配置（与 Naive UI [Message 组件选项](https://www.naiveui.com/zh-CN/os-theme/components/message#API) 一致）。
 
 **方法签名**
 
@@ -106,8 +120,7 @@ message.loading('处理中...', { duration: 0 }); // duration=0 表示不自动�
 
 ### 模态框（modal）
 
-通过 `modal.create(options)` 创建模态框，返回一个控制器对象，可主动关闭模态框。
-配置选项 `ModalOptions` 与 Naive UI [Modal 组件](https://www.naiveui.com/zh-CN/os-theme/components/modal#API) 的选项相同。
+通过 `modal.create(options)` 创建模态框，返回一个控制器对象，可主动关闭模态框。配置选项 `ModalOptions` 与 Naive UI [Modal 组件](https://www.naiveui.com/zh-CN/os-theme/components/modal#API) 的选项相同。
 
 **方法签名**
 
@@ -139,8 +152,7 @@ setTimeout(() => modalWin.destroy(), 5000);
 
 ### 通知（notification）
 
-`notification` 提供四种类型：`error`、`info`、`success`、`warning`。
-每个方法接收一个 `NotificationOption` 对象（与 Naive UI [Notification 组件选项](https://www.naiveui.com/zh-CN/os-theme/components/notification#API) 一致）。
+`notification` 提供四种类型：`error`、`info`、`success`、`warning`。每个方法接收一个 `NotificationOption` 对象（与 Naive UI [Notification 组件选项](https://www.naiveui.com/zh-CN/os-theme/components/notification#API) 一致）。
 
 **方法签名**
 
@@ -216,72 +228,71 @@ console.log(UserEntity__save.id); // 输出保存后返回的 id
 
 ### 使用要求与注意事项
 
-1. **禁止拦截 graphql 的调用异常**
-   - 不允许使用 `.catch()` 或 `try/catch` 包裹 `graphql` 调用来处理错误。
-   - 错误将由框架统一处理（如全局错误提示）。
-   - 若需在操作结束后执行清理工作，应使用 `finally` 块。
+- **禁止拦截 graphql 的调用异常**
+  - 不允许使用 `.catch()` 或 `try/catch` 包裹 `graphql` 调用来处理错误。
+  - 错误将由框架统一处理（如全局错误提示）。
+  - 若需在操作结束后执行清理工作，应使用 `finally` 块。
 
-   ```js
-   // ❌ 错误示例
-   try {
-     await graphql(...);
-   } catch (err) {
-     // 禁止自行处理错误
-   }
+  ```js
+  // ❌ 错误示例
+  try {
+    await graphql(...);
+  } catch (err) {
+    // 禁止自行处理错误
+  }
 
-   // ✅ 正确示例
-   let loading = true;
-   try {
-     await graphql(...);
-   } finally {
-     loading = false; // 关闭加载遮罩或其他清理
-   }
-   ```
+  // ✅ 正确示例
+  let loading = true;
+  try {
+    await graphql(...);
+  } finally {
+    loading = false; // 关闭加载遮罩或其他清理
+  }
+  ```
 
-2. **变更操作必须配合加载遮罩**
-   - 对于增加、修改、删除等变更操作（通常是 mutation），需要在操作开始前显示加载遮罩，操作结束后关闭。
-   - 加载遮罩推荐使用 Naive UI 的 `NSpin` 组件，将其包裹在需要屏蔽的区域外层，并通过一个响应式变量控制其 `show` 属性。
+- **变更操作必须配合加载遮罩**
+  - 对于增加、修改、删除等变更操作（通常是 mutation），需要在操作开始前显示加载遮罩，操作结束后关闭。
+  - 加载遮罩推荐使用 Naive UI 的 `NSpin` 组件，将其包裹在需要屏蔽的区域外层，并通过一个响应式变量控制其 `show` 属性。
 
-   ```vue
-   <template>
-     <n-spin :show="loading">
-       <!-- 变更操作涉及的区域 -->
-       <div>...</div>
-     </n-spin>
-   </template>
+  ```vue
+  <template>
+    <n-spin :show="loading">
+      <!-- 变更操作涉及的区域 -->
+      <div>...</div>
+    </n-spin>
+  </template>
 
-   <script setup>
-   import { ref } from 'vue';
-   import { graphql } from '@app-utils';
+  <script setup>
+  import { ref } from 'vue';
+  import { graphql } from '@app-utils';
 
-   const loading = ref(false);
+  const loading = ref(false);
 
-   async function handleSave() {
-     loading.value = true;
-     try {
-       await graphql(
-         `
-           mutation ($data: Map) {
-             UserEntity__save(data: $data) {
-               id
-             }
-           }
-         `,
-         { data: { name: 'Tom' } }
-       );
-     } finally {
-       loading.value = false;
-     }
-   }
-   </script>
-   ```
+  async function handleSave() {
+    loading.value = true;
+    try {
+      await graphql(
+        `
+          mutation ($data: Map) {
+            UserEntity__save(data: $data) {
+              id
+            }
+          }
+        `,
+        { data: { name: 'Tom' } }
+      );
+    } finally {
+      loading.value = false;
+    }
+  }
+  </script>
+  ```
 
-   - 若操作涉及多个独立区域，可考虑使用全局加载指示器（如顶部进度条），但推荐按区域细粒度控制。
+  - 若操作涉及多个独立区域，可考虑使用全局加载指示器（如顶部进度条），但推荐按区域细粒度控制。
 
-3. **GraphQL 查询变量类型**
-   - 变量对象中可使用 `Map` 类型（对应任意 JSON 对象），服务端会进行解析。
-   - 复杂筛选条件通常也通过 `Map` 传递，具体格式需参考业务文档。
-
-4. **返回值结构**
-   - `graphql` 返回的 Promise 解析为服务端返回的数据对象，其顶层字段名与 query 中定义的操作名一致（如 `UserEntity__save`）。
-   - 若需要多个操作的结果，可通过别名区分。
+- **GraphQL 查询变量类型**
+  - 变量对象中可使用 `Map` 类型（对应任意 JSON 对象），服务端会进行解析。
+  - 复杂筛选条件通常也通过 `Map` 传递，具体格式需参考业务文档。
+- **返回值结构**
+  - `graphql` 返回的 Promise 解析为服务端返回的数据对象，其顶层字段名与 query 中定义的操作名一致（如 `UserEntity__save`）。
+  - 若需要多个操作的结果，可通过别名区分。
