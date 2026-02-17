@@ -162,9 +162,10 @@ public class AppCoder {
 //        options.setEnableSystemPrompt(true);
 
         AiChatExchange exchange = command.execute(prompt.vars, null);
+        String sessionId = (String) exchange.getResponse().getMetadata("session_id");
 
         XNode node = (XNode) exchange.getOutput("RESULT");
-        return new AppCoderCode(node.xml());
+        return new AppCoderCode(sessionId, node.xml());
     }
 
     protected String parseCodeFromChat(String content, IPromptTemplate template) {

@@ -1,7 +1,7 @@
 /* 通过操作浏览器实现与 DeepSeek 网页端交互的接口 */
 
 import { createContext, closeContext } from '@/utils/browser';
-import { createLlmModel, CHAT_URL } from '@/utils/openai';
+import { createLlmModel, CHAT_URL, KEY_KEEP_SESSION } from '@/utils/openai';
 import {
   ACTION_URL,
   ACTION_AUTH_PREFIX,
@@ -24,7 +24,10 @@ export function routes(fastify, { prefix, authDir }) {
     const { messages } = request.body;
     const content = messages.map((msg) => msg.content).join('\n\n---\n\n');
 
-    const result = await startChat(content, { authDir });
+    const result = await startChat(content, {
+      authDir,
+      keepSession: request.body[KEY_KEEP_SESSION]
+    });
     reply.send(result);
   });
 
@@ -71,7 +74,7 @@ async function resetGlobalAuth() {
   globalAuthPromise = null;
 }
 
-async function startChat(content, { authDir }) {
+async function startChat(content, { authDir, keepSession }) {
   await resetGlobalAuth();
 
   const authFile = `${authDir}/${AUTH_FILE}`;
@@ -80,7 +83,7 @@ async function startChat(content, { authDir }) {
   const page = await context.newPage();
 
   try {
-    const result = await chat(page, content);
+    const result = await chat(page, content, { keepSession });
 
     if (result.reason == ACTION_REASON_UNAUTHORIZED) {
       globalAuthPage = page;

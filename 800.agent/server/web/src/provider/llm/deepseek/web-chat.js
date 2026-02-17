@@ -17,7 +17,7 @@ const CHAT_API_DELETE_SESSION = '/api/v0/chat_session/delete';
 
 const CHAT_TIMEOUT = 20 * 60 * 1000;
 
-export async function chat(page, content) {
+export async function chat(page, content, { keepSession }) {
   //console.log(`[DeepSeek] Opening ${WEB_CHAT_URL} ...`);
   await page.goto(WEB_CHAT_URL);
 
@@ -33,14 +33,16 @@ export async function chat(page, content) {
   //console.log('[DeepSeek] Starting chat session ...');
   const session = await startChatSession(page, content);
 
-  try {
-    //console.log('[DeepSeek] Deleting chat session ...');
-    await deleteChatSession(page, session.id);
-  } catch (e) {
-    console.error(e);
+  if (!keepSession) {
+    try {
+      //console.log('[DeepSeek] Deleting chat session ...');
+      await deleteChatSession(page, session.id);
+    } catch (e) {
+      console.error(e);
+    }
   }
 
-  return createChatResponse(session.answer);
+  return createChatResponse(session.answer, { sessionId: session.id });
 }
 
 /** 等待认证结束 */

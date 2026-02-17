@@ -1,4 +1,8 @@
-import { readJsonFile } from '@/utils/fs';
+import {
+  readJsonFile,
+  readJsonLinesFile,
+  appendToJsonLinesFile
+} from '@/utils/fs';
 import {
   createNeedAuthApiKeyResponse,
   ACTION_FORM_INPUT_API_KEY
@@ -6,22 +10,59 @@ import {
 
 export const CHAT_URL = '/chat';
 
-export async function sendChat({ url, data, authFile, unauthActionTitle }) {
+export const KEY_KEEP_SESSION = 'keep_session';
+export const KEY_SESSION_ID = 'session_id';
+
+export async function sendChat({
+  url,
+  data,
+  sessionDir,
+  authFile,
+  unauthActionTitle
+}) {
   const auth = await readJsonFile(authFile);
   let apiKey = auth[ACTION_FORM_INPUT_API_KEY];
 
   if (apiKey) {
+    const sessionId = data[KEY_KEEP_SESSION]
+      ? data[KEY_SESSION_ID] || generateSessionId()
+      : null;
+    const sessionFile = sessionId ? `${sessionDir}/${sessionId}` : null;
+
+    // { "content": "You are a helpful assistant", "role": "system" }
+    const messages = [];
+    if (sessionFile) {
+      messages = await readJsonLinesFile(sessionFile);
+    }
+    data.messages.forEach((msg) => {
+      messages.push(JSON.stringify(msg));
+    });
+
+    delete data.messages;
+
     const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${apiKey}`
       },
-      body: JSON.stringify(data)
+      body:
+        `{"messages":[${messages.join(',')}],` +
+        JSON.stringify(data).substring(1)
     });
 
     if (response.ok) {
-      return await response.json();
+      const result = await response.json();
+      if (sessionFile) {
+        const msg = result.choices[0].message;
+        delete msg.reasoning_content;
+
+        await appendToJsonLinesFile(sessionFile, msg);
+      }
+
+      result[KEY_SESSION_ID] = sessionId;
+
+      return result;
     } else if (response.status == 401) {
       apiKey = null;
     } else {
@@ -34,9 +75,10 @@ export async function sendChat({ url, data, authFile, unauthActionTitle }) {
   }
 }
 
-export function createChatResponse(content) {
+export function createChatResponse(content, { sessionId }) {
   return {
     object: 'chat.completion',
+    [KEY_SESSION_ID]: sessionId,
     choices: [
       {
         index: 0,
@@ -76,4 +118,8 @@ export function createLlmModel(opts) {
       ...(opts.response || {})
     }
   };
+}
+
+export function generateSessionId() {
+  return '';
 }

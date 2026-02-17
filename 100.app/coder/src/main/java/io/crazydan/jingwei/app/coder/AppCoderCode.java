@@ -28,13 +28,19 @@ import io.nop.api.core.annotations.data.DataBean;
  */
 @DataBean
 public class AppCoderCode {
+    private final String sessionId;
     private final String content;
 
-    public AppCoderCode(String content) {
+    public AppCoderCode(String sessionId, String content) {
+        this.sessionId = sessionId;
         this.content = content;
     }
 
     public String getContent() {
         return this.content;
+    }
+
+    public String getSessionId() {
+        return this.sessionId;
     }
 }
