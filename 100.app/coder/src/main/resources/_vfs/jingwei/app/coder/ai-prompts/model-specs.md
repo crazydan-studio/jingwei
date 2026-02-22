@@ -41,7 +41,7 @@
 
 - **结构展开**：所有业务字段必须平铺，禁止使用 JSON 等复杂类型存储结构化数据。如有复杂结构应拆分为子实体并通过关联引用。
 - **长度限定**：字符串、文本等类型必须显式约束最小/最大长度（通过 `<constraint>` 中的 `minLength` / `maxLength`）。
-- **敏感数据**：密码、密钥等属性需设置 `ui:showable="false"`，同时必须禁止查询和排序（`queryable="false"`, `sortable="false"`）。通常允许插入/更新。
+- **敏感数据**：密码、密钥等属性需设置 `ui:published="false"`，同时必须禁止查询和排序（`queryable="false"`, `sortable="false"`）。通常允许插入/更新。
 - **日期时间**：所有日期、时间、时间戳属性的 `domain` 应设为 `date`, `time` 或 `datetime`，并通过 `ui:datePattern` 指定显示格式。
 - **描述说明**：每个属性必须包含 `<description>`，用简洁的业务语言描述作用、格式、示例，避免技术术语，不要重复属性名。
 - **序号分配**：`index` 在单个实体内必须唯一，业务属性从 20 开始连续递增，方便未来插入新属性时不必整体重排。
@@ -56,7 +56,6 @@
 | `displayName` | 属性显示名称。 |  | 是 | `displayName="用户名"` |
 | `mandatory` | 是否必填。 | `true`/`false` | 否，默认 `false` | `mandatory="true"` |
 | `virtual` | 是否为虚拟属性（不生成数据库字段）。值通过计算得到，计算逻辑写在 `<computed>` 中。 | `true`/`false` | 否，默认 `false` | `virtual="true"` |
-| `internal` | 是否为内部属性（仅后台逻辑使用，前端不可直接增改）。若为 `true`，前端不会展示该属性，且 API 默认不接收/返回该属性。 | `true`/`false` | 否，默认 `false` | `internal="true"` |
 | `queryable` | 是否可参与过滤查询。若为 `false`，则任何查询条件都不能使用该属性。 | `true`/`false` | 否，默认 `true`（但建议显式指定） | `queryable="true"` |
 | `sortable` | 是否可参与排序。若为 `false`，则排序字段不能包含该属性。 | `true`/`false` | 否，默认 `true`（但建议显式指定） | `sortable="false"` |
 | `allowFilterOp` | 可用的过滤运算符，多个用逗号分隔。若 `queryable="true"` **必须**配置该属性，以明确接口支持的操作。 | 见下方运算符列表 | 推荐必需 | `allowFilterOp="eq,like"` |
@@ -65,12 +64,12 @@
 | `orm:updatable` | 是否可更新数据库。若为 `false`，更新时将忽略该属性。 | `true`/`false` | 否，默认 `true` | `orm:updatable="false"` |
 | `domain` | 数据域，即业务层面的属性类型。 | 见 domain 可选值及说明 | 是 | `domain="string"` |
 | `mapTo` | 属性映射，如 `mapTo="user.name"` 表示该属性映射到关联实体 `user` 的 `name` 属性。常用于将关联实体的字段展平到当前实体上。 | 路径表达式 | 否 | `mapTo="category.name"` |
-| `dict` | 引用的数据字典名，如 `user-status`。此时 `domain` 必须为 `string`。 | 字典名 | 否 | `dict="user-status"` |
+| `dict` | 引用的数据字典名，如 `auth/account-status`。此时 `domain` 必须为 `string`。 | 字典名 | 否 | `dict="auth/account-status"` |
 | `biz:codeRule` | 业务编码生成规则，如 `INV{@year}{@month}{@seq:5}`。 | 见 biz:codeRule 占位符 | 否 | `biz:codeRule="ORD{@year}{@seq:6}"` |
 | `defaultValue` | 默认值。新建记录时若未提供该属性，则使用此默认值。 | 与属性类型匹配的字符串 | 否 | `defaultValue="active"` |
-| `ui:showable` | 是否在列表/详情等查看界面中显示。 | `true`/`false` | 否，默认 `true` | `ui:showable="false"` |
-| `ui:insertable` | 是否可在新增表单中输入并提交。若为 `false` 则不显示。 | `true`/`false` | 否，默认 `true` | `ui:insertable="false"` |
-| `ui:updatable` | 是否可在编辑表单中输入并提交。若为 `false` 则其为只读。 | `true`/`false` | 否，默认 `true` | `ui:updatable="false"` |
+| `ui:published` | 是否对外开放。若为 `false` 则在添加/编辑界面中不回显其值，且在查看界面中不显示。 | `true`/`false` | 否，默认 `true` | `ui:published="false"` |
+| `ui:insertable` | 是否可新增。若为 `false` 则在数据添加界面中不显示。 | `true`/`false` | 否，默认 `true` | `ui:insertable="false"` |
+| `ui:updatable` | 是否可被编辑。若为 `false` 则在数据编辑界面中只读。 | `true`/`false` | 否，默认 `true` | `ui:updatable="false"` |
 | `ui:maskPattern` | 脱敏显示模式，如 `3*4` 表示保留前 3 位和后 4 位，中间用 `*` 填充。常用于手机号、身份证等敏感信息。 | 模式字符串，格式为 `前保留位数 * 后保留位数` | 否 | `ui:maskPattern="3*4"` |
 | `ui:datePattern` | 日期/时间显示格式，如 `yyyy-MM-dd HH:mm:ss`。 | Java 日期格式 | 日期/时间类型需要 | `ui:datePattern="yyyy-MM-dd"` |
 
@@ -96,7 +95,7 @@
 | `datetime` | 日期时间。 | 需指定 `ui:datePattern` |
 | `url` | URL 地址。 | 必须指定 `maxLength`，可附加 `pattern` 验证格式 |
 | `text` | 纯文本（大字段）。 | 必须指定 `maxLength`（字符数） |
-| `svg` | SVG 内容。 | 同 `text` |
+| `svg` | SVG 内容。 | 同 `xml` |
 | `json` | JSON 内容。 | 可指定 `maxLength` |
 | `xml` | XML 内容。 | 可指定 `maxLength` |
 | `html` | HTML 内容。 | 可指定 `maxLength` |
@@ -217,7 +216,7 @@
       mandatory="true"
       queryable="true" sortable="false"
       orm:insertable="true" orm:updatable="false"
-      ui:showable="false"
+      ui:published="false"
       ui:insertable="false" ui:updatable="false">
     <description>全局唯一标识，由系统自动生成</description>
 </attr>
@@ -306,7 +305,7 @@
 
 - 关联类型仅支持 **一对一（one-to-one）** 和 **一对多（one-to-many）**。
 - **禁止**直接建立多对多关系，必须引入中间实体转换为一对多和一对一。
-- 关联属性必须设置 `domain="entityRef"`，且 `virtual="false" internal="false"`。
+- 关联属性必须设置 `domain="entityRef"`，且 `virtual="false"`。
 - 关联属性名应体现业务含义：一对一用单数（如 `user`），一对多用复数（如 `users`）。
 - **禁止额外添加“关联属性名 + Id”的冗余字段**，如 `userId`，因为关联属性本身已包含目标实体的 ID。唯一键应直接引用关联属性（如 `user`）。
 
@@ -363,7 +362,7 @@
 
 **规则**：
 
-- 字典 `name` 格式：`相关模型-用途`，如 `user-status`，全局唯一。
+- 字典 `name` 格式：`所属领域/相关模型-用途`，如 `auth/account-status`，全局唯一。
 - 每个 `<option>` 的 `value` 为 3 位数字代码（如 `010`），`code` 为业务含义的常量名（大写字母+下划线），`displayName` 为界面显示文本。
 - `boolean` 类型不定义为字典（直接使用布尔属性）。
 - 字典项数量应 ≤ 20，超过则应考虑改为独立实体（如标签、分类）。
@@ -371,7 +370,7 @@
 **示例**：
 
 ```xml
-<dict name="user-status" displayName="用户状态">
+<dict name="auth/account-status" displayName="账号状态">
     <option value="010" code="ACTIVE" displayName="正常" />
     <option value="020" code="LOCKED" displayName="锁定" />
     <option value="030" code="INACTIVE" displayName="未激活" />
@@ -381,7 +380,7 @@
 在实体属性中引用：
 
 ```xml
-<attr name="status" dict="user-status" domain="string" displayName="用户状态"
+<attr name="status" dict="auth/account-status" domain="string" displayName="账号状态"
       queryable="true" sortable="true" mandatory="true"
       allowFilterOp="eq,in">
     <description>用户当前状态，可选值：正常、锁定、未激活</description>

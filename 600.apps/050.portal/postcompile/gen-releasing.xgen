@@ -25,7 +25,7 @@
     import io.crazydan.jingwei.app.AppConstants;
     import io.nop.core.resource.ResourceConstants;
 
-    const builder = new AppReleasingBuilder('pnpm');
+    const builder = new AppReleasingBuilder();
 
     const rootDir = FileHelper.getMavenProjectRoot(codeGenerator);
     const sourceDir = new File(rootDir, 'src/main/resources/app');

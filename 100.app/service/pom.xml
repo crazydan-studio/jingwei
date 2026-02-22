@@ -46,5 +46,9 @@
             <groupId>io.github.entropy-cloud</groupId>
             <artifactId>nop-dbtool-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.github.entropy-cloud</groupId>
+            <artifactId>nop-sys-dao</artifactId>
+        </dependency>
     </dependencies>
 </project>

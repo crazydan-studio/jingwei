@@ -16,13 +16,26 @@
 
 ## 强制性编码规范
 
-### 组件使用
+### 自定义组件 (`<component>`)
 
-- **优先使用 Naive UI 组件**：所有基础 UI 元素（如按钮、输入框、下拉框、表格、弹窗等）应首先从 Naive UI 导入并使用。例如：
-  ```html
-  <n-button type="primary">提交</n-button>
-  ```
-- **自定义组件**：当 Naive UI 无法满足需求时（如特殊布局、业务复合组件），自行编写 Vue 组件。自定义组件需放在当前页面文件内（或通过 `<component>` 内联定义），**禁止**将组件拆分为独立的 `.vue` 文件引入。
+**优先使用 Naive UI 组件**：所有基础 UI 元素（如按钮、输入框、下拉框、表格等）应首先从 Naive UI 导入并使用。例如：
+
+```vue
+<n-button type="primary">提交</n-button>
+```
+
+> **禁止使用 Naive UI 的 useMessage/useDialog/useNotification/useModal 函数**。
+
+当 Naive UI 无法满足需求时（如特殊布局、业务复合组件），在 `<component>` 中编写 Vue 组件：
+
+```xml
+<component name="CustomCmp"><![CDATA[
+  <template>...</template>
+  <script setup>...</script>
+]]></component>
+```
+
+再在 `<page>` 中以 `import CustomCmp from './components/CustomCmp';` 形式导入。
 
 ### 图标使用
 
@@ -39,11 +52,6 @@
   import { NButton, NInput } from 'naive-ui'; // 正确
   import * as naive from 'naive-ui'; // 禁止，会引入所有组件
   ```
-- **自定义组件导入**：由于所有代码均需在单个文件中完成，因此**不存在**跨文件导入自定义组件的情况。若因特殊原因需要复用组件，也应通过内联 `<component>` 或直接在页面中定义多个组件。
-
-### 作用域
-
-- **单文件原则**：整个页面的所有逻辑、组件、样式均需在同一个 `.vue` 文件内完成，**禁止**引入外部模块（如工具函数、常量、配置）或将代码拆分为多个文件。所有辅助函数、常量、自定义 Hook 均应在页面文件的 `<script setup>` 中定义。
 
 ### 编程风格
 
@@ -100,6 +108,10 @@
 - 非特殊说明，包括 svg、xml、html、markdown 等在内的所有类型的长文本，均使用文本输入组件。
 - 对于 svg、xml、html、markdown 等各种代码，在只读状态时均通过 `highlight.js` 高亮其内容。
 
+### 隐式属性
+
+- `xxx_label`？只读，更新通过对应的字典属性实现
+
 ## 交互体验
 
 - **操作路径最短**：任何功能（增、删、改、查）应在 3 步以内完成。例如，新增按钮应直接展示表单弹窗，而非跳转页面。
@@ -130,7 +142,7 @@
 
 ## 演示数据 (`<demo-data>`) 定义规则
 
-在开发或演示环境中，页面所需的动态数据均通过模拟接口（Mock）返回，禁止在组件代码中硬编码模拟数据。模拟接口的定义遵循以下规则：
+在开发或演示环境中，页面所需的动态数据均通过模拟接口（Mock）返回，禁止在 `<page>` 和 `<component>` 中的代码中硬编码模拟数据。模拟接口的定义遵循以下规则：
 
 - **使用 `<action>` 标签**：每个模拟接口对应一个 `<action>` 标签，`name` 属性为接口名（如 `UserEntity__save`）。
 - **动态数据逻辑**：在 `<source>` 中使用 JavaScript（ES6 规范）编写数据返回逻辑。可以根据传入的参数（如 `data.id`、`query.offset`）以动态返回不同的数据，以模拟真实后端行为。

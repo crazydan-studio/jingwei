@@ -27,8 +27,7 @@
           x:schema="/nop/schema/xdef.xdef"
           xdef:bean-package="io.crazydan.jingwei.app.model"
           xdef:name="AppInstallation_Manifest"
-          bizDomain="!ns-name" code="!string"
-          version="!string"
+          code="!string" version="!string"
 >
 
     <!-- [模型资源]

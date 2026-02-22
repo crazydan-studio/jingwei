@@ -1,40 +1,48 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<model-design xmlns:x="/nop/schema/xdsl.xdef" xmlns:ext="ext"
+<model-design xmlns:x="/nop/schema/xdsl.xdef" xmlns:orm="orm" xmlns:ref="ref"
               x:schema="/jingwei/app/coder/schema/model-design.xdef"
 >
     <entities>
         <entity name="App">
             <attrs>
-                <attr name="code" propId="20"/>
-                <attr name="id" propId="1" ext:primary="true" domain="uuid" displayName="ID" mandatory="true"
-                      insertable="true" updatable="false"/>
-                <attr name="createdBy" propId="2" domain="userFlag" displayName="创建者" insertable="true"
-                      updatable="false"/>
-                <attr name="updatedBy" propId="3" domain="userFlag" displayName="更新者" insertable="true"
-                      updatable="true"/>
-                <attr name="createdAt" propId="4" domain="datetime" displayName="创建时间" insertable="true"
-                      updatable="false"/>
-                <attr name="updatedAt" propId="5" domain="datetime" displayName="更新时间" insertable="true"
-                      updatable="true"/>
-                <attr name="deleted" updatable="true" propId="6" domain="deleteFlag" displayName="是否已删除"
-                      insertable="true"/>
+                <attr name="id" index="1" orm:primary="true" domain="uuid" displayName="ID" mandatory="true"
+                      orm:insertable="true" orm:updatable="false"/>
+                <attr name="createdBy" index="2" domain="userFlag" displayName="创建者" orm:insertable="true"
+                      orm:updatable="false"/>
+                <attr name="updatedBy" index="3" domain="userFlag" displayName="更新者" orm:insertable="true"
+                      orm:updatable="true"/>
+                <attr name="createdAt" index="4" domain="datetime" displayName="创建时间" orm:insertable="true"
+                      orm:updatable="false"/>
+                <attr name="updatedAt" index="5" domain="datetime" displayName="更新时间" orm:insertable="true"
+                      orm:updatable="true"/>
+                <attr name="deleted" orm:updatable="true" index="6" domain="deleteFlag" displayName="是否已删除"
+                      orm:insertable="true"/>
+
+                <attr name="code" index="20"/>
+                <attr name="versions" index="24" displayName="版本列表" domain="entityRef"
+                      queryable="false" sortable="false" ref:target="AppVersionEntity" ref:type="one-to-many"
+                      ref:targetAttr="app" ref:cascadeDelete="true"/>
             </attrs>
         </entity>
         <entity name="AppVersion">
             <attrs>
-                <attr name="id" propId="1" ext:primary="true" domain="uuid" displayName="ID" mandatory="true"
-                      insertable="true" updatable="false"/>
-                <attr name="createdBy" updatable="false" propId="2" domain="userFlag" displayName="创建者"
-                      insertable="true"/>
-                <attr name="updatedBy" propId="3" domain="userFlag" displayName="更新者" insertable="true"
-                      updatable="true"/>
-                <attr name="createdAt" propId="4" domain="datetime" displayName="创建时间" insertable="true"
-                      updatable="false"/>
-                <attr name="updatedAt" propId="5" domain="datetime" displayName="更新时间" insertable="true"
-                      updatable="true"/>
-                <attr name="deleted" propId="6" domain="deleteFlag" displayName="是否已删除" insertable="true"
-                      updatable="true"/>
+                <attr name="id" index="1" orm:primary="true" domain="uuid" displayName="ID" mandatory="true"
+                      orm:insertable="true" orm:updatable="false"/>
+                <attr name="createdBy" orm:updatable="false" index="2" domain="userFlag" displayName="创建者"
+                      orm:insertable="true"/>
+                <attr name="updatedBy" index="3" domain="userFlag" displayName="更新者" orm:insertable="true"
+                      orm:updatable="true"/>
+                <attr name="createdAt" index="4" domain="datetime" displayName="创建时间" orm:insertable="true"
+                      orm:updatable="false"/>
+                <attr name="updatedAt" index="5" domain="datetime" displayName="更新时间" orm:insertable="true"
+                      orm:updatable="true"/>
+                <attr name="deleted" index="6" domain="deleteFlag" displayName="是否已删除" orm:insertable="true"
+                      orm:updatable="true"/>
+
+                <attr name="app" index="20" displayName="所属应用" mandatory="true" domain="entityRef" queryable="true"
+                      sortable="true" allowFilterOp="eq,in" orm:insertable="true" orm:updatable="true"
+                      ref:target="AppEntity" ref:type="one-to-one"/>
             </attrs>
         </entity>
     </entities>

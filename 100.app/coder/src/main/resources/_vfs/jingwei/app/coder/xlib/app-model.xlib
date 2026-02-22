@@ -89,7 +89,7 @@
 
                     // 等价于构造 /nop/schema/orm/dict.xdef
                     const dict = new DictBean();
-                    dict.name = codeGenConfig.bizDomain + '/' + node.attrText('name');
+                    dict.name = node.attrText('name');
                     dict.label = node.attrText('displayName');
                     dict.valueType = 'string';
 
@@ -266,8 +266,8 @@
                     column.code = 'col_' + $String.camelCaseToUnderscore(column.name, true);
                     column.displayName = node.attrText('displayName');
                     column.mandatory = node.attrBoolean('mandatory');
-                    column.insertable = node.attrBoolean('insertable');
-                    column.updatable = node.attrBoolean('updatable');
+                    column.insertable = node.attrBoolean('orm:insertable');
+                    column.updatable = node.attrBoolean('orm:updatable');
                     column.defaultValue = node.attrText('defaultValue');
                     column.comment = $String.trimToNull(node.childContentText('description'));
                     column.tagSet = [];
@@ -290,29 +290,58 @@
 
                     const dict = node.attrText('dict');
                     if (!$String.isBlank(dict)) {
-                        column[OrmModelConstants.EXT_DICT] = codeGenConfig.bizDomain + '/' + dict;
+                        column[OrmModelConstants.EXT_DICT] = dict;
                     }
-
-                    column['meta:maskPattern'] = node.attrText('maskPattern');
-                    column['meta:datePattern'] = node.attrText('datePattern');
-                    column['meta:minValue'] = node.attrDouble('minValue');
-                    column['meta:maxValue'] = node.attrDouble('maxValue');
-                    column['meta:minLength'] = node.attrInt('minLength');
-                    column['meta:maxLength'] = node.attrInt('maxLength');
-                    column['meta:allowedFileTypes'] = node.attrText('allowedFileTypes');
 
                     column['meta:mapToProp'] = mapTo;
                     if (virtual) {
                         column['meta:computed'] = node.childContentText('computed');
                     }
+                    if (node.attrBoolean('ui:published')) {
+                        column.tagSet.add('not-pub');
+                    }
+                    if (!node.attrBoolean('queryable')) {
+                        column.tagSet.add('not-query');
+                    }
+                    if (!node.attrBoolean('sortable')) {
+                        column.tagSet.add('not-sort');
+                    }
 
-                    ['minFileSize', 'maxFileSize'].forEach(name => {
-                        const val = node.attrText(name);
-                        column['meta:' + name] = !$String.isBlank(val) ? $String.parseSize(val) : null;
-                    });
+                    column['meta:allowFilterOp'] = node.attrText('allowFilterOp');
+                    column['meta:insertable'] = node.attrBoolean('ui:insertable');
+                    column['meta:updatable'] = node.attrBoolean('ui:updatable');
+                    column['meta:maskPattern'] = node.attrText('ui:maskPattern');
+                    column['meta:datePattern'] = node.attrText('ui:datePattern');
+
+                    const codeRule = node.attrText('biz:codeRule');
+                    if (!$String.isBlank(codeRule)) {
+                        column['biz:codeRule'] = codeRule;
+                        column['meta:insertable'] = false;
+                        column['meta:updatable'] = false;
+                    }
 
                     xpl `<thisLib:_ProcessOrmModelEntityColumn
                             column="${column}" node="${node}"/>`;
+
+                    const constraint = node.childByTag('constraint');
+                    if (constraint) {
+                        column['meta:pattern'] = constraint.attrText('pattern');
+                        column['meta:minValue'] = constraint.attrDouble('minValue');
+                        column['meta:maxValue'] = constraint.attrDouble('maxValue');
+                        column['meta:minLength'] = constraint.attrInt('minLength');
+                        column['meta:maxLength'] = constraint.attrInt('maxLength');
+                        column['meta:allowedFileTypes'] = constraint.attrText('allowedFileTypes');
+
+                        ['minFileSize', 'maxFileSize'].forEach(name => {
+                            const val = constraint.attrText(name);
+                            column['meta:' + name] = !$String.isBlank(val) ? $String.parseSize(val) : null;
+                        });
+
+                        if (!column.domain) {
+                            column.precision = constraint.attrInt('maxLength');
+                            column.scale = constraint.attrInt('scale');
+                        }
+                    }
 
                     return column;
                 ]]></c:script>
@@ -340,7 +369,7 @@
                     };
                     const domains = {
                         entityRef: 'uuid',
-                        date: 'datetime', xml: 'text',
+                        svg: 'text', xml: 'text',
                         html: 'text', markdown: 'text',
                     };
                     const domain = //
@@ -352,21 +381,6 @@
                     } else {
                         column.stdDomain = stdDomain;
                         column.stdSqlType = stdSqlTypes[stdDomain];
-                        column.precision = node.attrInt('precision', node.attrInt('maxLength'));
-                        column.scale = node.attrInt('scale');
-                    }
-
-                    if (node.attrBoolean('internal')) {
-                        column['ui:show'] = 'X';
-                    }
-                    if (!node.attrBoolean('published')) {
-                        column.tagSet.add('not-pub');
-                    }
-                    if (!node.attrBoolean('queryable')) {
-                        column.tagSet.add('not-query');
-                    }
-                    if (!node.attrBoolean('sortable')) {
-                        column.tagSet.add('not-sort');
                     }
                 ]]></c:script>
             </source>
@@ -415,10 +429,10 @@
                             relation.cascadeDelete = true;
                             relation.tagSet.add('cascade-delete');
                         }
-                        if (node.attrBoolean('insertable')) {
+                        if (node.attrBoolean('ui:insertable')) {
                             relation.tagSet.add('insertable');
                         }
-                        if (node.attrBoolean('updatable')) {
+                        if (node.attrBoolean('ui:updatable')) {
                             relation.tagSet.add('updatable');
                         }
                     } else {
@@ -430,7 +444,7 @@
                     relation.displayName = node.attrText('displayName');
                     relation.refEntityName = target;
 
-                    if (!node.attrBoolean('internal') && node.attrBoolean('published')) {
+                    if (node.attrBoolean('ui:published')) {
                         relation.tagSet.add('pub');
                     }
 

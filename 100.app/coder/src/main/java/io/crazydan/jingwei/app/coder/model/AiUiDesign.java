@@ -62,7 +62,9 @@ public class AiUiDesign {
     public XNode getDesignNode() {
         if (this.designNode == null) {
             this.designNode = XNodeParser.instance().parseFromResource(this.resource);
-            AiUiDesignNormalizer.normalize(this.designNode);
+
+            AiUiDesignNormalizer normalizer = new AiUiDesignNormalizer();
+            normalizer.normalize(this.designNode);
         }
         return this.designNode;
     }

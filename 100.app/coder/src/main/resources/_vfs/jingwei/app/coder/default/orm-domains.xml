@@ -30,6 +30,7 @@
         <domain name="uuid" precision="32" stdSqlType="CHAR"/>
 
         <domain name="date" stdSqlType="BIGINT"/>
+        <domain name="time" stdSqlType="BIGINT"/>
         <domain name="datetime" stdSqlType="BIGINT"/>
         <domain name="url" precision="1024" stdSqlType="VARCHAR"/>
         <domain name="file" precision="64" stdSqlType="CHAR"/>

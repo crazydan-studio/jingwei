@@ -19,8 +19,18 @@
 
 package io.crazydan.jingwei.app.coder.normalizer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.crazydan.jingwei.app.coder.AppCoderConstants;
 import io.nop.core.lang.xml.XNode;
+
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.ORM_ONE_TO_ONE;
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.TAG_ATTR_PREFIX_ref;
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.TAG_ATTR_displayName;
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.TAG_ATTR_domain;
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.TAG_ATTR_name;
+import static io.crazydan.jingwei.app.coder.AppCoderConstants.TAG_ATTR_ref_type;
 
 /**
  *
@@ -30,8 +40,50 @@ import io.nop.core.lang.xml.XNode;
 public class AiModelDesignNormalizer {
 
     /** 处理 {@link AppCoderConstants#XDSL_SCHEMA_CODER_MODEL_DESIGN} 的根节点 */
-    public static XNode normalize(XNode node) {
-        // TODO 补充 xxxId, xxx_label 等隐式属性
+    public XNode normalize(XNode node) {
+//        node.forEachChild((child) -> {
+//            String childTag = child.getTagName();
+//
+//            if ("entities".equals(childTag)) {
+//                child.forEachChild(this::normalizeEntityNode);
+//            }
+//        });
+
         return node;
+    }
+
+    protected void normalizeEntityNode(XNode node) {
+        node.forEachChild((child) -> {
+            String childTag = child.getTagName();
+
+            if ("attrs".equals(childTag)) {
+                normalizeEntityAttrsNode(child);
+            }
+        });
+    }
+
+    protected void normalizeEntityAttrsNode(XNode node) {
+        List<XNode> extraAttrs = new ArrayList<>(node.getChildCount());
+
+        node.forEachChild((child) -> {
+            String name = child.attrText(TAG_ATTR_name);
+            String displayName = child.attrText(TAG_ATTR_displayName);
+            String refType = child.attrText(TAG_ATTR_ref_type);
+
+            if (ORM_ONE_TO_ONE.equals(refType)) {
+                name = name + "Id";
+                displayName = displayName + " ID";
+
+                XNode attr = child.cloneInstance();
+                attr.removeAttrsWithPrefix(TAG_ATTR_PREFIX_ref);
+                attr.setAttr(TAG_ATTR_name, name);
+                attr.setAttr(TAG_ATTR_displayName, displayName);
+                attr.setAttr(TAG_ATTR_domain, "uuid");
+
+                extraAttrs.add(attr);
+            }
+        });
+
+        node.appendChildren(extraAttrs);
     }
 }

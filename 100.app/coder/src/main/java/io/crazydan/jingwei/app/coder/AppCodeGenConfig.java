@@ -19,8 +19,6 @@
 
 package io.crazydan.jingwei.app.coder;
 
-import java.util.Locale;
-
 import io.crazydan.duzhou.framework.commons.StringHelper;
 import io.crazydan.jingwei.app.model.AppInstallation_Manifest;
 import io.crazydan.jingwei.app.model.AppReleasing_Manifest;
@@ -34,14 +32,11 @@ import io.crazydan.jingwei.app.model.AppReleasing_Manifest;
 public class AppCodeGenConfig {
     /** 应用唯一标识，不能为 {@code null} 或空白 */
     private String code;
-    /** 应用所处的业务域标识，不能为 {@code null} 或空白 */
-    private String bizDomain;
 
     public static AppCodeGenConfig from(AppReleasing_Manifest manifest) {
         AppCodeGenConfig config = new AppCodeGenConfig();
 
         config.setCode(manifest.getCode());
-        config.setBizDomain(manifest.getBizDomain());
 
         return config;
     }
@@ -50,7 +45,6 @@ public class AppCodeGenConfig {
         AppCodeGenConfig config = new AppCodeGenConfig();
 
         config.setCode(manifest.getCode());
-        config.setBizDomain(manifest.getBizDomain());
 
         return config;
     }
@@ -63,19 +57,10 @@ public class AppCodeGenConfig {
         this.code = code;
     }
 
-    public String getBizDomain() {
-        return this.bizDomain;
-    }
-
-    public void setBizDomain(String appDomain) {
-        this.bizDomain = appDomain.toLowerCase(Locale.ROOT);
-    }
-
     /** 在 xlib 函数中调用 */
     public String genTableName(String entityName) {
-        String prefix = getBizDomain().replace('-', '_');
         String name = StringHelper.camelCaseToUnderscore(entityName, true);
 
-        return "tbl_" + prefix + '_' + name;
+        return "tbl_" + name;
     }
 }

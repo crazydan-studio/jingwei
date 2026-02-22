@@ -67,7 +67,6 @@ public class TestAiModelDesign extends NopJunitTestCase {
         AppCodeGenConfig genConfig = new AppCodeGenConfig();
 
         genConfig.setCode("16834a2287e74be796b6493008e22ac4");
-        genConfig.setBizDomain("app");
 
         return genConfig;
     }

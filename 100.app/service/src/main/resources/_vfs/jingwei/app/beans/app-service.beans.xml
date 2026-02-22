@@ -16,4 +16,7 @@
     />
 
     <bean id="appOrmModelProvider" class="io.crazydan.jingwei.app.orm.AppOrmModelProvider"/>
+
+    <!-- biz:codeRule 规则，id 采用固定前缀（见 /nop/sys/beans/app-dao.beans.xml） -->
+    <bean id="nopCodeRuleVariable_uuid" class="io.crazydan.jingwei.app.coderule.UuidCodeRuleVariable"/>
 </beans>

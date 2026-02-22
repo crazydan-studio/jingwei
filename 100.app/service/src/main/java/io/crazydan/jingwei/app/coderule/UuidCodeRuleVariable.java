@@ -17,20 +17,21 @@
  * If not, see <https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text>.
  */
 
-package io.crazydan.jingwei.app.coder.normalizer;
+package io.crazydan.jingwei.app.coderule;
 
-import io.crazydan.jingwei.app.coder.AppCoderConstants;
-import io.nop.core.lang.xml.XNode;
+import io.crazydan.duzhou.framework.commons.StringHelper;
+import io.nop.dao.coderule.CodeRuleParams;
+import io.nop.dao.coderule.ICodeRuleVariable;
 
 /**
  *
  * @author <a href="mailto:flytreeleft@crazydan.org">flytreeleft</a>
- * @date 2026-01-13
+ * @date 2026-02-22
  */
-public class AiUiDesignNormalizer {
+public class UuidCodeRuleVariable implements ICodeRuleVariable {
 
-    /** 处理 {@link AppCoderConstants#XDSL_SCHEMA_CODER_UI_DESIGN} 的根节点 */
-    public XNode normalize(XNode node) {
-        return node;
+    @Override
+    public String resolve(String options, CodeRuleParams params) {
+        return StringHelper.generateUUID();
     }
 }

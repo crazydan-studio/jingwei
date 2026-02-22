@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <c:unit xmlns:c="c" xmlns:delta="delta" xmlns:xpl="xpl"
-        xmlns:x="x" xmlns:graphql="graphql">
+        xmlns:x="x" xmlns:graphql="graphql"
+        xmlns:ui="ui" xmlns:biz="biz" xmlns:ext="ext">
 
     <c:script><![CDATA[
         import io.nop.codegen.XCodeGenerator;
@@ -29,8 +30,30 @@
                         <prop name="${col.name}" x:override="remove"/>
                     </c:if>
 
-                    <prop name="${col.name}" mapToProp="${col['meta:mapToProp']}"/>
+
+                    <c:if test="${!col.tagSet?.contains('del')}">
+                        <prop name="${col.name}"
+                              insertable="${col['meta:insertable']}"
+                              updatable="${col['meta:updatable']}"
+                              mapToProp="${col['meta:mapToProp']}"
+                              allowFilterOp="${col['meta:allowFilterOp']}"
+                              biz:codeRule="${col['biz:codeRule']}"
+                              ui:maskPattern="${col['meta:maskPattern']}"
+                              graphql:datePattern="${col['meta:datePattern']}"
+                              ext:allowedFileTypes="${col['meta:allowedFileTypes']}"
+                              ext:minFileSize="${col['meta:minFileSize']}"
+                              ext:maxFileSize="${col['meta:maxFileSize']}"
+                        >
+                            <schema pattern="${col['meta:pattern']}"
+                                    min="${col['meta:minValue']}"
+                                    max="${col['meta:maxValue']}"
+                                    minLength="${col['meta:minLength']}"
+                                    maxLength="${col['meta:maxLength']}"
+                            />
+                        </prop>
+                    </c:if>
                 </c:for>
+
                 <!-- JsonOrmComponent 不暴露给前端（直接移除），采用 alias 方式屏蔽内部结构 -->
                 <c:for var="comp" items="${entityModel.components}">
                     <c:script><![CDATA[

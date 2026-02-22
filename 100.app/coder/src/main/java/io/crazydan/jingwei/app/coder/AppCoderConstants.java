@@ -35,13 +35,20 @@ public interface AppCoderConstants {
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+    String TAG_ATTR_node = "node";
+    String TAG_ATTR_name = "name";
+    String TAG_ATTR_displayName = "displayName";
+    String TAG_ATTR_domain = "domain";
+    String TAG_ATTR_ref_type = "ref:type";
+    String TAG_ATTR_PREFIX_ref = "ref";
+
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
     String XLIB_APP_MODEL = "/jingwei/app/coder/xlib/app-model.xlib";
     String XLIB_APP_PAGE = "/jingwei/app/coder/xlib/app-page.xlib";
 
     String XLIB_TAG_ModelDesignToOrmModel = "ModelDesignToOrmModel";
     String XLIB_TAG_UiDesignToUiModel = "UiDesignToUiModel";
-
-    String TAG_ATTR_node = "node";
 
     String CODEGEN_TEMPLATE_APP_MODEL = "/jingwei/app/templates/app-model";
     String CODEGEN_TEMPLATE_APP_PAGE = "/jingwei/app/templates/app-page";

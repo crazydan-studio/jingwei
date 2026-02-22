@@ -99,6 +99,7 @@ inputs:
 
 postProcess: |
   import io.crazydan.jingwei.app.coder.normalizer.AiChatExchangeNormalizer;
+  
   AiChatExchangeNormalizer.normalize(chatExchange);
 
 outputs:
@@ -108,4 +109,6 @@ outputs:
     format: xml
     valueNormalizer: |
       import io.crazydan.jingwei.app.coder.normalizer.AiUiDesignNormalizer;
-      return AiUiDesignNormalizer.normalize(value);
+      
+      AiUiDesignNormalizer normalizer = new AiUiDesignNormalizer();
+      return normalizer.normalize(value);

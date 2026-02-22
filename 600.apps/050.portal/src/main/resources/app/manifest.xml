@@ -21,29 +21,11 @@
 
 <manifest xmlns:x="/nop/schema/xdsl.xdef"
           x:schema="/jingwei/app/schema/manifest/releasing.xdef"
-          bizDomain="app" code="ae9c6b146f93436abba7761593058f38"
-          name="精卫 - 个人数字资产平台" version="0.1.0" icon="icon.svg"
+          title="精卫 - 个人数字资产平台"
+          code="ae9c6b146f93436abba7761593058f38" version="0.1.0"
 >
 
     <description>精卫应用设计与管理</description>
 
     <author name="Crazydan Studio" url="https://studio.crazydan.org"/>
-
-    <requirementResource>
-        <modelDesign path="source/model-requirements.md"/>
-        <uiDesign path="source/ui-requirements.md"/>
-    </requirementResource>
-
-    <coderResource>
-        <modelDesign path="source/model-design.xml"/>
-        <uiDesign path="source/ui-design.xml"/>
-    </coderResource>
-
-    <!--<artifactResource>
-        <model path="artifact/model/App/App.xmeta" name="App/App.xmeta"/>
-
-        <orm path="artifact/orm/app.orm.xml" name="app.orm.xml"/>
-
-        <page path="artifact/page/index.js" name="index.js"/>
-    </artifactResource>-->
 </manifest>

@@ -55,7 +55,7 @@ openGraphiQL(); // 在新标签页或内嵌视图中打开 GraphiQL
 
 ## 页面消息
 
-从 `@app-utils` 中可导入四种消息组件：**dialog**、**message**、**modal** 和 **notification**。它们均基于 Naive UI 对应组件封装，配置选项与 Naive UI 原生选项一致。
+从 `@app-utils` 中可导入并使用 **dialog**、**message**、**modal** 和 **notification** 消息组件：
 
 ```js
 import { message, notification, dialog, modal } from '@app-utils';
@@ -63,7 +63,7 @@ import { message, notification, dialog, modal } from '@app-utils';
 
 ### 对话框（dialog）
 
-提供四种预设类型：`error`、`info`、`success`、`warning`。配置选项 `DialogOptions` 与 Naive UI [Dialog 组件](https://www.naiveui.com/zh-CN/os-theme/components/dialog#API) 的选项相同。
+提供四种预设类型：`error`、`info`、`success`、`warning`。
 
 **方法签名**
 
@@ -89,11 +89,11 @@ dialog.success({
 
 **返回值**
 
-每个方法返回一个对话框实例，包含 `destroy` 等方法（参考 Naive UI）。
+每个方法返回一个对话框实例，包含 `destroy` 等方法。
 
 ### 信息（message）
 
-`message` 提供五种类型：`error`、`info`、`loading`、`success`、`warning`。调用时需传入内容（字符串或渲染函数）及可选的 `MessageOption` 配置（与 Naive UI [Message 组件选项](https://www.naiveui.com/zh-CN/os-theme/components/message#API) 一致）。
+`message` 提供五种类型：`error`、`info`、`loading`、`success`、`warning`。
 
 **方法签名**
 
@@ -120,7 +120,7 @@ message.loading('处理中...', { duration: 0 }); // duration=0 表示不自动�
 
 ### 模态框（modal）
 
-通过 `modal.create(options)` 创建模态框，返回一个控制器对象，可主动关闭模态框。配置选项 `ModalOptions` 与 Naive UI [Modal 组件](https://www.naiveui.com/zh-CN/os-theme/components/modal#API) 的选项相同。
+通过 `modal.create(options)` 创建模态框，返回一个控制器对象，可主动关闭模态框。
 
 **方法签名**
 
@@ -152,7 +152,7 @@ setTimeout(() => modalWin.destroy(), 5000);
 
 ### 通知（notification）
 
-`notification` 提供四种类型：`error`、`info`、`success`、`warning`。每个方法接收一个 `NotificationOption` 对象（与 Naive UI [Notification 组件选项](https://www.naiveui.com/zh-CN/os-theme/components/notification#API) 一致）。
+`notification` 提供四种类型：`error`、`info`、`success`、`warning`。
 
 **方法签名**
 

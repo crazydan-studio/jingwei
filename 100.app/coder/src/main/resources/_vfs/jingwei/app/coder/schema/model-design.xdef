@@ -55,7 +55,7 @@
                 <attr name="!camel-case" index="!int" displayName="string"
                       mandatory="!boolean=false" deprecated="boolean"
 
-                      virtual="!boolean=false" internal="!boolean=false"
+                      virtual="!boolean=false"
                       queryable="!boolean=false" sortable="!boolean=false"
                       allowFilterOp="word-set"
 
@@ -69,7 +69,7 @@
                       mapTo="attr-path" dict="dict-name"
                       biz:codeRule="string" defaultValue="any"
 
-                      ui:showable="!boolean=true"
+                      ui:published="!boolean=true"
                       ui:insertable="!boolean=false" ui:updatable="!boolean=false"
                       ui:maskPattern="string" ui:datePattern="string"
                 >
