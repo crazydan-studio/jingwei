@@ -21,31 +21,29 @@ package io.crazydan.jingwei.app.coder;
 
 import java.io.File;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import io.crazydan.duzhou.framework.commons.FileHelper;
 import io.crazydan.duzhou.framework.commons.StringHelper;
-import io.crazydan.jingwei.app.model.AppInstallation_CoderResource;
 import io.crazydan.jingwei.app.model.AppInstallation_Manifest;
 import io.crazydan.jingwei.app.model.AppInstallation_ModelResources;
 import io.crazydan.jingwei.app.model.AppInstallation_OrmResources;
 import io.crazydan.jingwei.app.model.AppInstallation_PageResources;
 import io.crazydan.jingwei.app.model.AppPackage_Resource;
-import io.crazydan.jingwei.app.model.AppReleasing_ArtifactResource;
-import io.crazydan.jingwei.app.model.AppReleasing_CoderResource;
 import io.crazydan.jingwei.app.model.AppReleasing_Manifest;
 import io.crazydan.jingwei.app.util.AppModelHelper;
 import io.nop.core.resource.IResource;
 import io.nop.core.resource.impl.FileResource;
 
-import static io.crazydan.jingwei.app.AppConstants.APP_MANIFEST_FILE;
+import static io.crazydan.jingwei.app.AppConstants.APP_DIR_SOURCE;
+import static io.crazydan.jingwei.app.AppConstants.APP_FILE_LOGO;
+import static io.crazydan.jingwei.app.AppConstants.APP_FILE_MANIFEST;
+import static io.crazydan.jingwei.app.AppConstants.APP_FILE_MODEL_DESIGN;
+import static io.crazydan.jingwei.app.AppConstants.APP_FILE_UI_DESIGN;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.APP_DIR_MODEL;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.APP_DIR_ORM;
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.APP_DIR_SRC;
-import static io.crazydan.jingwei.app.coder.AppCoderConstants.APP_FILE_MODEL_DESIGN;
-import static io.crazydan.jingwei.app.coder.AppCoderConstants.APP_FILE_UI_DESIGN;
 
 /**
  *
@@ -54,108 +52,66 @@ import static io.crazydan.jingwei.app.coder.AppCoderConstants.APP_FILE_UI_DESIGN
  */
 public class AppInstallationBuilder extends AppCodeGenerator {
 
-    public AppInstallation_Manifest install(
-            AppReleasing_Manifest releasingManifest, File appModelDir, File appPageDir) {
-
-        installModels(releasingManifest, appModelDir);
-        installPages(releasingManifest, appPageDir);
-
+    public AppInstallation_Manifest install(AppReleasing_Manifest releasingManifest, File appModelDir) {
         installCoders(releasingManifest, appModelDir);
 
+        // Note: 页面延迟到首次访问应用时构建
+        buildModels(releasingManifest, appModelDir);
+
+        //
         AppInstallation_Manifest manifest = AppInstallation_Manifest.from(releasingManifest);
         recordModels(manifest, appModelDir);
-        recordPages(manifest, appPageDir);
 
-        File manifestFile = new File(appModelDir, APP_MANIFEST_FILE);
-        IResource manifestResource = new FileResource('/' + APP_MANIFEST_FILE, manifestFile);
+        //
+        File manifestFile = new File(appModelDir, APP_FILE_MANIFEST);
+        IResource manifestResource = new FileResource('/' + APP_FILE_MANIFEST, manifestFile);
 
         AppModelHelper.saveAppInstallationManifest(manifest, manifestResource);
 
         return AppModelHelper.loadAppInstallationManifest(manifestResource);
     }
 
-    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-    protected void installModels(AppReleasing_Manifest manifest, File targetDir) {
-        AppReleasing_ArtifactResource artifactResource = manifest.getArtifactResource();
-
-        List<AppPackage_Resource> orms = artifactResource.getOrms();
-        List<AppPackage_Resource> models = artifactResource.getModels();
-
-        // 从设计资源构建
-        if (orms.isEmpty() || models.isEmpty()) {
-            buildModels(manifest, targetDir);
+    /** 根据页面设计构建应用页面 */
+    public AppInstallation_Manifest installPages(AppInstallation_Manifest manifest, File targetDir) {
+        IResource resource = getResource(manifest, APP_DIR_SRC + '/' + APP_FILE_UI_DESIGN);
+        if (resource == null) {
+            return manifest;
         }
-        // 直接释放已构建资源
-        else {
-            Map<String, List<AppPackage_Resource>> resources = //
-                    Map.of(APP_DIR_ORM, orms, APP_DIR_MODEL, models);
 
-            resources.forEach((dirName, list) -> {
-                list.forEach((source) -> {
-                    String targetFilePath = dirName + '/' + source.getName();
-                    File targetFile = new File(targetDir, targetFilePath);
+        AppCodeGenConfig genConfig = AppCodeGenConfig.from(manifest);
 
-                    source.getResource().saveToFile(targetFile);
-                });
-            });
-        }
-    }
+        genPages(resource, targetDir, genConfig);
+        recordPages(manifest, targetDir);
 
-    protected void installPages(AppReleasing_Manifest manifest, File targetDir) {
-        AppReleasing_ArtifactResource artifactResource = manifest.getArtifactResource();
+        IResource manifestResource = AppModelHelper.getVfsResource(manifest.resourcePath());
+        AppModelHelper.saveAppInstallationManifest(manifest, manifestResource);
 
-        List<AppPackage_Resource> pages = artifactResource.getPages();
-
-        // Note: 若存在已构建的页面资源，则将其释放到应用静态资源目录，否则，延迟到首次访问时再主动构建
-        pages.forEach((source) -> {
-            String targetFilePath = source.getName();
-            File targetFile = new File(targetDir, targetFilePath);
-
-            source.getResource().saveToFile(targetFile);
-        });
-    }
-
-    protected void installCoders(AppReleasing_Manifest manifest, File targetDir) {
-        AppReleasing_CoderResource coder = manifest.getCoderResource();
-
-        Map<String, AppPackage_Resource> resources = //
-                Map.of(APP_FILE_MODEL_DESIGN, coder.getModelDesign(), APP_FILE_UI_DESIGN, coder.getUiDesign());
-
-        resources.forEach((targetFilePath, source) -> {
-            if (source != null) {
-                File targetFile = new File(targetDir, APP_DIR_SRC + '/' + targetFilePath);
-                source.getResource().saveToFile(targetFile);
-            }
-        });
+        return AppModelHelper.loadAppInstallationManifest(manifestResource);
     }
 
     /** 根据模型设计构建模型资源（{@code app.orm.xml}、{@code *.xmeta}、{@code *.xbiz}） */
-    public void buildModels(AppReleasing_Manifest manifest, File targetDir) {
-        AppPackage_Resource source = manifest.getCoderResource().getModelDesign();
-        if (source == null) {
+    protected void buildModels(AppReleasing_Manifest manifest, File targetDir) {
+        IResource resource = getResource(manifest, APP_DIR_SOURCE + '/' + APP_FILE_MODEL_DESIGN);
+        if (resource == null) {
             return;
         }
 
-        IResource resource = source.getResource();
         AppCodeGenConfig genConfig = AppCodeGenConfig.from(manifest);
 
         genModels(resource, targetDir, genConfig);
     }
 
-    /** 根据页面设计构建应用页面 */
-    public void buildPages(AppInstallation_Manifest manifest, File targetDir) {
-        AppPackage_Resource source = manifest.getCoderResource().getUiDesign();
-        if (source == null) {
-            return;
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    protected void installCoders(AppReleasing_Manifest manifest, File targetDir) {
+        String[] paths = new String[] {
+                APP_FILE_LOGO, APP_FILE_MODEL_DESIGN, APP_FILE_UI_DESIGN
+        };
+
+        for (String path : paths) {
+            File target = new File(targetDir, APP_DIR_SRC);
+            copyResource(manifest, APP_DIR_SOURCE + '/' + path, target);
         }
-
-        IResource resource = source.getResource();
-        AppCodeGenConfig genConfig = AppCodeGenConfig.from(manifest);
-
-        genPages(resource, targetDir, genConfig);
-
-        recordPages(manifest, targetDir);
     }
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -174,18 +130,6 @@ public class AppInstallationBuilder extends AppCodeGenerator {
         paths = FileHelper.findFilePaths(targetDir, APP_DIR_MODEL + "/**/*", true, true);
         resources = paths.stream().map(pathMapper).collect(Collectors.toList());
         manifest.getModelResources().setChildren(resources);
-
-        manifest.setCoderResource(new AppInstallation_CoderResource());
-        paths = FileHelper.findFilePaths(targetDir, APP_DIR_SRC + "/**/*", true, true);
-        paths.forEach((path) -> {
-            AppPackage_Resource pkg = AppPackage_Resource.fromPath(path);
-
-            if (path.endsWith('/' + APP_FILE_MODEL_DESIGN)) {
-                manifest.getCoderResource().setModelDesign(pkg);
-            } else if (path.endsWith('/' + APP_FILE_UI_DESIGN)) {
-                manifest.getCoderResource().setUiDesign(pkg);
-            }
-        });
     }
 
     protected void recordPages(AppInstallation_Manifest manifest, File targetDir) {

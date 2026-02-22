@@ -38,7 +38,16 @@ public interface AppConstants {
     String XDSL_SCHEMA_APP_LOCAL_STORE_MANIFEST = "/jingwei/app/schema/manifest/local-store.xdef";
     String XDSL_SCHEMA_APP_INSTALLATION_MANIFEST = "/jingwei/app/schema/manifest/installation.xdef";
 
-    String APP_MANIFEST_FILE = "manifest.xml";
+    String APP_DIR_SOURCE = "source";
+    String APP_FILE_MANIFEST = "manifest.xml";
+    String APP_FILE_BIZ_REQUIREMENTS = "biz-requirements.md";
+    String APP_FILE_LOGO_REQUIREMENTS = "logo-requirements.md";
+    String APP_FILE_LOGO = "logo.svg";
+    String APP_FILE_MODEL_REQUIREMENTS = "model-requirements.md";
+    String APP_FILE_MODEL_DESIGN = "model-design.xml";
+    String APP_FILE_UI_REQUIREMENTS = "ui-requirements.md";
+    String APP_FILE_UI_DESIGN = "ui-design.xml";
+
     String TEMPLATE_APP_STORE_VPATH = //
             VFS_NS_INSTALLATION_APP + ":/{" + VAR_PATH + "}";
 

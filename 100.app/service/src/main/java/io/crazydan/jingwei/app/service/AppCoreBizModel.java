@@ -51,7 +51,7 @@ import io.nop.orm.IOrmTemplate;
 import jakarta.inject.Inject;
 
 import static io.crazydan.duzhou.framework.CommonErrors.ERR_CFG_VALUE_NOT_SPECIFIED;
-import static io.crazydan.jingwei.app.AppConstants.APP_MANIFEST_FILE;
+import static io.crazydan.jingwei.app.AppConstants.APP_FILE_MANIFEST;
 import static io.crazydan.jingwei.app.AppConstants.TEMPLATE_APP_CLASSPATH_VPATH;
 import static io.crazydan.jingwei.app.AppConstants.TEMPLATE_APP_INSTALLATION_ROOT_VPATH;
 import static io.crazydan.jingwei.app.AppConstants.TEMPLATE_APP_INSTALLATION_VPATH;
@@ -116,7 +116,7 @@ public class AppCoreBizModel {
     @Description("确保应用已安装")
     @BizAction
     public AppInstallation_Manifest assureAppInstalled(@Name("appCode") String appCode) {
-        IResource resource = loadAppInstallationResource(appCode, APP_MANIFEST_FILE);
+        IResource resource = loadAppInstallationResource(appCode, APP_FILE_MANIFEST);
         AppInstallation_Manifest manifest = AppModelHelper.loadAppInstallationManifest(resource);
 
         if (manifest == null) {
@@ -128,18 +128,16 @@ public class AppCoreBizModel {
     @Description("从 classpath 安装应用")
     @BizAction
     public AppInstallation_Manifest installAppFromClasspath(@Name("appCode") String appCode) {
-        IResource resource = loadVfsResource(TEMPLATE_APP_CLASSPATH_VPATH, appCode, APP_MANIFEST_FILE);
+        IResource resource = loadVfsResource(TEMPLATE_APP_CLASSPATH_VPATH, appCode, APP_FILE_MANIFEST);
         AppReleasing_Manifest manifest = AppModelHelper.loadAppReleasingManifest(resource);
         if (manifest == null) {
             return null;
         }
 
         File targetDir = loadVfsResource(TEMPLATE_APP_INSTALLATION_ROOT_VPATH, appCode, "").toFile();
-        File pageTargetDir = loadVfsResource(TEMPLATE_APP_STATIC_ROOT_VPATH, appCode, "").toFile();
-
         AppInstallationBuilder builder = new AppInstallationBuilder();
 
-        return builder.install(manifest, targetDir, pageTargetDir);
+        return builder.install(manifest, targetDir);
     }
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -198,15 +196,9 @@ public class AppCoreBizModel {
         }
 
         File targetDir = loadVfsResource(TEMPLATE_APP_STATIC_ROOT_VPATH, appCode, "").toFile();
-        AppInstallation_Manifest cloned = manifest.cloneInstance();
-
         AppInstallationBuilder builder = new AppInstallationBuilder();
-        builder.buildPages(cloned, targetDir);
 
-        IResource manifestResource = AppModelHelper.getVfsResource(manifest.resourcePath());
-        AppModelHelper.saveAppInstallationManifest(cloned, manifestResource);
-
-        return AppModelHelper.loadAppInstallationManifest(manifestResource);
+        return builder.installPages(manifest, targetDir);
     }
 
     protected Map<String, Object> getAppPageStaticPath(AppInstallation_Manifest manifest) {
@@ -237,7 +229,7 @@ public class AppCoreBizModel {
     }
 
     protected AppLocalStore_Manifest loadAppLocalStoreManifest() {
-        IResource resource = loadVfsResource(TEMPLATE_APP_STORE_VPATH, "", APP_MANIFEST_FILE);
+        IResource resource = loadVfsResource(TEMPLATE_APP_STORE_VPATH, "", APP_FILE_MANIFEST);
         AppLocalStore_Manifest manifest = AppModelHelper.loadAppLocalStoreManifest(resource);
 
         // TODO 完善门户页面配置检查和异常信息

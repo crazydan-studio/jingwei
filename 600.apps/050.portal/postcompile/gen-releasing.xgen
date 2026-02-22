@@ -37,7 +37,7 @@
     FileHelper.copyWithFilter(sourceDir, targetDir, null);
     FileHelper.copyWithFilter(sourceDir, buildDir, null);
 
-    const manifestVPath = ResourceConstants.RESOURCE_NS_CLASSPATH + ':app/' + AppConstants.APP_MANIFEST_FILE;
+    const manifestVPath = ResourceConstants.RESOURCE_NS_CLASSPATH + ':app/' + AppConstants.APP_FILE_MANIFEST;
 
     const manifest = builder.build(manifestVPath, buildDir);
     FileHelper.deleteDir(targetDir);

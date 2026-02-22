@@ -24,13 +24,16 @@ import java.util.Map;
 
 import io.crazydan.duzhou.framework.commons.FileHelper;
 import io.crazydan.duzhou.framework.commons.PnpmRunner;
+import io.crazydan.duzhou.framework.commons.StringHelper;
 import io.crazydan.jingwei.app.coder.model.AiModelDesign;
 import io.crazydan.jingwei.app.coder.model.AiOrmModel;
 import io.crazydan.jingwei.app.coder.model.AiUiDesign;
 import io.crazydan.jingwei.app.coder.model.AiUiModel;
+import io.nop.api.core.util.ISourceLocationGetter;
 import io.nop.codegen.XCodeGenerator;
 import io.nop.core.lang.eval.IEvalScope;
 import io.nop.core.resource.IResource;
+import io.nop.core.resource.VirtualFileSystem;
 import io.nop.xlang.api.XLang;
 
 import static io.crazydan.jingwei.app.coder.AppCoderConstants.BUILD_DIR_HIDDEN_BUILD;
@@ -95,6 +98,29 @@ public abstract class AppCodeGenerator {
         pnpm.copyDistTo(targetDir, false);
 
         FileHelper.deleteDir(buildDir);
+    }
+
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    /** 根据资源位置获取指定资源 */
+    protected IResource getResource(ISourceLocationGetter locator, String path) {
+        String inDir = StringHelper.removeLastPart(locator.getLocation().getPath(), '/');
+        String vPath = StringHelper.appendPath(inDir, path);
+
+        return VirtualFileSystem.instance().getResource(vPath, true);
+    }
+
+    /** 复制资源到指定目录。若资源不存在，则不复制 */
+    protected void copyResource(ISourceLocationGetter locator, String path, File targetDir) {
+        IResource resource = getResource(locator, path);
+        if (resource == null) {
+            return;
+        }
+
+        String name = StringHelper.fileName(path);
+        File targetFile = new File(targetDir, name);
+
+        resource.saveToFile(targetFile);
     }
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

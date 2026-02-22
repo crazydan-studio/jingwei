@@ -62,12 +62,4 @@
                   path="!file-path"
         />
     </pageResources>
-
-    <!-- [源码资源]
-    > 用于重新生成模型和页面代码的 DSL 资源。
-    -->
-    <coderResource xdef:name="AppInstallation_CoderResource">
-        <modelDesign xdef:ref="resource.xdef"/>
-        <uiDesign xdef:ref="resource.xdef"/>
-    </coderResource>
 </manifest>

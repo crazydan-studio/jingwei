@@ -18,13 +18,6 @@ import io.nop.commons.util.ClassHelper;
 public abstract class _AppReleasing_Manifest extends io.nop.core.resource.component.AbstractComponentModel {
     
     /**
-     *  应用的构建产物
-     * xml name: artifactResource
-     * > 将被释放到应用安装目录中的构建产物资源。若未指定，则在安装时动态构建。
-     */
-    private io.crazydan.jingwei.app.model.AppReleasing_ArtifactResource _artifactResource ;
-    
-    /**
      *  应用的作者信息
      * xml name: author
      * > 作者可以是个人，也可以是组织。
@@ -33,24 +26,10 @@ public abstract class _AppReleasing_Manifest extends io.nop.core.resource.compon
     
     /**
      *  
-     * xml name: bizDomain
-     * 
-     */
-    private java.lang.String _bizDomain ;
-    
-    /**
-     *  
      * xml name: code
      * 
      */
     private java.lang.String _code ;
-    
-    /**
-     *  应用的源码资源
-     * xml name: coderResource
-     * > 用于生成应用代码的 DSL 资源。根据需求设计资源确定模型和 UI 设计资源是否必须包含。
-     */
-    private io.crazydan.jingwei.app.model.AppReleasing_CoderResource _coderResource ;
     
     /**
      *  
@@ -61,24 +40,10 @@ public abstract class _AppReleasing_Manifest extends io.nop.core.resource.compon
     
     /**
      *  
-     * xml name: icon
+     * xml name: title
      * 
      */
-    private java.lang.String _icon ;
-    
-    /**
-     *  
-     * xml name: name
-     * 
-     */
-    private java.lang.String _name ;
-    
-    /**
-     *  应用的需求设计资源
-     * xml name: requirementResource
-     * > 应用功能、模型、UI 设计的需求说明文档。应用功能需求必须指定，而模型和 UI 需求必须至少指定一项。
-     */
-    private io.crazydan.jingwei.app.model.AppReleasing_RequirementResource _requirementResource ;
+    private java.lang.String _title ;
     
     /**
      *  
@@ -86,25 +51,6 @@ public abstract class _AppReleasing_Manifest extends io.nop.core.resource.compon
      * 
      */
     private java.lang.String _version ;
-    
-    /**
-     * 应用的构建产物
-     * xml name: artifactResource
-     *  > 将被释放到应用安装目录中的构建产物资源。若未指定，则在安装时动态构建。
-     */
-    
-    public io.crazydan.jingwei.app.model.AppReleasing_ArtifactResource getArtifactResource(){
-      return _artifactResource;
-    }
-
-    
-    public void setArtifactResource(io.crazydan.jingwei.app.model.AppReleasing_ArtifactResource value){
-        checkAllowChange();
-        
-        this._artifactResource = value;
-           
-    }
-
     
     /**
      * 应用的作者信息
@@ -127,25 +73,6 @@ public abstract class _AppReleasing_Manifest extends io.nop.core.resource.compon
     
     /**
      * 
-     * xml name: bizDomain
-     *  
-     */
-    
-    public java.lang.String getBizDomain(){
-      return _bizDomain;
-    }
-
-    
-    public void setBizDomain(java.lang.String value){
-        checkAllowChange();
-        
-        this._bizDomain = value;
-           
-    }
-
-    
-    /**
-     * 
      * xml name: code
      *  
      */
@@ -159,25 +86,6 @@ public abstract class _AppReleasing_Manifest extends io.nop.core.resource.compon
         checkAllowChange();
         
         this._code = value;
-           
-    }
-
-    
-    /**
-     * 应用的源码资源
-     * xml name: coderResource
-     *  > 用于生成应用代码的 DSL 资源。根据需求设计资源确定模型和 UI 设计资源是否必须包含。
-     */
-    
-    public io.crazydan.jingwei.app.model.AppReleasing_CoderResource getCoderResource(){
-      return _coderResource;
-    }
-
-    
-    public void setCoderResource(io.crazydan.jingwei.app.model.AppReleasing_CoderResource value){
-        checkAllowChange();
-        
-        this._coderResource = value;
            
     }
 
@@ -203,57 +111,19 @@ public abstract class _AppReleasing_Manifest extends io.nop.core.resource.compon
     
     /**
      * 
-     * xml name: icon
+     * xml name: title
      *  
      */
     
-    public java.lang.String getIcon(){
-      return _icon;
+    public java.lang.String getTitle(){
+      return _title;
     }
 
     
-    public void setIcon(java.lang.String value){
+    public void setTitle(java.lang.String value){
         checkAllowChange();
         
-        this._icon = value;
-           
-    }
-
-    
-    /**
-     * 
-     * xml name: name
-     *  
-     */
-    
-    public java.lang.String getName(){
-      return _name;
-    }
-
-    
-    public void setName(java.lang.String value){
-        checkAllowChange();
-        
-        this._name = value;
-           
-    }
-
-    
-    /**
-     * 应用的需求设计资源
-     * xml name: requirementResource
-     *  > 应用功能、模型、UI 设计的需求说明文档。应用功能需求必须指定，而模型和 UI 需求必须至少指定一项。
-     */
-    
-    public io.crazydan.jingwei.app.model.AppReleasing_RequirementResource getRequirementResource(){
-      return _requirementResource;
-    }
-
-    
-    public void setRequirementResource(io.crazydan.jingwei.app.model.AppReleasing_RequirementResource value){
-        checkAllowChange();
-        
-        this._requirementResource = value;
+        this._title = value;
            
     }
 
@@ -285,13 +155,7 @@ public abstract class _AppReleasing_Manifest extends io.nop.core.resource.compon
 
         if(cascade){ //NOPMD - suppressed EmptyControlStatement - Auto Gen Code
         
-           this._artifactResource = io.nop.api.core.util.FreezeHelper.deepFreeze(this._artifactResource);
-            
            this._author = io.nop.api.core.util.FreezeHelper.deepFreeze(this._author);
-            
-           this._coderResource = io.nop.api.core.util.FreezeHelper.deepFreeze(this._coderResource);
-            
-           this._requirementResource = io.nop.api.core.util.FreezeHelper.deepFreeze(this._requirementResource);
             
         }
     }
@@ -300,15 +164,10 @@ public abstract class _AppReleasing_Manifest extends io.nop.core.resource.compon
     protected void outputJson(IJsonHandler out){
         super.outputJson(out);
         
-        out.putNotNull("artifactResource",this.getArtifactResource());
         out.putNotNull("author",this.getAuthor());
-        out.putNotNull("bizDomain",this.getBizDomain());
         out.putNotNull("code",this.getCode());
-        out.putNotNull("coderResource",this.getCoderResource());
         out.putNotNull("description",this.getDescription());
-        out.putNotNull("icon",this.getIcon());
-        out.putNotNull("name",this.getName());
-        out.putNotNull("requirementResource",this.getRequirementResource());
+        out.putNotNull("title",this.getTitle());
         out.putNotNull("version",this.getVersion());
     }
 
@@ -321,15 +180,10 @@ public abstract class _AppReleasing_Manifest extends io.nop.core.resource.compon
     protected void copyTo(AppReleasing_Manifest instance){
         super.copyTo(instance);
         
-        instance.setArtifactResource(this.getArtifactResource());
         instance.setAuthor(this.getAuthor());
-        instance.setBizDomain(this.getBizDomain());
         instance.setCode(this.getCode());
-        instance.setCoderResource(this.getCoderResource());
         instance.setDescription(this.getDescription());
-        instance.setIcon(this.getIcon());
-        instance.setName(this.getName());
-        instance.setRequirementResource(this.getRequirementResource());
+        instance.setTitle(this.getTitle());
         instance.setVersion(this.getVersion());
     }
 

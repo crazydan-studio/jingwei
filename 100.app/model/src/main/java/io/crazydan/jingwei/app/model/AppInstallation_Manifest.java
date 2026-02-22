@@ -32,13 +32,11 @@ public class AppInstallation_Manifest extends _AppInstallation_Manifest {
         AppInstallation_Manifest manifest = new AppInstallation_Manifest();
 
         manifest.setCode(releasing.getCode());
-        manifest.setBizDomain(releasing.getBizDomain());
         manifest.setVersion(releasing.getVersion());
 
         manifest.setOrmResources(new AppInstallation_OrmResources());
         manifest.setModelResources(new AppInstallation_ModelResources());
         manifest.setPageResources(new AppInstallation_PageResources());
-        manifest.setCoderResource(new AppInstallation_CoderResource());
 
         return manifest;
     }
@@ -56,10 +54,5 @@ public class AppInstallation_Manifest extends _AppInstallation_Manifest {
     @Override
     public AppInstallation_PageResources getPageResources() {
         return firstNonNull(super.getPageResources(), AppInstallation_PageResources.NONE);
-    }
-
-    @Override
-    public AppInstallation_CoderResource getCoderResource() {
-        return firstNonNull(super.getCoderResource(), AppInstallation_CoderResource.NONE);
     }
 }

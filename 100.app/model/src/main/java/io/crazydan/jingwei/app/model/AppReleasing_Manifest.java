@@ -22,8 +22,6 @@ package io.crazydan.jingwei.app.model;
 import io.crazydan.jingwei.app.model._gen._AppReleasing_Manifest;
 import io.nop.api.core.util.INeedInit;
 
-import static io.crazydan.duzhou.framework.commons.ObjectHelper.firstNonNull;
-
 public class AppReleasing_Manifest extends _AppReleasing_Manifest implements INeedInit {
 
     public AppReleasing_Manifest() {
@@ -34,23 +32,5 @@ public class AppReleasing_Manifest extends _AppReleasing_Manifest implements INe
         // TODO artifactResource 中的 name 必须设置
         // TODO 必须属性校验
         // TODO requirementResource、coderResource 必须
-    }
-
-    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-    @Override
-    public AppReleasing_CoderResource getCoderResource() {
-        return firstNonNull(super.getCoderResource(), AppReleasing_CoderResource.NONE);
-    }
-
-    @Override
-    public AppReleasing_RequirementResource getRequirementResource() {
-        return firstNonNull(super.getRequirementResource(), AppReleasing_RequirementResource.NONE);
-    }
-
-    /** @return 始终不返回 {@code null} */
-    @Override
-    public AppReleasing_ArtifactResource getArtifactResource() {
-        return firstNonNull(super.getArtifactResource(), AppReleasing_ArtifactResource.NONE);
     }
 }
