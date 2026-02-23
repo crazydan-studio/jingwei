@@ -18,7 +18,7 @@
     <delta:DeltaMerge targetNode="${targetNode}"
                       xpl:lib="/duzhou/commons/xlib/delta.xlib"
     >
-        <meta>
+        <meta biz:allowGetDeleted="true">
             <props>
                 <c:for var="col" items="${entityModel.columns}">
                     <!-- json 字段不暴露给前端（直接移除），采用 alias 方式屏蔽内部结构 -->

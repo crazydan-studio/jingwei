@@ -297,7 +297,7 @@
                     if (virtual) {
                         column['meta:computed'] = node.childContentText('computed');
                     }
-                    if (node.attrBoolean('ui:published')) {
+                    if (!node.attrBoolean('published')) {
                         column.tagSet.add('not-pub');
                     }
                     if (!node.attrBoolean('queryable')) {
@@ -308,12 +308,12 @@
                     }
 
                     column['meta:allowFilterOp'] = node.attrText('allowFilterOp');
-                    column['meta:insertable'] = node.attrBoolean('ui:insertable');
-                    column['meta:updatable'] = node.attrBoolean('ui:updatable');
-                    column['meta:maskPattern'] = node.attrText('ui:maskPattern');
-                    column['meta:datePattern'] = node.attrText('ui:datePattern');
+                    column['meta:insertable'] = node.attrBoolean('insertable');
+                    column['meta:updatable'] = node.attrBoolean('updatable');
+                    column['meta:maskPattern'] = node.attrText('maskPattern');
+                    column['meta:datePattern'] = node.attrText('datePattern');
 
-                    const codeRule = node.attrText('biz:codeRule');
+                    const codeRule = node.attrText('codeRule');
                     if (!$String.isBlank(codeRule)) {
                         column['biz:codeRule'] = codeRule;
                         column['meta:insertable'] = false;
@@ -429,10 +429,10 @@
                             relation.cascadeDelete = true;
                             relation.tagSet.add('cascade-delete');
                         }
-                        if (node.attrBoolean('ui:insertable')) {
+                        if (node.attrBoolean('insertable')) {
                             relation.tagSet.add('insertable');
                         }
-                        if (node.attrBoolean('ui:updatable')) {
+                        if (node.attrBoolean('updatable')) {
                             relation.tagSet.add('updatable');
                         }
                     } else {
@@ -444,7 +444,7 @@
                     relation.displayName = node.attrText('displayName');
                     relation.refEntityName = target;
 
-                    if (node.attrBoolean('ui:published')) {
+                    if (node.attrBoolean('published')) {
                         relation.tagSet.add('pub');
                     }
 

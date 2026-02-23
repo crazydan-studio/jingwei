@@ -75,5 +75,5 @@ outputs:
     valueNormalizer: |
       import io.crazydan.jingwei.app.coder.normalizer.AiModelDesignNormalizer;
       
-      AiModelDesignNormalizer normalizer = new AiModelDesignNormalizer();
+      const normalizer = new AiModelDesignNormalizer();
       return normalizer.normalize(value);

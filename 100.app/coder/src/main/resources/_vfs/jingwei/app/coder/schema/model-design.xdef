@@ -22,7 +22,7 @@
 <!-- [业务模型设计结构]
 -->
 <model-design xmlns:x="/nop/schema/xdsl.xdef" xmlns:xdef="/nop/schema/xdef.xdef"
-              xmlns:db="db" xmlns:orm="orm" xmlns:ref="ref" xmlns:ui="ui" xmlns:biz="biz"
+              xmlns:db="db" xmlns:orm="orm" xmlns:ref="ref"
               x:schema="/nop/schema/xdef.xdef"
 >
 
@@ -55,23 +55,22 @@
                 <attr name="!camel-case" index="!int" displayName="string"
                       mandatory="!boolean=false" deprecated="boolean"
 
-                      virtual="!boolean=false"
+                      virtual="!boolean=false" published="!boolean=true"
+                      insertable="!boolean=false" updatable="!boolean=false"
                       queryable="!boolean=false" sortable="!boolean=false"
                       allowFilterOp="word-set"
+
+                      domain="!domain-name"
+                      mapTo="attr-path" dict="dict-name"
+                      codeRule="string" defaultValue="any"
+
+                      maskPattern="string" datePattern="string"
 
                       orm:primary="!boolean=false"
                       orm:insertable="!boolean=false" orm:updatable="!boolean=false"
 
                       ref:target="ref-entity-name" ref:type="ref-type"
                       ref:targetAttr="ref-entity-attr-name" ref:cascadeDelete="boolean"
-
-                      domain="!domain-name"
-                      mapTo="attr-path" dict="dict-name"
-                      biz:codeRule="string" defaultValue="any"
-
-                      ui:published="!boolean=true"
-                      ui:insertable="!boolean=false" ui:updatable="!boolean=false"
-                      ui:maskPattern="string" ui:datePattern="string"
                 >
                     <description>string</description>
 

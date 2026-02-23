@@ -110,5 +110,5 @@ outputs:
     valueNormalizer: |
       import io.crazydan.jingwei.app.coder.normalizer.AiUiDesignNormalizer;
       
-      AiUiDesignNormalizer normalizer = new AiUiDesignNormalizer();
+      const normalizer = new AiUiDesignNormalizer();
       return normalizer.normalize(value);
