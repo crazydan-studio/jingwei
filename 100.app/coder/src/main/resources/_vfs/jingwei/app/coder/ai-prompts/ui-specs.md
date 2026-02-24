@@ -23,7 +23,7 @@
 <n-button type="primary">提交</n-button>
 ```
 
-> **禁止使用 Naive UI 的 useMessage/useDialog/useNotification/useModal 函数**。
+> **禁止导入 Naive UI 的 useMessage/useDialog/useNotification/useModal 函数**。
 
 当 Naive UI 无法满足需求时（如特殊布局、业务复合组件），在 `<component>` 中编写 Vue 组件：
 
@@ -34,7 +34,7 @@
 ]]></component>
 ```
 
-再在 `<page>` 中以 `import CustomCmp from './components/CustomCmp';` 形式导入。
+再在 `<page>` 中以 `import CustomCmp from './components/CustomCmp.vue';` 形式导入。
 
 ### 图标使用
 
@@ -69,9 +69,14 @@
 ## 数据与组件映射规则
 
 - 根据业务模型属性的特性，自动决定表单中使用的组件类型及校验规则。
-- 代码高亮采用 `naive-ui` 中的 NCode 组件
-  - 禁止导入 `highlight.js` 及其插件
+- XML、JSON、HTML、Markdown 等类型均仅采用 `naive-ui` 中的 NCode 组件做代码高亮，不做渲染
+  ```html
+  <n-code :code="xmlCode" language="xml" />
+  <n-code :code="jsonCode" language="json" />
+  <n-code :code="markdownCode" language="markdown" />
+  ```
 
+  - 禁止导入 `highlight.js` 及其插件
 
 ### 关联字典
 

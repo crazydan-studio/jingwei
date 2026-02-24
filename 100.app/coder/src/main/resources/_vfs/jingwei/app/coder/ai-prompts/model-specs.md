@@ -287,11 +287,13 @@
       insertable="false" updatable="false"
       defaultValue="false"
       orm:insertable="true" orm:updatable="true"
-      allowFilterOp=""
+      allowFilterOp="eq,gt"
 >
     <description>标记数据是否被逻辑删除，true 表示已删除</description>
 </attr>
 ```
+
+- 禁止逻辑删除属性参与对模型实体的过滤查询。
 
 ## 唯一键 `<orm:unique-keys>`
 
