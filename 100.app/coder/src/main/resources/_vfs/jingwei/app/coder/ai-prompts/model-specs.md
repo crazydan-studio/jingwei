@@ -64,7 +64,7 @@
 | `dict` | 引用的数据字典名，如 `auth/account-status`。此时 `domain` 必须为 `string`。 | 字典名 | 否 | `dict="auth/account-status"` |
 | `codeRule` | 业务编码生成规则，如 `INV{@year}{@month}{@seq:5}`。 | 见 codeRule 占位符 | 否 | `codeRule="ORD{@year}{@seq:6}"` |
 | `defaultValue` | 默认值。新建记录时若未提供该属性，则使用此默认值。 | 与属性类型匹配的字符串 | 否 | `defaultValue="active"` |
-| `published` | 是否对外开放。若为 `false` 则在数据新增/编辑界面中不回显其值，且在查看界面中不显示。 | `true`/`false` | 否，缺省为 `true` | `published="false"` |
+| `published` | 是否对外开放。若为 `false` 则在数据新增/编辑界面中不回显其值，且在查看界面中不显示。 | `true`/`false` | 是 | `published="true"` |
 | `insertable` | 是否可在前端新增。若为 `false` 则在数据新增界面中不显示。 | `true`/`false` | 是 | `insertable="true"` |
 | `updatable` | 是否可在前端被编辑。若为 `false` 则在数据编辑界面中只读。 | `true`/`false` | 是 | `updatable="true"` |
 | `maskPattern` | 脱敏显示模式，如 `3*4` 表示保留前 3 位和后 4 位，中间用 `*` 填充。常用于手机号、身份证等敏感信息。 | 模式字符串，格式为 `前保留位数 * 后保留位数` | 否 | `maskPattern="3*4"` |
@@ -212,10 +212,11 @@
 ```xml
 <attr name="id" index="1" orm:primary="true"
       domain="uuid" displayName="ID"
-      mandatory="true"
+      mandatory="true" published="true"
       queryable="true" sortable="false"
       insertable="false" updatable="false"
       orm:insertable="true" orm:updatable="false"
+      allowFilterOp="eq,in"
 >
     <description>全局唯一标识，由系统自动生成</description>
 </attr>
@@ -232,35 +233,43 @@
 ```xml
 <attr name="createdBy" index="2"
       domain="userFlag" displayName="创建者"
+      published="true"
       queryable="true" sortable="true"
       insertable="false" updatable="false"
       orm:insertable="true" orm:updatable="false"
+      allowFilterOp="eq,in"
 >
     <description>记录创建该数据的用户标识</description>
 </attr>
 <attr name="updatedBy" index="3"
       domain="userFlag" displayName="更新者"
+      published="true"
       queryable="true" sortable="true"
       insertable="false" updatable="false"
       orm:insertable="true" orm:updatable="true"
+      allowFilterOp="eq,in"
 >
     <description>最后一次更新该数据的用户标识</description>
 </attr>
 <attr name="createdAt" index="4"
       domain="datetime" displayName="创建时间"
+      published="true"
       queryable="true" sortable="true"
       insertable="false" updatable="false"
       datePattern="yyyy-MM-dd HH:mm:ss"
       orm:insertable="true" orm:updatable="false"
+      allowFilterOp="eq,gt,lt,dateTimeBetween"
 >
     <description>数据创建时间，自动填充</description>
 </attr>
 <attr name="updatedAt" index="5"
       domain="datetime" displayName="更新时间"
+      published="true"
       queryable="true" sortable="true"
       insertable="false" updatable="false"
       datePattern="yyyy-MM-dd HH:mm:ss"
       orm:insertable="true" orm:updatable="true"
+      allowFilterOp="eq,gt,lt,dateTimeBetween"
 >
     <description>数据最后一次更新时间，自动更新</description>
 </attr>
@@ -273,12 +282,14 @@
 ```xml
 <attr name="deleted" index="6"
       domain="deleteFlag" displayName="是否已删除"
+      published="true"
       queryable="true" sortable="true"
       insertable="false" updatable="false"
       defaultValue="false"
       orm:insertable="true" orm:updatable="true"
+      allowFilterOp=""
 >
-    <description>标记数据是否被逻辑删除，true 表示已删除，查询时默认过滤</description>
+    <description>标记数据是否被逻辑删除，true 表示已删除</description>
 </attr>
 ```
 

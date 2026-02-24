@@ -176,7 +176,7 @@
                     entity.displayName = node.attrText('displayName');
                     entity.tagSet = [];
 
-                    entity.notGenCode = node.attrBoolean('deprecated');
+                    entity.notGenCode = node.attrBoolean('deprecated') == true;
                     entity['db:estimatedRowCount'] = node.attrInt('db:estimatedRowCount');
 
                     // Note: 统一采用动态模型，以避免创建实体 class
@@ -265,23 +265,23 @@
                     column.propId = node.attrInt('propId');
                     column.code = 'col_' + $String.camelCaseToUnderscore(column.name, true);
                     column.displayName = node.attrText('displayName');
-                    column.mandatory = node.attrBoolean('mandatory');
-                    column.insertable = node.attrBoolean('orm:insertable');
-                    column.updatable = node.attrBoolean('orm:updatable');
+                    column.mandatory = node.attrBoolean('mandatory') == true;
+                    column.insertable = node.attrBoolean('orm:insertable') == true;
+                    column.updatable = node.attrBoolean('orm:updatable') == true;
                     column.defaultValue = node.attrText('defaultValue');
                     column.comment = $String.trimToNull(node.childContentText('description'));
                     column.tagSet = [];
 
-                    if (node.attrBoolean('orm:primary')) {
+                    if (node.attrBoolean('orm:primary') == true) {
                         column.primary = true;
                         column.tagSet.add('seq');
                     }
 
-                    const deprecated = node.attrBoolean('deprecated');
+                    const deprecated = node.attrBoolean('deprecated') == true;
                     if (deprecated) {
                         column.tagSet.add('del');
                     }
-                    const virtual = node.attrBoolean('virtual');
+                    const virtual = node.attrBoolean('virtual') == true;
                     const mapTo = node.attrText('mapTo');
                     const notGen = deprecated || virtual || !$String.isBlank(mapTo);
                     if (notGen) {
@@ -297,19 +297,19 @@
                     if (virtual) {
                         column['meta:computed'] = node.childContentText('computed');
                     }
-                    if (!node.attrBoolean('published')) {
+                    if (node.attrBoolean('published') != true) {
                         column.tagSet.add('not-pub');
                     }
-                    if (!node.attrBoolean('queryable')) {
+                    if (node.attrBoolean('queryable') != true) {
                         column.tagSet.add('not-query');
                     }
-                    if (!node.attrBoolean('sortable')) {
+                    if (node.attrBoolean('sortable') != true) {
                         column.tagSet.add('not-sort');
                     }
 
                     column['meta:allowFilterOp'] = node.attrText('allowFilterOp');
-                    column['meta:insertable'] = node.attrBoolean('insertable');
-                    column['meta:updatable'] = node.attrBoolean('updatable');
+                    column['meta:insertable'] = node.attrBoolean('insertable') == true;
+                    column['meta:updatable'] = node.attrBoolean('updatable') == true;
                     column['meta:maskPattern'] = node.attrText('maskPattern');
                     column['meta:datePattern'] = node.attrText('datePattern');
 
@@ -397,7 +397,7 @@
                     import io.nop.orm.model.OrmToManyReferenceModel;
                     import io.nop.orm.model.OrmJoinOnModel;
 
-                    const deprecated = node.attrBoolean('deprecated');
+                    const deprecated = node.attrBoolean('deprecated') == true;
                     if (deprecated) {
                         return null;
                     }
@@ -425,14 +425,14 @@
                         join.leftProp = 'id'; // 始终从源端的主键出发
                         join.rightProp = relation.refPropName + 'Id';
 
-                        if (node.attrBoolean('ref:cascadeDelete')) {
+                        if (node.attrBoolean('ref:cascadeDelete') == true) {
                             relation.cascadeDelete = true;
                             relation.tagSet.add('cascade-delete');
                         }
-                        if (node.attrBoolean('insertable')) {
+                        if (node.attrBoolean('insertable') == true) {
                             relation.tagSet.add('insertable');
                         }
-                        if (node.attrBoolean('updatable')) {
+                        if (node.attrBoolean('updatable') == true) {
                             relation.tagSet.add('updatable');
                         }
                     } else {
@@ -444,7 +444,7 @@
                     relation.displayName = node.attrText('displayName');
                     relation.refEntityName = target;
 
-                    if (node.attrBoolean('published')) {
+                    if (node.attrBoolean('published') == true) {
                         relation.tagSet.add('pub');
                     }
 

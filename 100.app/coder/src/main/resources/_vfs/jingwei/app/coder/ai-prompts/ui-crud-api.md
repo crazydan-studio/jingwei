@@ -182,7 +182,7 @@ const user = UserEntity__findFirst;
 
 **GraphQL 操作类型**：`mutation`
 
-**参数**：`data: !Map` – 一个键值对对象，包含要设置的字段。主键通常由数据库自动生成，无需传入。
+**参数**：`data: Map!` – 一个键值对对象，包含要设置的字段。主键通常由数据库自动生成，无需传入。
 
 **返回**：创建后的实体对象（需指定返回字段）。
 
@@ -193,7 +193,7 @@ import { graphql } from '@app-utils';
 
 const { UserEntity__save } = await graphql(
   `
-    mutation ($data: !Map) {
+    mutation ($data: Map!) {
       UserEntity__save(data: $data) {
         id
         name
@@ -222,7 +222,7 @@ const { id, name, age } = UserEntity__save;
 
 **GraphQL 操作类型**：`mutation`
 
-**参数**：`data: !Map` – 必须包含实体主键 `id`，其他字段为待更新的属性。
+**参数**：`data: Map!` – 必须包含实体主键 `id`，其他字段为待更新的属性。
 
 **返回**：更新后的实体对象（需指定返回字段）。
 
@@ -233,7 +233,7 @@ import { graphql } from '@app-utils';
 
 const { UserEntity__update } = await graphql(
   `
-    mutation ($data: !Map) {
+    mutation ($data: Map!) {
       UserEntity__update(data: $data) {
         id
         name
@@ -260,7 +260,7 @@ const { id, name } = UserEntity__update;
 
 **GraphQL 操作类型**：`mutation`
 
-**参数**：`data: !Map` – 必须包含源实体的主键 `id`，以及需要覆盖的字段（可选）。
+**参数**：`data: Map!` – 必须包含源实体的主键 `id`，以及需要覆盖的字段（可选）。
 
 **返回**：新创建的实体对象（需指定返回字段）。
 
@@ -271,7 +271,7 @@ import { graphql } from '@app-utils';
 
 const { UserEntity__copyForNew } = await graphql(
   `
-    mutation ($data: !Map) {
+    mutation ($data: Map!) {
       UserEntity__copyForNew(data: $data) {
         id
         name
@@ -297,7 +297,7 @@ const { id, name } = UserEntity__copyForNew;
 
 **GraphQL 操作类型**：`query`
 
-**参数**：`id: !String`
+**参数**：`id: String!`
 
 **返回**：实体对象，若不存在或其已被逻辑删除，则返回 `null`。
 
@@ -308,7 +308,7 @@ import { graphql } from '@app-utils';
 
 const { UserEntity__get } = await graphql(
   `
-    query ($id: !String) {
+    query ($id: String!) {
       UserEntity__get(id: $id) {
         id
         name
@@ -331,7 +331,7 @@ const { id, name, roles } = UserEntity__get;
 
 **GraphQL 操作类型**：`mutation`
 
-**参数**：`id: !String`
+**参数**：`id: String!`
 
 **返回**：布尔值（`true` 表示成功）。
 
@@ -342,7 +342,7 @@ import { graphql } from '@app-utils';
 
 await graphql(
   `
-    mutation ($id: !String) {
+    mutation ($id: String!) {
       UserEntity__delete(id: $id)
     }
   `,
@@ -356,7 +356,7 @@ await graphql(
 
 **GraphQL 操作类型**：`mutation`
 
-**参数**：`ids: [!String]`
+**参数**：`ids: [String!]`
 
 **返回**：无。
 
@@ -367,7 +367,7 @@ import { graphql } from '@app-utils';
 
 await graphql(
   `
-    mutation ($ids: [!String]) {
+    mutation ($ids: [String!]) {
       UserEntity__batchDelete(ids: $ids)
     }
   `,
@@ -388,8 +388,8 @@ await graphql(
 
 **参数**：
 
-- `ids: [!String]` – 要更新的记录 ID 列表
-- `data: !Map` – 要设置的公共字段及其值
+- `ids: [String!]` – 要更新的记录 ID 列表
+- `data: Map!` – 要设置的公共字段及其值
 
 **返回**：无。
 
@@ -400,7 +400,7 @@ import { graphql } from '@app-utils';
 
 await graphql(
   `
-    mutation ($ids: [!String], $data: !Map) {
+    mutation ($ids: [String!], $data: Map!) {
       ProductEntity__batchUpdate(ids: $ids, data: $data)
     }
   `,
@@ -471,7 +471,7 @@ const { total, items } = UserEntity__deleted_findPage;
 
 **GraphQL 操作类型**：`query`
 
-**参数**：`id: !String`
+**参数**：`id: String!`
 
 **返回**：实体对象，若不存在返回 `null`。
 
@@ -482,7 +482,7 @@ import { graphql } from '@app-utils';
 
 const { UserEntity__deleted_get } = await graphql(
   `
-    query ($id: !String) {
+    query ($id: String!) {
       UserEntity__deleted_get(id: $id) {
         id
         name
@@ -505,7 +505,7 @@ const { id, name, roles } = UserEntity__deleted_get;
 
 **GraphQL 操作类型**：`query`
 
-**参数**：`id: !String`
+**参数**：`id: String!`
 
 **返回**：实体对象，若不存在返回 `null`。
 
@@ -516,7 +516,7 @@ import { graphql } from '@app-utils';
 
 const { UserEntity__recoverDeleted } = await graphql(
   `
-    query ($id: !String) {
+    query ($id: String!) {
       UserEntity__recoverDeleted(id: $id) {
         id
         name
@@ -535,4 +535,4 @@ const { id, name } = UserEntity__recoverDeleted;
 - **主键字段**：更新、复制、获取、删除等操作必须提供正确的实体主键（通常为 `id`）。
 - **过滤条件语法**：`filter` 中的 `$type` 指定操作符，具体字段名和值由实体模型决定。组合条件使用 `$body` 数组。
 - **接口命名规则**：`[实体名]__[操作名]`，如 `UserEntity__findPage`，注意大小写敏感。
-- 已被逻辑删除的数据只能通过 `deleted_findPage` 查询，或者通过 `deleted_get` 获取，普通的查询或更新接口将自动忽略被逻辑删除的数据
+- **逻辑删除数据**：只有以 `deleted_` 开头的接口才可以查询已被逻辑删除的数据，若无特殊说明，其余接口均只针对未被逻辑删除的数据。禁止在查询中以逻辑删除属性作为过滤条件。

@@ -19,12 +19,15 @@
 
 package io.crazydan.jingwei.app.orm;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import io.nop.api.core.context.ContextProvider;
 import io.nop.commons.cache.GlobalCacheRegistry;
 import io.nop.core.dict.DictProvider;
+import io.nop.core.module.ModuleManager;
+import io.nop.core.module.ModuleModel;
 import io.nop.core.resource.IResource;
 import io.nop.core.resource.cache.CacheEntryManagement;
 import io.nop.core.resource.tenant.ResourceTenantManager;
@@ -88,7 +91,7 @@ public class AppOrmModelProvider implements IOrmModelProvider {
     }
 
     private LoadedOrmModel loadSharedOrmModel(IPersistEnv env) {
-        OrmModel ormModel = new OrmModelLoader().loadOrmModel(this.ormModelResources);
+        OrmModel ormModel = new OrmModelLoader().loadOrmModel(getAllResources());
         registerDicts(ormModel);
 
         LoadedOrmModel ret = new LoadedOrmModel(env, ormModel);
@@ -98,6 +101,15 @@ public class AppOrmModelProvider implements IOrmModelProvider {
         ret.setOrmInterceptor(interceptor);
 
         return ret;
+    }
+
+    private List<IResource> getAllResources() {
+        Collection<ModuleModel> modules = ModuleManager.instance().getEnabledModules(false);
+        List<IResource> resources = ModuleManager.instance().getAllModuleResourcesInModules(modules, "orm/app.orm.xml");
+
+        resources.addAll(this.ormModelResources);
+
+        return resources;
     }
 
     private void registerDicts(OrmModel ormModel) {

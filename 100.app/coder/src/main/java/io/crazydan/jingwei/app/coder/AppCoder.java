@@ -162,6 +162,8 @@ public class AppCoder {
 //        options.setEnableSystemPrompt(true);
 
         AiChatExchange exchange = command.execute(prompt.vars, null);
+        validateChatResponse(exchange);
+
         String sessionId = (String) exchange.getResponse().getMetadata("session_id");
 
         XNode node = (XNode) exchange.getOutput("RESULT");
@@ -174,6 +176,8 @@ public class AppCoder {
 
         IEvalScope scope = XLang.newEvalScope();
         template.processChatResponse(exchange, scope);
+
+        validateChatResponse(exchange);
 
         XNode node = (XNode) exchange.getOutput("RESULT");
         return node.xml();
@@ -191,6 +195,12 @@ public class AppCoder {
         node.clearComment();
 
         return node;
+    }
+
+    protected void validateChatResponse(AiChatExchange exchange) {
+        if (exchange.isInvalid()) {
+            exchange.getInvalidReason().rethrow();
+        }
     }
 
     protected static class DesignPrompt {

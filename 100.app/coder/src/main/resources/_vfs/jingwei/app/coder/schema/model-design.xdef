@@ -55,7 +55,7 @@
                 <attr name="!camel-case" index="!int" displayName="string"
                       mandatory="!boolean=false" deprecated="boolean"
 
-                      virtual="!boolean=false" published="!boolean=true"
+                      virtual="!boolean=false" published="!boolean=false"
                       insertable="!boolean=false" updatable="!boolean=false"
                       queryable="!boolean=false" sortable="!boolean=false"
                       allowFilterOp="word-set"

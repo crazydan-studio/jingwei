@@ -12,7 +12,6 @@
 - **图标库**：Lucide Vue Next（`lucide-vue-next`），提供丰富的 SVG 图标。若 Lucide 图标不满足需求，需自行绘制 SVG 图标并封装为 Vue 组件，禁止使用其他图标库（如 `@vicons`）。
 - **样式方案**：Tailwind CSS，直接在模板中使用原子类名，如 `class="flex items-center p-4"`。**禁止**在 `<style>` 中编写额外的 CSS，除非需要覆盖第三方组件样式或实现 Tailwind 无法完成的复杂样式。
 - **数据可视化**：Apache ECharts（`echarts`）配合 Vue ECharts（`vue-echarts`），用于图表展示。图表应响应式适配容器尺寸变化。
-- **代码高亮**：`highlight.js`，用于在代码展示区域高亮代码块。
 
 ## 强制性编码规范
 
@@ -39,7 +38,7 @@
 
 ### 图标使用
 
-- **优先使用 Lucide 图标**：例如 `<lucide-user />`，需从 `lucide-vue-next` 导入具体图标组件。
+- **优先使用 Lucide 图标**：例如 `<AlignHorizontalDistributeEnd />`，需从 `lucide-vue-next` 导入具体图标组件。
 - **自定义 SVG 图标**：若所需图标不在 Lucide 集中，自行绘制 SVG，并封装为单文件组件或内联模板。例如：
   ```html
   <svg width="24" height="24" viewBox="0 0 24 24">...</svg>
@@ -52,6 +51,8 @@
   import { NButton, NInput } from 'naive-ui'; // 正确
   import * as naive from 'naive-ui'; // 禁止，会引入所有组件
   ```
+
+禁止 `import('xxx')` 形式导入。
 
 ### 编程风格
 
@@ -67,7 +68,10 @@
 
 ## 数据与组件映射规则
 
-根据业务模型属性的特性，自动决定表单中使用的组件类型及校验规则。
+- 根据业务模型属性的特性，自动决定表单中使用的组件类型及校验规则。
+- 代码高亮采用 `naive-ui` 中的 NCode 组件
+  - 禁止导入 `highlight.js` 及其插件
+
 
 ### 关联字典
 

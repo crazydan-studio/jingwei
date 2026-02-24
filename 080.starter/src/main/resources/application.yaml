@@ -21,10 +21,6 @@ nop:
     username: sa
     password:
 
-  gateway:
-    http-filter:
-      enabled: true
-
   file:
     #store-impl: oss
     store-dir: ${jingwei.data-dir}/files

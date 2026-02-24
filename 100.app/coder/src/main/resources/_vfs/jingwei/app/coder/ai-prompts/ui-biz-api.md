@@ -7,7 +7,7 @@
 ### 语法
 
 ```graphql
-query($name: !String) {
+query($name: String!) {
   DictProvider__getDict(dictName: $name) {
     label
     name
@@ -50,7 +50,7 @@ import { graphql } from '@app-utils';
 
 const { DictProvider__getDict } = await graphql(
   `
-    query($name: !String) {
+    query($name: String!) {
       DictProvider__getDict(dictName: $name) {
         label
         name
@@ -142,7 +142,7 @@ console.log(firstProvider.models.map((m) => m.name)); // 例如 ["gpt-4o", "gpt-
 ### 语法
 
 ```graphql
-query ($provider: !String, $model: !String, $bizRequirements: !String, $modelRequirements: !String) {
+query ($provider: String!, $model: String!, $bizRequirements: String!, $modelRequirements: String!) {
   AppCoder__genModelDesignCode(
     provider: $provider
     model: $model
@@ -178,7 +178,7 @@ import { graphql } from '@app-utils';
 
 const { AppCoder__genModelDesignCode } = await graphql(
   `
-    query ($provider: !String, $model: !String, $bizRequirements: !String, $modelRequirements: !String) {
+    query ($provider: String!, $model: String!, $bizRequirements: String!, $modelRequirements: String!) {
       AppCoder__genModelDesignCode(
         provider: $provider
         model: $model
@@ -215,7 +215,7 @@ console.log(content);
 ### 语法
 
 ```graphql
-query ($provider: !String, $model: !String, $bizRequirements: !String, $uiRequirements: !String, $bizModelDefs: !String) {
+query ($provider: String!, $model: String!, $bizRequirements: String!, $uiRequirements: String!, $bizModelDefs: String!) {
   AppCoder__genUiDesignCode(
     provider: $provider
     model: $model
@@ -253,7 +253,7 @@ import { graphql } from '@app-utils';
 
 const { AppCoder__genUiDesignCode } = await graphql(
   `
-    query ($provider: !String, $model: !String, $bizRequirements: !String, $uiRequirements: !String, $bizModelDefs: !String) {
+    query ($provider: String!, $model: String!, $bizRequirements: String!, $uiRequirements: String!, $bizModelDefs: String!) {
       AppCoder__genUiDesignCode(
         provider: $provider
         model: $model
@@ -291,7 +291,7 @@ console.log(content);
 ### 语法
 
 ```graphql
-query ($provider: !String, $model: !String, $bizRequirements: !String, $logoRequirements: !String) {
+query ($provider: String!, $model: String!, $bizRequirements: String!, $logoRequirements: String!) {
   AppCoder__genLogoDesignCode(
     provider: $provider
     model: $model
@@ -327,7 +327,7 @@ import { graphql } from '@app-utils';
 
 const { AppCoder__genLogoDesignCode } = await graphql(
   `
-    query ($provider: !String, $model: !String, $bizRequirements: !String, $logoRequirements: !String) {
+    query ($provider: String!, $model: String!, $bizRequirements: String!, $logoRequirements: String!) {
       AppCoder__genLogoDesignCode(
         provider: $provider
         model: $model
@@ -359,7 +359,7 @@ console.log(content);
 ### 语法
 
 ```graphql
-query ($bizRequirements: !String, $modelRequirements: !String) {
+query ($bizRequirements: String!, $modelRequirements: String!) {
   AppCoder__genModelDesignPrompt(bizRequirements: $bizRequirements, modelRequirements: $modelRequirements)
 }
 ```
@@ -383,7 +383,7 @@ import { graphql } from '@app-utils';
 
 const { AppCoder__genModelDesignPrompt } = await graphql(
   `
-    query ($bizRequirements: !String, $modelRequirements: !String) {
+    query ($bizRequirements: String!, $modelRequirements: String!) {
       AppCoder__genModelDesignPrompt(bizRequirements: $bizRequirements, modelRequirements: $modelRequirements)
     }
   `,
@@ -410,7 +410,7 @@ console.log(prompt); // 输出优化后的提示词文本
 ### 语法
 
 ```graphql
-query ($bizRequirements: !String, $uiRequirements: !String, $bizModelDefs: !String) {
+query ($bizRequirements: String!, $uiRequirements: String!, $bizModelDefs: String!) {
   AppCoder__genUiDesignPrompt(
     bizRequirements: $bizRequirements
     uiRequirements: $uiRequirements
@@ -439,7 +439,7 @@ import { graphql } from '@app-utils';
 
 const { AppCoder__genUiDesignPrompt } = await graphql(
   `
-    query ($bizRequirements: !String, $uiRequirements: !String, $bizModelDefs: !String) {
+    query ($bizRequirements: String!, $uiRequirements: String!, $bizModelDefs: String!) {
       AppCoder__genUiDesignPrompt(
         bizRequirements: $bizRequirements
         uiRequirements: $uiRequirements

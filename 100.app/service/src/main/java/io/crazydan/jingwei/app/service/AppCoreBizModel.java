@@ -198,7 +198,7 @@ public class AppCoreBizModel {
         File targetDir = loadVfsResource(TEMPLATE_APP_STATIC_ROOT_VPATH, appCode, "").toFile();
         AppInstallationBuilder builder = new AppInstallationBuilder();
 
-        return builder.installPages(manifest, targetDir);
+        return builder.installPages(manifest.cloneInstance(), targetDir);
     }
 
     protected Map<String, Object> getAppPageStaticPath(AppInstallation_Manifest manifest) {
